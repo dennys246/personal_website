@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Denny Schaedig{% endblock %}
+
+{% block extra_head %}
+<style>
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  background: transparent;
+}
+
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/static/img/crested_butte_profile.jpeg");
+  background-image: image-set(
+    url("/static/img/crested_butte_profile.jpeg") type("image/jpeg"),
+    url("/static/img/crested_butte_profile.HEIC") type("image/heic")
+  );
+  background-size: cover;
+  background-position: center;
+  z-index: -2;
+}
+
+.scroll-cta {
+  position: fixed;
+  top: 33%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 40px));
+  display: flex;
+  gap: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  z-index: 50;
+}
+
+.scroll-cta.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.scroll-cta__btn {
+  padding: 0.85rem 2rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(248, 250, 252, 0.65);
+  background: rgba(15, 23, 42, 0.6);
+  color: #f8fafc;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.scroll-cta__btn:hover {
+  background: rgba(99, 102, 241, 0.9);
+  border-color: rgba(248, 250, 252, 0.9);
+  transform: translateY(-2px);
+}
+
+.scroll-cta__card {
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 40px -25px rgba(15, 23, 42, 0.9);
+  min-width: 220px;
+  text-decoration: none;
+  color: #e2e8f0;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.scroll-cta__card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(99, 102, 241, 0.7);
+}
+
+.scroll-cta__card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #c7d2fe;
+  margin-bottom: 0.5rem;
+}
+
+.scroll-cta__card p {
+  color: rgba(226, 232, 240, 0.8);
+  font-size: 0.95rem;
+}
+
+.scroll-cta__card span {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(99, 102, 241, 0.85);
+}
+
+.seo-watermark {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .scroll-cta {
+    flex-direction: column;
+  }
+
+  .scroll-cta__card {
+    width: 16rem;
+  }
+
+  .scroll-cta__btn {
+    width: 12rem;
+    text-align: center;
+  }
+}
+</style>
+{% endblock %}
+
+{% block main_class %}home-hero relative w-full mt-0 flex-grow p-0 overflow-hidden{% endblock %}
+
+{% block content %}
+<section class="relative w-full min-h-screen">
+  <div class="h-[100vh] w-full"></div>
+  <p class="seo-watermark">This is the official homepage of Denny Schaedig, AI engineer and neuroimaging researcher.</p>
+</section>
+
+<div id="scroll-cta" class="scroll-cta" aria-label="Quick navigation">
+  <a href="/projects" class="scroll-cta__card">
+    <h3>Neurotech</h3>
+    <p>Building tools for Neuroscientist to better understand and leverage fMRI and fNIRS data.</p>
+  </a>
+  <a href="/projects" class="scroll-cta__card">
+    <h3>AI Systems</h3>
+    <p>Designing applied machine learning, from avalanche forecasting to pathology diagnosis.</p>
+  </a>
+  <a href="/projects" class="scroll-cta__card">
+    <h3>Snowpack Dataset</h3>
+    <p>Collecting snowpack samples to apply computer vision to avalanche risk prediction.</p>
+  </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const scrollCta = document.getElementById('scroll-cta');
+    if (!scrollCta) return;
+
+    let hasActivated = false;
+    const maybeShowScrollCta = () => {
+      if (hasActivated) return;
+      if (window.scrollY > 140) {
+        scrollCta.classList.add('visible');
+        hasActivated = true;
+        window.removeEventListener('scroll', maybeShowScrollCta);
+      }
+    };
+
+    window.addEventListener('scroll', maybeShowScrollCta, { passive: true });
+    maybeShowScrollCta();
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Denny Schaedig | Ramblings{% endblock %}
+
+{% block main_class %}w-full p-0 mt-0 bg-transparent border-0 space-y-0{% endblock %}
+
+{% block content %}
+<section class="grid gap-px sm:grid-cols-2 lg:grid-cols-3 bg-slate-900">
+  <a href="https://www.denver7.com/news/local-news/colorado-backcountry-skier-using-ai-to-predict-avalanches" aria-label="Read Aurora Sprints" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <img
+      src="{{ url_for('static', filename='img/ABC_Denver7_Ryan_Fish_Denny_Schaedig_Interview.png') }}"
+      alt="Denver7 interview with Ryan Fish and Denny Schaedig"
+      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <span class="absolute inset-0 bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 opacity-50 mix-blend-multiply transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-indigo-200">ABC Denver7 Ryan Fish join's Denny</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-indigo-200"> for first snowpack sampling of 2025-2026</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Sampling with Denver7 Ryan Fish</span>
+  </a>
+
+  <a href="https://www.rmdig.ai/collection_signup" aria-label="Read Lantern Hours" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <img
+      src="{{ url_for('static', filename='img/data_collection_loveland_pass.png') }}"
+      alt="Data Collection on Loveland Pass"
+      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <span class="absolute inset-0 bg-gradient-to-tr from-amber-400 via-orange-500 to-rose-500 opacity-0 transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-amber-200">Learn about how you can help your </p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-amber-200">community by collecting snowpack</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Join Data Collection</span>
+  </a>
+
+  <a href="https://youtu.be/nFu4g8I2m0A" aria-label="Read Signal Drift" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <img
+      src="{{ url_for('static', filename='img/perceptron-neuron_connection_denny_schaedig_thumbnail.png') }}"
+      alt="Denny Schaedig discusses how perceptrons are similar to neurons"
+      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <span class="absolute inset-0 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 opacity-0 transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-emerald-200">Denny rambles about perceptron being</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-emerald-200">inspired by the brain and neurons</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">How AI Got Started</span>
+  </a>
+
+  <a href="https://www.rmdig.ai/gan_finetuning" aria-label="Read Low Orbit Living" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <span class="absolute inset-0 bg-gradient-to-br from-sky-600 via-blue-500 to-indigo-500 opacity-90 transition duration-500 group-hover:scale-105"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-sky-200">Read and apply what Denny learned about</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-sky-200">generative adversarial networks</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Tips & Tricks for Fine-Tuning GANs</span>
+  </a>
+
+  <a href="https://youtu.be/QJqz6qSf2E8" aria-label="Read Chalkboard Protocol" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <img
+      src="{{ url_for('static', filename='img/snowpack_sampling.png') }}"
+      alt="Snowpack sampling with avalanche gear"
+      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <span class="absolute inset-0 bg-gradient-to-br from-fuchsia-500 via-purple-500 to-indigo-500 opacity-0 mix-blend-multiply transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-fuchsia-200">Learn about how Denny applying</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-fuchsia-200">AI avalanche risk prediction</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">How to teach an AI about Avalanches</span>
+  </a>
+
+  <a href="{{ url_for('ramblings') }}" aria-label="Read Orchard Systems" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <span class="absolute inset-0 bg-gradient-to-tr from-lime-400 via-green-500 to-emerald-500 opacity-90 transition duration-500 group-hover:scale-105"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-lime-200">*In Progress*</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-lime-200">An Insanely Useful Method</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Progressively Growing Models</span>
+  </a>
+
+{% endblock %}

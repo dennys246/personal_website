@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Denny Schaedig | Perceptrons{% endblock %}
+
+{% block main_class %}max-w-5xl mx-auto p-0 mt-0 bg-transparent border-0{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-b from-slate-900 via-slate-900/90 to-black shadow-2xl">
+  <div class="pointer-events-none absolute inset-0 opacity-30">
+    <div class="absolute -left-16 top-10 h-48 w-48 rounded-full bg-amber-400/30 blur-3xl"></div>
+    <div class="absolute right-0 -bottom-10 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl"></div>
+  </div>
+
+  <div class="relative p-8 md:p-12 space-y-10">
+    <header class="space-y-3 text-center md:text-left">
+      <p class="text-xs uppercase tracking-[0.35em] text-amber-200">Perceptrons</p>
+      <h1 class="text-3xl md:text-4xl font-semibold text-white">Building intuition for the original neural network</h1>
+      <p class="text-base text-slate-200/80 max-w-3xl mx-auto md:mx-0">
+        A short explainer and visualization of the perceptron&mdash;the foundation that sparked neural network research.
+        Watch the walkthrough and jump to Vimeo if you want the full player controls.
+      </p>
+    </header>
+
+    <div class="relative aspect-video overflow-hidden rounded-xl border border-slate-800 bg-black shadow-xl">
+      <iframe
+        src="https://player.vimeo.com/video/1112083093"
+        class="absolute inset-0 h-full w-full"
+        title="Perceptrons video"
+        frameborder="0"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div class="space-y-1 text-sm text-slate-300">
+        <p class="font-medium text-white">Quick context</p>
+        <p class="text-slate-300/90">Why the perceptron still matters: linear separability, decision boundaries, and how it evolved into modern deep learning.</p>
+      </div>
+      <a
+        href="https://vimeo.com/1112083093"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center rounded-full border border-amber-300/70 px-4 py-2 text-sm font-semibold text-amber-100 transition hover:-translate-y-0.5 hover:border-amber-200 hover:bg-amber-400/20"
+      >
+        Open on Vimeo
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

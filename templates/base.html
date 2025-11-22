@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  <meta charset="UTF-8">
+  <title>{% block title %}Denny Schaedig{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% set default_description = "Official site for Denny Schaedig, an AI and neuroimaging engineer sharing projects, publications, and experiences across data science, neuroscience, and mountain life." %}
+  <meta name="description" content="{{ default_description }}">
+  <meta name="keywords" content="Denny Schaedig, AI engineer, neuroimaging, data science, Colorado researcher, Rocky Mountain Digerati">
+  <meta name="author" content="Denny Schaedig">
+  <link rel="canonical" href="{{ request.url }}">
+  <meta property="og:title" content="{{ self.title()|striptags }}">
+  <meta property="og:description" content="{{ default_description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.url }}">
+  <meta property="og:image" content="{{ url_for('static', filename='img/signature.jpg') }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ self.title()|striptags }}">
+  <meta name="twitter:description" content="{{ default_description }}">
+  <meta name="twitter:image" content="{{ url_for('static', filename='img/signature.jpg') }}">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,600,700&display=swap" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .center-wrapper {
+      text-align: center;
+    }
+
+    ul.bullet-list {
+      list-style-type: disc;        /* show bullet points */
+      margin: 0 auto;               /* center the list container */
+      padding-left: 40px;           /* ensure bullets are visible */
+      display: inline-block;        /* shrink to content for centering */
+      text-align: left;             /* keep list items left-aligned */
+    }
+
+    ul.bullet-list li {
+      margin: 0.5em 0;
+    }
+    .logo-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .logo-wrapper img {
+      display: block;
+      height: 64px;
+      width: auto;
+      transition: opacity 0.3s ease;
+    }
+
+    .logo-hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+
+    .logo-wrapper:hover .logo-hover {
+      opacity: 1;
+    }
+
+    .logo-wrapper:hover .logo-default {
+      opacity: 0;
+    }
+
+    .chalk-text {
+      font-family: "Comic Sans MS", "Comic Sans";
+    }
+
+    .btn-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: rgb(48, 5, 122);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: color 0.3s;
+    }
+
+    .btn-link:hover {
+      color: rgb(89, 0, 255); /* text turns orange on hover */
+    }
+
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Denny Schaedig",
+    "url": "{{ request.url_root }}",
+    "jobTitle": "AI & Neuroimaging Engineer",
+    "description": "Denny Schaedig builds AI, neuroimaging tools, and mountain-focused research projects in Colorado.",
+    "image": "{{ url_for('static', filename='img/signature.jpg') }}",
+    "knowsAbout": ["Artificial Intelligence", "Neuroimaging", "Data Science", "Backcountry Safety"]
+  }
+  </script>
+</head>
+
+<body class="bg-gray-800 bg-gray-900 min-h-screen flex flex-col">
+
+  <!-- Header -->
+<header class="p-6 bg-black text-white shadow sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-center">
+    <nav class="flex flex-wrap items-center justify-center gap-4 text-lg order-2 md:order-1 md:mr-10">
+      <a href="/story" class="chalk-text text-white hover:text-gray-400 transition">My Story</a>
+      <a href="/experiences" class="chalk-text text-white hover:text-gray-400 transition">Experiences</a>
+      <a href="/achievements" class="chalk-text text-white hover:text-gray-400 transition">Achievements</a>
+    </nav>
+    <a href="/" class="logo-wrapper order-1 md:order-2">
+      <img src="/static/img/signature.jpg" alt="Signature" class="logo-default" />
+    </a>
+    <nav class="flex flex-wrap items-center justify-center gap-4 text-lg order-3 md:ml-10">
+      <a href="/projects" class="chalk-text text-white hover:text-gray-400 transition">Projects</a>
+      <a href="/papers" class="chalk-text text-white hover:text-gray-400 transition">Paper</a>
+      <a href="/ramblings" class="chalk-text text-white hover:text-gray-400 transition">Ramblings</a>
+    </nav>
+  </div>
+</header>
+
+  <!-- Main content -->
+  <main class="{% block main_class %}max-w-4xl mx-auto p-6 mt-8 bg-slate-900/70 rounded-2xl shadow-lg border border-slate-700{% endblock %} flex-grow text-gray-100">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.copy-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const code = button.parentElement.querySelector('code').textContent.trim();
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    button.innerText = 'Copied!';
+                    setTimeout(() => button.innerText = 'Copy', 1500);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    button.innerText = 'Failed';
+                    setTimeout(() => button.innerText = 'Copy', 1500);
+                });
+        });
+    });
+});
+</script>
+{% endblock %}
+
+  <!-- Footer -->
+  <footer class="bg-black mt-auto">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm text-center md:text-left">
+      
+      <!-- Left -->
+      <p class="mb-2 md:mb-0">&copy; 2025 Denny Schaedig. All rights reserved.</p>
+      
+      <!-- Right -->
+      <div class="flex flex-col md:flex-row gap-2 md:gap-4">
+        <a href="/contact" class="hover:text-indigo-500">Contact Me</a>
+      </div>
+      
+    </div>
+  </footer>
+
+</body>
+</html>

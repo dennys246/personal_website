@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Denny Schaedig | Story{% endblock %}
+
+{% block extra_head %}
+<style>
+.story-hero {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent !important;
+    padding: 4rem 1.5rem;
+    min-height: 100vh;
+  }
+  .story-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/static/img/summer_denny_picture.HEIC");
+    background-size: cover;
+    background-position: center;
+    z-index: -2;
+  }
+  .story-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+{% endblock %}
+
+{% block main_class %}story-hero w-full min-h-screen p-0 flex items-start justify-start{% endblock %}
+
+{% block content %}
+<div class="reveal w-full max-w-xl bg-transparent font-bold">
+  <div class="flex min-h-screen flex-col justify-between gap-6 p-8 text-slate-100 backdrop-blur-md">
+    <p class="leading-relaxed text-gray-900">
+    Denny Schaedig is a Colorado native passionate about learning in every
+    sense. This passion started as a drive to learn more about the world and in 2015
+    drove Denny to pursue a Bachelor's in Neuroscience at the University
+    of Colorado, Boulder. While honing his understanding of Neuroscience, he focused his studies on how our
+    brains naturally learn, form memories and leverage what was learned. Along the way he 
+    took courses on computer science and mathmatical models of cognition which ignited a 
+    fierce passion and love for computer science, AI, and machine learning.
+    <br><br>
+    This passion ultimately led him to learn more about AI through first-hand experiences.
+    He first started applying computer vision and machine learning to 4D fMRI data in 2018, ultimately
+    training an AI (KleinNet) to understand how the brain functions during a cognitive task. These projects inspired 
+    him to pursue a Master's in AI and machine learning through Colorado State University Global
+    in 2022 to hone his skills. Denny has been leveraging these skills within the Neuroscience 
+    field, building software and training AI to advance scientific research.
+    <br><br>
+    Denny currently works remotely as a Data and AI Engineer for the Laboratory for Child Brain Development 
+    at Washington University in St. Louis preprocessing and analyzing
+    neuroimaging data with traditional and AI approaches. In his free 
+    time, Denny likes to build stuff he believes could help
+    his communities. Currently he is training AvAI&trade; to predict avalanche 
+    risk with real-time data to inform backcountry skiers of potential dangers.
+    <br><br>In his free time, he also loves to learn new things. Currently he is learning the
+    fine details of skiing through teaching and learning from the Professional Ski Instructor
+    of America (PSIA). Alongside this he is learning how to snowboard and
+    is getting ready to shred down his first double black this season! 
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  });
+</script>
+{% endblock %}

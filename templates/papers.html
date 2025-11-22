@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Denny Schaedig | Papers{% endblock %}
+
+{% block extra_head %}
+<style>
+.projects-hero {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent !important;
+    padding: 4rem 1.5rem;
+    min-height: 100vh;
+  }
+  .projects-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/static/img/buffalo_mountain_1.JPG");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: -2;
+  }
+  .projects-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .project-card {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 25px 45px -20px rgba(15, 23, 42, 0.9);
+  }
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+{% endblock %}
+
+{% block main_class %}projects-hero w-full min-h-screen p-0 flex items-start justify-start{% endblock %}
+
+{% block content %}
+<div class="w-full flex justify-center">
+  <div class="flex w-full max-w-4xl flex-col items-center gap-16 pt-[18vh] pb-24 px-6 lg:px-0">
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100"><a href = "https://www.biorxiv.org/content/10.1101/2025.07.02.662817v1">Neural Synchrony in Parent-Child Dyads: Profiles Associated with Interparental Conflict and Internalizing Symptoms</a></h2>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80">
+        Charles Alvarado, Carlomagno C. Panlilio, Koraly Perez-Edgar, Khalil I. Thompson, Denny Schaedig, Nadine Melhem, Susan B. Perlman
+      </p>
+    </section>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const revealElements = Array.from(document.querySelectorAll('.reveal'));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    let hasStarted = false;
+    const startObserving = () => {
+      if (hasStarted) return;
+      revealElements.forEach(el => observer.observe(el));
+      hasStarted = true;
+    };
+
+    if (window.scrollY > 10) {
+      startObserving();
+    } else {
+      const onScroll = () => {
+        if (window.scrollY > 10) {
+          startObserving();
+          window.removeEventListener('scroll', onScroll);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+  });
+</script>
+{% endblock %}

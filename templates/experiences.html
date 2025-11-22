@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Denny Schaedig | Experiences{% endblock %}
+
+{% block extra_head %}
+<style>
+.projects-hero {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent !important;
+    padding: 4rem 1.5rem;
+    min-height: 100vh;
+  }
+  .projects-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/static/img/hangling_lakes.JPG");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: -2;
+  }
+  .projects-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .project-card {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 25px 45px -20px rgba(15, 23, 42, 0.9);
+  }
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+{% endblock %}
+
+{% block main_class %}projects-hero w-full min-h-screen p-0 flex items-start justify-start{% endblock %}
+
+{% block content %}
+<div class="w-full flex justify-center">
+  <div class="flex w-full max-w-4xl flex-col items-center gap-16 pt-[18vh] pb-24 px-6 lg:px-0">
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center"><a href = "https://www.childbrainlab.com/" class="text-green-400 hover:text-green-800">Laboratory for Child Brain Development</a></h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">NeuroImaging Engineer</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Prepares and analyzes neuroimaging data (fMRI, fNIRS, etc.) using high performance computing, statistics, and AI<br>
+        Develops open-source tools to accelerate scientific discovery like HRfunc and BOLDnet<br>
+        Validates discoveries and tools through writing peer-reviewed papers<br>
+        Built a high performance computing server with AWS for 3D and 4D Neuroimaging Analysis<br>
+        <br>
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center"><a href = "https://www.rmdig.ai" class="text-green-400 hover:text-green-800">Rocky Mountain Digerati</a></h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">Founder, Snowpack Digger, AI Engineer</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Collects the Rocky Mountain Snowpack dataset and generatively pre-traines models on data<br>
+        Creating a higher level model AvAI™ to predict avalanche risk using pre-trained models<br>
+        Developing an app to host AvAI™ alongside an inference infrastructure.<br>
+        Writing papers to validate the snowpack collection method and avalanche risk predictions<br>
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center"><a href = "https://www.colorado.edu/mri/" class="text-green-400 hover:text-green-800">Intermountain NeuroImaging Consortium</a></h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">Software Engineer</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Created an automated training system to track MRI user's training compliance.<br>
+        Developed a scheduling assistants for finding available MRI time.<br>
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center">Cěko Lab</h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">Professional Research Assistant</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Constructed a SQL database for storing data from multiple neuroimaging devices.<br>
+        Developed ETL pipelines for extracting data from multiple servers and merging into an SQL database.<br>
+        Created an automated enrollment process for streamline enrolling new subjects into studies.<br>
+        Guided participants through remote studies to collect real-time data<br>
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center"><a href = "https://www.colorado.edu/ics/research/dmello-lab" class="text-green-400 hover:text-green-800">D'Mello Lab</a></h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">Professional Research Assistant</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Guided participants through fNIRS studies examining memory and executive function.<br>
+        Explored algorithms to correct eye tracking drift artifacts.<br>
+        Managed research assistance, lab equipment, and supplies.<br>
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center"><a href = "https://www.colorado.edu/faculty/banich/" class="text-green-400 hover:text-green-800">Banich Lab</a></h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">Research Assistant</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Guided participants through fMRI studies examining memory, learning and executive function.<br>
+        Conducted voxel spectroscopy assessing real-time Human brain glutamate and GABA concentration <br>
+        Developed an participant management script enabling researchers to run 12 subjects at a time.<br>
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center">Loveland Ski Resort</h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">Ski Instructor</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Taught skiing to people of all ages, primary focusing on teaching kids 3 - 14.
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center">Eldora Ski Resort</h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">Ski Instructor</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Taught skiing to people of all ages, primary focusing on teaching kids 3 - 7.
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center">Boulder Recreational Center</h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">Life Gaurd</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Performed emergency rescues and first aid when necessary.<br>
+        Enforced rules and fostered a safe environment.
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center">South Suburban Recreational Centers</h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">Head Gaurd</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Lead lifegaurds, organizing rotations, and assigning duties.<br>
+        Ensures supplies were sufficient and pool chemicals were balanced.<br>
+        Performed emergency rescues and first aid when necessary.<br>
+        Enforced rules and fostered a safe environment.
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center">Aurora Medical Team</h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">First Responder, Medical Officer</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Attended to medical emergencies<br>
+        Taught people of all ages CPR and first aid.<br>
+        Organized medical roving rotations for events.<br>
+        Maintained equipment and upkept supplies for fellow medics.<br>
+      </p>
+    </section>
+    <section class="reveal project-card w-full">
+      <h2 class="text-2xl font-semibold text-slate-100 text-center">United Artists Movie Theaters</h2>
+      <p class="text-xl font-semibold text-slate-100 text-center">"Cast Member"</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80 text-center">
+        Slung popcorn and swept it up.
+      </p>
+    </section>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const revealElements = Array.from(document.querySelectorAll('.reveal'));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    let hasStarted = false;
+    const startObserving = () => {
+      if (hasStarted) return;
+      revealElements.forEach(el => observer.observe(el));
+      hasStarted = true;
+    };
+
+    if (window.scrollY > 10) {
+      startObserving();
+    } else {
+      const onScroll = () => {
+        if (window.scrollY > 10) {
+          startObserving();
+          window.removeEventListener('scroll', onScroll);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+  });
+</script>
+{% endblock %}
