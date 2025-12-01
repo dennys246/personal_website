@@ -112,46 +112,9 @@
 }
 
 @media (max-width: 768px) {
-  .scroll-cta {
-    position: relative;
-    inset: auto;
-    transform: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1.5rem;
-    padding: 1.5rem 1.25rem 2.5rem;
-    width: 100%;
-    height: 100vh;
-    overflow-y: auto;
-    scroll-snap-type: y mandatory;
-    scroll-padding: 1.5rem;
-    opacity: 1;
-    pointer-events: auto;
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.82) 0%, rgba(15, 23, 42, 0.7) 100%);
-    border-radius: 1.75rem 1.75rem 0 0;
-    box-shadow: 0 -12px 36px -28px rgba(15, 23, 42, 0.9);
-  }
-
+  .scroll-cta,
   .scroll-cta.visible {
-    transform: none;
-  }
-
-  .scroll-cta__card {
-    width: 100%;
-    max-width: 22rem;
-    min-height: calc(100vh - 5rem);
-    margin: 0 auto;
-    scroll-snap-align: start;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .scroll-cta__btn {
-    width: 100%;
-    max-width: 14rem;
-    text-align: center;
+    display: none;
   }
 }
 </style>
