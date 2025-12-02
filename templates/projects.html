@@ -36,6 +36,25 @@
     backdrop-filter: blur(12px);
     box-shadow: 0 25px 45px -20px rgba(15, 23, 42, 0.9);
   }
+  .project-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .project-card-link:focus-visible {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 25px 45px -20px rgba(15, 23, 42, 0.9), 0 0 0 3px rgba(129, 140, 248, 0.35);
+  }
+  .project-card-link:hover {
+    transform: translateY(-2px);
+    border-color: rgba(129, 140, 248, 0.8);
+  }
+  .project-card-link:hover .project-title,
+  .project-card-link:focus-visible .project-title {
+    color: #3730a3;
+  }
 .reveal {
     opacity: 0;
     transform: translateY(30px);
@@ -53,8 +72,8 @@
 {% block content %}
 <div class="w-full flex justify-center">
   <div class="flex w-full max-w-4xl flex-col items-center gap-16 pt-[18vh] pb-24 px-6 lg:px-0">
-    <section class="reveal project-card w-full">
-      <h2 class="text-2xl font-semibold text-slate-100 text-center"><a href="https://www.hrfunc.org" class="text-indigo-400 hover:text-indigo-800">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i></a></h2>
+    <a class="reveal project-card project-card-link w-full" href="https://www.hrfunc.org">
+      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i></h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
         To improve human representation in science, Denny leverages
         linear algebra and deconvolution to estimate neural activity and
@@ -62,23 +81,23 @@
         data. Leveraging a hybrid tree-hash table data structure, the HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i> tool allows Neuroscientists to
         communicate observed hemodynamics, increase neural activity estimation activation,
         and improve represationation of people from diverse backgrounds in science.
-        Check out the <a href="https://www.hrfunc.org" class="text-indigo-400 hover:text-indigo-800">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i> website</a>
+        Check out the <span class="text-indigo-200">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i> website</span>
         for more information!
       </p>
-    </section>
-    <section class="reveal project-card w-full">
-      <h2 class="text-2xl font-semibold text-slate-100 text-center"><a href="https://www.rmdig.ai/avai" class="text-indigo-400 hover:text-indigo-800">AvAI&trade;</a></h2>
+    </a>
+    <a class="reveal project-card project-card-link w-full" href="https://www.rmdig.ai/avai">
+      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200">AvAI&trade;</h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
         AvAI is a artificial intelligence taught to understand snowpack
         characteristics and apply features learned to avalanche risk 
         prediction. The model is undergoing training currently and expected
         to be released alongside a paper validating it's use in 2026. Check
-        out the <a href="www.rmdig.ai" class="text-indigo-400 hover:text-indigo-800">Rocky Mountain Digerati website</a> 
+        out the <span class="text-indigo-200">Rocky Mountain Digerati website</span>
         for updates on it's progress!
       </p>
-    </section>
-    <section class="reveal project-card w-full">
-      <h2 class="text-2xl font-semibold text-slate-100 text-center"><a href="https://www.rmdig.ai/snowpack_dataset" class="text-indigo-400 hover:text-indigo-800">Rocky Mountain Snowpack Dataset</a></h2>
+    </a>
+    <a class="reveal project-card project-card-link w-full" href="https://www.rmdig.ai/snowpack_dataset">
+      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200">Rocky Mountain Snowpack Dataset</h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
         The Rocky Mountain Snowpack dataset is a collection of snowpack images
         methodically collected to preserve each samples location in time & space.
@@ -88,7 +107,7 @@
         avalanche risk at higher accuracy than current avalanche risk prediction
         systems (~86%).
       </p>
-    </section>
+    </a>
     <section class="reveal project-card w-full">
       <h2 class="text-2xl font-semibold text-slate-100 text-center">BOLDnet</h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
