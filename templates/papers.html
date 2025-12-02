@@ -29,12 +29,29 @@
     z-index: -1;
   }
   .project-card {
+    display: block;
     background: rgba(15, 23, 42, 0.65);
     border: 1px solid rgba(148, 163, 184, 0.4);
     border-radius: 1.5rem;
     padding: 2.5rem;
+    text-decoration: none;
+    color: inherit;
     backdrop-filter: blur(12px);
     box-shadow: 0 25px 45px -20px rgba(15, 23, 42, 0.9);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .project-card:focus-visible {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 25px 45px -20px rgba(15, 23, 42, 0.9), 0 0 0 3px rgba(129, 140, 248, 0.4);
+  }
+  .project-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(129, 140, 248, 0.8);
+  }
+  .project-card:hover .project-title,
+  .project-card:focus-visible .project-title {
+    color: #818cf8;
   }
 .reveal {
     opacity: 0;
@@ -53,22 +70,22 @@
 {% block content %}
 <div class="w-full flex justify-center">
   <div class="flex w-full max-w-4xl flex-col items-center gap-16 pt-[18vh] pb-24 px-6 lg:px-0">
-    <section class="reveal project-card w-full">
-      <h2 class="text-2xl font-semibold text-slate-100">
-        <a class="transition-colors duration-200 hover:text-indigo-400" href="https://www.spiedigitallibrary.org/journals/neurophotonics/volume-13/issue-S1/S17801/HRfunc--a-tool-for-modeling-hemodynamic-response-variability-in/10.1117/1.NPh.13.S1.S17801.full">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i>: a tool for modeling hemodynamic response variability in fNIRS</a>
+    <a class="reveal project-card w-full" href="https://www.spiedigitallibrary.org/journals/neurophotonics/volume-13/issue-S1/S17801/HRfunc--a-tool-for-modeling-hemodynamic-response-variability-in/10.1117/1.NPh.13.S1.S17801.full">
+      <h2 class="project-title text-2xl font-semibold text-slate-100 transition-colors duration-200">
+        <span class = "text-indigo-400">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i></span>: a tool for modeling hemodynamic response variability in fNIRS
       </h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
         Denny Schaedig, Megan Schumer, Bedilia Mata-Centeno, Luca Pollonini, Koraly Pérez-Edgar, Nadine Melhem, Susan B. Perlman
       </p>
-    </section>
-    <section class="reveal project-card w-full">
-      <h2 class="text-2xl font-semibold text-slate-100">
-        <a class="transition-colors duration-200 hover:text-indigo-400" href="https://www.biorxiv.org/content/10.1101/2025.07.02.662817v1">Neural Synchrony in Parent-Child Dyads: Profiles Associated with Interparental Conflict and Internalizing Symptoms</a>
+    </a>
+    <a class="reveal project-card w-full" href="https://www.biorxiv.org/content/10.1101/2025.07.02.662817v1">
+      <h2 class="project-title text-2xl font-semibold text-slate-100 transition-colors duration-200">
+        Neural Synchrony in Parent-Child Dyads: Profiles Associated with Interparental Conflict and Internalizing Symptoms
       </h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
         Charles Alvarado, Carlomagno C. Panlilio, Koraly Perez-Edgar, Khalil I. Thompson, Denny Schaedig, Nadine Melhem, Susan B. Perlman
       </p>
-    </section>
+    </a>
   </div>
 </div>
 {% endblock %}
