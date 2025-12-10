@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, Response, url_for
 import os
 
 app = Flask(__name__)
@@ -38,6 +38,55 @@ def contact():
 @app.route("/perceptrons")
 def perceptrons():
     return render_template("perceptrons.html")
+
+
+@app.route("/robots.txt")
+def robots_txt():
+    sitemap_url = url_for("sitemap_xml", _external=True)
+    content = "\n".join(
+        [
+            "User-agent: *",
+            "Allow: /",
+            f"Sitemap: {sitemap_url}",
+        ]
+    )
+    return Response(content, mimetype="text/plain")
+
+
+@app.route("/sitemap.xml")
+def sitemap_xml():
+    pages = [
+        ("main", "weekly", "1.0"),
+        ("story", "monthly", "0.8"),
+        ("experiences", "monthly", "0.8"),
+        ("achievements", "monthly", "0.8"),
+        ("papers", "monthly", "0.8"),
+        ("projects", "monthly", "0.8"),
+        ("ramblings", "monthly", "0.6"),
+        ("contact", "monthly", "0.6"),
+        ("perceptrons", "monthly", "0.6"),
+    ]
+
+    url_entries = []
+    for endpoint, changefreq, priority in pages:
+        loc = url_for(endpoint, _external=True)
+        url_entries.append(
+            f"""  <url>
+    <loc>{loc}</loc>
+    <changefreq>{changefreq}</changefreq>
+    <priority>{priority}</priority>
+  </url>"""
+        )
+
+    xml_content = "\n".join(
+        [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+            *url_entries,
+            "</urlset>",
+        ]
+    )
+    return Response(xml_content, mimetype="application/xml")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
