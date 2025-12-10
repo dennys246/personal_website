@@ -11,19 +11,23 @@
   <title>{% block title %}Denny Schaedig{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% set default_description = "Official site for Denny Schaedig, an AI and neuroimaging engineer sharing projects, publications, and experiences across data science, neuroscience, and mountain life." %}
+  {% set canonical_url = request.base_url %}
+  {% set preview_image = url_for('static', filename='img/signature.jpg', _external=True) %}
   <meta name="description" content="{{ default_description }}">
   <meta name="keywords" content="Denny Schaedig, AI engineer, neuroimaging, data science, Colorado researcher, Rocky Mountain Digerati">
   <meta name="author" content="Denny Schaedig">
-  <link rel="canonical" href="{{ request.url }}">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <link rel="canonical" href="{{ canonical_url }}">
   <meta property="og:title" content="{{ self.title()|striptags }}">
   <meta property="og:description" content="{{ default_description }}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ request.url }}">
-  <meta property="og:image" content="{{ url_for('static', filename='img/signature.jpg') }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:image" content="{{ preview_image }}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ self.title()|striptags }}">
   <meta name="twitter:description" content="{{ default_description }}">
-  <meta name="twitter:image" content="{{ url_for('static', filename='img/signature.jpg') }}">
+  <meta name="twitter:image" content="{{ preview_image }}">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,600,700&display=swap" rel="stylesheet">
   {% block extra_head %}{% endblock %}
@@ -97,7 +101,7 @@
     "url": "{{ request.url_root }}",
     "jobTitle": "AI & Neuroimaging Engineer",
     "description": "Denny Schaedig builds AI, neuroimaging tools, and mountain-focused research projects in Colorado.",
-    "image": "{{ url_for('static', filename='img/signature.jpg') }}",
+    "image": "{{ preview_image }}",
     "knowsAbout": ["Artificial Intelligence", "Neuroimaging", "Data Science", "Backcountry Safety"]
   }
   </script>

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, Response, url_for
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -67,12 +68,14 @@ def sitemap_xml():
         ("perceptrons", "monthly", "0.6"),
     ]
 
+    lastmod = datetime.utcnow().date().isoformat()
     url_entries = []
     for endpoint, changefreq, priority in pages:
         loc = url_for(endpoint, _external=True)
         url_entries.append(
             f"""  <url>
     <loc>{loc}</loc>
+    <lastmod>{lastmod}</lastmod>
     <changefreq>{changefreq}</changefreq>
     <priority>{priority}</priority>
   </url>"""
