@@ -60,6 +60,21 @@
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Tips & Tricks for Fine-Tuning GANs</span>
   </a>
 
+  <a href="{{ url_for('maxim') }}" aria-label="Read Maxim Overview" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <img
+      src="{{ url_for('static', filename='img/reachy_mini_hidding.jpg') }}"
+      alt="Reachy Mini robot hiding"
+      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <span class="absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700 opacity-0 mix-blend-multiply transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-violet-200">Building artificial minds from</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-violet-200">biological blueprints for robots</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Maxim: A Brain for Robots</span>
+  </a>
+
   <a href="https://youtu.be/QJqz6qSf2E8" aria-label="Read Chalkboard Protocol" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
     <img
       src="{{ url_for('static', filename='img/snowpack_sampling.png') }}"
@@ -75,13 +90,21 @@
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">How to teach an AI about Avalanches</span>
   </a>
 
-  <a href="{{ url_for('ramblings') }}" aria-label="Read Orchard Systems" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+  <a href="{{ url_for('progressive_growing') }}" aria-label="Read Progressive Growing" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
     <span class="absolute inset-0 bg-gradient-to-tr from-lime-400 via-green-500 to-emerald-500 opacity-90 transition duration-500 group-hover:scale-105"></span>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
-      <p class="text-xs uppercase tracking-[0.3em] text-lime-200">*In Progress*</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-lime-200">An Insanely Useful Method</h2>
+      <p class="text-xs uppercase tracking-[0.3em] text-lime-200">Progressive growing of GANs and</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-lime-200">building the Abominable SnowGAN</h2>
     </div>
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Progressively Growing Models</span>
   </a>
+
+  <div class="relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <span class="absolute inset-0 bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-700 opacity-90"></span>
+  </div>
+
+  <div class="relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <span class="absolute inset-0 bg-gradient-to-tr from-cyan-500 via-teal-600 to-emerald-700 opacity-90"></span>
+  </div>
 
 {% endblock %}

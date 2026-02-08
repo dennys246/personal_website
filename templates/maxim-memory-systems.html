@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}Maxim Memory Systems | Denny Schaedig{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
+
+  <header class="text-center space-y-2">
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Memory Systems</h1>
+    <p class="text-indigo-400 font-medium">How Maxim Remembers, Predicts, and Learns</p>
+  </header>
+
+  <p class="text-slate-300 leading-relaxed">Memory in biological systems isn't a filing cabinet. It's not even a database. It's a dynamic, reconstructive process where different brain regions collaborate to store, index, and retrieve experiences. Maxim implements four key memory structures, each handling a different aspect of cognition.</p>
+
+  <!-- Hippocampus -->
+  <section class="space-y-4">
+    <h2 id="hippocampus" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Hippocampus: Episodic Memory</h2>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">The hippocampus in mammals is crucial for forming new episodic memories, those rich, contextual records of "what happened, where, and when." Damage to it famously prevents forming new long-term memories while leaving older ones intact.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Maxim's Hippocampus stores <em class="text-indigo-400 not-italic font-medium">EpisodicMemory</em> objects, each capturing a complete cycle:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Perception → Decision → Action → Outcome</div>
+
+    <p class="text-slate-300 leading-relaxed">Not every moment gets recorded. The system uses <em class="text-indigo-400 not-italic font-medium">selective capture</em> to avoid memory bloat:</p>
+
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">User interactions</strong> - Always recorded (humans are important)</li>
+      <li><strong class="text-white">High novelty</strong> - New situations worth remembering (threshold: 0.7)</li>
+      <li><strong class="text-white">High salience</strong> - Emotionally or contextually significant events</li>
+      <li><strong class="text-white">Goal changes</strong> - Transitions in what the robot is trying to do</li>
+      <li><strong class="text-white">Failures</strong> - Mistakes are valuable teachers</li>
+      <li><strong class="text-white">Periodic checkpoints</strong> - Regular snapshots for continuity</li>
+    </ul>
+
+    <p class="text-slate-300 leading-relaxed">Memories are indexed by multiple keys (goal, tool, object, person, success, mode) enabling O(1) retrieval. Need all memories involving "coffee mug"? Instant lookup.</p>
+  </section>
+
+  <!-- SCN -->
+  <section class="space-y-4">
+    <h2 id="scn" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The SCN: Temporal Rhythm Indexing</h2>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">The Suprachiasmatic Nucleus (SCN) is your brain's master clock, a tiny cluster of neurons that orchestrates circadian rhythms. It's why jet lag hurts and why you get hungry at the same time each day.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Maxim's SCN provides temporal indexing across multiple timescales:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Timescale</th>
+            <th class="px-4 py-3">Bins</th>
+            <th class="px-4 py-3 rounded-tr-lg">Use Case</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Hourly</td>
+            <td class="px-4 py-3">24 bins</td>
+            <td class="px-4 py-3">"What usually happens at 9 AM?"</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Daily</td>
+            <td class="px-4 py-3">7 bins</td>
+            <td class="px-4 py-3">"What's different on Mondays?"</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Weekly</td>
+            <td class="px-4 py-3">4 bins</td>
+            <td class="px-4 py-3">"First week of month patterns"</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">Monthly</td>
+            <td class="px-4 py-3">12 bins</td>
+            <td class="px-4 py-3">"Seasonal patterns"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">This enables queries like "What typically happens around this time on weekday mornings?" with minimal computational cost. The memory footprint is remarkably small: 10,000 memories require only ~500KB of index storage.</p>
+  </section>
+
+  <!-- Nucleus Accumbens -->
+  <section class="space-y-4">
+    <h2 id="nucleus-accumbens" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Nucleus Accumbens: Reward Prediction</h2>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">The Nucleus Accumbens (NAc) is central to reward processing and motivation. It learns to predict outcomes based on prior experience, essentially asking: "What happened last time I did this?"</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Maxim's NAc learns <em class="text-indigo-400 not-italic font-medium">causal links</em> between events and outcomes:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Event (e.g., "internet_search") → Outcome (e.g., "success_with_results")
+    ↓
+CausalLink:
+  - event_signature: hash of action + parameters
+  - outcome_signature: hash of result type
+  - valence: POSITIVE | NEUTRAL | NEGATIVE
+  - strength: 0.0 - 1.0
+  - confidence: reliability of prediction
+  - observation_count: how many times seen
+  - context_conditions: when this applies</div>
+
+    <p class="text-slate-300 leading-relaxed">The learning algorithm is <em class="text-indigo-400 not-italic font-medium">Rescorla-Wagner</em>, the same mathematical model used in behavioral psychology:</p>
+
+    <div class="bg-slate-950 rounded-lg px-6 py-3 font-serif text-lg text-slate-200 inline-block">
+      ΔV = α(λ - V)
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Where α is learning rate, λ is the actual outcome, and V is the current prediction. This produces smooth, asymptotic learning without oscillation.</p>
+
+    <p class="text-slate-300 leading-relaxed">The key insight: before executing any action, Maxim can predict its likely outcome. This enables <em class="text-indigo-400 not-italic font-medium">proactive</em> rather than purely reactive decision-making.</p>
+  </section>
+
+  <!-- Entorhinal Cortex -->
+  <section class="space-y-4">
+    <h2 id="entorhinal-cortex" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Entorhinal Cortex: Similarity Matching</h2>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">The Entorhinal Cortex (EC) serves as a gateway between the hippocampus and neocortex, supporting pattern completion and spatial navigation. Grid cells here create abstract representations that generalize across specific experiences.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Maxim's EC enables similarity queries: "Find memories similar to this situation." This is crucial because exact matches are rare. You want to find relevant past experience even when details differ.</p>
+
+    <p class="text-slate-300 leading-relaxed">The implementation uses <em class="text-indigo-400 not-italic font-medium">Locality-Sensitive Hashing (LSH)</em> for approximate nearest-neighbor search in O(1) time:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Current situation: "find the red cup in the kitchen"
+    ↓
+Situation Signature: [semantic, structural, temporal features]
+    ↓
+LSH lookup: ~10ms regardless of memory size
+    ↓
+Returns: "find the blue mug in the kitchen" (last week)
+         "find the water bottle in the kitchen" (yesterday)</div>
+
+    <p class="text-slate-300 leading-relaxed">Optional neural embeddings (SentenceTransformer) provide richer semantic similarity for Phase 4 deployments.</p>
+  </section>
+
+  <!-- Consolidation -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Memory Consolidation: Sleep</h2>
+
+    <p class="text-slate-300 leading-relaxed">Biological memory consolidation happens during sleep. Maxim implements an analogous process during idle time or session end:</p>
+
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">Access-based retention:</strong> Frequently accessed memories are preserved</li>
+      <li><strong class="text-white">Compression:</strong> Old memories shrink from ~2.5KB to ~200 bytes</li>
+      <li><strong class="text-white">Pruning:</strong> Memories not accessed in one week are removed</li>
+      <li><strong class="text-white">Protection:</strong> High-value memories (user interactions, successes) are never pruned</li>
+      <li><strong class="text-white">Temporal coverage:</strong> SCN-aware consolidation maintains representation across time periods</li>
+    </ul>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 text-center">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-4">Memory System Integration</h3>
+      <pre class="font-mono text-sm text-slate-300 inline-block text-left">
+         ┌─────────────┐
+         │   Percept   │
+         └──────┬──────┘
+                │
+    ┌───────────┼───────────┐
+    ▼           ▼           ▼
+┌───────┐  ┌────────┐  ┌────────┐
+│  SCN  │  │ Hippo- │  │   EC   │
+│(when) │  │ campus │  │(like?) │
+└───┬───┘  │ (what) │  └───┬────┘
+    │      └────┬───┘      │
+    │           │          │
+    └─────┬─────┴─────┬────┘
+          ▼           ▼
+      ┌───────────────────┐
+      │   NAc (predict)   │
+      │   What outcome?   │
+      └─────────┬─────────┘
+                ▼
+          ┌───────────┐
+          │  Decision │
+          └───────────┘</pre>
+    </div>
+  </section>
+
+  <div class="flex flex-wrap justify-center gap-3 pt-6 border-t border-slate-700">
+    <a href="/maxim" class="btn-link">Overview</a>
+    <a href="/maxim-proprioception" class="btn-link">Body Awareness</a>
+    <a href="/maxim-attention-salience" class="btn-link">Attention &amp; Salience</a>
+    <a href="/maxim-agent-architecture" class="btn-link">Agent Architecture</a>
+    <a href="/maxim-operating-modes" class="btn-link">Operating Modes</a>
+    <a href="/maxim-technical-deepdive" class="btn-link">Technical Deep Dive</a>
+    <a href="/maxim-usage-guide" class="btn-link">Usage Guide</a>
+  </div>
+</div>
+{% endblock %}

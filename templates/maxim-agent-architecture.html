@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+
+{% block title %}Maxim Agent Architecture | Denny Schaedig{% endblock %}
+
+{% block extra_head %}
+<style>
+  .agent-box {
+    position: relative;
+  }
+  .agent-box:not(:last-child)::after {
+    content: '↓';
+    display: block;
+    text-align: center;
+    font-size: 1.5rem;
+    color: rgb(99 102 241);
+    padding: 4px 0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
+
+  <header class="text-center space-y-2">
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Agent Architecture</h1>
+    <p class="text-indigo-400 font-medium">How Biological Systems Meet Agentic AI</p>
+  </header>
+
+  <p class="text-slate-300 leading-relaxed">Maxim's cognitive components don't exist in isolation. They're woven into an agentic architecture where LLM-powered agents make decisions informed by biological memory, attention, and learning systems. This page explains how the pieces fit together.</p>
+
+  <!-- Layered Architecture -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">The Layered Architecture</h2>
+
+    <p class="text-slate-300 leading-relaxed">Maxim enforces strict one-way dependencies. Higher layers can call lower layers, but never the reverse. This prevents circular reasoning and ensures clean separation of concerns:</p>
+
+    <div class="bg-slate-950 rounded-xl p-5 space-y-2">
+      <div class="flex items-center bg-slate-800 rounded-lg p-3 border-l-4 border-indigo-500">
+        <span class="font-semibold text-white w-28 shrink-0">Agents</span>
+        <span class="text-sm text-slate-400">Goal reasoning, intent generation (NO side effects)</span>
+      </div>
+      <div class="text-center text-indigo-500 text-lg">↓</div>
+      <div class="flex items-center bg-slate-800 rounded-lg p-3 border-l-4 border-indigo-500">
+        <span class="font-semibold text-white w-28 shrink-0">Planning</span>
+        <span class="text-sm text-slate-400">Plan generation and refinement (NO execution)</span>
+      </div>
+      <div class="text-center text-indigo-500 text-lg">↓</div>
+      <div class="flex items-center bg-slate-800 rounded-lg p-3 border-l-4 border-indigo-500">
+        <span class="font-semibold text-white w-28 shrink-0">Decision</span>
+        <span class="text-sm text-slate-400">Action selection and arbitration (NO memory mutation)</span>
+      </div>
+      <div class="text-center text-indigo-500 text-lg">↓</div>
+      <div class="flex items-center bg-slate-800 rounded-lg p-3 border-l-4 border-indigo-500">
+        <span class="font-semibold text-white w-28 shrink-0">Runtime</span>
+        <span class="text-sm text-slate-400">Agentic orchestration loop</span>
+      </div>
+      <div class="text-center text-indigo-500 text-lg">↓</div>
+      <div class="flex items-center bg-slate-800 rounded-lg p-3 border-l-4 border-indigo-500">
+        <span class="font-semibold text-white w-28 shrink-0">Executor</span>
+        <span class="text-sm text-slate-400">Tool invocation and motor control</span>
+      </div>
+      <div class="text-center text-indigo-500 text-lg">↓</div>
+      <div class="flex items-center bg-slate-800 rounded-lg p-3 border-l-4 border-indigo-500">
+        <span class="font-semibold text-white w-28 shrink-0">Environment</span>
+        <span class="text-sm text-slate-400">World observation (NO side effects)</span>
+      </div>
+      <div class="text-center text-indigo-500 text-lg">↓</div>
+      <div class="flex items-center bg-slate-800 rounded-lg p-3 border-l-4 border-indigo-500">
+        <span class="font-semibold text-white w-28 shrink-0">Memory</span>
+        <span class="text-sm text-slate-400">Storage and retrieval (NO decision making)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agent Pipeline -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">The Agent Pipeline</h2>
+
+    <p class="text-slate-300 leading-relaxed">Four specialized agents work in sequence, each with a distinct role:</p>
+
+    <div class="space-y-1">
+      <div class="agent-box">
+        <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
+          <h4 class="text-white font-semibold mb-2 flex items-center gap-2">👁️ PerceptionAgent</h4>
+          <p class="text-sm text-slate-300">Observes raw input from the environment. Classifies objects, computes salience and novelty scores. Outputs a <em class="text-indigo-400 not-italic font-medium">Percept</em>: a normalized, classified observation ready for higher processing.</p>
+        </div>
+      </div>
+      <div class="agent-box">
+        <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
+          <h4 class="text-white font-semibold mb-2 flex items-center gap-2">🧠 MemoryAgent</h4>
+          <p class="text-sm text-slate-300">The bridge between perception and decision. Maintains salient memory context, tracks interaction history, and builds <em class="text-indigo-400 not-italic font-medium">StructuredContext</em> for the LLM. This is where biological memory systems (Hippocampus, SCN, NAc, EC) integrate with the agent loop.</p>
+        </div>
+      </div>
+      <div class="agent-box">
+        <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
+          <h4 class="text-white font-semibold mb-2 flex items-center gap-2">💭 ExecAgent</h4>
+          <p class="text-sm text-slate-300">Proposes goals via LLM. Uses context from MemoryAgent to generate <em class="text-indigo-400 not-italic font-medium">ProposedGoal</em> objects. Considers current state, active goals, and relevant history to suggest what the robot should do next.</p>
+        </div>
+      </div>
+      <div class="agent-box">
+        <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
+          <h4 class="text-white font-semibold mb-2 flex items-center gap-2">🎯 AgenticGoalAgent</h4>
+          <p class="text-sm text-slate-300">Accepts or rejects proposed goals. If accepted, executes via tool invocation. Manages goal execution lifecycle and chains sub-goals hierarchically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Biology Meets AI -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Where Biology Meets AI</h2>
+
+    <p class="text-slate-300 leading-relaxed">The integration points between biological systems and the agent pipeline:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Biological System</th>
+            <th class="px-4 py-3">Integration Point</th>
+            <th class="px-4 py-3 rounded-tr-lg">Effect on Agent</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Hippocampus</td>
+            <td class="px-4 py-3">MemoryAgent context</td>
+            <td class="px-4 py-3">Provides relevant past episodes for LLM reasoning</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">SCN</td>
+            <td class="px-4 py-3">MemoryAgent context</td>
+            <td class="px-4 py-3">Adds temporal patterns ("this usually happens at...")</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">NAc</td>
+            <td class="px-4 py-3">Decision Engine</td>
+            <td class="px-4 py-3">Predicts action outcomes before execution</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">EC</td>
+            <td class="px-4 py-3">MemoryAgent retrieval</td>
+            <td class="px-4 py-3">Finds similar situations from different contexts</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Attention</td>
+            <td class="px-4 py-3">PerceptionAgent</td>
+            <td class="px-4 py-3">Prioritizes unexplored spatial regions</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Salience</td>
+            <td class="px-4 py-3">PerceptionAgent</td>
+            <td class="px-4 py-3">Highlights important objects for attention</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Pain</td>
+            <td class="px-4 py-3">Decision Engine</td>
+            <td class="px-4 py-3">Blocks or modifies harmful action proposals</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">FocusLearner</td>
+            <td class="px-4 py-3">Executor (motor)</td>
+            <td class="px-4 py-3">Adapts movement precision over time</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- StructuredContext -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">The StructuredContext</h2>
+
+    <p class="text-slate-300 leading-relaxed">The MemoryAgent compiles a <em class="text-indigo-400 not-italic font-medium">StructuredContext</em> that gives the LLM everything it needs to reason about the current situation:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">StructuredContext:
+  current_percept:
+    - detected_objects: [{"class": "mug", "confidence": 0.89, "position": [0.3, 0.2]}]
+    - attention_target: "mug"
+    - novelty_score: 0.2
+    - salience_score: 0.7
+
+  relevant_memories:
+    - "2 hours ago: Successfully found mug on kitchen counter"
+    - "Yesterday: User asked for coffee, mug was near coffee maker"
+    - "Last week: Mug search failed in living room"
+
+  temporal_context:
+    - current_time: "09:15 Tuesday"
+    - scn_pattern: "Morning tasks typically involve kitchen"
+
+  predicted_outcomes:  # From NAc
+    - "counter_search": {valence: POSITIVE, strength: 0.82}
+    - "living_room_search": {valence: NEGATIVE, strength: 0.45}
+
+  active_goals:
+    - "Find the coffee mug for the user"
+
+  pain_warnings:
+    - None currently active</div>
+  </section>
+
+  <!-- Fear Circuit -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Decision Safety: The Fear Circuit</h2>
+
+    <p class="text-slate-300 leading-relaxed">Before any action executes, it passes through harm prediction:</p>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Two-Tier Harm Detection</h3>
+      <p class="text-slate-300 mb-2"><strong class="text-white">Tier 1 - Predictive (zero latency):</strong> Analyzes action parameters before execution. MovementHarmPredictor checks velocity, JointLimitHarmPredictor checks workspace bounds.</p>
+      <p class="text-slate-300"><strong class="text-white">Tier 2 - Reactive (learned):</strong> PainDetector monitors execution, feeds outcomes to NAc. Next time, similar actions are predicted as harmful.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">FearAgent</em> reviews actions against harm predictions and pain history, making one of four decisions:</p>
+
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">ALLOW:</strong> Proceed as planned</li>
+      <li><strong class="text-white">WARN:</strong> Proceed with caution notice</li>
+      <li><strong class="text-white">DELAY:</strong> Request more information</li>
+      <li><strong class="text-white">BLOCK:</strong> Refuse the action entirely</li>
+    </ul>
+  </section>
+
+  <!-- Energy -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Energy Awareness</h2>
+
+    <p class="text-slate-300 leading-relaxed">Actions consume resources. Maxim tracks energy expenditure across multiple domains:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Energy Types:
+  - LLM_TOKENS: Input + output tokens consumed
+  - LLM_LATENCY: Time waiting for LLM responses
+  - MOTOR_COMMAND: Movement execution cost
+  - VISION_INFERENCE: Vision model processing
+  - AUDIO_PROCESSING: Speech transcription/synthesis
+  - ATTENTION: Cognitive focus cost</div>
+
+    <p class="text-slate-300 leading-relaxed">Energy signals flow to the NAc, creating associations between actions and their costs. Over time, the robot learns which approaches are efficient and which are wasteful, incorporating this into decision-making.</p>
+  </section>
+
+  <!-- Design Principles -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Design Principles</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">🏗️</div>
+        <h5 class="text-indigo-400 font-semibold mb-1">Layered Separation</h5>
+        <p class="text-sm text-slate-400">One-way dependencies prevent circular reasoning</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">🧬</div>
+        <h5 class="text-indigo-400 font-semibold mb-1">Biological Plausibility</h5>
+        <p class="text-sm text-slate-400">Core systems mirror neuroscience mechanisms</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">📈</div>
+        <h5 class="text-indigo-400 font-semibold mb-1">Learning Over Tuning</h5>
+        <p class="text-sm text-slate-400">Systems adapt rather than requiring manual configuration</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">🛡️</div>
+        <h5 class="text-indigo-400 font-semibold mb-1">Safety First</h5>
+        <p class="text-sm text-slate-400">Multi-tier harm detection before and during execution</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">💾</div>
+        <h5 class="text-indigo-400 font-semibold mb-1">Continuous Memory</h5>
+        <p class="text-sm text-slate-400">Persistent learning enables improvement across sessions</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">🤝</div>
+        <h5 class="text-indigo-400 font-semibold mb-1">Human Deference</h5>
+        <p class="text-sm text-slate-400">Always yields to human authority and intervention</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Root Goal -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">The Root Goal</h2>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+      <p class="text-xl text-center italic text-slate-200">"Understand reality and help people."</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Every decision in Maxim traces back to this root goal. The biological systems provide the machinery for understanding (memory, attention, learning). The agent architecture provides the machinery for helping (goal decomposition, planning, execution). The integration of both creates something that might, in small ways, begin to resemble a mind.</p>
+  </section>
+
+  <div class="flex flex-wrap justify-center gap-3 pt-6 border-t border-slate-700">
+    <a href="/maxim" class="btn-link">Overview</a>
+    <a href="/maxim-memory-systems" class="btn-link">Memory Systems</a>
+    <a href="/maxim-proprioception" class="btn-link">Body Awareness</a>
+    <a href="/maxim-attention-salience" class="btn-link">Attention &amp; Salience</a>
+    <a href="/maxim-operating-modes" class="btn-link">Operating Modes</a>
+    <a href="/maxim-technical-deepdive" class="btn-link">Technical Deep Dive</a>
+    <a href="/maxim-usage-guide" class="btn-link">Usage Guide</a>
+  </div>
+</div>
+{% endblock %}

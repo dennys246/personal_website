@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, url_for
+from flask import Flask, render_template, Response, url_for, redirect
 import os
 from datetime import datetime
 
@@ -40,6 +40,46 @@ def contact():
 def perceptrons():
     return render_template("perceptrons.html")
 
+@app.route("/maxim")
+def maxim():
+    return render_template("maxim-overview.html")
+
+@app.route("/maxim-overview")
+def maxim_overview():
+    return redirect(url_for("maxim"), code=301)
+
+@app.route("/maxim-memory-systems")
+def maxim_memory_systems():
+    return render_template("maxim-memory-systems.html")
+
+@app.route("/maxim-proprioception")
+def maxim_proprioception():
+    return render_template("maxim-proprioception.html")
+
+@app.route("/maxim-attention-salience")
+def maxim_attention_salience():
+    return render_template("maxim-attention-salience.html")
+
+@app.route("/maxim-agent-architecture")
+def maxim_agent_architecture():
+    return render_template("maxim-agent-architecture.html")
+
+@app.route("/maxim-technical-deepdive")
+def maxim_technical_deepdive():
+    return render_template("maxim-technical-deepdive.html")
+
+@app.route("/maxim-operating-modes")
+def maxim_operating_modes():
+    return render_template("maxim-operating-modes.html")
+
+@app.route("/maxim-usage-guide")
+def maxim_usage_guide():
+    return render_template("maxim-usage-guide.html")
+
+@app.route("/progressive-growing")
+def progressive_growing():
+    return render_template("progressive-growing.html")
+
 
 @app.route("/robots.txt")
 def robots_txt():
@@ -66,6 +106,15 @@ def sitemap_xml():
         ("ramblings", "monthly", "0.6"),
         ("contact", "monthly", "0.6"),
         ("perceptrons", "monthly", "0.6"),
+        ("maxim", "weekly", "0.9"),
+        ("maxim_memory_systems", "monthly", "0.7"),
+        ("maxim_proprioception", "monthly", "0.7"),
+        ("maxim_attention_salience", "monthly", "0.7"),
+        ("maxim_agent_architecture", "monthly", "0.7"),
+        ("maxim_technical_deepdive", "monthly", "0.7"),
+        ("maxim_operating_modes", "monthly", "0.7"),
+        ("maxim_usage_guide", "monthly", "0.7"),
+        ("progressive_growing", "monthly", "0.6"),
     ]
 
     lastmod = datetime.utcnow().date().isoformat()

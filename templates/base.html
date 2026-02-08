@@ -13,20 +13,20 @@
   {% set default_description = "Official site for Denny Schaedig, an AI and neuroimaging engineer sharing projects, publications, and experiences across data science, neuroscience, and mountain life." %}
   {% set canonical_url = request.base_url %}
   {% set preview_image = url_for('static', filename='img/signature.jpg', _external=True) %}
-  <meta name="description" content="{{ default_description }}">
-  <meta name="keywords" content="Denny Schaedig, AI engineer, neuroimaging, data science, Colorado researcher, Rocky Mountain Digerati">
+  <meta name="description" content="{% block meta_description %}{{ default_description }}{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}Denny Schaedig, AI engineer, neuroimaging, data science, Colorado researcher, Rocky Mountain Digerati{% endblock %}">
   <meta name="author" content="Denny Schaedig">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
   <link rel="canonical" href="{{ canonical_url }}">
   <meta property="og:title" content="{{ self.title()|striptags }}">
-  <meta property="og:description" content="{{ default_description }}">
+  <meta property="og:description" content="{{ self.meta_description() }}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ canonical_url }}">
   <meta property="og:image" content="{{ preview_image }}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ self.title()|striptags }}">
-  <meta name="twitter:description" content="{{ default_description }}">
+  <meta name="twitter:description" content="{{ self.meta_description() }}">
   <meta name="twitter:image" content="{{ preview_image }}">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,600,700&display=swap" rel="stylesheet">

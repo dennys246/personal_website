@@ -1,0 +1,643 @@
+{% extends "base.html" %}
+
+{% block title %}Maxim Technical Deep Dive | Denny Schaedig{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
+
+  <header class="text-center space-y-2">
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Technical Deep Dive</h1>
+    <p class="text-indigo-400 font-medium">Architecture, Threading, Bridges, and the Orchestration Loop</p>
+  </header>
+
+  <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2">Contents</h3>
+    <ol class="space-y-1 text-slate-300 list-decimal pl-5">
+      <li><a href="#architecture" class="text-indigo-400 hover:text-indigo-300 no-underline">The Dependency Graph</a></li>
+      <li><a href="#orchestrator" class="text-indigo-400 hover:text-indigo-300 no-underline">The Orchestration Loop (selfy.py)</a></li>
+      <li><a href="#threading" class="text-indigo-400 hover:text-indigo-300 no-underline">Threading Model</a></li>
+      <li><a href="#tools" class="text-indigo-400 hover:text-indigo-300 no-underline">The Tool System</a></li>
+      <li><a href="#llm" class="text-indigo-400 hover:text-indigo-300 no-underline">LLM Integration</a></li>
+      <li><a href="#hardware" class="text-indigo-400 hover:text-indigo-300 no-underline">Hardware Abstraction</a></li>
+      <li><a href="#bridges" class="text-indigo-400 hover:text-indigo-300 no-underline">The Bridge System</a></li>
+      <li><a href="#persistence" class="text-indigo-400 hover:text-indigo-300 no-underline">Persistence &amp; Checkpointing</a></li>
+      <li><a href="#energy" class="text-indigo-400 hover:text-indigo-300 no-underline">Energy Tracking</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. Dependency Graph -->
+  <section class="space-y-4">
+    <h2 id="architecture" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">1. The Dependency Graph</h2>
+
+    <p class="text-slate-300 leading-relaxed">Maxim enforces a strict one-way dependency graph. This isn't a suggestion; the architecture prevents circular dependencies at the module level. Higher layers may call lower layers, never the reverse.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"> ┌──────────────────────────────────────────────────────┐
+ │                      AGENTS                          │
+ │         Goal reasoning, intent generation            │
+ │                  (NO side effects)                   │
+ └──────────────────────┬───────────────────────────────┘
+                        │
+ ┌──────────────────────▼───────────────────────────────┐
+ │                     PLANNING                         │
+ │        Plan generation, goal decomposition           │
+ │                  (NO execution)                      │
+ └──────────────────────┬───────────────────────────────┘
+                        │
+ ┌──────────────────────▼───────────────────────────────┐
+ │                  DECISION ENGINE                     │
+ │            Action selection, arbitration             │
+ │         (NO planning, memory mutation, or            │
+ │                  tool execution)                     │
+ └──────────────────────┬───────────────────────────────┘
+                        │
+ ┌──────────────────────▼───────────────────────────────┐
+ │                     RUNTIME                          │
+ │            Agentic orchestration loop                │
+ └──────────────────────┬───────────────────────────────┘
+                        │
+ ┌──────────────────────▼───────────────────────────────┐
+ │                    EXECUTOR                          │
+ │          Tool invocation, motor control              │
+ └──────────────────────┬───────────────────────────────┘
+                        │
+ ┌──────────────────────▼───────────────────────────────┐
+ │               TOOLS / ENVIRONMENT                    │
+ │  Side effects (I/O, network) │ World observation     │
+ └──────────────────────┬───────────────────────────────┘
+                        │
+ ┌──────────────────────▼───────────────────────────────┐
+ │                STATE / MEMORY                        │
+ │   Single source of truth │ Storage &amp; retrieval       │
+ │                 (NO decision making)                 │
+ └──────────────────────────────────────────────────────┘</div>
+
+    <p class="text-slate-300 leading-relaxed">Why this matters: when memory doesn't make decisions and agents don't have side effects, you can reason about each layer independently. A bug in planning can't corrupt memory. A bad tool can't bypass safety checks. The decision engine is the single chokepoint for all actions.</p>
+  </section>
+
+  <!-- 2. Orchestration Loop -->
+  <section class="space-y-4">
+    <h2 id="orchestrator" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">2. The Orchestration Loop</h2>
+
+    <p class="text-slate-300 leading-relaxed">Everything runs through <em class="text-indigo-400 not-italic font-medium">selfy.py</em>, the main conscience of the system. The name isn't accidental: it's the self-model, the inner loop where perception, cognition, and action come together.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Maxim.run() — simplified</span>
+
+def run(self):
+    # 1. Start capture threads (video, audio)
+    self._start_video_capture()
+    self._start_audio_capture()
+
+    # 2. Main observation loop
+    while self.alive:
+        # Get latest frame
+        frame = self._latest_frame_queue.get(timeout=0.1)
+
+        # Vision inference (YOLO)
+        detections = self.detect(frame)
+
+        # Novelty tracking
+        novel, familiar = self.novelty_tracker.update(detections)
+
+        # Voice command check
+        transcript = self._check_audio()
+        if transcript:
+            self._handle_voice_command(transcript)
+
+        # Mode-specific behavior
+        if self.mode == "exploration":
+            self._exploration_step(novel, familiar)
+        elif self.mode == "agentic":
+            self._agentic_step(detections, transcript)
+        elif self.mode == "sleep":
+            self._sleep_step()
+
+        # Keyboard input (if interactive)
+        self._handle_keyboard()
+
+        self.current_epoch += 1
+
+    # 3. Cleanup
+    self._shutdown()</div>
+
+    <p class="text-slate-300 leading-relaxed">The loop runs at whatever rate the vision system can sustain (typically 15-30 fps on the Reachy Mini's camera). Each iteration is an "epoch" in Maxim's parlance.</p>
+  </section>
+
+  <!-- 3. Threading Model -->
+  <section class="space-y-4">
+    <h2 id="threading" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">3. Threading Model</h2>
+
+    <p class="text-slate-300 leading-relaxed">Maxim uses a carefully designed multi-threaded architecture. Each thread has a single responsibility and communicates through bounded queues:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Main Thread (observation loop)
+│
+├─ Video Capture Thread
+│  └─ Reads from RobotController.get_video_stream()
+│     Writes to: video_save_queue (bounded)
+│                latest_frame_queue (size 1, drops old)
+│
+├─ Video Writer Thread
+│  └─ Consumes video_save_queue
+│     Writes MP4 to data/videos/
+│
+├─ Audio Capture Thread
+│  └─ Reads from RobotController.get_audio_stream()
+│     Writes to: audio_save_queue
+│                transcription_queue
+│
+├─ Audio Writer Thread
+│  └─ Consumes audio_save_queue
+│     Writes WAV to data/audio/
+│
+├─ Transcription Process
+│  └─ Consumes audio chunks
+│     Runs Whisper inference
+│     Writes JSONL to data/transcript/
+│
+├─ Agentic Loop Thread (mode=agentic only)
+│  └─ Runs agent pipeline concurrently
+│     Shares state via StateManager (thread-safe)
+│
+└─ Motor Executor Thread
+   └─ Exclusive RobotController access for motor commands
+      Prevents concurrent motor operations</div>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Key Design Decision: Bounded Queues</h3>
+      <p class="text-slate-300">The video save queue is bounded (blocks on backpressure), while the latest frame queue has size 1 and drops old frames. This means the observation loop always processes the freshest frame available, never falling behind. Video recording might skip frames under load, but real-time perception never stalls.</p>
+    </div>
+  </section>
+
+  <!-- 4. Tool System -->
+  <section class="space-y-4">
+    <h2 id="tools" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">4. The Tool System</h2>
+
+    <p class="text-slate-300 leading-relaxed">Tools are the only way Maxim affects the world. Every side effect, from moving a motor to searching the internet, goes through a tool.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Tool base class</span>
+
+class Tool(ABC):
+    name: str                     # "move_head", "internet_search"
+    description: str              # For LLM context
+    input_schema: dict[str, Any]  # JSON Schema for parameters
+
+    def run(self, **kwargs) -&gt; ToolResult:
+        self._validate_input(kwargs)       # Schema check
+        output = self.execute(**kwargs)     # Subclass implements
+        return ToolResult(success=True, output=output)
+
+    @abstractmethod
+    def execute(self, **kwargs) -&gt; Any:
+        """Perform the actual side effect."""</div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Available Tools</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Category</th>
+            <th class="px-4 py-3">Tool</th>
+            <th class="px-4 py-3 rounded-tr-lg">What It Does</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3" rowspan="5">Robot Control</td>
+            <td class="px-4 py-3">MoveTool</td>
+            <td class="px-4 py-3">Move head to absolute pose (x, y, z, roll, pitch, yaw)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">FocusInterestsTool</td>
+            <td class="px-4 py-3">Set YOLO interest classes for attention filtering</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">TrackTargetTool</td>
+            <td class="px-4 py-3">Track and follow an object ("center" or "follow" strategy)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">NoveltyTrackTool</td>
+            <td class="px-4 py-3">Query novelty/familiarity scores for detected objects</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">MaximCommandTool</td>
+            <td class="px-4 py-3">Send state machine commands (sleep, wake, shutdown)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3" rowspan="3">Filesystem</td>
+            <td class="px-4 py-3">ReadFileTool</td>
+            <td class="px-4 py-3">Read files (path traversal blocked)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">WriteFileTool</td>
+            <td class="px-4 py-3">Write files to sandbox directory only</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">ExecuteFileTool</td>
+            <td class="px-4 py-3">Execute Python scripts with timeout enforcement</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3" rowspan="2">Network</td>
+            <td class="px-4 py-3">InternetSearchTool</td>
+            <td class="px-4 py-3">DuckDuckGo search (returns title, URL, snippet)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">HTTPFetchTool</td>
+            <td class="px-4 py-3">Fetch and parse web pages (blocks localhost)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3" rowspan="2">Response</td>
+            <td class="px-4 py-3">RespondTool</td>
+            <td class="px-4 py-3">Send text response to user</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">SpeakTool</td>
+            <td class="px-4 py-3">Synthesize speech via TTS engine</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Tool Invocation Flow</h3>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Agent proposes intent → Planner decomposes into tools
+  → Decision Engine selects → FearAgent safety review
+    → Executor calls tool.run(params) → ToolResult
+      → Memory records action + outcome
+        → NAc learns causal link</div>
+  </section>
+
+  <!-- 5. LLM Integration -->
+  <section class="space-y-4">
+    <h2 id="llm" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">5. LLM Integration</h2>
+
+    <p class="text-slate-300 leading-relaxed">Maxim runs LLMs locally using <em class="text-indigo-400 not-italic font-medium">llama-cpp-python</em> (GGUF format) for CPU + Metal GPU acceleration. No cloud API calls for inference.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Model Options</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Model</th>
+            <th class="px-4 py-3">Size</th>
+            <th class="px-4 py-3">Context</th>
+            <th class="px-4 py-3 rounded-tr-lg">Best For</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">SmolLM 1.7B</td>
+            <td class="px-4 py-3">~1.1GB</td>
+            <td class="px-4 py-3">4096</td>
+            <td class="px-4 py-3">CPU-only, low RAM</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Phi-3 Mini</td>
+            <td class="px-4 py-3">~2.3GB</td>
+            <td class="px-4 py-3">4096</td>
+            <td class="px-4 py-3">Balanced performance</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Mistral 7B</td>
+            <td class="px-4 py-3">~4.4GB</td>
+            <td class="px-4 py-3">4096</td>
+            <td class="px-4 py-3">General agentic tasks</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Qwen2 7B</td>
+            <td class="px-4 py-3">~4.4GB</td>
+            <td class="px-4 py-3">8192</td>
+            <td class="px-4 py-3">Extended context</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">Llama 3 8B</td>
+            <td class="px-4 py-3">~4.9GB</td>
+            <td class="px-4 py-3">8192</td>
+            <td class="px-4 py-3">Maximum capability</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Per-Mode Response Sizing</h3>
+    <p class="text-slate-300 leading-relaxed">Each operating mode gets different context windows and response limits, tuned for its cognitive demands:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Response configuration</span>
+
+observe:     max_tokens=128,  context=512   (fast, minimal)
+sleep:       max_tokens=64,   context=256   (barely conscious)
+exploration: max_tokens=256,  context=1024  (medium processing)
+live:        max_tokens=512,  context=2048  (full interaction)
+reflection:  max_tokens=1024, context=3072  (deep introspection)</div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Agent Types</h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-white font-semibold mb-2">LLMAgent</h4>
+        <p class="text-sm text-slate-400">Raw text completion. Single prompt in, text out. Used for classification and simple reasoning.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-white font-semibold mb-2">ChatLLMAgent</h4>
+        <p class="text-sm text-slate-400">Multi-turn conversation with context retention. Used for interactive dialogue with users.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Hardware Abstraction -->
+  <section class="space-y-4">
+    <h2 id="hardware" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">6. Hardware Abstraction</h2>
+
+    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">RobotController</em> abstract base class defines everything Maxim needs from a robot. Concrete implementations handle the actual hardware:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">RobotController interface (simplified)</span>
+
+class RobotController(ABC):
+    # Connection
+    def connect(self, timeout: float = 30.0) -&gt; bool
+    def disconnect(self) -&gt; None
+    def reconnect(self, timeout: float, max_attempts: int) -&gt; bool
+
+    # Motion
+    def goto_target(self, target: MotionTarget) -&gt; bool
+    def look_at_pixel(self, target: PixelTarget) -&gt; bool
+    def get_current_pose(self) -&gt; dict[str, float]
+    def center_vision(self, duration: float) -&gt; bool
+
+    # Lifecycle
+    def wake_up(self) -&gt; bool
+    def goto_sleep(self) -&gt; bool
+
+    # Streams
+    def get_video_stream(self) -&gt; VideoStream | None
+    def get_audio_stream(self) -&gt; AudioStream | None</div>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">MotionTarget — the lingua franca of movement</span>
+
+@dataclass
+class MotionTarget:
+    head_roll: float | None = None     # Radians
+    head_pitch: float | None = None
+    head_yaw: float | None = None
+    body_yaw: float | None = None
+    antenna_left: float | None = None
+    antenna_right: float | None = None
+    duration: float = 1.0              # Seconds
+    method: str = "minimum_jerk"       # Smooth trajectory</div>
+
+    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">ReachyMiniController</em> connects via Zenoh peer discovery on the local network, streaming video through GStreamer and audio through WebRTC. The <em class="text-indigo-400 not-italic font-medium">SimulatedController</em> provides a virtual 640x480 stream for testing without hardware.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Multi-Robot Support</h3>
+    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">RobotRegistry</em> (singleton) allows connecting multiple robots simultaneously:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">registry = RobotRegistry()
+registry.register_controller_type("reachy_mini", ReachyMiniController)
+registry.register_controller_type("simulated", SimulatedController)
+
+primary = registry.connect_robot("primary", "reachy_mini", set_primary=True)
+secondary = registry.connect_robot("secondary", "simulated")</div>
+  </section>
+
+  <!-- 7. Bridge System -->
+  <section class="space-y-4">
+    <h2 id="bridges" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">7. The Bridge System</h2>
+
+    <p class="text-slate-300 leading-relaxed">Bridges are the connective tissue between biological memory systems and the rest of the architecture. Each bridge creates bidirectional learning between two or more components.</p>
+
+    <div class="rounded-xl bg-gradient-to-br from-indigo-700 via-purple-700 to-indigo-800 p-6 text-white shadow-lg">
+      <h3 class="text-lg font-semibold mb-3">Why Bridges?</h3>
+      <p class="leading-relaxed">The strict layered architecture means memory can't directly influence decisions, and decisions can't directly write to memory. Bridges provide the controlled channels for information to flow between layers, maintaining architectural purity while enabling integrated learning.</p>
+    </div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">SpatialMemoryBridge</h3>
+    <p class="text-slate-300 leading-relaxed"><em class="text-indigo-400 not-italic font-medium">Hippocampus + EC &harr; SpatialMap + AttentionNetwork</em></p>
+    <p class="text-slate-300 leading-relaxed">Stores multi-session object location priors. "The mug was on the counter 3 out of 4 times" translates to an attention boost for the counter region when searching for mugs.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">boosts = spatial_bridge.boost_attention_for_goal("find mug")
+# Returns: [(position=(320, 180), weight=0.82), ...]
+# Counter region gets priority based on prior success</div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">PainCircuitBridge</h3>
+    <p class="text-slate-300 leading-relaxed"><em class="text-indigo-400 not-italic font-medium">PainDetector &harr; NAc &harr; FearAgent</em></p>
+    <p class="text-slate-300 leading-relaxed">Two modes of harm prevention:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Mode</th>
+            <th class="px-4 py-3">Latency</th>
+            <th class="px-4 py-3">Mechanism</th>
+            <th class="px-4 py-3 rounded-tr-lg">When</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Predictive</td>
+            <td class="px-4 py-3">Zero (pre-execution)</td>
+            <td class="px-4 py-3">Physics-based velocity/limit analysis</td>
+            <td class="px-4 py-3">Before every motor command</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">Learned</td>
+            <td class="px-4 py-3">After first occurrence</td>
+            <td class="px-4 py-3">NAc pattern matching from past pain events</td>
+            <td class="px-4 py-3">After experiencing pain once</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">PlanHistoryBridge</h3>
+    <p class="text-slate-300 leading-relaxed"><em class="text-indigo-400 not-italic font-medium">Hippocampus &harr; NAc</em></p>
+    <p class="text-slate-300 leading-relaxed">Retrieves successful plan templates from memory. If "find mug" succeeded with the tool sequence [look_at_counter, track_object, approach], that template is offered for similar future goals.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400">EscalationLearningBridge</h3>
+    <p class="text-slate-300 leading-relaxed"><em class="text-indigo-400 not-italic font-medium">Hippocampus + SCN &harr; NAc</em></p>
+    <p class="text-slate-300 leading-relaxed">Learns when to ask a human for help. If confidence in an action drops below a learned threshold (different per goal type, per time of day), Maxim escalates rather than acting autonomously.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400">EnergyCircuitBridge</h3>
+    <p class="text-slate-300 leading-relaxed"><em class="text-indigo-400 not-italic font-medium">Energy Tracking &harr; NAc</em></p>
+    <p class="text-slate-300 leading-relaxed">Reports resource costs as valence signals. Expensive LLM calls get negative valence. Cheap local inferences get positive valence. Over time, the NAc learns to predict energy costs and factor them into planning.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400">SalienceMemoryBridge</h3>
+    <p class="text-slate-300 leading-relaxed"><em class="text-indigo-400 not-italic font-medium">Hippocampus + EC &harr; SalienceNetwork</em></p>
+    <p class="text-slate-300 leading-relaxed">Enriches real-time salience scores with long-term interaction history. Objects you've had positive experiences with become more salient. Objects associated with failures get suppressed.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Bridge Coordination: MemoryHub</h3>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">MemoryHub — central coordinator</span>
+
+hub = MemoryHub(
+    hippocampus=hippo, spatial_map=spatial_map,
+    nac=nac, fear_agent=fear_agent,
+    pain_detector=pain_detector
+)
+
+# Session lifecycle
+hub.on_session_start()              # Load all priors
+hub.record_action(sig, tool, params) # During execution
+hub.record_outcome(sig, success, v)  # After execution
+hub.consolidate_during_sleep()       # Compress &amp; clean</div>
+  </section>
+
+  <!-- 8. Persistence -->
+  <section class="space-y-4">
+    <h2 id="persistence" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">8. Persistence &amp; Checkpointing</h2>
+
+    <p class="text-slate-300 leading-relaxed">Maxim persists learned state across sessions. Every biological system saves its learned parameters:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Component</th>
+            <th class="px-4 py-3">File</th>
+            <th class="px-4 py-3 rounded-tr-lg">What's Saved</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Hippocampus</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/hippocampus.json</td>
+            <td class="px-4 py-3">All episodic memories + associative indices</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">NAc</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/nac_state.json</td>
+            <td class="px-4 py-3">Learned causal links (action &rarr; outcome)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">SCN</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/scn_state.json</td>
+            <td class="px-4 py-3">Temporal bin distributions</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">FocusLearner</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/focus_learner.json</td>
+            <td class="px-4 py-3">Movement gain values (Rescorla-Wagner)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">WorkspaceBounds</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/learned_bounds.json</td>
+            <td class="px-4 py-3">Discovered reachable space limits</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">FearCircuit</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/fear_learning.json</td>
+            <td class="px-4 py-3">Learned aversive action patterns</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">PainDetector</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/pain_detector.json</td>
+            <td class="px-4 py-3">Pain threshold adaptations</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">Thresholds</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/adaptive_thresholds.json</td>
+            <td class="px-4 py-3">Learned escalation/pain thresholds</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Goal Tree Checkpointing</h3>
+
+    <p class="text-slate-300 leading-relaxed">Before risky operations, Maxim checkpoints its entire goal tree so it can recover if something goes wrong:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">checkpoint_id = persistence.checkpoint(
+    tree=goal_tree,
+    config=config,
+    reason="pre_risky_op"
+)
+
+# If things go wrong...
+tree, config, budgets = persistence.recover(checkpoint_id)</div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Memory Consolidation (Sleep)</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Step</th>
+            <th class="px-4 py-3">Mechanism</th>
+            <th class="px-4 py-3 rounded-tr-lg">Effect</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">1. Score</td>
+            <td class="px-4 py-3">Access frequency + recency</td>
+            <td class="px-4 py-3">Rank memories by importance</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">2. Compress</td>
+            <td class="px-4 py-3">EpisodicMemory &rarr; CompressedMemory</td>
+            <td class="px-4 py-3">~2.5KB &rarr; ~200 bytes</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">3. Prune</td>
+            <td class="px-4 py-3">Remove unaccessed (&gt;7 days)</td>
+            <td class="px-4 py-3">Cap total memory footprint</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">4. Protect</td>
+            <td class="px-4 py-3">Exempt high-value memories</td>
+            <td class="px-4 py-3">User interactions, successes preserved</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">5. Reindex</td>
+            <td class="px-4 py-3">SCN-aware rebalancing</td>
+            <td class="px-4 py-3">Maintain temporal coverage</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 9. Energy Tracking -->
+  <section class="space-y-4">
+    <h2 id="energy" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">9. Energy Tracking</h2>
+
+    <p class="text-slate-300 leading-relaxed">Maxim tracks resource expenditure across six domains, creating a unified cost model for decision-making:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Energy types and model multipliers</span>
+
+Energy Domains:
+  LLM_TOKENS        # Input + output token consumption
+  LLM_LATENCY       # Wall-clock time waiting for inference
+  MOTOR_COMMAND      # Movement execution cost
+  VISION_INFERENCE   # YOLO detection cost
+  AUDIO_PROCESSING   # Whisper transcription cost
+  ATTENTION          # Cognitive focus allocation
+
+Model Cost Multipliers:
+  local:             0.2   (cheapest)
+  claude-3-haiku:    0.5
+  claude-3-sonnet:   1.0   (baseline)
+  claude-3-opus:     2.0
+  claude-opus-4-5:   2.5   (most expensive)</div>
+
+    <p class="text-slate-300 leading-relaxed">Energy signals flow to the NAc. High costs produce negative valence. Low costs produce positive valence. Over time, Maxim learns which strategies are efficient and which are wasteful, without being explicitly programmed with cost tables.</p>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-3">The Full Picture</h3>
+      <p class="text-slate-300 mb-3">Every component described here, from the layered architecture to the bridge system to energy tracking, serves a single purpose: enabling an embodied agent that learns from experience while maintaining safety guarantees.</p>
+      <p class="text-slate-300 mb-3">The biological metaphors aren't decoration. They're engineering decisions. Hippocampal indexing is faster than SQL for the access patterns Maxim needs. Rescorla-Wagner learning converges more smoothly than gradient descent for small-sample motor adaptation. Pain circuits provide safety guarantees that policy-only approaches can't match.</p>
+      <p class="text-slate-300">The result is a system where you can plug in a different robot, swap the LLM, or add new tools, and the cognitive architecture adapts. Because that's what brains do.</p>
+    </div>
+  </section>
+
+  <div class="flex flex-wrap justify-center gap-3 pt-6 border-t border-slate-700">
+    <a href="/maxim" class="btn-link">Overview</a>
+    <a href="/maxim-memory-systems" class="btn-link">Memory Systems</a>
+    <a href="/maxim-proprioception" class="btn-link">Body Awareness</a>
+    <a href="/maxim-attention-salience" class="btn-link">Attention &amp; Salience</a>
+    <a href="/maxim-agent-architecture" class="btn-link">Agent Architecture</a>
+    <a href="/maxim-operating-modes" class="btn-link">Operating Modes</a>
+    <a href="/maxim-usage-guide" class="btn-link">Usage Guide</a>
+  </div>
+</div>
+{% endblock %}

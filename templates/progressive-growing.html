@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+
+{% block title %}Progressive Growing of GANs | Denny Schaedig{% endblock %}
+
+{% block extra_head %}
+<style>
+  .fade-bar {
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .fade-fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, rgb(52 211 153), rgb(99 102 241));
+  }
+  .res-block {
+    transition: all 0.3s ease;
+  }
+  .res-block:hover {
+    transform: scale(1.05);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/ramblings" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Ramblings</a>
+
+  <header class="text-center space-y-2">
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Progressive Growing of GANs</h1>
+    <p class="text-indigo-400 font-medium">An Insanely Useful Method for Training Generative Models</p>
+  </header>
+
+  <div class="rounded-xl bg-gradient-to-br from-emerald-700 via-teal-700 to-indigo-800 p-6 text-white shadow-lg">
+    <h3 class="text-lg font-semibold mb-3">The Core Insight</h3>
+    <p class="leading-relaxed">What if instead of throwing your GAN at the hardest version of the problem immediately, you started with the simplest version and gradually increased complexity? That's progressive growing: train at 4x4 pixels first, then 8x8, then 16x16, doubling resolution until you reach your target. The network learns large-scale structure before sweating the fine details.</p>
+  </div>
+
+  <!-- The Problem -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Why Training Big GANs Is Hard</h2>
+    <p class="text-slate-300 leading-relaxed">Try training a GAN to generate 1024x1024 images from scratch. You'll quickly discover why most people don't:</p>
+
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">Unstable gradients:</strong> The generator must simultaneously learn coarse structure and fine detail across a massive parameter space. The optimization landscape is brutal.</li>
+      <li><strong class="text-white">Discriminator dominance:</strong> At high resolution, even tiny imperfections are easy to spot. The discriminator overwhelms the generator before it learns anything meaningful.</li>
+      <li><strong class="text-white">Computational waste:</strong> Early training where the network is learning basic blobs? Wasted on full-resolution pixel shuffling.</li>
+      <li><strong class="text-white">Mode collapse:</strong> The simultaneous learning of all scales increases the likelihood the generator collapses to producing narrow, repetitive outputs.</li>
+    </ul>
+
+    <p class="text-slate-300 leading-relaxed">Progressive growing sidesteps all of this by decomposing the problem into a series of simpler sub-problems.</p>
+  </section>
+
+  <!-- How It Works -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">How Progressive Growing Works</h2>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">The Original Paper</h3>
+      <p class="text-slate-300"><em class="text-indigo-400 not-italic font-medium">Progressive Growing of GANs for Improved Quality, Stability, and Variation</em> by Karras, Aila, Laine, and Lehtinen (NVIDIA, 2017). This paper produced the first photorealistic 1024x1024 synthetic faces and launched the lineage that led to StyleGAN, StyleGAN2, and much of modern image synthesis.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The training progression follows a resolution ladder. Both the generator and discriminator grow in lockstep:</p>
+
+    <div class="flex flex-wrap justify-center gap-2">
+      <div class="res-block bg-indigo-900/60 border border-indigo-500/40 rounded-lg px-3 py-2 text-center">
+        <div class="text-xs text-indigo-400">Phase 1</div>
+        <div class="text-white font-mono font-bold">4x4</div>
+      </div>
+      <span class="text-indigo-500 self-center font-bold">&rarr;</span>
+      <div class="res-block bg-indigo-900/60 border border-indigo-500/40 rounded-lg px-3 py-2 text-center">
+        <div class="text-xs text-indigo-400">Phase 2</div>
+        <div class="text-white font-mono font-bold">8x8</div>
+      </div>
+      <span class="text-indigo-500 self-center font-bold">&rarr;</span>
+      <div class="res-block bg-indigo-900/60 border border-indigo-500/40 rounded-lg px-3 py-2 text-center">
+        <div class="text-xs text-indigo-400">Phase 3</div>
+        <div class="text-white font-mono font-bold">16x16</div>
+      </div>
+      <span class="text-indigo-500 self-center font-bold">&rarr;</span>
+      <div class="res-block bg-indigo-900/60 border border-indigo-500/40 rounded-lg px-3 py-2 text-center">
+        <div class="text-xs text-indigo-400">Phase 4</div>
+        <div class="text-white font-mono font-bold">32x32</div>
+      </div>
+      <span class="text-indigo-500 self-center font-bold">&rarr;</span>
+      <div class="res-block bg-indigo-900/60 border border-indigo-500/40 rounded-lg px-3 py-2 text-center">
+        <div class="text-xs text-indigo-400">...</div>
+        <div class="text-white font-mono font-bold">1024</div>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">At each phase, new layers are added to both networks. The generator grows at its output end (producing higher-resolution images), while the discriminator grows at its input end (accepting higher-resolution images). Critically, existing layers keep their learned weights.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Phase</th>
+            <th class="px-4 py-3">Resolution</th>
+            <th class="px-4 py-3 rounded-tr-lg">What the Network Learns</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">1</td>
+            <td class="px-4 py-3 font-mono">4x4</td>
+            <td class="px-4 py-3">Overall color, basic blob structure</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">2-3</td>
+            <td class="px-4 py-3 font-mono">8x8 - 16x16</td>
+            <td class="px-4 py-3">Rough spatial layout, coarse shapes</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">4-5</td>
+            <td class="px-4 py-3 font-mono">32x32 - 64x64</td>
+            <td class="px-4 py-3">Recognizable features, basic textures</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">6-7</td>
+            <td class="px-4 py-3 font-mono">128x128 - 256x256</td>
+            <td class="px-4 py-3">Fine details, complex textures</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">8-9</td>
+            <td class="px-4 py-3 font-mono">512x512 - 1024x1024</td>
+            <td class="px-4 py-3">Highest-fidelity micro-details</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Fade-In -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">The Fade-In: Smooth Transitions</h2>
+
+    <p class="text-slate-300 leading-relaxed">You can't just bolt on a new layer and expect things to work. The new layer's random weights would destroy what the network already learned. The solution: <em class="text-indigo-400 not-italic font-medium">fade in</em> new layers smoothly using a blending parameter &alpha; that transitions from 0 to 1.</p>
+
+    <div class="bg-slate-950 rounded-lg px-6 py-3 font-serif text-lg text-slate-200 text-center">
+      output = (1 - &alpha;) &times; upsampled_old + &alpha; &times; new_layer
+    </div>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-3">
+      <h4 class="text-sm font-semibold text-slate-200 mb-2">Alpha Fade-In Progress</h4>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-slate-400 w-16">&alpha; = 0.0</span>
+        <div class="flex-1 fade-bar bg-slate-700"><div class="fade-fill" style="width: 0%;"></div></div>
+        <span class="text-xs text-slate-500 w-16">Old only</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-slate-400 w-16">&alpha; = 0.25</span>
+        <div class="flex-1 fade-bar bg-slate-700"><div class="fade-fill" style="width: 25%;"></div></div>
+        <span class="text-xs text-slate-500 w-16">Blending</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-slate-400 w-16">&alpha; = 0.5</span>
+        <div class="flex-1 fade-bar bg-slate-700"><div class="fade-fill" style="width: 50%;"></div></div>
+        <span class="text-xs text-slate-500 w-16">Half &amp; half</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-slate-400 w-16">&alpha; = 0.75</span>
+        <div class="flex-1 fade-bar bg-slate-700"><div class="fade-fill" style="width: 75%;"></div></div>
+        <span class="text-xs text-slate-500 w-16">Blending</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-slate-400 w-16">&alpha; = 1.0</span>
+        <div class="flex-1 fade-bar bg-slate-700"><div class="fade-fill" style="width: 100%;"></div></div>
+        <span class="text-xs text-slate-500 w-16">New only</span>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">When &alpha; = 0, the output comes entirely from the upsampled previous resolution. As training progresses, &alpha; linearly increases to 1, at which point the new layer has fully taken over. The old shortcut path is then removed. Each resolution phase consists of a <em class="text-indigo-400 not-italic font-medium">transition period</em> (fade-in) followed by a <em class="text-indigo-400 not-italic font-medium">stabilization period</em> (training at the new resolution with &alpha; fixed at 1.0).</p>
+  </section>
+
+  <!-- Key Techniques -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Supporting Techniques</h2>
+
+    <p class="text-slate-300 leading-relaxed">Progressive growing doesn't work in isolation. Several auxiliary techniques keep training stable:</p>
+
+    <div class="space-y-3">
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x2696;&#xFE0F;</span>
+        <div>
+          <h5 class="text-white font-medium">Equalized Learning Rate</h5>
+          <p class="text-sm text-slate-400">Instead of careful weight initialization, all weights start from N(0,1) and are scaled at runtime by the He constant. This ensures all parameters have the same dynamic range regardless of layer depth, preventing some layers from learning faster than others.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x1F4CF;</span>
+        <div>
+          <h5 class="text-white font-medium">Pixelwise Feature Normalization</h5>
+          <p class="text-sm text-slate-400">Applied after each generator convolution, this normalizes the feature vector at each pixel to unit length. Prevents signal magnitudes from spiraling out of control during the adversarial feedback loop.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x1F4CA;</span>
+        <div>
+          <h5 class="text-white font-medium">Minibatch Standard Deviation</h5>
+          <p class="text-sm text-slate-400">A layer near the end of the discriminator that computes the statistical variation across the minibatch and concatenates it as an extra feature channel. If the generator produces low-diversity outputs, this statistical signature gives it away.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x1F4D0;</span>
+        <div>
+          <h5 class="text-white font-medium">WGAN-GP Loss</h5>
+          <p class="text-sm text-slate-400">Wasserstein distance with gradient penalty provides stable training and a meaningful loss metric. The gradient penalty enforces a Lipschitz constraint by penalizing gradient norms that deviate from 1.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- snowGAN -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Case Study: The Abominable SnowGAN</h2>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">snowGAN</h3>
+      <p class="text-slate-300">A progressive GAN built to generate synthetic images of magnified snowpack. Trained on real winter snowpack photography collected in the Colorado Rocky Mountains, it produces realistic 1024x1024 RGB images of snow crystal formations.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The <a href="https://github.com/dennys246/snowGAN" class="text-indigo-400 hover:text-indigo-300">snowGAN</a> project applies progressive growing to an unusual domain: snow crystal imagery. Here's how the technique maps to a real implementation:</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Architecture</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-center text-white font-semibold mb-3 pb-3 border-b border-slate-700">Generator</h4>
+        <ul class="space-y-2 text-slate-300 list-disc pl-5 text-sm">
+          <li>Input: 100-dim latent vector</li>
+          <li>Initial projection to 16x16 feature map</li>
+          <li>Transposed convolution stack with configurable filters</li>
+          <li>Fade-in blocks for smooth resolution transitions</li>
+          <li>Final activation: tanh (output range [-1, 1])</li>
+          <li>Output: 1024x1024 RGB images</li>
+        </ul>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-center text-white font-semibold mb-3 pb-3 border-b border-slate-700">Discriminator</h4>
+        <ul class="space-y-2 text-slate-300 list-disc pl-5 text-sm">
+          <li>Input: 1024x1024 RGB images</li>
+          <li>Conv2D blocks with LeakyReLU</li>
+          <li>Wasserstein output (no activation)</li>
+          <li>Gradient penalty for stability</li>
+          <li>Optional dual-head inference mode</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">The Fade-In Implementation</h3>
+
+    <p class="text-slate-300 leading-relaxed">snowGAN's fade-in implementation splits the generator output into two paths during resolution transitions:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Generator during fade-in (e.g., 16x16 → 32x32):
+                                  ┌─────────────────────────┐
+                                  │   Existing 16x16 block   │
+                                  └────────────┬─────────────┘
+                                               │
+                              ┌────────────────┼────────────────┐
+                              │                │                │
+                      ┌───────▼───────┐  ┌─────▼──────┐        │
+                      │ Upsample to   │  │ New 32x32  │        │
+                      │  32x32 +      │  │ conv block │        │
+                      │  old toRGB    │  │ + new toRGB│        │
+                      └───────┬───────┘  └─────┬──────┘        │
+                              │                │               │
+                              ▼                ▼               │
+                      (1 - alpha) *      alpha *               │
+                       prev_output     curr_output             │
+                              │                │               │
+                              └───────┬────────┘               │
+                                      ▼                        │
+                               Blended output</div>
+
+    <p class="text-slate-300 leading-relaxed">The blending alpha is computed from the current training step:</p>
+
+    <div class="bg-slate-950 rounded-lg px-6 py-3 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">alpha = clamp(current_step / total_fade_steps, 0.0, 1.0)</div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Training Data</h3>
+
+    <p class="text-slate-300 leading-relaxed">snowGAN trains on the <em class="text-indigo-400 not-italic font-medium">Rocky Mountain Snowpack Dataset</em> (~2,341 samples from the 2024-2025 Colorado winter season). Each sample includes magnified crystal images, snowpack profiles, and core segments, along with metadata like GPS coordinates, temperatures, slope angles, and avalanche observations.</p>
+
+    <p class="text-slate-300 leading-relaxed">With only ~2,341 samples, this is a challenging dataset for GANs. Progressive growing helps enormously here because the early low-resolution phases can learn meaningful structure from small datasets, where a full-resolution GAN would struggle with such limited data.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Beyond Generation: Dual-Head Inference</h3>
+
+    <p class="text-slate-300 leading-relaxed">An interesting twist: snowGAN repurposes its trained discriminator as a feature extractor. The discriminator's output layer is stripped and replaced with two classification heads:</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-emerald-400 font-semibold mb-2">Avalanche Count</h4>
+        <p class="text-sm text-slate-400">21 classes predicting the number of avalanches observed at the sampling site. Leverages the discriminator's learned snow crystal representations.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-emerald-400 font-semibold mb-2">Wind Loading</h4>
+        <p class="text-sm text-slate-400">4 classes (high/medium/low/none) predicting wind loading conditions. The discriminator already learned to distinguish crystal structures; those features transfer to safety assessment.</p>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">This is a clever application of transfer learning: the adversarial training process forces the discriminator to develop rich feature representations of snow crystals, which can then be repurposed for downstream tasks without training a new model from scratch.</p>
+  </section>
+
+  <!-- Why It Matters -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Why Progressive Growing Matters</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">&#x26A1;</div>
+        <h4 class="text-indigo-400 font-semibold mb-1">2-6x Faster</h4>
+        <p class="text-sm text-slate-400">Early phases on small images are cheap. Computational effort is concentrated where it matters most.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">&#x1F3AF;</div>
+        <h4 class="text-indigo-400 font-semibold mb-1">Higher Quality</h4>
+        <p class="text-sm text-slate-400">The first method to produce photorealistic 1024x1024 faces. Structure before detail is a winning strategy.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">&#x1F527;</div>
+        <h4 class="text-indigo-400 font-semibold mb-1">More Stable</h4>
+        <p class="text-sm text-slate-400">The adversarial game stays balanced at every stage. No resolution shock, no mode collapse spiral.</p>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The broader lesson extends well beyond GANs: <em class="text-indigo-400 not-italic font-medium">curriculum learning works</em>. Start simple, increase complexity gradually, and preserve what you've already learned. Progressive growing proved this for image generation, and the principle has influenced training strategies across generative modeling, including some diffusion model approaches.</p>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-3">The Legacy: ProGAN to StyleGAN</h3>
+      <p class="text-slate-300 mb-3">Progressive growing didn't just produce great images. It spawned a lineage:</p>
+      <ul class="space-y-2 text-slate-300 list-disc pl-5">
+        <li><strong class="text-white">ProGAN (2017):</strong> The original progressive growing paper. First photorealistic 1024x1024 synthesis.</li>
+        <li><strong class="text-white">StyleGAN (2019):</strong> Built directly on ProGAN's architecture. Added style-based generation with AdaIN. Disentangled latent spaces.</li>
+        <li><strong class="text-white">StyleGAN2 (2020):</strong> Refined further, actually removing progressive growing in favor of other improvements, but the core insights remained foundational.</li>
+        <li><strong class="text-white">StyleGAN3 (2021):</strong> Addressed aliasing artifacts. The lineage continued.</li>
+      </ul>
+      <p class="text-slate-300 mt-3">This ProGAN &rarr; StyleGAN lineage essentially defined the trajectory of photorealistic image synthesis and influenced commercial tools like Adobe Firefly, Midjourney, and others.</p>
+    </div>
+  </section>
+
+  <div class="flex flex-wrap justify-center gap-3 pt-6 border-t border-slate-700">
+    <a href="/ramblings" class="btn-link">Ramblings</a>
+    <a href="https://github.com/dennys246/snowGAN" class="btn-link">snowGAN on GitHub</a>
+  </div>
+</div>
+{% endblock %}
