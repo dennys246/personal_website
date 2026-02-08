@@ -76,6 +76,10 @@ def maxim_operating_modes():
 def maxim_usage_guide():
     return render_template("maxim-usage-guide.html")
 
+@app.route("/gan-training-tips")
+def gan_training_tips():
+    return render_template("gan-training-tips.html")
+
 @app.route("/progressive-growing")
 def progressive_growing():
     return render_template("progressive-growing.html")
@@ -114,6 +118,7 @@ def sitemap_xml():
         ("maxim_technical_deepdive", "monthly", "0.7"),
         ("maxim_operating_modes", "monthly", "0.7"),
         ("maxim_usage_guide", "monthly", "0.7"),
+        ("gan_training_tips", "monthly", "0.6"),
         ("progressive_growing", "monthly", "0.6"),
     ]
 

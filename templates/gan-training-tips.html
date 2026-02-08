@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+
+{% block title %}Tips & Tricks for Training GANs | Denny Schaedig{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/ramblings" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Ramblings</a>
+
+  <header class="text-center space-y-2">
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Tips & Tricks for Training GANs</h1>
+    <p class="text-indigo-400 font-medium">Hard-Won Lessons from Getting Generators to Actually Generate</p>
+  </header>
+
+  <div class="rounded-xl bg-gradient-to-br from-sky-700 via-blue-700 to-indigo-800 p-6 text-white shadow-lg">
+    <h3 class="text-lg font-semibold mb-3">The Honest Truth</h3>
+    <p class="leading-relaxed">Training GANs is notoriously finicky. The adversarial dynamic means you're optimizing two networks simultaneously in opposition, and the whole system can collapse in creative and frustrating ways. These tips come from real experience training models on real data, not textbook theory.</p>
+  </div>
+
+  <!-- Start Simple -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">1. Start Simple, Then Scale</h2>
+    <p class="text-slate-300 leading-relaxed">Don't jump straight to your full dataset at full resolution. Build confidence in your pipeline first:</p>
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">Overfit on one image first.</strong> If your GAN can't memorize a single image, it definitely can't learn a distribution. This validates your architecture and training loop.</li>
+      <li><strong class="text-white">Then try 10 images.</strong> Can it learn a tiny distribution? Good. Now you know the adversarial dynamics work.</li>
+      <li><strong class="text-white">Start at low resolution.</strong> Train at 64x64 before attempting 256x256 or higher. Debug faster, iterate faster.</li>
+      <li><strong class="text-white">Use a known dataset first.</strong> Before training on your custom data, verify your code works on MNIST or CelebA. If it doesn't work on a standard benchmark, the problem is your code, not your data.</li>
+    </ul>
+  </section>
+
+  <!-- Learning Rates -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">2. Learning Rates Are Everything</h2>
+    <p class="text-slate-300 leading-relaxed">The balance between generator and discriminator learning rates is the single most impactful hyperparameter:</p>
+
+    <div class="space-y-3">
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x1F4C9;</span>
+        <div>
+          <h5 class="text-white font-medium">Use a Lower Generator LR</h5>
+          <p class="text-sm text-slate-400">A common starting point: discriminator at 1e-4, generator at 1e-4 or slightly lower. If the generator learns too fast, it'll find degenerate shortcuts. If the discriminator runs away, the generator gets no useful gradient signal.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x1F9EA;</span>
+        <div>
+          <h5 class="text-white font-medium">TTUR (Two Time-Scale Update Rule)</h5>
+          <p class="text-sm text-slate-400">Use different learning rates for G and D. The original TTUR paper showed that giving the discriminator a higher learning rate (e.g., 4e-4 vs 1e-4) can improve convergence. This lets D provide better gradients without running away.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x26A0;&#xFE0F;</span>
+        <div>
+          <h5 class="text-white font-medium">Adam Betas Matter</h5>
+          <p class="text-sm text-slate-400">The default Adam beta1 of 0.9 is often too high for GANs. Try beta1=0.0 or beta1=0.5 with beta2=0.999 or beta2=0.9. High momentum in Adam can cause oscillations in the adversarial game.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mode Collapse -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">3. Fighting Mode Collapse</h2>
+    <p class="text-slate-300 leading-relaxed">Mode collapse is when the generator finds a small set of outputs that fool the discriminator and stops exploring. Your generator becomes a one-trick pony. Signs to watch for:</p>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3">Red Flags</h3>
+      <ul class="space-y-2 text-slate-300 list-disc pl-5">
+        <li>Generated images all look nearly identical</li>
+        <li>Loss oscillates wildly or discriminator loss drops to zero</li>
+        <li>Generator loss keeps decreasing but image quality stagnates</li>
+        <li>FID score plateaus while loss still improves</li>
+      </ul>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Countermeasures that actually work:</p>
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">Minibatch discrimination:</strong> Let the discriminator see statistics across the batch, not just individual samples. If all samples look the same, the discriminator can catch it.</li>
+      <li><strong class="text-white">Feature matching:</strong> Instead of training G to maximize D's error, train it to match the statistics of real data in D's intermediate layers.</li>
+      <li><strong class="text-white">Use Wasserstein loss:</strong> WGAN and WGAN-GP provide more stable gradients and a meaningful loss metric. The Earth Mover's distance doesn't saturate like the original GAN loss.</li>
+      <li><strong class="text-white">Increase latent dimensionality:</strong> If your latent space is too small, the generator can't encode enough variation. 100-512 dimensions is typical.</li>
+      <li><strong class="text-white">Unrolled optimization:</strong> Take multiple discriminator steps per generator step. This prevents the generator from exploiting a momentarily confused discriminator.</li>
+    </ul>
+  </section>
+
+  <!-- Architecture -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">4. Architecture Choices That Matter</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-emerald-400 font-semibold mb-2">Do This</h4>
+        <ul class="space-y-2 text-slate-300 list-disc pl-5 text-sm">
+          <li>Use strided convolutions instead of pooling</li>
+          <li>BatchNorm in G, LayerNorm or SpectralNorm in D</li>
+          <li>LeakyReLU (slope 0.2) in D, ReLU in G</li>
+          <li>Tanh activation on G's output layer</li>
+          <li>Scale inputs to [-1, 1] to match tanh range</li>
+          <li>Use a power-of-2 image size (64, 128, 256...)</li>
+        </ul>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-red-400 font-semibold mb-2">Avoid This</h4>
+        <ul class="space-y-2 text-slate-300 list-disc pl-5 text-sm">
+          <li>Max pooling (loses spatial information)</li>
+          <li>BatchNorm in D (leaks batch information)</li>
+          <li>Sigmoid output in D with WGAN loss</li>
+          <li>Sparse gradients (no ReLU in D)</li>
+          <li>Fully connected layers in deep architectures</li>
+          <li>Very deep networks without residual connections</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Spectral Normalization</h3>
+      <p class="text-slate-300">One of the most impactful stabilization techniques. Normalizes the weight matrices of the discriminator by their spectral norm (largest singular value), enforcing a Lipschitz constraint without the computational overhead of gradient penalty. Often you can use SpectralNorm in D and skip gradient penalty entirely.</p>
+    </div>
+  </section>
+
+  <!-- Data -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">5. Data Preparation Is Half the Battle</h2>
+    <p class="text-slate-300 leading-relaxed">Garbage in, garbage out applies doubly to GANs:</p>
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">Clean your dataset aggressively.</strong> A few corrupted, mislabeled, or drastically out-of-distribution images can derail training. The discriminator will latch onto artifacts.</li>
+      <li><strong class="text-white">Align and crop consistently.</strong> If you're generating faces, align them. If you're generating snow crystals, center them. Spatial consistency helps the generator focus on content rather than position.</li>
+      <li><strong class="text-white">Augment carefully.</strong> Random flips and small rotations are usually safe. Color jitter and aggressive crops can confuse the distribution the generator is trying to learn.</li>
+      <li><strong class="text-white">More data beats more training.</strong> If your results are bad, consider collecting more data before training longer. GANs memorize small datasets.</li>
+      <li><strong class="text-white">Normalize to [-1, 1].</strong> Match the tanh output range. This sounds obvious but is a common source of bugs.</li>
+    </ul>
+  </section>
+
+  <!-- Monitoring -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">6. Monitoring Training</h2>
+    <p class="text-slate-300 leading-relaxed">GAN loss curves are notoriously uninformative. Don't rely on them alone:</p>
+
+    <div class="space-y-3">
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x1F5BC;&#xFE0F;</span>
+        <div>
+          <h5 class="text-white font-medium">Save Generated Samples Frequently</h5>
+          <p class="text-sm text-slate-400">Generate and save a grid of images every N steps using a fixed latent vector. This lets you visually track improvement and catch mode collapse early. Your eyes are a better metric than the loss curve.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x1F4CA;</span>
+        <div>
+          <h5 class="text-white font-medium">Track FID Score</h5>
+          <p class="text-sm text-slate-400">Fr&eacute;chet Inception Distance compares the statistics of generated images to real images in Inception feature space. Lower is better. Compute it periodically (not every step, it's expensive). This is the closest thing to an objective quality metric.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4 bg-slate-950 rounded-lg p-4">
+        <span class="text-2xl w-10 text-center shrink-0">&#x2696;&#xFE0F;</span>
+        <div>
+          <h5 class="text-white font-medium">Watch the D/G Loss Balance</h5>
+          <p class="text-sm text-slate-400">For WGAN: the critic loss should be negative and relatively stable. If it crashes to zero, D has won. If it oscillates wildly, the learning rates are likely too high. For vanilla GAN: D loss around 0.5-0.7 and G loss around 1.0-2.0 is a reasonable range.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loss Functions -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">7. Choosing a Loss Function</h2>
+    <p class="text-slate-300 leading-relaxed">The loss function shapes the entire training dynamic. Here's a practical comparison:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Loss</th>
+            <th class="px-4 py-3">Stability</th>
+            <th class="px-4 py-3">Quality</th>
+            <th class="px-4 py-3 rounded-tr-lg">Notes</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3 font-medium text-white">Vanilla (BCE)</td>
+            <td class="px-4 py-3">Low</td>
+            <td class="px-4 py-3">Moderate</td>
+            <td class="px-4 py-3">Prone to vanishing gradients and mode collapse</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3 font-medium text-white">WGAN</td>
+            <td class="px-4 py-3">High</td>
+            <td class="px-4 py-3">Good</td>
+            <td class="px-4 py-3">Requires weight clipping, which can limit capacity</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3 font-medium text-white">WGAN-GP</td>
+            <td class="px-4 py-3">High</td>
+            <td class="px-4 py-3">High</td>
+            <td class="px-4 py-3">Gradient penalty is more principled than clipping</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3 font-medium text-white">Hinge</td>
+            <td class="px-4 py-3">High</td>
+            <td class="px-4 py-3">High</td>
+            <td class="px-4 py-3">Used in BigGAN and SAGAN. Simple and effective</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3 font-medium text-white">Non-saturating</td>
+            <td class="px-4 py-3">Moderate</td>
+            <td class="px-4 py-3">Good</td>
+            <td class="px-4 py-3">-log(D(G(z))) instead of log(1-D(G(z))). Better gradients early on</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed"><strong class="text-white">Recommendation:</strong> Start with WGAN-GP or hinge loss. They provide meaningful loss curves and stable training. Only use vanilla GAN loss if you have a specific reason.</p>
+  </section>
+
+  <!-- Small Datasets -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">8. Working with Small Datasets</h2>
+    <p class="text-slate-300 leading-relaxed">Not everyone has millions of images. When your dataset is small (hundreds to low thousands):</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">&#x1F4D0;</div>
+        <h4 class="text-indigo-400 font-semibold mb-1">Progressive Growing</h4>
+        <p class="text-sm text-slate-400">Start at low resolution and scale up. Early phases learn structure from limited data efficiently.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">&#x1F504;</div>
+        <h4 class="text-indigo-400 font-semibold mb-1">Data Augmentation</h4>
+        <p class="text-sm text-slate-400">Apply augmentation to both real and fake images (DiffAugment). This prevents D from memorizing the training set.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center">
+        <div class="text-3xl mb-2">&#x1F9CA;</div>
+        <h4 class="text-indigo-400 font-semibold mb-1">Freeze D Layers</h4>
+        <p class="text-sm text-slate-400">With limited data, D overfits fast. Freezing early D layers after initial training can help.</p>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The <a href="/progressive-growing" class="text-indigo-400 hover:text-indigo-300">snowGAN project</a> trains on ~2,341 samples using progressive growing. It's proof that you can get meaningful results from small, domain-specific datasets if your training strategy is right.</p>
+  </section>
+
+  <!-- Common Pitfalls -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">9. Common Pitfalls & Quick Fixes</h2>
+
+    <div class="space-y-3">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-white font-semibold mb-1">Checkerboard artifacts in generated images</h4>
+        <p class="text-sm text-slate-400">Caused by transposed convolutions with stride > 1. Fix: use nearest-neighbor upsampling followed by a regular convolution instead of ConvTranspose2d.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-white font-semibold mb-1">Generator produces noise / no recognizable structure</h4>
+        <p class="text-sm text-slate-400">Discriminator is too strong. Lower D learning rate, reduce D updates per G update, or add noise to D's inputs (label smoothing or instance noise).</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-white font-semibold mb-1">Training loss oscillates wildly</h4>
+        <p class="text-sm text-slate-400">Learning rates too high, or batch size too small. Try halving both LRs first. If that doesn't help, increase batch size or add gradient penalty.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-white font-semibold mb-1">Good samples early, then quality degrades</h4>
+        <p class="text-sm text-slate-400">The generator may be overfitting or the adversarial balance shifted. Save checkpoints frequently and consider learning rate decay in late training.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-white font-semibold mb-1">NaN losses</h4>
+        <p class="text-sm text-slate-400">Gradient explosion. Add gradient clipping (max_norm=1.0), lower learning rates, or check for division by zero in custom loss functions. Also verify your data doesn't contain NaN/inf values.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Checklist -->
+  <section class="space-y-4">
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">The GAN Training Checklist</h2>
+    <p class="text-slate-300 leading-relaxed">Before you start training, run through this:</p>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <ul class="space-y-2 text-slate-300">
+        <li>&#x2610; Data cleaned, aligned, and normalized to [-1, 1]</li>
+        <li>&#x2610; Architecture validated on a known dataset</li>
+        <li>&#x2610; Single-image overfit test passed</li>
+        <li>&#x2610; Learning rates set (try 1e-4 / 1e-4 or TTUR)</li>
+        <li>&#x2610; Adam betas adjusted (beta1=0.0 or 0.5)</li>
+        <li>&#x2610; Loss function chosen (WGAN-GP or hinge recommended)</li>
+        <li>&#x2610; Image saving callback configured (every N steps)</li>
+        <li>&#x2610; Checkpoint saving enabled</li>
+        <li>&#x2610; FID evaluation scheduled</li>
+        <li>&#x2610; GPU memory checked (reduce batch size if needed)</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="flex flex-wrap justify-center gap-3 pt-6 border-t border-slate-700">
+    <a href="/progressive-growing" class="btn-link">Progressive Growing</a>
+    <a href="/ramblings" class="btn-link">Ramblings</a>
+    <a href="https://github.com/dennys246/snowGAN" class="btn-link">Practice with the snowGAN!</a>
+  </div>
+</div>
+{% endblock %}
