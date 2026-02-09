@@ -7,6 +7,9 @@
 {% block meta_keywords %}Maxim, Maxim AI, Maxim agent, Maxim brain, Maxim robot, agentic robotics, cognitive architecture, robot brain, embodied AI, biologically-inspired AI, artificial mind, Reachy Mini, memory systems, attention networks, proprioception, Denny Schaedig{% endblock %}
 
 {% block extra_head %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -32,14 +35,31 @@
   <a href="/ramblings" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Ramblings</a>
 
   <header class="text-center space-y-2">
-    <h1 class="text-3xl md:text-4xl font-bold text-white">Maxim: A Brain for Robots</h1>
-    <p class="text-indigo-400 font-medium">Building Artificial Minds from Biological Blueprints</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight" style="font-family: 'Space Grotesk', sans-serif;">MAXIM</h1>
+    <p class="text-indigo-400 font-medium">An Artificial Brain from Biological Blueprints</p>
   </header>
+
+  <!-- Navigation Menu -->
+  <nav class="bg-slate-800/60 border border-slate-700 rounded-xl p-4">
+    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3 text-center">Explore Maxim</h3>
+    <div class="flex flex-wrap justify-center gap-2">
+      <a href="/maxim-agent-architecture" class="btn-link">The Agent Brain</a>
+      <a href="/maxim-memory-systems" class="btn-link">Memory Systems</a>
+      <a href="/maxim-attention-salience" class="btn-link">Attention &amp; Salience</a>
+      <a href="/maxim-proprioception" class="btn-link">Body Awareness</a>
+      <a href="/maxim-usage-guide" class="btn-link">Usage Guide</a>
+      <a href="/maxim-technical-deepdive" class="btn-link">Technical Deep Dive</a>
+      <a href="/maxim-operating-modes" class="btn-link">Operating Modes</a>
+      <a href="https://github.com/dennys246/Maxim" class="btn-link">GitHub</a>
+    </div>
+  </nav>
 
   <div class="rounded-xl bg-gradient-to-br from-indigo-700 via-purple-700 to-indigo-800 p-6 text-white shadow-lg">
     <h3 class="text-lg font-semibold mb-3">What is Maxim?</h3>
     <p class="leading-relaxed">Maxim is an agentic robotics framework that gives robots something resembling a mind. Not just reflexes. Not just if-then rules. An actual cognitive architecture inspired by how mammalian brains work, adapted for embodied AI agents that can perceive, remember, decide, and learn.</p>
   </div>
+
+  <div class="pt-4"></div>
 
   <section class="space-y-4">
     <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">The Problem with Robot Brains</h2>
@@ -87,7 +107,7 @@
 
   <section class="space-y-4">
     <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Operating Modes</h2>
-    <p class="text-slate-300 leading-relaxed">Maxim's behavior is controlled by three orthogonal dimensions: <em class="text-indigo-400 not-italic font-medium">processing states</em> (awake vs sleep), <em class="text-indigo-400 not-italic font-medium">operational modes</em> (passive, active, singularity), and <em class="text-indigo-400 not-italic font-medium">strategies</em> (observe, explore, research, assist, reflect, learn). These combine freely to produce configurations like "active exploration" or "passive reflection."</p>
+    <p class="text-slate-300 leading-relaxed">Maxim's behavior is controlled by three independent dimensions: <em class="text-indigo-400 not-italic font-medium">processing states</em> (awake vs sleep), <em class="text-indigo-400 not-italic font-medium">operational modes</em> (passive, active, singularity), and <em class="text-indigo-400 not-italic font-medium">strategies</em> (observe, explore, research, assist, reflect, learn). These combine freely to produce configurations like "active exploration" or "passive reflection."</p>
     <p class="text-slate-300 leading-relaxed"><a href="/maxim-operating-modes#live-mode" class="text-indigo-400 hover:text-indigo-300">Live mode</a> is the full embodied runtime with a self-evolving intent system&mdash;the agent shapes its own personality through experience. <a href="/maxim-operating-modes#exploration" class="text-indigo-400 hover:text-indigo-300">Exploration mode</a> adds curiosity modeling and budget tracking. <a href="/maxim-operating-modes#sleep" class="text-indigo-400 hover:text-indigo-300">Sleep</a> isn't a mode but a processing state that enables memory consolidation while monitoring for wake keywords.</p>
     <p class="text-slate-300 leading-relaxed"><a href="/maxim-operating-modes" class="text-indigo-400 hover:text-indigo-300 font-medium">Read the full Operating Modes guide &rarr;</a></p>
   </section>
@@ -128,15 +148,5 @@
     <p class="text-slate-300 leading-relaxed">Maxim runs on the Reachy Mini humanoid robot, processing real visual input, real motor commands, real interactions with humans. It's not a simulation. It's not a thought experiment. It's a working system that learns from every interaction.</p>
   </section>
 
-  <div class="flex flex-wrap justify-center gap-3 pt-6 border-t border-slate-700">
-    <a href="/maxim-memory-systems" class="btn-link">Memory Systems</a>
-    <a href="/maxim-proprioception" class="btn-link">Body Awareness</a>
-    <a href="/maxim-attention-salience" class="btn-link">Attention &amp; Salience</a>
-    <a href="/maxim-agent-architecture" class="btn-link">Agent Architecture</a>
-    <a href="/maxim-operating-modes" class="btn-link">Operating Modes</a>
-    <a href="/maxim-technical-deepdive" class="btn-link">Technical Deep Dive</a>
-    <a href="/maxim-usage-guide" class="btn-link">Usage Guide</a>
-    <a href="https://github.com/dennys246/Maxim" class="btn-link">GitHub</a>
-  </div>
 </div>
 {% endblock %}

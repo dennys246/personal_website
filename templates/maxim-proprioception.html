@@ -7,18 +7,31 @@
   <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
 
   <header class="text-center space-y-2">
+    <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM</p>
     <h1 class="text-3xl md:text-4xl font-bold text-white">Body Awareness</h1>
     <p class="text-indigo-400 font-medium">Proprioception, Pain, and Motor Learning</p>
   </header>
 
   <p class="text-slate-300 leading-relaxed">Close your eyes and touch your nose. You can do it because proprioception tells you where your arm is without looking. You don't smash your arm into the table because pain taught you to be careful. You've become smoother at the movement through practice. Maxim implements all three.</p>
 
+  <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2">Contents</h3>
+    <ol class="space-y-1 text-slate-300 list-decimal pl-5">
+      <li><a href="#proprioception" class="text-indigo-400 hover:text-indigo-300 no-underline">Proprioception: Knowing Where You Are</a></li>
+      <li><a href="#pain" class="text-indigo-400 hover:text-indigo-300 no-underline">Pain: Learning from Discomfort</a></li>
+      <li><a href="#pain-learning" class="text-indigo-400 hover:text-indigo-300 no-underline">Pain &rarr; Learning</a></li>
+      <li><a href="#motor-learning" class="text-indigo-400 hover:text-indigo-300 no-underline">Motor Learning: The FocusLearner</a></li>
+      <li><a href="#workspace-bounds" class="text-indigo-400 hover:text-indigo-300 no-underline">Workspace Bounds Learning</a></li>
+      <li><a href="#integration" class="text-indigo-400 hover:text-indigo-300 no-underline">Integration: The Embodied Loop</a></li>
+    </ol>
+  </div>
+
   <!-- Proprioception -->
   <section class="space-y-4">
-    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Proprioception: Knowing Where You Are</h2>
+    <h2 id="proprioception" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Proprioception: Knowing Where You Are</h2>
 
-    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
-      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Biological Inspiration</h3>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">🧬 Biological Inspiration</h3>
       <p class="text-slate-300">Muscle spindles detect stretch. Golgi tendon organs sense tension. Joint receptors track angles. Together, they create a real-time map of body position that doesn't require vision.</p>
     </div>
 
@@ -71,7 +84,8 @@
 
     <p class="text-slate-300 leading-relaxed">Each pain signal includes:</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">PainSignal:
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Data structure</span>
+PainSignal:
   - pain_type: EXCESSIVE_VELOCITY
   - intensity: 0.73  (scale 0-1)
   - angular_velocity: 127.4 deg/sec
@@ -83,7 +97,7 @@
 
   <!-- Pain → Learning -->
   <section class="space-y-4">
-    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Pain → Learning</h2>
+    <h2 id="pain-learning" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Pain &rarr; Learning</h2>
 
     <p class="text-slate-300 leading-relaxed">Pain signals don't just trigger immediate responses. They feed into the <em class="text-indigo-400 not-italic font-medium">Nucleus Accumbens</em> through the <em class="text-indigo-400 not-italic font-medium">PainCircuitBridge</em>, creating lasting aversive associations:</p>
 
@@ -124,10 +138,10 @@ Future: Predict pain BEFORE action</pre>
 
   <!-- Motor Learning -->
   <section class="space-y-4">
-    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Motor Learning: The FocusLearner</h2>
+    <h2 id="motor-learning" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Motor Learning: The FocusLearner</h2>
 
-    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
-      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Biological Inspiration</h3>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">🧬 Biological Inspiration</h3>
       <p class="text-slate-300">The cerebellum adapts motor commands through error-driven learning. Reach for a cup, miss by 2cm, and your next reach is slightly adjusted. Over trials, movements become smooth and accurate without conscious effort.</p>
     </div>
 
@@ -154,7 +168,8 @@ Future: Predict pain BEFORE action</pre>
       <li>Update gain incrementally toward optimal</li>
     </ol>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Trial 1: Gain=1.0, Commanded=30°, Overshot to 38° → optimal=0.79
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Example</span>
+Trial 1: Gain=1.0, Commanded=30°, Overshot to 38° → optimal=0.79
          Update: V = 1.0 + 0.2*(0.79 - 1.0) = 0.96
 
 Trial 2: Gain=0.96, Commanded=25°, Overshot to 28° → optimal=0.89
@@ -176,13 +191,13 @@ Trial N: Gain=0.82, Commanded=20°, Actual=20.2° → nearly perfect
 
   <!-- Workspace Bounds -->
   <section class="space-y-4">
-    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Workspace Bounds Learning</h2>
+    <h2 id="workspace-bounds" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Workspace Bounds Learning</h2>
     <p class="text-slate-300 leading-relaxed">Similarly, the <em class="text-indigo-400 not-italic font-medium">WorkspaceBoundsLearner</em> discovers the robot's reachable space through exploration. Rather than hard-coding limits, the system learns where it can and cannot move, adapting to mounting position, obstructions, and mechanical wear.</p>
   </section>
 
   <!-- Integration -->
   <section class="space-y-4">
-    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Integration: The Embodied Loop</h2>
+    <h2 id="integration" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Integration: The Embodied Loop</h2>
 
     <p class="text-slate-300 leading-relaxed">All proprioceptive systems connect to the decision-making loop:</p>
 
@@ -197,14 +212,29 @@ Trial N: Gain=0.82, Commanded=20°, Actual=20.2° → nearly perfect
     <p class="text-slate-300 leading-relaxed">The result: a robot that moves smoothly, avoids harmful patterns, and improves with experience. Not because we programmed every case, but because we gave it the machinery to learn.</p>
   </section>
 
-  <div class="flex flex-wrap justify-center gap-3 pt-6 border-t border-slate-700">
-    <a href="/maxim" class="btn-link">Overview</a>
-    <a href="/maxim-memory-systems" class="btn-link">Memory Systems</a>
-    <a href="/maxim-attention-salience" class="btn-link">Attention &amp; Salience</a>
-    <a href="/maxim-agent-architecture" class="btn-link">Agent Architecture</a>
-    <a href="/maxim-operating-modes" class="btn-link">Operating Modes</a>
-    <a href="/maxim-technical-deepdive" class="btn-link">Technical Deep Dive</a>
-    <a href="/maxim-usage-guide" class="btn-link">Usage Guide</a>
+  <div class="pt-6 border-t border-slate-700 space-y-5">
+    <div class="flex justify-between items-stretch gap-4">
+      <a href="/maxim-attention-salience" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
+        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
+        <span class="block text-white font-medium mt-1">Attention &amp; Salience</span>
+      </a>
+      <a href="/maxim-usage-guide" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
+        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
+        <span class="block text-white font-medium mt-1">Usage Guide</span>
+      </a>
+    </div>
+    <div class="text-center space-y-2">
+      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
+      <div class="flex flex-wrap justify-center gap-2">
+        <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
+        <a href="/maxim-agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
+        <a href="/maxim-memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
+        <a href="/maxim-attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
+        <a href="/maxim-usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
+        <a href="/maxim-technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
+        <a href="/maxim-operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

@@ -85,11 +85,13 @@
       color: white;
       text-decoration: none;
       border-radius: 5px;
-      transition: color 0.3s;
+      transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
     }
 
     .btn-link:hover {
-      color: rgb(89, 0, 255); /* text turns orange on hover */
+      background-color: rgb(67, 20, 160);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
     }
 
   </style>
@@ -107,7 +109,7 @@
   </script>
 </head>
 
-<body class="bg-gray-800 bg-gray-900 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col" style="background: linear-gradient(180deg, #0a0f1a 0%, #111827 40%, #1a1a2e 100%);">
 
   <!-- Header -->
 <header class="p-6 bg-black text-white shadow sticky top-0 z-50">
@@ -129,7 +131,7 @@
 </header>
 
   <!-- Main content -->
-  <main class="{% block main_class %}max-w-4xl mx-auto p-6 mt-8 bg-slate-900/70 rounded-2xl shadow-lg border border-slate-700{% endblock %} flex-grow text-gray-100">
+  <main class="{% block main_class %}max-w-4xl mx-auto p-6 mt-8 mb-8 bg-slate-900/70 rounded-2xl shadow-lg border border-slate-700{% endblock %} flex-grow text-gray-100">
     {% block content %}{% endblock %}
   </main>
 

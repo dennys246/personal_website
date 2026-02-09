@@ -42,6 +42,7 @@
   <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
 
   <header class="text-center space-y-2">
+    <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM</p>
     <h1 class="text-3xl md:text-4xl font-bold text-white">Usage Guide</h1>
     <p class="text-indigo-400 font-medium">Installing, Configuring, and Running Maxim</p>
   </header>
@@ -64,7 +65,7 @@
 
   <!-- 1. Requirements -->
   <section class="space-y-4">
-    <h2 id="requirements" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">1. Requirements</h2>
+    <h2 id="requirements" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Requirements</h2>
 
     <ul class="space-y-2 text-slate-300 list-disc pl-5">
       <li><strong class="text-white">Python 3.12+</strong></li>
@@ -82,7 +83,7 @@
 
   <!-- 2. Installation -->
   <section class="space-y-4">
-    <h2 id="installation" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">2. Installation</h2>
+    <h2 id="installation" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Installation</h2>
 
     <ol class="step-list text-slate-300">
       <li><strong class="text-white">Clone the repository</strong>
@@ -96,7 +97,7 @@ source maxim-env/bin/activate</div>
       <li><strong class="text-white">Install core package</strong>
         <div class="bg-slate-950 rounded-lg px-4 py-2 mt-2 font-mono text-sm overflow-x-auto whitespace-pre">pip install -e .</div>
       </li>
-      <li><strong class="text-white">Install LLM support</strong> (for agentic mode)
+      <li><strong class="text-white">Install LLM support</strong> (enables the agentic runtime)
         <div class="bg-slate-950 rounded-lg px-4 py-2 mt-2 font-mono text-sm overflow-x-auto whitespace-pre">pip install -e '.[llm]'</div>
       </li>
       <li><strong class="text-white">Download a language model</strong>
@@ -139,7 +140,7 @@ source maxim-env/bin/activate</div>
 
   <!-- 3. Configuration -->
   <section class="space-y-4">
-    <h2 id="configuration" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">3. Configuration</h2>
+    <h2 id="configuration" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Configuration</h2>
 
     <h3 class="text-lg font-semibold text-indigo-400">Configuration Files</h3>
     <p class="text-slate-300 leading-relaxed">All configuration lives in <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">data/util/</code>:</p>
@@ -241,7 +242,7 @@ MAXIM_WHISPER_COMPUTE_TYPE=float32     # Whisper precision fallback</div>
 
   <!-- 4. Operating Modes -->
   <section class="space-y-4">
-    <h2 id="modes" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">4. Operating Modes</h2>
+    <h2 id="modes" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Operating Modes</h2>
 
     <p class="text-slate-300 leading-relaxed">Maxim uses a decomposed mode architecture combining <em class="text-indigo-400 not-italic font-medium">processing states</em> (awake/sleep), <em class="text-indigo-400 not-italic font-medium">operational modes</em> (passive/active/singularity), and <em class="text-indigo-400 not-italic font-medium">strategies</em> (observe/explore/research/assist/reflect/learn). For backward compatibility, the CLI accepts legacy mode names that map to specific combinations. See the <a href="/maxim-operating-modes" class="text-indigo-400 hover:text-indigo-300 no-underline">Operating Modes deep dive</a> for full details.</p>
 
@@ -323,7 +324,7 @@ MAXIM_WHISPER_COMPUTE_TYPE=float32     # Whisper precision fallback</div>
 
   <!-- 5. CLI Reference -->
   <section class="space-y-4">
-    <h2 id="cli" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">5. CLI Reference</h2>
+    <h2 id="cli" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">CLI Reference</h2>
 
     <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Basic usage</span>
 
@@ -384,7 +385,7 @@ maxim [OPTIONS]
 
   <!-- 6. Voice Commands -->
   <section class="space-y-4">
-    <h2 id="voice" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">6. Voice Commands</h2>
+    <h2 id="voice" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Voice Commands</h2>
 
     <p class="text-slate-300 leading-relaxed">All voice commands begin with the wake word <em class="text-indigo-400 not-italic font-medium">"Maxim"</em>:</p>
 
@@ -407,7 +408,23 @@ maxim [OPTIONS]
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">"Maxim observe"</td>
-            <td class="px-4 py-3">Enter reflection mode</td>
+            <td class="px-4 py-3">Switch to observe strategy</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">"Maxim explore"</td>
+            <td class="px-4 py-3">Switch to explore strategy</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">"Maxim assist"</td>
+            <td class="px-4 py-3">Switch to assist strategy</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">"Maxim reflect"</td>
+            <td class="px-4 py-3">Switch to reflect strategy</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">"Maxim passive" / "active" / "singularity"</td>
+            <td class="px-4 py-3">Switch operational mode</td>
           </tr>
           <tr class="hover:bg-slate-800/50">
             <td class="px-4 py-3">"Maxim shutdown"</td>
@@ -417,12 +434,12 @@ maxim [OPTIONS]
       </table>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Custom voice commands can be added in <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">data/util/phrase_responses.json</code>.</p>
+    <p class="text-slate-300 leading-relaxed">See the <a href="/maxim-operating-modes#switching" class="text-indigo-400 hover:text-indigo-300">Operating Modes</a> page for the full list. Custom voice commands can be added in <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">data/util/phrase_responses.json</code>.</p>
   </section>
 
   <!-- 7. Keyboard Controls -->
   <section class="space-y-4">
-    <h2 id="keyboard" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">7. Keyboard Controls</h2>
+    <h2 id="keyboard" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Keyboard Controls</h2>
 
     <p class="text-slate-300 leading-relaxed">Available in interactive mode (default):</p>
 
@@ -452,7 +469,7 @@ maxim [OPTIONS]
 
   <!-- 8. Common Recipes -->
   <section class="space-y-4">
-    <h2 id="recipes" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">8. Common Recipes</h2>
+    <h2 id="recipes" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Common Recipes</h2>
 
     <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
       <h3 class="text-lg font-semibold text-emerald-400 mb-2">First Run (No Robot)</h3>
@@ -462,7 +479,7 @@ maxim [OPTIONS]
 
     <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
       <h3 class="text-lg font-semibold text-emerald-400 mb-2">Full Agentic Mode with Mistral</h3>
-      <div class="bg-slate-950 rounded-lg px-4 py-2 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">maxim --mode agentic \
+      <div class="bg-slate-950 rounded-lg px-4 py-2 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">maxim --mode live \
   --language-model mistral-7b \
   --prompt-profile standard \
   --autonomy supervised</div>
@@ -471,7 +488,7 @@ maxim [OPTIONS]
     <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
       <h3 class="text-lg font-semibold text-emerald-400 mb-2">CPU-Only with Small Model</h3>
       <div class="bg-slate-950 rounded-lg px-4 py-2 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">CUDA_VISIBLE_DEVICES="" maxim \
-  --mode agentic \
+  --mode live \
   --language-model smollm-1.7b \
   --prompt-profile minimal</div>
     </div>
@@ -485,7 +502,7 @@ maxim [OPTIONS]
 
     <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
       <h3 class="text-lg font-semibold text-emerald-400 mb-2">Verbose Debugging Session</h3>
-      <div class="bg-slate-950 rounded-lg px-4 py-2 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">maxim --mode agentic \
+      <div class="bg-slate-950 rounded-lg px-4 py-2 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">maxim --mode live \
   --verbosity 2 \
   --agentic-verbosity 3 \
   --language-model phi-3-mini</div>
@@ -503,7 +520,7 @@ maxim --resume-session abc123</div>
 
   <!-- 9. Memory Management -->
   <section class="space-y-4">
-    <h2 id="memory-management" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">9. Memory Management</h2>
+    <h2 id="memory-management" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Memory Management</h2>
 
     <h3 class="text-lg font-semibold text-indigo-400">Clearing Memory</h3>
 
@@ -583,7 +600,9 @@ maxim --clear-memory pain,fear       # Safety learning only</div>
 
     <h3 class="text-lg font-semibold text-indigo-400">Where Data Lives</h3>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">data/
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Directory structure</span>
+
+data/
 ├── util/               # Learned state (JSON)
 │   ├── hippocampus.json
 │   ├── nac_state.json
@@ -607,7 +626,7 @@ maxim --clear-memory pain,fear       # Safety learning only</div>
 
   <!-- 10. Debugging -->
   <section class="space-y-4">
-    <h2 id="debugging" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">10. Debugging</h2>
+    <h2 id="debugging" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Debugging</h2>
 
     <h3 class="text-lg font-semibold text-indigo-400">Verbosity Levels</h3>
 
@@ -676,14 +695,29 @@ for sig, pred in nac._learned_associations.items():
     </div>
   </section>
 
-  <div class="flex flex-wrap justify-center gap-3 pt-6 border-t border-slate-700">
-    <a href="/maxim" class="btn-link">Overview</a>
-    <a href="/maxim-memory-systems" class="btn-link">Memory Systems</a>
-    <a href="/maxim-proprioception" class="btn-link">Body Awareness</a>
-    <a href="/maxim-attention-salience" class="btn-link">Attention &amp; Salience</a>
-    <a href="/maxim-agent-architecture" class="btn-link">Agent Architecture</a>
-    <a href="/maxim-operating-modes" class="btn-link">Operating Modes</a>
-    <a href="/maxim-technical-deepdive" class="btn-link">Technical Deep Dive</a>
+  <div class="pt-6 border-t border-slate-700 space-y-5">
+    <div class="flex justify-between items-stretch gap-4">
+      <a href="/maxim-proprioception" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
+        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
+        <span class="block text-white font-medium mt-1">Body Awareness</span>
+      </a>
+      <a href="/maxim-technical-deepdive" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
+        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
+        <span class="block text-white font-medium mt-1">Technical Deep Dive</span>
+      </a>
+    </div>
+    <div class="text-center space-y-2">
+      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
+      <div class="flex flex-wrap justify-center gap-2">
+        <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
+        <a href="/maxim-agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
+        <a href="/maxim-memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
+        <a href="/maxim-attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
+        <a href="/maxim-proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
+        <a href="/maxim-technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
+        <a href="/maxim-operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

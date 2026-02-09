@@ -7,6 +7,7 @@
   <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
 
   <header class="text-center space-y-2">
+    <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM</p>
     <h1 class="text-3xl md:text-4xl font-bold text-white">Technical Deep Dive</h1>
     <p class="text-indigo-400 font-medium">Architecture, Threading, Bridges, and the Orchestration Loop</p>
   </header>
@@ -28,11 +29,12 @@
 
   <!-- 1. Dependency Graph -->
   <section class="space-y-4">
-    <h2 id="architecture" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">1. The Dependency Graph</h2>
+    <h2 id="architecture" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Dependency Graph</h2>
 
     <p class="text-slate-300 leading-relaxed">Maxim enforces a strict one-way dependency graph. This isn't a suggestion; the architecture prevents circular dependencies at the module level. Higher layers may call lower layers, never the reverse.</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"> ┌──────────────────────────────────────────────────────┐
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Architecture</span>
+ ┌──────────────────────────────────────────────────────┐
  │                      AGENTS                          │
  │         Goal reasoning, intent generation            │
  │                  (NO side effects)                   │
@@ -77,7 +79,7 @@
 
   <!-- 2. Orchestration Loop -->
   <section class="space-y-4">
-    <h2 id="orchestrator" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">2. The Orchestration Loop</h2>
+    <h2 id="orchestrator" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Orchestration Loop</h2>
 
     <p class="text-slate-300 leading-relaxed">Everything runs through <em class="text-indigo-400 not-italic font-medium">selfy.py</em>, the main conscience of the system. The name isn't accidental: it's the self-model, the inner loop where perception, cognition, and action come together.</p>
 
@@ -107,7 +109,7 @@ def run(self):
         # Mode-specific behavior
         if self.mode == "exploration":
             self._exploration_step(novel, familiar)
-        elif self.mode == "agentic":
+        elif self.mode == "live":
             self._agentic_step(detections, transcript)
         elif self.mode == "sleep":
             self._sleep_step()
@@ -125,11 +127,12 @@ def run(self):
 
   <!-- 3. Threading Model -->
   <section class="space-y-4">
-    <h2 id="threading" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">3. Threading Model</h2>
+    <h2 id="threading" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Threading Model</h2>
 
     <p class="text-slate-300 leading-relaxed">Maxim uses a carefully designed multi-threaded architecture. Each thread has a single responsibility and communicates through bounded queues:</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Main Thread (observation loop)
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Threading diagram</span>
+Main Thread (observation loop)
 │
 ├─ Video Capture Thread
 │  └─ Reads from RobotController.get_video_stream()
@@ -154,7 +157,7 @@ def run(self):
 │     Runs Whisper inference
 │     Writes JSONL to data/transcript/
 │
-├─ Agentic Loop Thread (mode=agentic only)
+├─ Agentic Loop Thread (active modes only)
 │  └─ Runs agent pipeline concurrently
 │     Shares state via StateManager (thread-safe)
 │
@@ -170,7 +173,7 @@ def run(self):
 
   <!-- 4. Tool System -->
   <section class="space-y-4">
-    <h2 id="tools" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">4. The Tool System</h2>
+    <h2 id="tools" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Tool System</h2>
 
     <p class="text-slate-300 leading-relaxed">Tools are the only way Maxim affects the world. Every side effect, from moving a motor to searching the internet, goes through a tool.</p>
 
@@ -260,7 +263,8 @@ class Tool(ABC):
 
     <h3 class="text-lg font-semibold text-indigo-400">Tool Invocation Flow</h3>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Agent proposes intent → Planner decomposes into tools
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Pseudocode</span>
+Agent proposes intent → Planner decomposes into tools
   → Decision Engine selects → FearAgent safety review
     → Executor calls tool.run(params) → ToolResult
       → Memory records action + outcome
@@ -269,7 +273,7 @@ class Tool(ABC):
 
   <!-- 5. LLM Integration -->
   <section class="space-y-4">
-    <h2 id="llm" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">5. LLM Integration</h2>
+    <h2 id="llm" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">LLM Integration</h2>
 
     <p class="text-slate-300 leading-relaxed">Maxim runs LLMs locally using <em class="text-indigo-400 not-italic font-medium">llama-cpp-python</em> (GGUF format) for CPU + Metal GPU acceleration. No cloud API calls for inference.</p>
 
@@ -347,7 +351,7 @@ reflection:  max_tokens=1024, context=3072  (deep introspection)</div>
 
   <!-- 6. Hardware Abstraction -->
   <section class="space-y-4">
-    <h2 id="hardware" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">6. Hardware Abstraction</h2>
+    <h2 id="hardware" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Hardware Abstraction</h2>
 
     <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">RobotController</em> abstract base class defines everything Maxim needs from a robot. Concrete implementations handle the actual hardware:</p>
 
@@ -391,7 +395,8 @@ class MotionTarget:
     <h3 class="text-lg font-semibold text-indigo-400">Multi-Robot Support</h3>
     <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">RobotRegistry</em> (singleton) allows connecting multiple robots simultaneously:</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">registry = RobotRegistry()
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Example</span>
+registry = RobotRegistry()
 registry.register_controller_type("reachy_mini", ReachyMiniController)
 registry.register_controller_type("simulated", SimulatedController)
 
@@ -401,7 +406,7 @@ secondary = registry.connect_robot("secondary", "simulated")</div>
 
   <!-- 7. Bridge System -->
   <section class="space-y-4">
-    <h2 id="bridges" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">7. The Bridge System</h2>
+    <h2 id="bridges" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Bridge System</h2>
 
     <p class="text-slate-300 leading-relaxed">Bridges are the connective tissue between biological memory systems and the rest of the architecture. Each bridge creates bidirectional learning between two or more components.</p>
 
@@ -414,7 +419,8 @@ secondary = registry.connect_robot("secondary", "simulated")</div>
     <p class="text-slate-300 leading-relaxed"><em class="text-indigo-400 not-italic font-medium">Hippocampus + EC &harr; SpatialMap + AttentionNetwork</em></p>
     <p class="text-slate-300 leading-relaxed">Stores multi-session object location priors. "The mug was on the counter 3 out of 4 times" translates to an attention boost for the counter region when searching for mugs.</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">boosts = spatial_bridge.boost_attention_for_goal("find mug")
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Example</span>
+boosts = spatial_bridge.boost_attention_for_goal("find mug")
 # Returns: [(position=(320, 180), weight=0.82), ...]
 # Counter region gets priority based on prior success</div>
 
@@ -484,7 +490,7 @@ hub.consolidate_during_sleep()       # Compress &amp; clean</div>
 
   <!-- 8. Persistence -->
   <section class="space-y-4">
-    <h2 id="persistence" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">8. Persistence &amp; Checkpointing</h2>
+    <h2 id="persistence" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Persistence &amp; Checkpointing</h2>
 
     <p class="text-slate-300 leading-relaxed">Maxim persists learned state across sessions. Every biological system saves its learned parameters:</p>
 
@@ -546,7 +552,8 @@ hub.consolidate_during_sleep()       # Compress &amp; clean</div>
 
     <p class="text-slate-300 leading-relaxed">Before risky operations, Maxim checkpoints its entire goal tree so it can recover if something goes wrong:</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">checkpoint_id = persistence.checkpoint(
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Example</span>
+checkpoint_id = persistence.checkpoint(
     tree=goal_tree,
     config=config,
     reason="pre_risky_op"
@@ -599,7 +606,7 @@ tree, config, budgets = persistence.recover(checkpoint_id)</div>
 
   <!-- 9. Energy Tracking -->
   <section class="space-y-4">
-    <h2 id="energy" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">9. Energy Tracking</h2>
+    <h2 id="energy" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Energy Tracking</h2>
 
     <p class="text-slate-300 leading-relaxed">Maxim tracks resource expenditure across six domains, creating a unified cost model for decision-making:</p>
 
@@ -630,14 +637,29 @@ Model Cost Multipliers:
     </div>
   </section>
 
-  <div class="flex flex-wrap justify-center gap-3 pt-6 border-t border-slate-700">
-    <a href="/maxim" class="btn-link">Overview</a>
-    <a href="/maxim-memory-systems" class="btn-link">Memory Systems</a>
-    <a href="/maxim-proprioception" class="btn-link">Body Awareness</a>
-    <a href="/maxim-attention-salience" class="btn-link">Attention &amp; Salience</a>
-    <a href="/maxim-agent-architecture" class="btn-link">Agent Architecture</a>
-    <a href="/maxim-operating-modes" class="btn-link">Operating Modes</a>
-    <a href="/maxim-usage-guide" class="btn-link">Usage Guide</a>
+  <div class="pt-6 border-t border-slate-700 space-y-5">
+    <div class="flex justify-between items-stretch gap-4">
+      <a href="/maxim-usage-guide" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
+        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
+        <span class="block text-white font-medium mt-1">Usage Guide</span>
+      </a>
+      <a href="/maxim-operating-modes" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
+        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
+        <span class="block text-white font-medium mt-1">Operating Modes</span>
+      </a>
+    </div>
+    <div class="text-center space-y-2">
+      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
+      <div class="flex flex-wrap justify-center gap-2">
+        <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
+        <a href="/maxim-agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
+        <a href="/maxim-memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
+        <a href="/maxim-attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
+        <a href="/maxim-proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
+        <a href="/maxim-usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
+        <a href="/maxim-operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
