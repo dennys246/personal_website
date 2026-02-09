@@ -1,6 +1,40 @@
 {% extends "base.html" %}
 
-{% block title %}Maxim Memory Systems | Denny Schaedig{% endblock %}
+{% block title %}Memory Systems — Maxim Docs | Agentic Robotics Framework{% endblock %}
+
+{% block meta_description %}How Maxim remembers, predicts, and learns. Explore the Hippocampus, SCN, Nucleus Accumbens, and Entorhinal Cortex — biologically-inspired memory systems for embodied AI agents.{% endblock %}
+
+{% block meta_keywords %}Maxim memory systems, robot memory, hippocampus AI, episodic memory robot, reward prediction, entorhinal cortex, circadian rhythm AI, agentic memory, embodied AI memory{% endblock %}
+
+{% block meta_author %}Maxim Project{% endblock %}
+{% block og_site_name %}Maxim{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Memory Systems — How Maxim Remembers, Predicts, and Learns",
+  "description": "How Maxim remembers, predicts, and learns. Explore the Hippocampus, SCN, Nucleus Accumbens, and Entorhinal Cortex — biologically-inspired memory systems for embodied AI agents.",
+  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
+  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim-memory-systems",
+  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "keywords": ["memory systems", "hippocampus", "episodic memory", "reward prediction", "entorhinal cortex"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 2, "name": "Memory Systems", "item": "https://www.dennyschaedig.com/maxim-memory-systems" }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="space-y-8">
@@ -40,6 +74,119 @@ Perception → Decision → Action → Outcome</div>
     </ul>
 
     <p class="text-slate-300 leading-relaxed">Memories are indexed by multiple keys (goal, tool, object, person, success, mode) enabling O(1) retrieval. Need all memories involving "coffee mug"? Instant lookup.</p>
+  </section>
+
+  <!-- Associative Graph -->
+  <section class="space-y-4">
+    <h2 id="associative-graph" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Associative Graph: Recall-Triggered Connections</h2>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">🧬 Biological Inspiration</h3>
+      <p class="text-slate-300">Each memory in the brain is physically encoded as an <em class="text-emerald-300 not-italic font-medium">engram</em>&mdash;a sparse ensemble of hippocampal neurons whose synaptic wiring pattern <em>is</em> the memory. When a new engram forms, it reactivates overlapping neurons from existing engrams, creating physical bridges between memories. Recalling one engram later propagates activation through these shared neurons and "lights up" linked ones&mdash;this is why the smell of coffee can trigger a memory of your grandmother's kitchen.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Maxim's Hippocampus builds an <em class="text-indigo-400 not-italic font-medium">associative graph</em> where memories are nodes and recall-triggered connections are edges. The key mechanism: when a new memory is captured, the system automatically recalls similar existing memories and forms <em class="text-indigo-400 not-italic font-medium">bidirectional edges</em> between them&mdash;mirroring how biological engram co-allocation creates associative links during encoding.</p>
+
+    <h3 class="text-lg font-semibold text-white mt-6">From Engrams to Edges</h3>
+
+    <p class="text-slate-300 leading-relaxed">Pioneering work by Josselyn and Bhatt showed that individual engram cells can be tagged, reactivated with optogenetics, and even artificially linked&mdash;activating two engrams simultaneously creates a new association, exactly as if the animal had experienced both events together. The strength of biological engram links depends on how many neurons two ensembles share, which is governed by neuronal excitability at encoding time, perceptual similarity, and top-down goal states. Maxim's edge weight formula maps directly onto these mechanisms:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-emerald-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Biological Mechanism</th>
+            <th class="px-4 py-3">Maxim Analogue</th>
+            <th class="px-4 py-3 rounded-tr-lg">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3"><strong class="text-white">Pattern overlap</strong> &mdash; engrams for similar percepts recruit overlapping neural populations</td>
+            <td class="px-4 py-3">Shared detected objects and people between two memories</td>
+            <td class="px-4 py-3">60%</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3"><strong class="text-white">Goal-state modulation</strong> &mdash; prefrontal cortex biases which neurons are excitable, linking goal-relevant memories preferentially</td>
+            <td class="px-4 py-3">Matching or overlapping active goals (word-level Jaccard)</td>
+            <td class="px-4 py-3">25%</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3"><strong class="text-white">Co-allocation</strong> &mdash; neuronal excitability lingers after encoding, so memories formed close in time share more neurons</td>
+            <td class="px-4 py-3">Closer in time = stronger link (decays over hours)</td>
+            <td class="px-4 py-3">15%</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3"><strong class="text-white">Subthreshold propagation</strong> &mdash; recalling an engram sends graded activation through shared neurons to linked engrams</td>
+            <td class="px-4 py-3">BFS spreading activation with exponential decay (0.5 per hop, max 3 hops)</td>
+            <td class="px-4 py-3">&mdash;</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3"><strong class="text-white">Synaptic homeostasis</strong> &mdash; during sleep, weak synaptic links are pruned while strong ones consolidate</td>
+            <td class="px-4 py-3">Sleep cycle prunes weakly connected memories; well-linked ones score higher in retention</td>
+            <td class="px-4 py-3">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Edge Formation During Capture</span>
+1. New memory captured: "found cup on kitchen table"
+2. recall_similar() fires automatically
+3. Returns: "picked up cup yesterday", "cleaned table last week"
+4. Bidirectional edges formed:
+   found_cup ←→ picked_up_cup    (weight: 0.81)
+   found_cup ←→ cleaned_table    (weight: 0.75)</div>
+
+    <h3 class="text-lg font-semibold text-white mt-6">Spreading Activation: Multi-Hop Recall</h3>
+
+    <p class="text-slate-300 leading-relaxed">The real power emerges during recall. Just as recalling a biological engram sends subthreshold activation through shared neurons to linked ensembles, Maxim uses <em class="text-indigo-400 not-italic font-medium">spreading activation</em> to propagate signals through the graph. Activation flows from seed memories through edges, decaying at each hop:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Spreading Activation Example</span>
+Query: "make coffee"
+  │
+  ▼ direct recall (activation: 1.0)
+  ┌──────────────────┐
+  │ "made coffee at   │
+  │  9am yesterday"   │
+  └────────┬─────────┘
+           │ edge (weight: 0.81)
+           ▼ activation: 1.0 × 0.5 × 0.81 = 0.41
+  ┌──────────────────┐
+  │ "found cup on     │──── This memory has NO "coffee"
+  │  kitchen table"   │     in its index keys, but is
+  └────────┬─────────┘     reachable through association
+           │ edge (weight: 0.75)
+           ▼ activation: 0.41 × 0.5 × 0.75 = 0.15
+  ┌──────────────────┐
+  │ "cleaned kitchen  │──── Two hops away from "coffee"
+  │  table last week" │     but still contextually relevant
+  └──────────────────┘</div>
+
+    <p class="text-slate-300 leading-relaxed">This enables <em class="text-indigo-400 not-italic font-medium">context-bridging recall</em>. A memory about finding a cup (which was recalled when the coffee memory was formed) becomes reachable from a "make coffee" query, even though "cup" and "coffee" share no direct index keys. The graph bridges contexts that flat recall cannot.</p>
+
+    <h3 class="text-lg font-semibold text-white mt-6">Bridge Integration</h3>
+
+    <p class="text-slate-300 leading-relaxed">Every memory bridge in the system is enriched with associative recall, expanding their knowledge beyond direct filter matches:</p>
+
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">Planning Bridge</strong> &mdash; Finds successful plan templates not just for the exact goal, but for associatively related goals. "Navigate to kitchen" recalls templates from "fetch cup from kitchen."</li>
+      <li><strong class="text-white">Salience Bridge</strong> &mdash; Builds richer interaction history by pulling in associated memories, boosting salience for objects that appeared in related successful contexts.</li>
+      <li><strong class="text-white">Spatial Bridge</strong> &mdash; Expands location priors with associated memories, learning that "cups are often on the kitchen table" even from memories primarily about cooking.</li>
+      <li><strong class="text-white">Fear Bridge</strong> &mdash; Contextualizes risk assessments with associative history&mdash;if similar past contexts led to failures, risk thresholds adjust accordingly.</li>
+      <li><strong class="text-white">Escalation Bridge</strong> &mdash; Informs when to ask for human help by checking whether associated memories show high failure rates in similar contexts.</li>
+    </ul>
+
+    <h3 class="text-lg font-semibold text-white mt-6">Lifecycle</h3>
+
+    <p class="text-slate-300 leading-relaxed">The graph is fully integrated with the memory lifecycle:</p>
+
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">Capture:</strong> Edges formed automatically (configurable: <code class="bg-slate-800 px-1.5 py-0.5 rounded text-indigo-300 text-sm">association_limit=5</code>, <code class="bg-slate-800 px-1.5 py-0.5 rounded text-indigo-300 text-sm">association_threshold=0.5</code>)</li>
+      <li><strong class="text-white">Persistence:</strong> Graph serialized alongside memories (v3.0 format, backward-compatible)</li>
+      <li><strong class="text-white">Sleep:</strong> When memories are pruned or compressed, their graph edges are cleaned up automatically. Well-connected memories score higher in retention.</li>
+      <li><strong class="text-white">Consistency:</strong> Graph nodes are validated against the memory store and orphans are repaired</li>
+    </ul>
   </section>
 
   <!-- SCN -->

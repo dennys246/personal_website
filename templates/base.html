@@ -15,15 +15,16 @@
   {% set preview_image = url_for('static', filename='img/signature.jpg', _external=True) %}
   <meta name="description" content="{% block meta_description %}{{ default_description }}{% endblock %}">
   <meta name="keywords" content="{% block meta_keywords %}Denny Schaedig, AI engineer, neuroimaging, data science, Colorado researcher, Rocky Mountain Digerati{% endblock %}">
-  <meta name="author" content="Denny Schaedig">
+  <meta name="author" content="{% block meta_author %}Denny Schaedig{% endblock %}">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
   <link rel="canonical" href="{{ canonical_url }}">
   <meta property="og:title" content="{{ self.title()|striptags }}">
   <meta property="og:description" content="{{ self.meta_description() }}">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
   <meta property="og:url" content="{{ canonical_url }}">
   <meta property="og:image" content="{{ preview_image }}">
+  <meta property="og:site_name" content="{% block og_site_name %}Denny Schaedig{% endblock %}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ self.title()|striptags }}">
   <meta name="twitter:description" content="{{ self.meta_description() }}">
@@ -95,6 +96,7 @@
     }
 
   </style>
+  {% block structured_data %}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -107,6 +109,7 @@
     "knowsAbout": ["Artificial Intelligence", "Neuroimaging", "Data Science", "Backcountry Safety"]
   }
   </script>
+  {% endblock %}
 </head>
 
 <body class="min-h-screen flex flex-col" style="background: linear-gradient(180deg, #0a0f1a 0%, #111827 40%, #1a1a2e 100%);">

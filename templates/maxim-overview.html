@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Maxim: A Brain for Robots — Agentic AI Cognitive Architecture | Denny Schaedig{% endblock %}
+{% block title %}Maxim — A Brain for Robots | Agentic Robotics Cognitive Architecture{% endblock %}
 
-{% block meta_description %}Maxim is an agentic robotics framework that gives robots a brain. A biologically-inspired cognitive architecture for embodied AI agents with memory, attention, proprioception, and learning. Built by Denny Schaedig.{% endblock %}
+{% block meta_description %}Maxim is an agentic robotics framework that gives robots a brain. A biologically-inspired cognitive architecture for embodied AI agents with memory, attention, proprioception, and learning.{% endblock %}
 
-{% block meta_keywords %}Maxim, Maxim AI, Maxim agent, Maxim brain, Maxim robot, agentic robotics, cognitive architecture, robot brain, embodied AI, biologically-inspired AI, artificial mind, Reachy Mini, memory systems, attention networks, proprioception, Denny Schaedig{% endblock %}
+{% block meta_keywords %}Maxim, Maxim AI, Maxim agent, Maxim brain, Maxim robot, agentic robotics, cognitive architecture, robot brain, embodied AI, biologically-inspired AI, artificial mind, Reachy Mini, memory systems, attention networks, proprioception, ROS2{% endblock %}
 
-{% block extra_head %}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+{% block meta_author %}Maxim Project{% endblock %}
+{% block og_site_name %}Maxim{% endblock %}
+{% block og_type %}website{% endblock %}
+
+{% block structured_data %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -28,6 +29,21 @@
   "keywords": ["agentic robotics", "cognitive architecture", "robot brain", "embodied AI", "biologically-inspired AI", "memory systems", "attention networks", "proprioception"]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Maxim",
+  "alternateName": "Maxim Agentic Robotics Framework",
+  "url": "https://www.dennyschaedig.com/maxim"
+}
+</script>
+{% endblock %}
+
+{% block extra_head %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
