@@ -1,40 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Memory Systems — Maxim Docs | Agentic Robotics Framework{% endblock %}
-
-{% block meta_description %}How Maxim remembers, predicts, and learns. Explore the Hippocampus, SCN, Nucleus Accumbens, and Entorhinal Cortex — biologically-inspired memory systems for embodied AI agents.{% endblock %}
-
-{% block meta_keywords %}Maxim memory systems, robot memory, hippocampus AI, episodic memory robot, reward prediction, entorhinal cortex, circadian rhythm AI, agentic memory, embodied AI memory{% endblock %}
-
-{% block meta_author %}Maxim Project{% endblock %}
-{% block og_site_name %}Maxim{% endblock %}
-{% block og_type %}article{% endblock %}
-
-{% block structured_data %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "TechArticle",
-  "headline": "Memory Systems — How Maxim Remembers, Predicts, and Learns",
-  "description": "How Maxim remembers, predicts, and learns. Explore the Hippocampus, SCN, Nucleus Accumbens, and Entorhinal Cortex — biologically-inspired memory systems for embodied AI agents.",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
-  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim-memory-systems",
-  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
-  "keywords": ["memory systems", "hippocampus", "episodic memory", "reward prediction", "entorhinal cortex"]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
-    { "@type": "ListItem", "position": 2, "name": "Memory Systems", "item": "https://www.dennyschaedig.com/maxim-memory-systems" }
-  ]
-}
-</script>
-{% endblock %}
+{% block title %}Maxim Memory Systems | Denny Schaedig{% endblock %}
 
 {% block content %}
 <div class="space-y-8">
@@ -305,8 +271,9 @@ Returns: "find the blue mug in the kitchen" (last week)
 
     <ul class="space-y-2 text-slate-300 list-disc pl-5">
       <li><strong class="text-white">Access-based retention:</strong> Frequently accessed memories are preserved</li>
-      <li><strong class="text-white">Compression:</strong> Old memories shrink from ~2.5KB to ~200 bytes</li>
-      <li><strong class="text-white">Pruning:</strong> Memories not accessed in one week are removed</li>
+      <li><strong class="text-white">Graph-aware retention:</strong> Well-connected memories in the associative graph score higher for retention&mdash;mirroring how strongly linked engrams resist synaptic homeostasis during biological sleep</li>
+      <li><strong class="text-white">Compression:</strong> Old memories shrink from ~2.5KB to ~200 bytes, with their live edge count snapshotted for future retention scoring</li>
+      <li><strong class="text-white">Pruning:</strong> Memories not accessed in one week are removed, and their associative graph edges are cleaned up automatically</li>
       <li><strong class="text-white">Protection:</strong> High-value memories (user interactions, successes) are never pruned</li>
       <li><strong class="text-white">Temporal coverage:</strong> SCN-aware consolidation maintains representation across time periods</li>
     </ul>
@@ -314,28 +281,33 @@ Returns: "find the blue mug in the kitchen" (last week)
     <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 text-center">
       <h3 class="text-lg font-semibold text-indigo-400 mb-4">Memory System Integration</h3>
       <pre class="font-mono text-sm text-slate-300 inline-block text-left">
-         ┌─────────────┐
-         │   Percept   │
-         └──────┬──────┘
-                │
-    ┌───────────┼───────────┐
-    ▼           ▼           ▼
-┌───────┐  ┌────────┐  ┌────────┐
-│  SCN  │  │ Hippo- │  │   EC   │
-│(when) │  │ campus │  │(like?) │
-└───┬───┘  │ (what) │  └───┬────┘
-    │      └────┬───┘      │
-    │           │          │
-    └─────┬─────┴─────┬────┘
-          ▼           ▼
-      ┌───────────────────┐
-      │   NAc (predict)   │
-      │   What outcome?   │
-      └─────────┬─────────┘
-                ▼
-          ┌───────────┐
-          │  Decision │
-          └───────────┘</pre>
+            ┌─────────────┐
+            │   Percept   │
+            └──────┬──────┘
+                   │
+    ┌──────────────┼──────────────┐
+    ▼              ▼              ▼
+┌───────┐  ┌─────────────┐  ┌────────┐
+│  SCN  │  │ Hippocampus │  │   EC   │
+│(when) │  │   (what)    │  │(like?) │
+└───┬───┘  └──────┬──────┘  └───┬────┘
+    │          ┌───┴───┐        │
+    │          ▼       ▼        │
+    │     ┌────────────────┐    │
+    │     │ Associative    │    │
+    │     │ Graph (linked?)│    │
+    │     └───────┬────────┘    │
+    │             │             │
+    └──────┬──────┴──────┬──────┘
+           ▼             ▼
+      ┌────────────────────────┐
+      │    NAc (predict)       │
+      │    What outcome?       │
+      └───────────┬────────────┘
+                  ▼
+           ┌───────────┐
+           │  Decision │
+           └───────────┘</pre>
     </div>
   </section>
 
