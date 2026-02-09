@@ -1,6 +1,40 @@
 {% extends "base.html" %}
 
-{% block title %}Maxim Memory Systems | Denny Schaedig{% endblock %}
+{% block title %}Memory Systems — Maxim Docs | Agentic Robotics Framework{% endblock %}
+
+{% block meta_description %}How Maxim remembers, predicts, and learns. Explore the Hippocampus, SCN, Nucleus Accumbens, and Entorhinal Cortex — biologically-inspired memory systems for embodied AI agents.{% endblock %}
+
+{% block meta_keywords %}Maxim memory systems, robot memory, hippocampus AI, episodic memory robot, reward prediction, entorhinal cortex, circadian rhythm AI, agentic memory, embodied AI memory{% endblock %}
+
+{% block meta_author %}Maxim Project{% endblock %}
+{% block og_site_name %}Maxim{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Memory Systems — How Maxim Remembers, Predicts, and Learns",
+  "description": "How Maxim remembers, predicts, and learns. Explore the Hippocampus, SCN, Nucleus Accumbens, and Entorhinal Cortex — biologically-inspired memory systems for embodied AI agents.",
+  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
+  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim-memory-systems",
+  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "keywords": ["memory systems", "hippocampus", "episodic memory", "reward prediction", "entorhinal cortex"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 2, "name": "Memory Systems", "item": "https://www.dennyschaedig.com/maxim-memory-systems" }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="space-y-8">
