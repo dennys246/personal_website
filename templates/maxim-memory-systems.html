@@ -235,6 +235,49 @@ Query: "make coffee"
     </div>
 
     <p class="text-slate-300 leading-relaxed">This enables queries like "What typically happens around this time on weekday mornings?" with minimal computational cost. The memory footprint is remarkably small: 10,000 memories require only ~500KB of index storage.</p>
+
+    <h3 id="oscillator" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Coupled Oscillator Network</h3>
+
+    <p class="text-slate-300 leading-relaxed">The biological SCN isn't just a clock&mdash;it's a network of ~20,000 coupled oscillators synchronized via a coupling matrix. "Monday mornings" isn't the intersection of a Monday bin and a 9am bin. It's an <em class="text-indigo-400 not-italic font-medium">emergent rhythm</em> from learned coupling between circadian and weekly oscillators.</p>
+
+    <p class="text-slate-300 leading-relaxed">Maxim's SCN embeds an optional <em class="text-indigo-400 not-italic font-medium">Kuramoto-inspired coupled oscillator network</em> alongside the existing bin indices. Four oscillators&mdash;circadian (24h), weekly (7d), monthly (30d), and annual (365d)&mdash;evolve according to coupled phase dynamics:</p>
+
+    <div class="bg-slate-950 rounded-lg px-6 py-3 font-serif text-lg text-slate-200 inline-block">
+      d&theta;<sub>i</sub>/dt = &omega;<sub>i</sub> + (K/N) &Sigma;<sub>j</sub> W[i][j] &middot; sin(&theta;<sub>j</sub> &minus; &theta;<sub>i</sub>)
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The coupling matrix W learns via <em class="text-indigo-400 not-italic font-medium">Hebbian learning</em>: when two oscillators are co-active (similar phases), their coupling strengthens. This is how "Monday mornings" emerge&mdash;repeated observations where circadian and weekly oscillators activate together strengthen their link. Over time, the system develops temporal expectations that go beyond simple bin lookups.</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Capability</th>
+            <th class="px-4 py-3 rounded-tr-lg">What It Does</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3"><strong class="text-white">Phase prediction</strong></td>
+            <td class="px-4 py-3">Forward-simulate oscillator phases to predict when patterns will recur</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3"><strong class="text-white">Coherence detection</strong></td>
+            <td class="px-4 py-3">Kuramoto order parameter r &isin; [0,1] measures how synchronized the system is</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3"><strong class="text-white">Anomaly scoring</strong></td>
+            <td class="px-4 py-3">Circular distance between predicted and observed phases flags temporally unusual events</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3"><strong class="text-white">Coupling analysis</strong></td>
+            <td class="px-4 py-3">Eigenvalues of the coupling matrix reveal dominant rhythm structures</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The oscillator is fully optional&mdash;existing bin-based methods remain unchanged, and the oscillator only activates when enabled. This means zero breaking changes for existing consumers. <a href="/maxim-math-cognition#oscillator" class="text-indigo-400 hover:text-indigo-300">Read the full oscillator math &rarr;</a></p>
   </section>
 
   <!-- Nucleus Accumbens -->
@@ -297,6 +340,17 @@ Returns: "find the blue mug in the kitchen" (last week)
     <p class="text-slate-300 leading-relaxed">Optional neural embeddings (SentenceTransformer) provide richer semantic similarity for Phase 4 deployments.</p>
   </section>
 
+  <!-- Semantic Memory (ATL) -->
+  <section class="space-y-4">
+    <h2 id="semantic-memory" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Beyond Episodes: Semantic Memory</h2>
+
+    <p class="text-slate-300 leading-relaxed">The systems above handle <em class="text-indigo-400 not-italic font-medium">episodic</em> memory&mdash;"what happened." But brains also distill episodes into lasting <em class="text-indigo-400 not-italic font-medium">semantic</em> knowledge: "cups are usually in the kitchen" rather than "I found a cup in the kitchen on Tuesday." Maxim implements this via the <em class="text-indigo-400 not-italic font-medium">Anterior Temporal Lobe (ATL)</em>, a third memory layer that stores typed relationships between concepts.</p>
+
+    <p class="text-slate-300 leading-relaxed">Episodic memories are <em class="text-indigo-400 not-italic font-medium">promoted</em> to semantic knowledge when the NAc's reward signals and the StatisticianAgent's pattern detection agree that a regularity is worth preserving. The IPS (fast math) acts as a quality gate, filtering out noise before knowledge is committed to long-term storage.</p>
+
+    <p class="text-slate-300 leading-relaxed">All three memory layers&mdash;Hippocampus, ATL, and Angular Gyrus (math memory)&mdash;are connected via a cross-layer graph that enables spreading activation across episodic, semantic, and mathematical knowledge simultaneously. <a href="/maxim-semantic-memory" class="text-indigo-400 hover:text-indigo-300 font-medium">Read the full Semantic Memory guide &rarr;</a></p>
+  </section>
+
   <!-- Consolidation -->
   <section class="space-y-4">
     <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Memory Consolidation: Sleep</h2>
@@ -351,9 +405,9 @@ Returns: "find the blue mug in the kitchen" (last week)
         <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
         <span class="block text-white font-medium mt-1">The Agent Brain</span>
       </a>
-      <a href="/maxim-attention-salience" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
+      <a href="/maxim-math-cognition" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
         <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
-        <span class="block text-white font-medium mt-1">Attention &amp; Salience</span>
+        <span class="block text-white font-medium mt-1">Math &amp; Statistics</span>
       </a>
     </div>
     <div class="text-center space-y-2">
@@ -361,8 +415,12 @@ Returns: "find the blue mug in the kitchen" (last week)
       <div class="flex flex-wrap justify-center gap-2">
         <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
         <a href="/maxim-agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
+        <a href="/maxim-memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
+        <a href="/maxim-math-cognition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Math &amp; Statistics</a>
+        <a href="/maxim-semantic-memory" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Semantic Memory</a>
         <a href="/maxim-attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
         <a href="/maxim-proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
+        <a href="/maxim-communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
         <a href="/maxim-usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
         <a href="/maxim-technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
         <a href="/maxim-operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>

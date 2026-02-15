@@ -152,7 +152,7 @@
   <section class="space-y-4">
     <h2 id="agent-pipeline" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Agent Pipeline</h2>
 
-    <p class="text-slate-300 leading-relaxed">Four specialized agents work in sequence, each with a distinct role:</p>
+    <p class="text-slate-300 leading-relaxed">Five specialized agents work in the pipeline, each with a distinct role:</p>
 
     <div class="space-y-1">
       <div class="agent-box">
@@ -272,6 +272,35 @@
           <p class="text-sm text-slate-300">Accepts or rejects proposed goals. If accepted, executes via tool invocation. Manages goal execution lifecycle and chains sub-goals hierarchically.</p>
         </div>
       </div>
+      <div class="agent-box">
+        <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
+          <h4 class="text-white font-semibold mb-2 flex items-center gap-2">📊 StatisticianAgent</h4>
+          <p class="text-sm text-slate-300">Monitors operational metrics&mdash;tool success rates, goal latencies, percept distributions&mdash;and detects emerging patterns. Uses the <em class="text-indigo-400 not-italic font-medium">dual number system</em>: IPS (fast approximate) for continuous screening, Angular Gyrus (slow precise) for uncertain cases. Publishes confirmed patterns and anomalies to the bus.</p>
+
+          <div class="bio-detail">
+            <div>
+              <div class="bg-slate-900/60 rounded-lg p-4 border border-slate-700 space-y-3 mt-3">
+                <h5 class="text-indigo-400 font-semibold text-sm">Inspired by the Posterior Parietal Cortex</h5>
+                <p class="text-sm text-slate-300">The posterior parietal cortex (PPC) integrates sensory streams into quantitative assessments that feed executive decision-making. The intraparietal sulcus (IPS) handles fast magnitude estimation&mdash;"about how many? more or less than before?"&mdash;while the angular gyrus performs slow, precise computation when the gut check is inconclusive.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                  <div class="space-y-1">
+                    <p class="text-white font-medium">IPS (Fast Path) &rarr; Randomness Screening</p>
+                    <p class="text-slate-400">The IPS uses Wald-Wolfowitz runs tests and lag-1 autocorrelation to quickly assess whether a metric series contains structure or is just noise. This runs every analysis cycle and costs microseconds. Handles the 90% case: clearly random metrics stay quiet, clearly patterned ones escalate immediately.</p>
+                  </div>
+                  <div class="space-y-1">
+                    <p class="text-white font-medium">Angular Gyrus (Slow Path) &rarr; Precise Confirmation</p>
+                    <p class="text-slate-400">When IPS can't decide (pattern confidence between 0.3&ndash;0.65 for several steps), Angular Gyrus is invoked for exact R&sup2; computation, autocorrelation confidence intervals, and memory recall. It checks: "Have I seen this pattern before?" If found in memory, fast-track. If new, compute precisely and store the result.</p>
+                  </div>
+                </div>
+
+                <p class="text-sm text-slate-400 italic">Each tracked metric has its own PatternDetector state machine: OBSERVING &rarr; PATTERN_FORMING &rarr; CONFIRMED_PATTERN (or ESCALATED_TO_AG when uncertain). The SCN oscillator provides temporal context, distinguishing "this is unusual" from "this is unusual <em>for this time</em>." <a href="/maxim-math-cognition#statistician" class="text-indigo-400 hover:text-indigo-300">Full details &rarr;</a></p>
+              </div>
+            </div>
+          </div>
+          <p class="bio-hint mt-2">Hover to explore the biological inspiration</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -331,10 +360,25 @@
             <td class="px-4 py-3">ExecAgent</td>
             <td class="px-4 py-3">Goal formulation, conflict monitoring, inhibitory filtering, value-based prioritization</td>
           </tr>
-          <tr class="hover:bg-slate-800/50">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">Cerebellum (FocusLearner)</td>
             <td class="px-4 py-3">Executor (motor)</td>
             <td class="px-4 py-3">Error-driven motor adaptation, movement gain calibration via Rescorla-Wagner learning</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">IPS (Intraparietal Sulcus)</td>
+            <td class="px-4 py-3">StatisticianAgent</td>
+            <td class="px-4 py-3">Fast approximate math: randomness screening, trend detection, anomaly scoring</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Angular Gyrus</td>
+            <td class="px-4 py-3">StatisticianAgent</td>
+            <td class="px-4 py-3">Slow precise math: exact R&sup2;, correlation matrices, pattern memory recall and storage</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">ATL (Anterior Temporal Lobe)</td>
+            <td class="px-4 py-3">MemoryAgent context</td>
+            <td class="px-4 py-3">Semantic knowledge: typed relationships between concepts distilled from episodes</td>
           </tr>
         </tbody>
       </table>
@@ -371,6 +415,10 @@ StructuredContext:
 
   active_goals:
     - "Find the coffee mug for the user"
+
+  statistical_context:  # From StatisticianAgent
+    - "[PATTERN] navigate tool success declining (R²=0.73)"
+    - "[TEMPORAL] High coherence (0.91) — deviations significant"
 
   pain_warnings:
     - None currently active</div>
@@ -519,9 +567,13 @@ Energy Types:
       <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
       <div class="flex flex-wrap justify-center gap-2">
         <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
+        <a href="/maxim-agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
         <a href="/maxim-memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
+        <a href="/maxim-math-cognition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Math &amp; Statistics</a>
+        <a href="/maxim-semantic-memory" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Semantic Memory</a>
         <a href="/maxim-attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
         <a href="/maxim-proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
+        <a href="/maxim-communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
         <a href="/maxim-usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
         <a href="/maxim-technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
         <a href="/maxim-operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>

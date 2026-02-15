@@ -76,6 +76,18 @@ def maxim_operating_modes():
 def maxim_usage_guide():
     return render_template("maxim-usage-guide.html")
 
+@app.route("/maxim-communication")
+def maxim_communication():
+    return render_template("maxim-communication.html")
+
+@app.route("/maxim-math-cognition")
+def maxim_math_cognition():
+    return render_template("maxim-math-cognition.html")
+
+@app.route("/maxim-semantic-memory")
+def maxim_semantic_memory():
+    return render_template("maxim-semantic-memory.html")
+
 @app.route("/gan-training-tips")
 def gan_training_tips():
     return render_template("gan-training-tips.html")
@@ -118,6 +130,9 @@ def sitemap_xml():
         ("maxim_usage_guide", "weekly", "0.9"),
         ("maxim_technical_deepdive", "weekly", "0.9"),
         ("maxim_operating_modes", "weekly", "0.9"),
+        ("maxim_communication", "weekly", "0.9"),
+        ("maxim_math_cognition", "weekly", "0.9"),
+        ("maxim_semantic_memory", "weekly", "0.9"),
         ("gan_training_tips", "monthly", "0.6"),
         ("progressive_growing", "monthly", "0.6"),
     ]
