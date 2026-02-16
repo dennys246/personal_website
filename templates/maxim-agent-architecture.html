@@ -169,7 +169,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                   <div class="space-y-1">
                     <p class="text-white font-medium">V1/V2 (Primary Visual Cortex) &rarr; Feature Extraction</p>
-                    <p class="text-slate-400">V1 neurons detect edges, orientations, and basic spatial frequencies &mdash; the raw building blocks of vision. The PerceptionAgent's vision model (YOLO) performs the analogous step: extracting bounding boxes, confidence scores, and class labels from raw camera frames. Neither system "understands" what it sees at this stage &mdash; it just detects structure.</p>
+                    <p class="text-slate-400">V1 neurons detect edges, orientations, and basic spatial frequencies &mdash; the raw building blocks of vision. The PerceptionAgent's vision model (YOLOv8) performs the analogous step: detecting all 80 COCO object classes in every frame &mdash; extracting bounding boxes, confidence scores, and class labels from raw camera input. Like V1, neither system "understands" what it sees at this stage &mdash; it just detects structure. Downstream salience filtering decides what reaches awareness.</p>
                   </div>
                   <div class="space-y-1">
                     <p class="text-white font-medium">Ventral Stream ("What" Pathway) &rarr; Object Classification</p>
@@ -181,7 +181,7 @@
                   </div>
                   <div class="space-y-1">
                     <p class="text-white font-medium">Salience Network (Anterior Insula + ACC) &rarr; Importance Filtering</p>
-                    <p class="text-slate-400">The brain's salience network acts as a gatekeeper, deciding which stimuli deserve conscious attention. A snake in peripheral vision triggers it; a familiar chair doesn't. The PerceptionAgent's SalienceNetwork computes the same filter: novelty decays over 30 seconds, recency fades over 5 seconds, interest labels provide permanent boosts, and the SalienceMemoryBridge adds learned importance from past interactions.</p>
+                    <p class="text-slate-400">The brain's salience network acts as a gatekeeper, deciding which stimuli deserve conscious attention. A snake in peripheral vision triggers it; a familiar chair doesn't. The PerceptionAgent's SalienceNetwork computes the same filter: instance novelty decays over 30 seconds, class-level novelty habituates as more unique instances of a category are seen (the 20th chair is less novel than the first cup), recency fades over 5 seconds, interest labels provide salience boosts, and the SalienceMemoryBridge adds learned importance from past interactions.</p>
                   </div>
                 </div>
 
