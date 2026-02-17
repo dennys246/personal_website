@@ -275,7 +275,7 @@
       <div class="agent-box">
         <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
           <h4 class="text-white font-semibold mb-2 flex items-center gap-2">📊 StatisticianAgent</h4>
-          <p class="text-sm text-slate-300">Monitors operational metrics&mdash;tool success rates, goal latencies, percept distributions&mdash;and detects emerging patterns. Uses the <em class="text-indigo-400 not-italic font-medium">dual number system</em>: IPS (fast approximate) for continuous screening, Angular Gyrus (slow precise) for uncertain cases. Publishes confirmed patterns and anomalies to the bus.</p>
+          <p class="text-sm text-slate-300">Monitors operational metrics&mdash;tool success rates, goal latencies, percept distributions&mdash;and detects emerging patterns. Uses the <em class="text-indigo-400 not-italic font-medium">dual number system</em>: IPS (fast approximate) for continuous screening, Angular Gyrus (slow precise) for uncertain cases. Infers metric data types (binary, continuous, rate, latency) and generates ranked <em class="text-indigo-400 not-italic font-medium">analysis suggestions</em> based on FSM state, which flow through to the LLM prompt as actionable guidance.</p>
 
           <div class="bio-detail">
             <div>
@@ -420,6 +420,12 @@ StructuredContext:
     - "[PATTERN] navigate tool success declining (R²=0.73)"
     - "[TEMPORAL] High coherence (0.91) — deviations significant"
 
+  statistical_suggestions:  # Ranked analysis recommendations
+    - {metric: "tool:navigate:success", operation: "recall_memory",
+       data_type: "binary", priority: 0.6, rationale: "Confirmed pattern with AG memory"}
+    - {metric: "sensor:battery:rate", operation: "assess_randomness",
+       data_type: "rate", priority: 0.5, rationale: "Emerging pattern (mean=0.72)"}
+
   pain_warnings:
     - None currently active</div>
   </section>
@@ -436,14 +442,14 @@ StructuredContext:
       <p class="text-slate-300"><strong class="text-white">Tier 2 - Reactive (learned):</strong> PainDetector monitors execution, feeds outcomes to NAc. Next time, similar actions are predicted as harmful.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">FearAgent</em> reviews actions against harm predictions and pain history, making one of four decisions:</p>
+    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">FearAgent</em> reviews actions against harm predictions and pain history, returning a <span class="font-mono text-xs text-indigo-400">ReviewResult</span> with a binary <strong class="text-white">allow/block</strong> decision and a risk assessment:</p>
 
     <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">ALLOW:</strong> Proceed as planned</li>
-      <li><strong class="text-white">WARN:</strong> Proceed with caution notice</li>
-      <li><strong class="text-white">DELAY:</strong> Request more information</li>
-      <li><strong class="text-white">BLOCK:</strong> Refuse the action entirely</li>
+      <li><strong class="text-white">allow = true:</strong> Proceed &mdash; risk is acceptable</li>
+      <li><strong class="text-white">allow = false:</strong> Block the action entirely</li>
     </ul>
+
+    <p class="text-slate-300 leading-relaxed mt-3">Each review also produces a <span class="font-mono text-xs text-indigo-400">RiskLevel</span> (LOW, MEDIUM, HIGH, CRITICAL) and a list of specific <span class="font-mono text-xs text-indigo-400">Finding</span> objects describing what was detected. The risk level informs the binary decision but is also available to upstream agents for context.</p>
   </section>
 
   <!-- Motor Learning: The Cerebellum -->
