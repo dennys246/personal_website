@@ -226,8 +226,8 @@
         <p class="text-xs text-slate-400">Known constants and relationships. "Pi is approximately 3.14159." Recalled instantly without recomputation.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-purple-400 mb-1">FORMULA</h4>
-        <p class="text-xs text-slate-400">Computational procedures. "Distance = rate &times; time." Stored with both verbal and code representations.</p>
+        <h4 class="text-sm font-semibold text-purple-400 mb-1">RELATIONSHIP</h4>
+        <p class="text-xs text-slate-400">Proportional or causal links. "Temperature IS_PROPORTIONAL_TO energy." Captures how quantities relate to each other.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
         <h4 class="text-sm font-semibold text-purple-400 mb-1">METHOD</h4>
@@ -360,7 +360,7 @@
 Vec = list[float]          <span class="text-slate-500"># 1D vector</span>
 Mat = list[list[float]]    <span class="text-slate-500"># 2D matrix (row-major)</span>
 
-<span class="text-slate-500"># 31 functions across 5 categories:</span>
+<span class="text-slate-500"># 25 functions across 5 categories:</span>
 <span class="text-amber-400">Vector ops (7):</span>  vec_add, vec_sub, vec_scale, vec_dot, vec_norm, vec_normalize, vec_elementwise_mul
 <span class="text-amber-400">Construction (3):</span> mat_zeros, mat_identity, mat_from_diag
 <span class="text-amber-400">Matrix ops (7):</span>  mat_add, mat_sub, mat_scale, mat_transpose, mat_mul, mat_vec_mul, mat_shape
@@ -481,12 +481,105 @@ Mat = list[list[float]]    <span class="text-slate-500"># 2D matrix (row-major)<
         <h4 class="text-sm font-semibold text-white mb-2">Publishes (output)</h4>
         <ul class="text-sm text-slate-300 space-y-1">
           <li><span class="font-mono text-xs text-green-400">StatisticalInsight</span> &mdash; on CONFIRMED_PATTERN (actionable alert)</li>
-          <li><span class="font-mono text-xs text-green-400">StatisticalSummary</span> &mdash; periodic context for MemoryAgent</li>
+          <li><span class="font-mono text-xs text-green-400">StatisticalSummary</span> &mdash; periodic context + ranked analysis suggestions for MemoryAgent</li>
         </ul>
       </div>
     </div>
 
-    <p class="text-sm text-slate-400 mt-3">MemoryAgent subscribes to StatisticalSummary and populates <span class="font-mono text-xs">StructuredContext.statistical_context</span>, which the LLM sees during goal proposal. This means the agent's reasoning is informed by detected patterns: "tool_navigate failing 40% &mdash; consider alternatives."</p>
+    <p class="text-sm text-slate-400 mt-3">MemoryAgent subscribes to StatisticalSummary and populates <span class="font-mono text-xs">StructuredContext.statistical_context</span> and <span class="font-mono text-xs">statistical_suggestions</span>, which the LLM sees during goal proposal. This means the agent's reasoning is informed by detected patterns and data-type-aware analysis recommendations.</p>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Analysis Suggestion Engine</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">Rather than generic "investigate patterns" guidance, the StatisticianAgent generates <em class="text-indigo-400 not-italic font-medium">specific, ranked analysis suggestions</em> based on what it actually sees. This is entirely deterministic &mdash; no LLM involved. The engine has three stages:</p>
+
+    <div class="space-y-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-white mb-2">1. Data Type Inference (<span class="font-mono text-xs text-indigo-400">MetricDataType</span>)</h4>
+        <p class="text-sm text-slate-300 mb-2">Each metric is classified by naming convention first (fast path), then by value distribution analysis (fallback):</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+          <div class="bg-slate-900 rounded-lg p-3">
+            <p class="text-amber-400 font-semibold text-xs">BINARY</p>
+            <p class="text-xs text-slate-400"><span class="font-mono">*:success</span>, <span class="font-mono">*:fail</span>, or values &sube; {0, 1}</p>
+          </div>
+          <div class="bg-slate-900 rounded-lg p-3">
+            <p class="text-amber-400 font-semibold text-xs">RATE</p>
+            <p class="text-xs text-slate-400"><span class="font-mono">*rate*</span>, <span class="font-mono">*ratio*</span>, or all values in [0.0, 1.0]</p>
+          </div>
+          <div class="bg-slate-900 rounded-lg p-3">
+            <p class="text-amber-400 font-semibold text-xs">LATENCY</p>
+            <p class="text-xs text-slate-400"><span class="font-mono">*latency*</span>, <span class="font-mono">*duration*</span>, or non-negative values &gt; 1.0</p>
+          </div>
+          <div class="bg-slate-900 rounded-lg p-3">
+            <p class="text-amber-400 font-semibold text-xs">CONTINUOUS</p>
+            <p class="text-xs text-slate-400">Everything else (unbounded floats, signed values)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-white mb-2">2. Decision Matrix (FSM State &times; Data Type &rarr; Suggestion)</h4>
+        <p class="text-sm text-slate-300 mb-2">The suggestion depends on both what the FSM has determined and what kind of data it's looking at:</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead>
+              <tr class="border-b border-slate-600">
+                <th class="text-left py-2 px-2 text-slate-400">FSM State</th>
+                <th class="text-left py-2 px-2 text-slate-400">Binary/Rate</th>
+                <th class="text-left py-2 px-2 text-slate-400">Latency</th>
+                <th class="text-left py-2 px-2 text-slate-400">Continuous</th>
+                <th class="text-left py-2 px-2 text-slate-400">Priority</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-300">
+              <tr class="border-b border-slate-800">
+                <td class="py-2 px-2"><span class="fsm-state fsm-observing" style="font-size:0.65rem">OBSERVING</span></td>
+                <td class="py-2 px-2 text-slate-500" colspan="3">No suggestion (insufficient signal)</td>
+                <td class="py-2 px-2">&mdash;</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="py-2 px-2"><span class="fsm-state fsm-forming" style="font-size:0.65rem">FORMING</span></td>
+                <td class="py-2 px-2 font-mono">assess_randomness</td>
+                <td class="py-2 px-2 font-mono">anomaly</td>
+                <td class="py-2 px-2 font-mono">trend</td>
+                <td class="py-2 px-2">0.5</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="py-2 px-2"><span class="fsm-state fsm-escalated" style="font-size:0.65rem">ESCALATED</span></td>
+                <td class="py-2 px-2 font-mono" colspan="3">analyze linear (high priority &mdash; active uncertainty)</td>
+                <td class="py-2 px-2">0.8</td>
+              </tr>
+              <tr class="border-b border-slate-800">
+                <td class="py-2 px-2"><span class="fsm-state fsm-confirmed" style="font-size:0.65rem">CONFIRMED</span></td>
+                <td class="py-2 px-2 font-mono" colspan="3">recall_memory (if AG memory exists) or analyze (for characterization)</td>
+                <td class="py-2 px-2">0.6</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-2"><span class="fsm-state fsm-random" style="font-size:0.65rem">RANDOM</span></td>
+                <td class="py-2 px-2 text-slate-500" colspan="3">No suggestion (low value)</td>
+                <td class="py-2 px-2">&mdash;</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-500 mt-2">Temporal context from the SCN oscillator adjusts priority: +0.15 when <span class="font-mono">temporal_anomaly &gt; 0.5</span>.</p>
+      </div>
+
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-white mb-2">3. Ranked Output (<span class="font-mono text-xs text-indigo-400">AnalysisSuggestion</span>)</h4>
+        <p class="text-sm text-slate-300 mb-2">Each suggestion carries full context for prompt construction:</p>
+        <div class="bg-slate-950 rounded-lg p-4 font-mono text-xs text-slate-300 overflow-x-auto whitespace-pre">AnalysisSuggestion(
+  metric="tool:navigate:success",   <span class="text-slate-500"># Which metric</span>
+  tool_call="math",                 <span class="text-slate-500"># Which tool to invoke</span>
+  operation="assess_randomness",    <span class="text-slate-500"># Specific operation</span>
+  rationale="binary metric showing  <span class="text-slate-500"># Why this analysis</span>
+    emerging pattern (mean=0.60)",
+  priority=0.5,                     <span class="text-slate-500"># 0.0-1.0 ranking</span>
+  data_type="binary",               <span class="text-slate-500"># Inferred type</span>
+  fsm_state="PATTERN_FORMING"       <span class="text-slate-500"># Current FSM state</span>
+)</div>
+        <p class="text-xs text-slate-400 mt-2">Top 5 suggestions are published with each <span class="font-mono">StatisticalSummary</span>. MemoryAgent serializes them into <span class="font-mono">StructuredContext.statistical_suggestions</span>, and both ExecAgent (up to 3) and LLMWorker prompts consume them as ranked, actionable guidance &mdash; replacing the previous generic "use math tool to investigate patterns" advice.</p>
+      </div>
+    </div>
   </section>
 
   <!-- Coupled Oscillators -->
@@ -651,12 +744,17 @@ GoalCompleted ──┤             ┌─────────────�
                 │             │  detect_trend()      │
                 │             │                      │        StatisticalSummary
                 │             │ AG slow path:        │──&rarr;     (periodic &rarr; MemoryAgent)
-                │             │  analyze("linear")   │
-                │             │  recall/store memory  │        knowledge_context
-                │             │                      │──&rarr;     (merged ATL + AG &rarr; LLM)
+                │             │  analyze("linear")   │         + AnalysisSuggestions
+                │             │  recall/store memory  │         + data_type_breakdown
+                │             │                      │
+                │             │ Suggestion engine:   │        knowledge_context
+                │             │  infer_data_type()   │──&rarr;     (merged ATL + AG &rarr; LLM)
+                │             │  FSM &times; type matrix  │
+                │             │  rank by priority    │        PromotionCandidate
+                │             │                      │──&rarr;     (&rarr; SemanticPromoter &rarr; ATL)
                 │             │ SCN temporal context: │
-                │             │  anomaly weighting   │        PromotionCandidate
-                │             │  phase correlation   │──&rarr;     (&rarr; SemanticPromoter &rarr; ATL)
+                │             │  anomaly weighting   │        statistical_suggestions
+                │             │  phase correlation   │──&rarr;     (&rarr; ExecAgent + LLMWorker prompts)
                 │             └──────────────────────┘
 </div>
 
@@ -673,11 +771,11 @@ GoalCompleted ──┤             ┌─────────────�
         <tbody class="text-slate-300">
           <tr class="border-b border-slate-800 hover:bg-slate-800/50">
             <td class="py-2 px-3"><strong class="text-white">MemoryAgent</strong></td>
-            <td class="py-2 px-3">Populates <span class="font-mono text-xs">statistical_context</span> and <span class="font-mono text-xs">active_pattern_count</span> in StructuredContext via bus subscription</td>
+            <td class="py-2 px-3">Populates <span class="font-mono text-xs">statistical_context</span>, <span class="font-mono text-xs">active_pattern_count</span>, and <span class="font-mono text-xs">statistical_suggestions</span> in StructuredContext via bus subscription</td>
           </tr>
           <tr class="border-b border-slate-800 hover:bg-slate-800/50">
             <td class="py-2 px-3"><strong class="text-white">ExecAgent / LLM</strong></td>
-            <td class="py-2 px-3">Sees statistical patterns in prompt: "tool_navigate failing 40% &mdash; consider alternatives"</td>
+            <td class="py-2 px-3">Sees statistical patterns and ranked analysis suggestions in prompt &mdash; data-type-aware guidance like "math assess_randomness on tool:navigate:success [binary]" instead of generic advice</td>
           </tr>
           <tr class="border-b border-slate-800 hover:bg-slate-800/50">
             <td class="py-2 px-3"><strong class="text-white"><a href="/maxim-memory-systems#promotion" class="text-indigo-400 hover:text-indigo-300">SemanticPromoter</a></strong></td>
@@ -689,7 +787,7 @@ GoalCompleted ──┤             ┌─────────────�
           </tr>
           <tr class="hover:bg-slate-800/50">
             <td class="py-2 px-3"><strong class="text-white">MathTool</strong></td>
-            <td class="py-2 px-3">Agent-accessible math operations routed through IPS (compare, trend, anomaly) and Angular Gyrus (compute, analyze, mat_multiply, eigenvalues, solve_system, determinant). Natural-language aliases (sqrt, square_root, cube_root, squared, cubed, factorial) auto-normalize to canonical operations</td>
+            <td class="py-2 px-3">Agent-accessible math operations routed through IPS (compare, trend, anomaly) and Angular Gyrus (compute, analyze, mat_multiply, eigenvalues, solve_system, determinant). Natural-language aliases (sqrt, square_root, cube_root, squared, cubed, factorial) auto-normalize to canonical operations. LLM prompts include PEMDAS decomposition guidance for multi-step expressions, using <span class="font-mono text-xs">store_value/recall_value</span> for intermediates</td>
           </tr>
         </tbody>
       </table>
@@ -704,8 +802,9 @@ GoalCompleted ──┤             ┌─────────────�
         <li><strong class="text-purple-400">AG</strong> checks memory: no prior "navigate decline" pattern. Runs <span class="font-mono text-xs">analyze("linear")</span>: R&sup2; = 0.73, slope = -0.02/step.</li>
         <li>AG stores new <span class="font-mono text-xs">MathMemory(PATTERN, "stat:tool:navigate:success")</span> with R&sup2; and slope.</li>
         <li><strong class="text-green-400">CONFIRMED_PATTERN</strong>. <span class="font-mono text-xs">StatisticalInsight</span> published to bus.</li>
-        <li><strong class="text-white">MemoryAgent</strong> receives <span class="font-mono text-xs">StatisticalSummary</span>, adds to LLM context: "navigate tool declining (R&sup2;=0.73)".</li>
-        <li><strong class="text-white">ExecAgent</strong> proposes a goal that avoids navigate, choosing an alternative approach.</li>
+        <li>Suggestion engine infers <span class="font-mono text-xs">data_type=binary</span> (from <span class="font-mono text-xs">*:success</span> naming), generates <span class="font-mono text-xs">AnalysisSuggestion(operation="recall_memory", priority=0.6)</span> since AG memory exists.</li>
+        <li><strong class="text-white">MemoryAgent</strong> receives <span class="font-mono text-xs">StatisticalSummary</span> with suggestions, adds to LLM context: "navigate tool declining (R&sup2;=0.73)" + ranked analysis recommendation.</li>
+        <li><strong class="text-white">ExecAgent</strong> sees "SUGGESTED ANALYSES: math recall_memory on tool:navigate:success [binary]" &mdash; proposes a goal that avoids navigate, choosing an alternative approach.</li>
         <li>Next session: IPS detects the same pattern. AG recalls the MathMemory record &rarr; <strong>fast-track confirmation</strong> (no recomputation).</li>
       </ol>
     </div>
