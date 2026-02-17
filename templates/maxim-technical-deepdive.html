@@ -52,6 +52,7 @@
       <li><a href="#architecture" class="text-indigo-400 hover:text-indigo-300 no-underline">The Dependency Graph</a></li>
       <li><a href="#orchestrator" class="text-indigo-400 hover:text-indigo-300 no-underline">The Orchestration Loop (selfy.py)</a></li>
       <li><a href="#threading" class="text-indigo-400 hover:text-indigo-300 no-underline">Threading Model</a></li>
+      <li><a href="#worker-pool" class="text-indigo-400 hover:text-indigo-300 no-underline">Async Worker Pool</a></li>
       <li><a href="#tools" class="text-indigo-400 hover:text-indigo-300 no-underline">The Tool System</a></li>
       <li><a href="#llm" class="text-indigo-400 hover:text-indigo-300 no-underline">LLM Integration</a></li>
       <li><a href="#hardware" class="text-indigo-400 hover:text-indigo-300 no-underline">Hardware Abstraction</a></li>
@@ -191,9 +192,19 @@ Main Thread (observation loop)
 │     Runs Whisper inference
 │     Writes JSONL to data/transcript/
 │
-├─ Agentic Loop Thread (active modes only)
-│  └─ Runs agent pipeline concurrently
-│     Shares state via StateManager (thread-safe)
+├─ WorkerPool (typed lanes)
+│  ├─ infer lane  (1 worker, GPU) &mdash; LLM inference
+│  ├─ review lane (1 worker, CPU) &mdash; evaluation
+│  └─ record lane (2 workers)     &mdash; memory writes, I/O
+│
+├─ Hippocampus Capture Thread
+│  └─ Own FIFO queue (bounded, 100 items)
+│     Non-blocking capture_from_loop_async()
+│     Drops oldest on overflow
+│
+├─ EC NeuralEmbedder Thread
+│  └─ Async semantic embedding queue
+│     Triggered by hippocampus capture callbacks
 │
 └─ Motor Executor Thread
    └─ Exclusive RobotController access for motor commands
@@ -202,6 +213,67 @@ Main Thread (observation loop)
     <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
       <h3 class="text-lg font-semibold text-indigo-400 mb-2">Key Design Decision: Bounded Queues</h3>
       <p class="text-slate-300">The video save queue is bounded (blocks on backpressure), while the latest frame queue has size 1 and drops old frames. This means the observation loop always processes the freshest frame available, never falling behind. Video recording might skip frames under load, but real-time perception never stalls.</p>
+    </div>
+  </section>
+
+  <!-- Async Worker Pool -->
+  <section class="space-y-4">
+    <h2 id="worker-pool" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Async Worker Pool</h2>
+
+    <p class="text-slate-300 leading-relaxed">The two biggest blocking operations in the 30Hz main loop &mdash; LLM inference and hippocampus memory writes &mdash; are now handled by three independent async systems that eliminate contention:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">WorkerPool architecture</span>
+
+<span class="text-amber-400">WorkerPool</span> (runtime/worker_pool.py)
+├─ <span class="text-amber-400">Lane</span>: Named work category with own PriorityQueue + ThreadPoolExecutor
+│   Default lanes:
+│     infer  &mdash; 1 worker, GPU-bound (LLM calls)
+│     review &mdash; 1 worker, CPU-bound (evaluation)
+│     record &mdash; 2 workers (memory writes, I/O)
+│
+├─ <span class="text-amber-400">Job</span>: Unit of work with priority, optional DependencySpec
+│   Lifecycle: PENDING &rarr; RUNNING &rarr; COMPLETED | FAILED | CANCELLED
+│
+├─ <span class="text-amber-400">DependencyGate</span>: Per-job blocker with two-phase prefetch
+│   prefetch_early &mdash; runs on submission (gather stable data)
+│   prefetch_late  &mdash; runs after deps resolve (gather fresh data)
+│
+├─ <span class="text-amber-400">JobRegistry</span>: Thread-safe lifecycle tracker
+│   Uses threading.Event per job for cross-job waits
+│   GC'd completions still resolve dependency checks
+│
+└─ <span class="text-amber-400">GC Thread</span>: Prunes completed jobs every 60s (TTL: 300s)</div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Passive Hippocampus</h3>
+
+    <p class="text-slate-300 leading-relaxed">The hippocampus uses its own independent FIFO queue rather than the WorkerPool &mdash; a deliberate choice because captures don't need dependency gates and FIFO ordering is more appropriate than priority scheduling:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Async capture flow</span>
+
+Main loop calls capture_from_loop_async()
+  &rarr; Snapshots state immediately (prevents stale-reference bugs)
+  &rarr; Creates immutable _CaptureRequest
+  &rarr; Puts on bounded queue (max 100, drops oldest on overflow)
+  &rarr; Returns immediately (non-blocking)
+
+Hippocampus worker thread:
+  &rarr; Drains queue, calls capture_from_loop() per request
+  &rarr; Acquires write lock, stores memory, builds index
+  &rarr; Forms associative edges, fires capture callbacks
+  &rarr; EC schedule_embedding() chains to NeuralEmbedder queue
+
+flush(timeout) blocks until queue is drained
+  &rarr; Called before session-end consolidation</div>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Three Independent Async Systems</h3>
+      <p class="text-slate-300 mb-2">The async architecture deliberately uses three separate systems rather than one monolithic pool:</p>
+      <ul class="space-y-1 text-slate-300 list-disc pl-5">
+        <li><strong class="text-white">WorkerPool</strong> &mdash; typed lanes with dependency gates for LLM inference</li>
+        <li><strong class="text-white">Hippocampus capture thread</strong> &mdash; own FIFO queue for memory writes</li>
+        <li><strong class="text-white">EC NeuralEmbedder</strong> &mdash; own async queue for semantic embedding, triggered by hippocampus callbacks</li>
+      </ul>
+      <p class="text-slate-300 mt-2">This separation means LLM inference, memory capture, and semantic embedding can all proceed concurrently without blocking the 30Hz observation loop.</p>
     </div>
   </section>
 
@@ -261,7 +333,7 @@ class Tool(ABC):
             <td class="px-4 py-3">Send state machine commands (sleep, wake, shutdown)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3" rowspan="3">Filesystem</td>
+            <td class="px-4 py-3" rowspan="5">Filesystem</td>
             <td class="px-4 py-3">ReadFileTool</td>
             <td class="px-4 py-3">Read files (path traversal blocked)</td>
           </tr>
@@ -274,13 +346,25 @@ class Tool(ABC):
             <td class="px-4 py-3">Execute Python scripts with timeout enforcement</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3" rowspan="2">Network</td>
+            <td class="px-4 py-3">GlobTool</td>
+            <td class="px-4 py-3">Pattern-based file search within allowed directories</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">BashTool</td>
+            <td class="px-4 py-3">Shell command execution with containment</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3" rowspan="3">Network</td>
             <td class="px-4 py-3">InternetSearchTool</td>
             <td class="px-4 py-3">DuckDuckGo search (returns title, URL, snippet)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3">HTTPFetchTool</td>
+            <td class="px-4 py-3">HttpFetchTool</td>
             <td class="px-4 py-3">Fetch and parse web pages (blocks localhost)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">InternetAccessTool</td>
+            <td class="px-4 py-3">General internet access gating</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">Math</td>
@@ -292,9 +376,44 @@ class Tool(ABC):
             <td class="px-4 py-3">RespondTool</td>
             <td class="px-4 py-3">Send text response to user</td>
           </tr>
-          <tr class="hover:bg-slate-800/50">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">SpeakTool</td>
             <td class="px-4 py-3">Synthesize speech via TTS engine</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3" rowspan="2">Mode Control</td>
+            <td class="px-4 py-3">ModeSwitchTool</td>
+            <td class="px-4 py-3">Switch between operating modes (passive, active, singularity)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">AutonomyLevelTool</td>
+            <td class="px-4 py-3">Adjust autonomy level within the current mode</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3" rowspan="4">Live Intent</td>
+            <td class="px-4 py-3">DefineLiveModeIntentTool</td>
+            <td class="px-4 py-3">Define a new intent for live mode self-evolution</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">ReviewLiveModeIntentTool</td>
+            <td class="px-4 py-3">Review current live mode intent and progress</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">RecordLiveIntentInsightTool</td>
+            <td class="px-4 py-3">Record an insight relevant to the active intent</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">RecordLiveOutcomeTool</td>
+            <td class="px-4 py-3">Record an outcome observation for intent tracking</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3" rowspan="2">Communication</td>
+            <td class="px-4 py-3">SendMessageTool</td>
+            <td class="px-4 py-3">Send a message through the gateway</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">CallUserTool</td>
+            <td class="px-4 py-3">Initiate a call to the user via gateway</td>
           </tr>
         </tbody>
       </table>
@@ -411,6 +530,10 @@ class RobotController(ABC):
     # Lifecycle
     def wake_up(self) -&gt; bool
     def goto_sleep(self) -&gt; bool
+
+    # Recording
+    def start_recording(self) -&gt; bool
+    def stop_recording(self) -&gt; bool
 
     # Streams
     def get_video_stream(self) -&gt; VideoStream | None
@@ -661,8 +784,14 @@ Energy Domains:
 
 Model Cost Multipliers:
   local:             0.2   (cheapest)
+  ollama:            0.3
+  gpt-4o-mini:       0.4
   claude-3-haiku:    0.5
+  claude-haiku-4-5:  0.6
   claude-3-sonnet:   1.0   (baseline)
+  claude-sonnet-4-5: 1.2
+  gpt-4o:            1.5
+  gpt-4-turbo:       1.8
   claude-3-opus:     2.0
   claude-opus-4-5:   2.5   (most expensive)</div>
 
