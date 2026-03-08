@@ -19,7 +19,7 @@
   "description": "Get started with Maxim. Installation instructions, configuration options, CLI reference, and step-by-step setup guide.",
   "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
   "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
-  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim-usage-guide",
+  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/usage-guide",
   "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
   "keywords": ["installation", "configuration", "CLI", "setup guide"]
 }
@@ -30,7 +30,7 @@
   "@type": "BreadcrumbList",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
-    { "@type": "ListItem", "position": 2, "name": "Usage Guide", "item": "https://www.dennyschaedig.com/maxim-usage-guide" }
+    { "@type": "ListItem", "position": 2, "name": "Usage Guide", "item": "https://www.dennyschaedig.com/maxim/usage-guide" }
   ]
 }
 </script>
@@ -278,40 +278,40 @@ MAXIM_WHISPER_COMPUTE_TYPE=float32     # Whisper precision fallback</div>
   <section class="space-y-4">
     <h2 id="modes" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Operating Modes</h2>
 
-    <p class="text-slate-300 leading-relaxed">Maxim uses a decomposed mode architecture combining <em class="text-indigo-400 not-italic font-medium">processing states</em> (awake/sleep), <em class="text-indigo-400 not-italic font-medium">operational modes</em> (passive/active/singularity), and <em class="text-indigo-400 not-italic font-medium">strategies</em> (observe/explore/research/assist/reflect/learn). For backward compatibility, the CLI accepts legacy mode names that map to specific combinations. See the <a href="/maxim-operating-modes" class="text-indigo-400 hover:text-indigo-300 no-underline">Operating Modes deep dive</a> for full details.</p>
+    <p class="text-slate-300 leading-relaxed">Maxim uses a decomposed mode architecture combining <em class="text-indigo-400 not-italic font-medium">processing states</em> (awake/sleep), <em class="text-indigo-400 not-italic font-medium">operational modes</em> (passive/active/singularity), and <em class="text-indigo-400 not-italic font-medium">strategies</em> (observe/explore/research/assist/reflect/learn). For backward compatibility, the CLI accepts legacy mode names that map to specific combinations. See the <a href="/maxim/operating-modes" class="text-indigo-400 hover:text-indigo-300 no-underline">Operating Modes deep dive</a> for full details.</p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <a href="/maxim-operating-modes#exploration" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
+      <a href="/maxim/operating-modes#exploration" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
         <div class="text-2xl mb-2">&#x1F52D;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Exploration</h4>
         <p class="text-sm text-slate-400 mb-2">Active + explore strategy. Curiosity-driven discovery with budget tracking and novelty gating.</p>
         <code class="bg-slate-950 px-2 py-0.5 rounded text-xs text-slate-300">maxim</code>
       </a>
-      <a href="/maxim-operating-modes#live-mode" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
+      <a href="/maxim/operating-modes#live-mode" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
         <div class="text-2xl mb-2">&#x1F4E1;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Live</h4>
         <p class="text-sm text-slate-400 mb-2">Active + assist strategy. Full embodied runtime with self-evolving behavioral intent.</p>
         <code class="bg-slate-950 px-2 py-0.5 rounded text-xs text-slate-300">maxim --mode live</code>
       </a>
-      <a href="/maxim-operating-modes#sleep" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
+      <a href="/maxim/operating-modes#sleep" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
         <div class="text-2xl mb-2">&#x1F634;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Sleep</h4>
         <p class="text-sm text-slate-400 mb-2">Sleep processing state. Audio monitoring, memory consolidation, wake keyword detection.</p>
         <code class="bg-slate-950 px-2 py-0.5 rounded text-xs text-slate-300">maxim --mode sleep</code>
       </a>
-      <a href="/maxim-operating-modes#legacy-modes" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
+      <a href="/maxim/operating-modes#legacy-modes" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
         <div class="text-2xl mb-2">&#x1F4AD;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Reflection</h4>
         <p class="text-sm text-slate-400 mb-2">Passive + reflect strategy. Internal analysis, memory review, pattern identification.</p>
         <code class="bg-slate-950 px-2 py-0.5 rounded text-xs text-slate-300">maxim --mode reflection</code>
       </a>
-      <a href="/maxim-operating-modes#legacy-modes" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
+      <a href="/maxim/operating-modes#legacy-modes" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
         <div class="text-2xl mb-2">&#x1F3CB;&#xFE0F;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Train</h4>
         <p class="text-sm text-slate-400 mb-2">Passive + learn strategy. Watch demonstrations, incorporate feedback, update behavior.</p>
         <code class="bg-slate-950 px-2 py-0.5 rounded text-xs text-slate-300">maxim --mode train</code>
       </a>
-      <a href="/maxim-operating-modes#legacy-modes" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
+      <a href="/maxim/operating-modes#legacy-modes" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
         <div class="text-2xl mb-2">&#x1F440;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Observe</h4>
         <p class="text-sm text-slate-400 mb-2">Passive + observe strategy. Watch and understand without interfering.</p>
@@ -468,7 +468,7 @@ maxim [OPTIONS]
       </table>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">See the <a href="/maxim-operating-modes#switching" class="text-indigo-400 hover:text-indigo-300">Operating Modes</a> page for the full list. Custom voice commands can be added in <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">data/util/phrase_responses.json</code>.</p>
+    <p class="text-slate-300 leading-relaxed">See the <a href="/maxim/operating-modes#switching" class="text-indigo-400 hover:text-indigo-300">Operating Modes</a> page for the full list. Custom voice commands can be added in <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">data/util/phrase_responses.json</code>.</p>
   </section>
 
   <!-- 7. Keyboard Controls -->
@@ -731,11 +731,11 @@ for sig, pred in nac._learned_associations.items():
 
   <div class="pt-6 border-t border-slate-700 space-y-5">
     <div class="flex justify-between items-stretch gap-4">
-      <a href="/maxim-communication" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
+      <a href="/maxim/communication" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
         <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
         <span class="block text-white font-medium mt-1">Communication</span>
       </a>
-      <a href="/maxim-technical-deepdive" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
+      <a href="/maxim/technical-deepdive" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
         <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
         <span class="block text-white font-medium mt-1">Technical Deep Dive</span>
       </a>
@@ -744,15 +744,15 @@ for sig, pred in nac._learned_associations.items():
       <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
       <div class="flex flex-wrap justify-center gap-2">
         <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
-        <a href="/maxim-agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
-        <a href="/maxim-memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
-        <a href="/maxim-math-cognition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Math &amp; Statistics</a>
-        <a href="/maxim-attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
-        <a href="/maxim-proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
-        <a href="/maxim-communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
-        <a href="/maxim-usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
-        <a href="/maxim-technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
-        <a href="/maxim-operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
+        <a href="/maxim/agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
+        <a href="/maxim/memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
+        <a href="/maxim/math-cognition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Math &amp; Statistics</a>
+        <a href="/maxim/attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
+        <a href="/maxim/proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
+        <a href="/maxim/communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
+        <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
+        <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
+        <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
       </div>
     </div>
   </div>
