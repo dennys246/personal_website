@@ -88,6 +88,10 @@ def maxim_math_cognition():
 def maxim_semantic_memory():
     return render_template("maxim-semantic-memory.html")
 
+@app.route("/maxim-privacy-policy")
+def maxim_privacy_policy():
+    return render_template("maxim-privacy-policy.html")
+
 @app.route("/gan-training-tips")
 def gan_training_tips():
     return render_template("gan-training-tips.html")
@@ -133,6 +137,7 @@ def sitemap_xml():
         ("maxim_communication", "weekly", "0.9"),
         ("maxim_math_cognition", "weekly", "0.9"),
         ("maxim_semantic_memory", "weekly", "0.9"),
+        ("maxim_privacy_policy", "monthly", "0.5"),
         ("gan_training_tips", "monthly", "0.6"),
         ("progressive_growing", "monthly", "0.6"),
     ]
