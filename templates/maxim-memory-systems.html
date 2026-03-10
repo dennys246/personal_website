@@ -46,7 +46,7 @@
     <p class="text-indigo-400 font-medium">How Maxim Remembers, Predicts, and Learns</p>
   </header>
 
-  <p class="text-slate-300 leading-relaxed">Memory in biological systems isn't a filing cabinet. It's not even a database. It's a dynamic, reconstructive process where <em class="text-indigo-400 not-italic font-medium">anatomically distinct brain regions</em> collaborate to store, index, and retrieve experiences. The hippocampus, SCN, nucleus accumbens, and entorhinal cortex are separate structures scattered across the brain&mdash;hypothalamus, ventral striatum, medial temporal lobe&mdash;connected by neural pathways that let them work as complementary partners. Maxim mirrors this: four independent subsystems, each in its own package, coordinated by the MemoryHub.</p>
+  <p class="text-slate-300 leading-relaxed">Memory in biological systems isn't a filing cabinet. It's not even a database. It's a dynamic, reconstructive process where <em class="text-indigo-400 not-italic font-medium">anatomically distinct brain regions</em> collaborate to store, index, and retrieve experiences. The hippocampus, SCN, nucleus accumbens, and entorhinal cortex are separate structures scattered across the brain&mdash;hypothalamus, ventral striatum, medial temporal lobe&mdash;connected by neural pathways that let them work as complementary partners. Maxim mirrors this: independent subsystems coordinated by the MemoryHub. The Hippocampus is the long-term store&mdash;it owns all episodic memories and the associative connections between them. The MemoryAgent acts as the gatekeeper, deciding what's important and what's relevant, staging new observations before committing them to permanent storage.</p>
 
   <!-- ============================================================ -->
   <!--  PART 1 — THE BIG PICTURE                                    -->
@@ -119,7 +119,7 @@ class MemoryLayer(ABC):
     register_deletion_callback(cb)  <span class="text-slate-500"># Notify on removal</span>
     stats() / __len__ / __iter__    <span class="text-slate-500"># Inspection</span></div>
 
-    <p class="text-slate-300 leading-relaxed mt-3">All three layers share a common base record type (<span class="font-mono text-xs text-indigo-400">MemoryRecord</span>) with fields for ID, timestamps, access tracking, and long-term status. Each layer extends this with domain-specific fields.</p>
+    <p class="text-slate-300 leading-relaxed mt-3">All three layers share a common base record type (<span class="font-mono text-xs text-indigo-400">MemoryRecord</span>) with fields for ID, timestamps, access tracking, and long-term status. Every record knows how to describe itself: <span class="font-mono text-xs text-blue-400">keywords()</span> extracts searchable terms, and <span class="font-mono text-xs text-blue-400">to_context_dict()</span> formats the record for the LLM&mdash;so the system can build context from any mix of memory types without needing to know which layer they came from. Each layer extends MemoryRecord with its own domain-specific fields.</p>
 
     <div class="overflow-x-auto mt-3">
       <table class="w-full text-sm">
@@ -152,6 +152,57 @@ class MemoryLayer(ABC):
           </tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <!-- Staged Formation Pipeline -->
+  <section class="space-y-4">
+    <h2 id="staged-formation" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Staged Memory Formation</h2>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">In the brain, new experiences don't instantly become stable memories. They pass through labile encoding stages&mdash;initially held in working memory by prefrontal activity, then consolidated via hippocampal replay during rest. Disrupting this process (e.g., via concussion) prevents memory formation even though the event was perceived.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The MemoryAgent implements a staged formation pipeline. Rather than capturing memories immediately, observations progress through tiers before reaching the Hippocampus for permanent storage:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Memory Tier Progression</span>
+
+FORMING    &rarr;  Initial observation, still accumulating context
+               Protected from eviction during the active session
+
+WORKING    &rarr;  Enriched with importance scores and decay rates
+               Protected from eviction during the active session
+
+SHORT_TERM &rarr;  Committed to the Hippocampus for storage
+               Subject to consolidation during sleep
+
+LONG_TERM  &rarr;  Survived consolidation waves
+               Permanent storage in the Hippocampus</div>
+
+    <p class="text-slate-300 leading-relaxed">While observations are forming and working, each one is wrapped in a <span class="font-mono text-xs text-blue-400">WorkingMemoryEntry</span>&mdash;a container that tracks how important, how fresh, and how relevant the observation is, independently of the memory record itself. The ATL can also inject predicted outcomes into forming memories before they're committed, letting the system pre-fill expectations like "last time I saw this, X happened."</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-blue-400 mb-2">MemoryAgent Owns</h4>
+        <ul class="text-xs text-slate-300 space-y-1 list-disc pl-4">
+          <li>Deciding what's important (salience scoring)</li>
+          <li>Deciding what's relevant (relevance ranking)</li>
+          <li>Building context for the LLM (StructuredContext)</li>
+          <li>Staging observations before they're committed</li>
+          <li>Injecting predictions into forming memories</li>
+        </ul>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-blue-400 mb-2">Hippocampus Owns</h4>
+        <ul class="text-xs text-slate-300 space-y-1 list-disc pl-4">
+          <li>All long-term episodic memory storage</li>
+          <li>Associative connections between memories</li>
+          <li>Indexing and recall by context</li>
+          <li>Saving and loading across sessions</li>
+          <li>Sleep consolidation (compress, decay, prune)</li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -740,10 +791,106 @@ PromotionCandidate:
 
   <!-- Consolidation -->
   <section class="space-y-4">
-    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Memory Consolidation: Sleep</h2>
+    <h2 id="consolidation" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Memory Consolidation: Sleep</h2>
 
-    <p class="text-slate-300 leading-relaxed">Biological memory consolidation happens during sleep. Maxim implements an analogous process during idle time or session end:</p>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">Memory consolidation during sleep transforms labile hippocampal traces into stable neocortical representations. The nucleus accumbens (reward system) plays a gating role&mdash;rewarding experiences are preferentially consolidated. Similarly, repeated experiences (temporal recurrence) strengthen synaptic traces even without explicit reward.</p>
+    </div>
 
+    <p class="text-slate-300 leading-relaxed">Maxim implements a <em class="text-indigo-400 not-italic font-medium">wave-based consolidation pipeline</em> that separates staging from promotion, with path-dependent thresholds for one-shot learning (acute) and evidence-based learning (chronic).</p>
+
+    <!-- Consolidation Pipeline Diagram -->
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 text-center">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-4">Consolidation Pipeline</h3>
+      <pre class="font-mono text-sm text-slate-300 inline-block text-left">
+Agent Cycle Complete
+        │
+        ▼
+┌──────────────────────────────┐
+│ SignificanceWeightLearner    │
+│  RPE magnitude    (0.35)     │
+│  User interaction (0.20)     │
+│  Novelty          (0.15)     │
+│  Plan boundary    (0.10)     │
+│  Valence extreme  (0.10)     │
+│  Energy change    (0.05)     │
+└────────────┬─────────────────┘
+             │ score &gt; 0.5?
+             ▼
+  ┌─────────────────────┐
+  │ Acute Sidecar (JSON)│ &rarr; data/short_term_memory/
+  └─────────┬───────────┘
+            │
+     ┌──────┴──────────────────┐
+     ▼ Sleep Mode              ▼ Sleep Mode
+┌───────────────┐    ┌───────────────────┐
+│  Wave Score   │    │ Chronic Staging   │
+│  Evaluation   │    │ (recurrence LSH)  │
+└───────┬───────┘    └────────┬──────────┘
+        │                     │
+        ▼                     ▼
+  ┌───────────────────────────────┐
+  │  ConsolidationOrchestrator    │
+  │  Promote / Survive / Expire   │
+  └───────────┬───────────────────┘
+              ▼
+       ┌─────────────┐
+       │ Hippocampus │ long-term memory
+       │ + SCN + LSH │ registered
+       └─────────────┘</pre>
+    </div>
+
+    <!-- Staging Paths -->
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Staging Paths</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-blue-400 mb-1">ACUTE</h4>
+        <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Threshold: 0.45</p>
+        <p class="text-sm text-slate-300">One-shot learning. Triggered by RPE spikes, user input, or highly novel percepts. Lower consolidation bar&mdash;a single significant experience can become a lasting memory.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-purple-400 mb-1">CHRONIC</h4>
+        <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Threshold: 0.60</p>
+        <p class="text-sm text-slate-300">Evidence-based learning. Detected by LSH percept recurrence&mdash;the same pattern appearing at similar times. Higher bar requires accumulated evidence before promotion.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-emerald-400 mb-1">IMMEDIATE</h4>
+        <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Threshold: 0.85</p>
+        <p class="text-sm text-slate-300">Skip-the-queue learning. Extremely significant moments (high RPE + user input + novel) bypass wave processing entirely and promote on first sleep cycle.</p>
+      </div>
+    </div>
+
+    <!-- Wave Score Formula -->
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Wave Score Formula</h3>
+    <p class="text-slate-300 leading-relaxed">Each consolidation wave re-evaluates staged moments against accumulated system evidence:</p>
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Wave Score Computation</span>
+
+wave_score = 0.30 &times; significance          <span class="text-slate-500"># Original heuristic score</span>
+           + 0.20 &times; nac_corroboration      <span class="text-slate-500"># Has the event&rarr;outcome pattern strengthened?</span>
+           + 0.20 &times; temporal_recurrence    <span class="text-slate-500"># Similar activity at similar times? (SCN)</span>
+           + 0.12 &times; percept_recurrence     <span class="text-slate-500"># Similar percepts since staging? (LSH)</span>
+           + 0.10 &times; context_recurrence     <span class="text-slate-500"># Similar language contexts? (LSH)</span>
+           + 0.08 &times; novelty_decay          <span class="text-slate-500"># Novel &rarr; routine = worth encoding</span></div>
+
+    <!-- Learnable Weights -->
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Learnable Significance Weights</h3>
+    <p class="text-slate-300 leading-relaxed">Significance heuristic weights learn from long-term utility. After a memory is promoted, the <em class="text-indigo-400 not-italic font-medium">SignificanceWeightLearner</em> tracks whether it becomes well-connected in the associative graph (indicating usefulness). Pearson correlation between heuristic scores and graph edge growth adjusts weights over time&mdash;heuristics that predict useful memories gain weight, others lose it.</p>
+
+    <!-- Bounded Bins -->
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">SCN Bounded Bins</h3>
+    <p class="text-slate-300 leading-relaxed">SCN time bins use <em class="text-indigo-400 not-italic font-medium">BoundedBin</em> with a max capacity of 200 entries per bin. When full, the least significant entry from the older half is evicted. This prevents unbounded memory growth while preserving the most important temporal associations. The v3.0 persistence format stores significance scores alongside memory IDs for accurate restoration.</p>
+
+    <!-- LSH Similarity -->
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">LSH Similarity Indices</h3>
+    <p class="text-slate-300 leading-relaxed">Two <em class="text-indigo-400 not-italic font-medium">SimilarityIndex</em> instances use MinHash + Locality-Sensitive Hashing for O(1) approximate similarity lookup, replacing the old O(n) linear scans:</p>
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">context_index:</strong> Language/context similarity. Slots into <span class="font-mono text-xs text-blue-400">AssociationIndex.find_similar()</span> as the preferred path with automatic keyword Jaccard fallback.</li>
+      <li><strong class="text-white">percept_index:</strong> Percept similarity. Used by <span class="font-mono text-xs text-blue-400">recall_deep</span> and chronic recurrence detection to find similar visual/auditory patterns.</li>
+    </ul>
+
+    <!-- Retention principles (preserved from original) -->
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Retention Principles</h3>
     <ul class="space-y-2 text-slate-300 list-disc pl-5">
       <li><strong class="text-white">Access-based retention:</strong> Frequently accessed memories are preserved</li>
       <li><strong class="text-white">Graph-aware retention:</strong> Well-connected memories in the associative graph score higher for retention&mdash;mirroring how strongly linked engrams resist synaptic homeostasis during biological sleep</li>
@@ -773,16 +920,23 @@ PromotionCandidate:
     │     │ Graph (linked?)│    │
     │     └───────┬────────┘    │
     │             │             │
-    └──────┬──────┴──────┬──────┘
-           ▼             ▼
-      ┌────────────────────────┐
-      │    NAc (predict)       │
-      │    What outcome?       │
-      └───────────┬────────────┘
-                  ▼
-           ┌───────────┐
-           │  Decision │
-           └───────────┘</pre>
+    │    ┌────────┴────────┐    │
+    │    ▼                 ▼    │
+    │ ┌──────┐      ┌──────┐   │
+    │ │ LSH  │      │ LSH  │   │
+    │ │percep│      │contxt│   │
+    │ └──┬───┘      └──┬───┘   │
+    │    │              │      │
+    └────┼──────┬───────┼──────┘
+         ▼      ▼       ▼
+    ┌────────────────────────┐
+    │    NAc (predict)       │
+    │    What outcome?       │
+    └───────────┬────────────┘
+                ▼
+         ┌───────────┐
+         │  Decision │
+         └───────────┘</pre>
     </div>
   </section>
 

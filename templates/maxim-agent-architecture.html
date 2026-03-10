@@ -195,13 +195,14 @@
       <div class="agent-box">
         <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
           <h4 class="text-white font-semibold mb-2 flex items-center gap-2">🧠 MemoryAgent</h4>
-          <p class="text-sm text-slate-300">The bridge between perception and decision. Maintains salient memory context, tracks interaction history, and builds <em class="text-indigo-400 not-italic font-medium">StructuredContext</em> for the LLM. This is where biological memory systems (Hippocampus, SCN, NAc, EC) integrate with the agent loop.</p>
+          <p class="text-sm text-slate-300">The bridge between perception and decision. Doesn't store memories itself&mdash;it delegates that to the Hippocampus. Instead, it decides <em class="text-indigo-400 not-italic font-medium">what's important</em>, <em class="text-indigo-400 not-italic font-medium">what's relevant</em>, and builds the <em class="text-indigo-400 not-italic font-medium">StructuredContext</em> the LLM uses to reason. New observations are held in a staging area before being committed to long-term storage. This is where biological memory systems (Hippocampus, SCN, NAc, EC) integrate with the agent loop.</p>
 
           <div class="bio-detail">
             <div>
               <div class="bg-slate-900/60 rounded-lg p-4 border border-slate-700 space-y-3 mt-3">
                 <h5 class="text-indigo-400 font-semibold text-sm">Inspired by the Medial Temporal Lobe</h5>
-                <p class="text-sm text-slate-300">The MemoryAgent mirrors the medial temporal lobe (MTL) &mdash; not as a passive storage vault, but as an active <em class="text-indigo-400 not-italic">convergence zone</em> that integrates multiple memory systems into a coherent context for decision-making. In the brain, you don't "look up" a memory like a database query. The MTL reconstructs it by weaving together episodic traces, temporal context, familiarity signals, and spatial patterns. The MemoryAgent does exactly this when building StructuredContext for the LLM.</p>
+                <p class="text-sm text-slate-300">The MemoryAgent mirrors the medial temporal lobe (MTL) &mdash; not as a storage vault, but as an active <em class="text-indigo-400 not-italic">convergence zone</em> that integrates multiple memory systems into a coherent context for decision-making. In the brain, you don't "look up" a memory like a database query. The MTL reconstructs it by weaving together episodic traces, temporal context, familiarity signals, and spatial patterns. The MemoryAgent does exactly this when building StructuredContext for the LLM.</p>
+                <p class="text-sm text-slate-300">Like biological working memory, observations don't become permanent memories instantly. They pass through <em class="text-indigo-400 not-italic">staged formation</em>: new observations enter a forming pool, accumulate context as they graduate to working status, and are finally committed to the Hippocampus for long-term storage. During the active session, forming and working entries are protected from eviction&mdash;just as the prefrontal cortex actively maintains items in biological working memory until they're consolidated.</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                   <div class="space-y-1">
@@ -232,7 +233,7 @@
       <div class="agent-box">
         <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
           <h4 class="text-white font-semibold mb-2 flex items-center gap-2">💭 ExecAgent</h4>
-          <p class="text-sm text-slate-300">Proposes goals via LLM. Uses context from MemoryAgent to generate <em class="text-indigo-400 not-italic font-medium">ProposedGoal</em> objects. Considers current state, active goals, and relevant history to suggest what the robot should do next.</p>
+          <p class="text-sm text-slate-300">Proposes goals via LLM. Uses context from MemoryAgent to generate <em class="text-indigo-400 not-italic font-medium">ProposedGoal</em> objects. Considers current state, active goals, and relevant history to suggest what the robot should do next. After each goal completion, evaluates significance for <em class="text-indigo-400 not-italic font-medium">acute staging</em> and provides the <span class="font-mono text-xs text-blue-400">recall_deep</span> tool for LSH-seeded deep memory recall.</p>
 
           <div class="bio-detail">
             <div>
@@ -322,8 +323,8 @@
         <tbody class="text-slate-300">
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">Hippocampus</td>
-            <td class="px-4 py-3">MemoryAgent context</td>
-            <td class="px-4 py-3">Provides relevant past episodes for LLM reasoning</td>
+            <td class="px-4 py-3">MemoryAgent (storage + context)</td>
+            <td class="px-4 py-3">Long-term memory store; provides relevant past episodes for LLM reasoning</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">SCN</td>

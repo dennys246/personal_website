@@ -635,6 +635,8 @@ boosts = spatial_bridge.boost_attention_for_goal("find mug")
 
     <h3 class="text-lg font-semibold text-indigo-400">Bridge Coordination: MemoryHub</h3>
 
+    <p class="text-slate-300 leading-relaxed mb-3">The MemoryHub wires all bridges together and coordinates the session lifecycle. During setup, the MemoryAgent is connected to the Hippocampus&mdash;delegating all persistent storage while keeping ownership of importance scoring, staged memory formation, and context building for the LLM.</p>
+
     <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">MemoryHub — central coordinator</span>
 
 hub = MemoryHub(
@@ -643,11 +645,21 @@ hub = MemoryHub(
     pain_detector=pain_detector
 )
 
+# MemoryAgent &harr; Hippocampus wiring (done in wire_memory_hub):
+memory_agent.connect_hippocampus(hippo)  <span class="text-slate-500"># Delegate storage</span>
+hippo.register_deletion_callback(        <span class="text-slate-500"># Sync on removal</span>
+    memory_agent._on_memory_deleted)
+
 # Session lifecycle
 hub.on_session_start()              # Load all priors
 hub.record_action(sig, tool, params) # During execution
 hub.record_outcome(sig, success, v)  # After execution
-hub.consolidate_during_sleep()       # Compress &amp; clean</div>
+hub.consolidate_during_sleep()       # Wave consolidation + compress &amp; clean
+
+# Consolidation pipeline wiring (done in wire_memory_hub):
+# - SimilarityIndex (context + percept) for O(1) LSH recall
+# - ExecAgent.wire_staging() for acute significance evaluation
+# - ConsolidationOrchestrator for wave-based sleep consolidation</div>
   </section>
 
   <!-- 8. Persistence -->
@@ -669,7 +681,7 @@ hub.consolidate_during_sleep()       # Compress &amp; clean</div>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">Hippocampus</td>
             <td class="px-4 py-3 font-mono text-xs">data/util/hippocampus.json</td>
-            <td class="px-4 py-3">All episodic memories + associative indices</td>
+            <td class="px-4 py-3">All episodic memories + associative graph + context indices (the single source of truth for episodic storage)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">NAc</td>
@@ -679,7 +691,27 @@ hub.consolidate_during_sleep()       # Compress &amp; clean</div>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">SCN</td>
             <td class="px-4 py-3 font-mono text-xs">data/util/scn_state.json</td>
-            <td class="px-4 py-3">Temporal bin distributions</td>
+            <td class="px-4 py-3">Temporal bin distributions (v3.0 with BoundedBin significance)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">SignificanceWeights</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/significance_weights.json</td>
+            <td class="px-4 py-3">Learned heuristic weights + RPE stats</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">SimilarityIndex</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/context_index.json</td>
+            <td class="px-4 py-3">LSH bands + MinHash signatures (context)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">SimilarityIndex</td>
+            <td class="px-4 py-3 font-mono text-xs">data/util/percept_index.json</td>
+            <td class="px-4 py-3">LSH bands + MinHash signatures (percept)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Staged Sidecars</td>
+            <td class="px-4 py-3 font-mono text-xs">data/short_term_memory/*.json</td>
+            <td class="px-4 py-3">Acute/chronic staged moments awaiting consolidation</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">FocusLearner</td>
@@ -726,6 +758,8 @@ tree, config, budgets = persistence.recover(checkpoint_id)</div>
 
     <h3 class="text-lg font-semibold text-indigo-400">Memory Consolidation (Sleep)</h3>
 
+    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">ConsolidationOrchestrator</em> processes staged sidecars during sleep, separating consolidation logic from the Hippocampus:</p>
+
     <div class="overflow-x-auto">
       <table class="w-full text-sm text-left">
         <thead>
@@ -737,29 +771,44 @@ tree, config, budgets = persistence.recover(checkpoint_id)</div>
         </thead>
         <tbody class="text-slate-300">
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3">1. Score</td>
-            <td class="px-4 py-3">Access frequency + recency</td>
-            <td class="px-4 py-3">Rank memories by importance</td>
+            <td class="px-4 py-3">1. Stage</td>
+            <td class="px-4 py-3">SignificanceWeightLearner evaluates 6 heuristics</td>
+            <td class="px-4 py-3">JSON sidecar written to data/short_term_memory/</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3">2. Compress</td>
+            <td class="px-4 py-3">2. Wave Score</td>
+            <td class="px-4 py-3">NAc corroboration + SCN recurrence + LSH similarity</td>
+            <td class="px-4 py-3">Re-evaluate against accumulated evidence</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">3. Promote</td>
+            <td class="px-4 py-3">Wave score &ge; threshold (acute: 0.45, chronic: 0.60)</td>
+            <td class="px-4 py-3">Capture to Hippocampus + register in SCN/LSH</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">4. Expire</td>
+            <td class="px-4 py-3">&gt;5 waves without promotion</td>
+            <td class="px-4 py-3">Remove sidecar (not significant enough)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">5. Chronic</td>
+            <td class="px-4 py-3">LSH percept recurrence detection</td>
+            <td class="px-4 py-3">Create chronic sidecars from temporal patterns</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">6. Compress</td>
             <td class="px-4 py-3">EpisodicMemory &rarr; CompressedMemory</td>
             <td class="px-4 py-3">~2.5KB &rarr; ~200 bytes</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3">3. Prune</td>
+            <td class="px-4 py-3">7. Prune</td>
             <td class="px-4 py-3">Remove unaccessed (&gt;7 days)</td>
             <td class="px-4 py-3">Cap total memory footprint</td>
           </tr>
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3">4. Protect</td>
-            <td class="px-4 py-3">Exempt high-value memories</td>
-            <td class="px-4 py-3">User interactions, successes preserved</td>
-          </tr>
           <tr class="hover:bg-slate-800/50">
-            <td class="px-4 py-3">5. Reindex</td>
-            <td class="px-4 py-3">SCN-aware rebalancing</td>
-            <td class="px-4 py-3">Maintain temporal coverage</td>
+            <td class="px-4 py-3">8. Harvest</td>
+            <td class="px-4 py-3">Graph-based utility feedback</td>
+            <td class="px-4 py-3">Update significance heuristic weights</td>
           </tr>
         </tbody>
       </table>
