@@ -116,7 +116,7 @@
   <section class="space-y-4">
     <h2 id="orchestrator" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Orchestration Loop</h2>
 
-    <p class="text-slate-300 leading-relaxed">Everything runs through <em class="text-indigo-400 not-italic font-medium">selfy.py</em>, the main conscience of the system. The name isn't accidental: it's the self-model, the inner loop where perception, cognition, and action come together.</p>
+    <p class="text-slate-300 leading-relaxed">Everything runs through <em class="text-indigo-400 not-italic font-medium">selfy.py</em>, the main conscience of the system. The name isn't accidental: it's the self-model, the inner loop where perception, cognition, and action come together. The <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">Maxim</code> class composes six mixins extracted into the <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">conscience/</code> package: <em class="text-indigo-400 not-italic">ConnectionMixin</em> (reconnection &amp; resource cleanup), <em class="text-indigo-400 not-italic">VisionStreamMixin</em> (threaded vision events), <em class="text-indigo-400 not-italic">AgenticRuntimeMixin</em> (LLM agent lifecycle), <em class="text-indigo-400 not-italic">MovementMixin</em> (kinematics &amp; gaze), <em class="text-indigo-400 not-italic">InputHandlerMixin</em> (keyboard, CLI, voice listeners), and <em class="text-indigo-400 not-italic">MediaLoopMixin</em> (live capture/playback pipeline).</p>
 
     <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Maxim.run() — simplified</span>
 
@@ -130,7 +130,7 @@ def run(self):
         # Get latest frame
         frame = self._latest_frame_queue.get(timeout=0.1)
 
-        # Vision inference (YOLO)
+        # Vision inference (RTMDet-m)
         detections = self.detect(frame)
 
         # Novelty tracking
@@ -290,10 +290,10 @@ class Tool(ABC):
     description: str              # For LLM context
     input_schema: dict[str, Any]  # JSON Schema for parameters
 
-    def run(self, **kwargs) -&gt; ToolResult:
+    def run(self, **kwargs) -&gt; ToolOutput:
         self._validate_input(kwargs)       # Schema check
         output = self.execute(**kwargs)     # Subclass implements
-        return ToolResult(success=True, output=output)
+        return ToolOutput(success=True, output=output)
 
     @abstractmethod
     def execute(self, **kwargs) -&gt; Any:
@@ -333,7 +333,7 @@ class Tool(ABC):
             <td class="px-4 py-3">Send state machine commands (sleep, wake, shutdown)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3" rowspan="5">Filesystem</td>
+            <td class="px-4 py-3" rowspan="6">Filesystem</td>
             <td class="px-4 py-3">ReadFileTool</td>
             <td class="px-4 py-3">Read files (path traversal blocked)</td>
           </tr>
@@ -352,6 +352,47 @@ class Tool(ABC):
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">BashTool</td>
             <td class="px-4 py-3">Shell command execution with containment</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">RequestDirectoryChangeTool</td>
+            <td class="px-4 py-3">Request working directory change (validated against allowed paths)</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3" rowspan="9">Sandbox</td>
+            <td class="px-4 py-3">ReadDataFileTool</td>
+            <td class="px-4 py-3">Read files from the data directory</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">ReadSandboxFileTool</td>
+            <td class="px-4 py-3">Read files from the sandbox directory</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">WriteSandboxFileTool</td>
+            <td class="px-4 py-3">Write files to the sandbox directory</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">ListSandboxTool</td>
+            <td class="px-4 py-3">List files in the sandbox directory</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">ExecuteSandboxScriptTool</td>
+            <td class="px-4 py-3">Execute scripts within the sandbox with timeout enforcement</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">CreateSandboxScriptTool</td>
+            <td class="px-4 py-3">Create executable scripts in the sandbox directory</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">ListOtherInstanceOutputsTool</td>
+            <td class="px-4 py-3">List outputs from other Maxim instances</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">ReadOtherInstanceOutputTool</td>
+            <td class="px-4 py-3">Read output files from other Maxim instances</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">WriteToSharedOutputsTool</td>
+            <td class="px-4 py-3">Write files to the shared outputs directory for cross-instance access</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3" rowspan="3">Network</td>
@@ -411,9 +452,19 @@ class Tool(ABC):
             <td class="px-4 py-3">SendMessageTool</td>
             <td class="px-4 py-3">Send a message through the gateway</td>
           </tr>
-          <tr class="hover:bg-slate-800/50">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">CallUserTool</td>
             <td class="px-4 py-3">Initiate a call to the user via gateway</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Provenance</td>
+            <td class="px-4 py-3">ExplainTool</td>
+            <td class="px-4 py-3">Surface decision traces &mdash; supports current, recent, summary, concept history, session export (markdown and JSON)</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">Math</td>
+            <td class="px-4 py-3">MathTool</td>
+            <td class="px-4 py-3">IPS numerical analysis and Angular Gyrus statistical queries via NumericalWorkspace</td>
           </tr>
         </tbody>
       </table>
@@ -424,9 +475,69 @@ class Tool(ABC):
     <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Pseudocode</span>
 Agent proposes intent → Planner decomposes into tools
   → Decision Engine selects → FearAgent safety review
-    → Executor calls tool.run(params) → ToolResult
+    → Executor calls tool.run(params) → ToolOutput
       → Memory records action + outcome
         → NAc learns causal link</div>
+  </section>
+
+  <!-- Provenance System -->
+  <section class="space-y-4">
+    <h2 id="provenance" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Provenance &amp; Traceability</h2>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">Why Provenance?</h3>
+      <p class="text-slate-300">Maxim's bio systems are a black box without traceability. Decision reasoning, concept formation, pattern completion, causal learning, and consolidation all happen silently. The provenance system answers "why did Maxim do that?" by collecting decision traces and linking them back to source memories, concepts, and predictions.</p>
+    </div>
+
+    <h3 class="text-lg font-semibold text-white mt-5 mb-3">Two-Tier Collection</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-indigo-400 mb-2">Tier 1: Cycle Traces</h4>
+        <p class="text-xs text-slate-400 mb-2">Tied to <span class="font-mono text-indigo-400">run_id</span>. Records the perception &rarr; recall &rarr; decision &rarr; action &rarr; outcome pipeline for each agent cycle.</p>
+        <p class="text-xs text-slate-400">Managed via <span class="font-mono text-indigo-400">begin_trace(run_id)</span>, <span class="font-mono text-indigo-400">record()</span>, <span class="font-mono text-indigo-400">complete_trace(run_id)</span>.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-purple-400 mb-2">Tier 2: Activity Log</h4>
+        <p class="text-xs text-slate-400 mb-2">No <span class="font-mono">run_id</span> needed. Captures background operations: concept extraction, grounding, sleep consolidation, NAc causal learning.</p>
+        <p class="text-xs text-slate-400">Managed via <span class="font-mono text-purple-400">log_activity()</span> &mdash; persists immediately if store is wired.</p>
+      </div>
+    </div>
+
+    <h3 class="text-lg font-semibold text-white mt-5 mb-3">Session-Aware Persistence</h3>
+    <p class="text-slate-300 leading-relaxed mb-3">Each Maxim session gets a UUID session_id. Traces and activities are written to per-session JSONL files (<span class="font-mono text-slate-400">data/provenance/{session_id}.jsonl</span>) with an atomic <span class="font-mono text-slate-400">sessions.json</span> manifest. Cross-run queries enable concept lineage: "When did Maxim first learn about kitchens? How has confidence evolved?"</p>
+
+    <h3 class="text-lg font-semibold text-white mt-5 mb-3">Verbosity Levels</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-slate-700">
+            <th class="text-left py-2 px-3 text-slate-400 font-medium">Level</th>
+            <th class="text-left py-2 px-3 text-slate-400 font-medium">Overhead</th>
+            <th class="text-left py-2 px-3 text-slate-400 font-medium">Output</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-800">
+            <td class="py-2 px-3 font-mono text-xs text-slate-500">OFF (0)</td>
+            <td class="py-2 px-3">Zero</td>
+            <td class="py-2 px-3 text-xs text-slate-400">Nothing. All guards short-circuit.</td>
+          </tr>
+          <tr class="border-b border-slate-800">
+            <td class="py-2 px-3 font-mono text-xs text-indigo-400">COMPACT (1)</td>
+            <td class="py-2 px-3">Low</td>
+            <td class="py-2 px-3 text-xs text-slate-400">Stage summaries with <span class="font-mono">layer:id</span> refs. One line per stage.</td>
+          </tr>
+          <tr>
+            <td class="py-2 px-3 font-mono text-xs text-purple-400">VERBOSE (2)</td>
+            <td class="py-2 px-3">Moderate</td>
+            <td class="py-2 px-3 text-xs text-slate-400">Full metadata: timestamps, latencies, alternatives, reasoning, AG properties.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-sm text-slate-400 mt-3">Configure via <code class="bg-slate-950 px-2 py-0.5 rounded text-xs">MAXIM_PROVENANCE_VERBOSITY=1</code> (env var). Use the <em class="text-indigo-400 not-italic font-medium">ExplainTool</em> to query traces: <span class="font-mono text-indigo-400">explain current</span>, <span class="font-mono text-indigo-400">explain summary</span>, <span class="font-mono text-indigo-400">explain concept:kitchen</span>.</p>
   </section>
 
   <!-- 5. LLM Integration -->
@@ -827,7 +938,7 @@ Energy Domains:
   LLM_TOKENS        # Input + output token consumption
   LLM_LATENCY       # Wall-clock time waiting for inference
   MOTOR_COMMAND      # Movement execution cost
-  VISION_INFERENCE   # YOLO detection cost
+  VISION_INFERENCE   # Vision model detection cost
   AUDIO_PROCESSING   # Whisper transcription cost
   ATTENTION          # Cognitive focus allocation
 

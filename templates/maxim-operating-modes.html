@@ -174,6 +174,25 @@ MaximState:
     </div>
 
     <p class="text-slate-300 leading-relaxed">Wake keywords: <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">"maxim"</code>, <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">"hey maxim"</code>, <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">"wake up"</code>, <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">"hello"</code>. When detected, the robot wakes, actuates motors, and resumes its previous operational mode and strategy.</p>
+
+    <h3 id="headless-mode" class="text-lg font-semibold text-white mt-6 mb-3 scroll-mt-32">Headless Mode (Adaptive Runtime)</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">When no robot hardware is detected, Maxim automatically enters <em class="text-indigo-400 not-italic font-medium">headless mode</em> &mdash; the full agentic loop runs without media capture, motor control, or Default Network overhead. Detection uses mDNS: if the robot's hostname doesn't resolve within 5 seconds, Maxim skips the SDK connection and starts immediately.</p>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+      <h4 class="text-center text-white font-semibold mb-3 pb-3 border-b border-slate-700"><span class="state-badge badge-awake mr-2">headless</span> No Robot Connected</h4>
+      <ul class="space-y-2 text-slate-300 list-disc pl-5 text-sm">
+        <li>Full LLM processing and agentic loop active</li>
+        <li>CLI input and file-change perception only (no video/audio)</li>
+        <li>Default Network <strong class="text-white">disabled</strong> (no motor commands)</li>
+        <li>Frame/audio capture workers <strong class="text-white">not started</strong></li>
+        <li>Whisper transcription <strong class="text-white">not started</strong></li>
+        <li>All bio memory systems active (Hippocampus, ATL, NAc, AG, EC)</li>
+        <li>Tools, provenance, and concept memory fully operational</li>
+      </ul>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed mt-3">Set <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">MAXIM_ROBOT_TIMEOUT=5</code> to reduce the mDNS timeout for faster headless startup. The system uses <em class="text-indigo-400 not-italic font-medium">capability detection, not mode flags</em> &mdash; like a biological organism adapting to sensory loss rather than requiring an explicit switch.</p>
   </section>
 
   <!-- 3. Operational Modes -->

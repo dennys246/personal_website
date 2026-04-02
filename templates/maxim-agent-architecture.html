@@ -169,7 +169,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                   <div class="space-y-1">
                     <p class="text-white font-medium">V1/V2 (Primary Visual Cortex) &rarr; Feature Extraction</p>
-                    <p class="text-slate-400">V1 neurons detect edges, orientations, and basic spatial frequencies &mdash; the raw building blocks of vision. The PerceptionAgent's vision model (YOLOv8) performs the analogous step: detecting all 80 COCO object classes in every frame &mdash; extracting bounding boxes, confidence scores, and class labels from raw camera input. Like V1, neither system "understands" what it sees at this stage &mdash; it just detects structure. Downstream salience filtering decides what reaches awareness.</p>
+                    <p class="text-slate-400">V1 neurons detect edges, orientations, and basic spatial frequencies &mdash; the raw building blocks of vision. The PerceptionAgent's vision model (RTMDet-m by default, with YOLOv8 available as an optional extra via <code>pip install "maxim[yolo]"</code>) performs the analogous step: detecting object classes in every frame &mdash; extracting bounding boxes, confidence scores, and class labels from raw camera input. Like V1, neither system "understands" what it sees at this stage &mdash; it just detects structure. Downstream salience filtering decides what reaches awareness.</p>
                   </div>
                   <div class="space-y-1">
                     <p class="text-white font-medium">Ventral Stream ("What" Pathway) &rarr; Object Classification</p>
@@ -181,7 +181,7 @@
                   </div>
                   <div class="space-y-1">
                     <p class="text-white font-medium">Salience Network (Anterior Insula + ACC) &rarr; Importance Filtering</p>
-                    <p class="text-slate-400">The brain's salience network acts as a gatekeeper, deciding which stimuli deserve conscious attention. A snake in peripheral vision triggers it; a familiar chair doesn't. The PerceptionAgent's SalienceNetwork computes the same filter: instance novelty decays over 30 seconds, class-level novelty habituates as more unique instances of a category are seen (the 20th chair is less novel than the first cup), recency fades over 5 seconds, interest labels provide salience boosts, and the SalienceMemoryBridge adds learned importance from past interactions.</p>
+                    <p class="text-slate-400">The brain's salience network acts as a gatekeeper, deciding which stimuli deserve conscious attention. A snake in peripheral vision triggers it; a familiar chair doesn't. The PerceptionAgent's SalienceNetwork computes the same filter: instance novelty decays over 30 seconds, class-level novelty habituates as more unique instances of a category are seen (the 20th chair is less novel than the first cup), recency fades over 5 seconds, interest labels provide a 1.5x salience boost, and the SalienceMemoryBridge adds learned importance from past interactions.</p>
                   </div>
                 </div>
 
@@ -428,7 +428,32 @@ StructuredContext:
        data_type: "rate", priority: 0.5, rationale: "Emerging pattern (mean=0.72)"}
 
   pain_warnings:
-    - None currently active</div>
+    - None currently active
+
+  concept_context:   # From ConceptContextBuilder (ATL)
+    - {id: "f47ac10b...", name: "kitchen", category: "location",
+       confidence: 0.82, episode_count: 14,
+       relationships: [{id: "e3b9d4f1...", type: "EXECUTES_WITH",
+                        target: "skill:navigate"}]}
+
+  provenance_context:  # From ProvenanceCollector (recent traces)
+    - "**recall** → 2 concepts: `atl:c7f2a1b3` kitchen, `atl:e3b9d4f1` navigate"
+    - "**decision** → navigate_to (confidence: 0.9)"</div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Bio-Skill Integration</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">Skills access biological memory systems through a <em class="text-indigo-400 not-italic font-medium">BioContext</em> facade &mdash; a lightweight wrapper that provides skill-friendly methods without exposing internal wiring. Skills opt in by declaring <span class="font-mono text-indigo-400">bio_dependencies(["memory_hub"])</span> and receive a BioContext instance at activation.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Skill-Concept Pipeline</span>
+
+Skill activates &rarr; Protocol injects skill name into context
+  &rarr; MemoryAgent writes _skill_name into perception observations
+    &rarr; ConceptExtractor creates "skill:patrol" concept (category=skill_execution)
+      &rarr; EXECUTES_WITH edges formed to co-occurring concepts
+        &rarr; PatternCompleter discovers skill concepts via graph
+          &rarr; ConceptContextBuilder ranks skills by edge overlap</div>
+
+    <p class="text-slate-300 leading-relaxed mt-3">The system <em class="text-indigo-400 not-italic font-medium">learns</em> which skills are relevant to which concepts organically &mdash; no hardcoded triggers needed. The ATL relationship graph IS the trigger system.</p>
   </section>
 
   <!-- Fear Circuit -->
@@ -451,6 +476,32 @@ StructuredContext:
     </ul>
 
     <p class="text-slate-300 leading-relaxed mt-3">Each review also produces a <span class="font-mono text-xs text-indigo-400">RiskLevel</span> (LOW, MEDIUM, HIGH, CRITICAL) and a list of specific <span class="font-mono text-xs text-indigo-400">Finding</span> objects describing what was detected. The risk level informs the binary decision but is also available to upstream agents for context.</p>
+  </section>
+
+  <!-- Coding Tools -->
+  <section class="space-y-4">
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2 mt-6">Coding Tools</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">
+      Maxim includes code-aware tools for autonomous software development:
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-indigo-400 mb-1">edit_file</h4>
+        <p class="text-slate-400 text-sm">Text-anchor edits (old_text &rarr; new_text). Stable across multi-step plans &mdash; no line number drift.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-indigo-400 mb-1">search_code</h4>
+        <p class="text-slate-400 text-sm">Regex search with context lines, file pattern filtering. Always allowed (read-only).</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-indigo-400 mb-1">run_tests</h4>
+        <p class="text-slate-400 text-sm">Execute test suites with structured pass/fail results. 5-minute timeout. Feeds CodingReplanContext on failure.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-indigo-400 mb-1">git_diff / git_commit</h4>
+        <p class="text-slate-400 text-sm">Version control awareness. git_diff is always allowed (read-only); git_commit requires autonomy approval.</p>
+      </div>
+    </div>
   </section>
 
   <!-- Motor Learning: The Cerebellum -->

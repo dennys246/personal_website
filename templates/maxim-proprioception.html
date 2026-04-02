@@ -116,6 +116,35 @@
       </div>
     </div>
 
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2 mt-6">Cognitive Pain: Tool Errors</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">
+      Beyond physical discomfort, Maxim experiences <em>cognitive pain</em> when tools fail.
+      Tool errors are routed through the same PainDetector &rarr; NAc &rarr; FearAgent pipeline as
+      movement pain, enabling learned aversion to unreliable tools.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-red-400 mb-1">TOOL_FAILURE</h4>
+        <p class="text-slate-400 text-sm">Tool returned an error. Intensity escalates logarithmically with repeated failures of the same tool.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-red-400 mb-1">TOOL_TIMEOUT</h4>
+        <p class="text-slate-400 text-sm">Tool exceeded its expected duration. Maps to ToolErrorKind.TIMEOUT.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-red-400 mb-1">TOOL_INVALID_INPUT</h4>
+        <p class="text-slate-400 text-sm">Tool rejected its input parameters. Maps to ToolErrorKind.INVALID_INPUT.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-red-400 mb-1">TOOL_SUSTAINED</h4>
+        <p class="text-slate-400 text-sm">Tool running longer than expected &mdash; cognitive equivalent of SUSTAINED_STRAIN. Intensity escalates: 1&times; expected = 0.3, 2&times; = 0.6, 3&times; = 0.9.</p>
+      </div>
+    </div>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6 mb-4">
+      <p class="text-emerald-400 font-semibold mb-1">🧬 Biological Parallel</p>
+      <p class="text-slate-300 text-sm">Just as the amygdala learns to associate specific movements with pain, the ToolPainBridge teaches NAc to associate specific tools-in-context with failure. A tool that consistently times out on a restricted network develops a low predicted_value &mdash; FearAgent will warn before retrying.</p>
+    </div>
+
     <p class="text-slate-300 leading-relaxed">Each pain signal includes:</p>
 
     <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Data structure</span>

@@ -145,7 +145,7 @@
         <span class="text-2xl w-10 text-center">✨</span>
         <div>
           <h5 class="text-white font-medium">Novelty (Instance + Class)</h5>
-          <p class="text-sm text-slate-400">Never-before-seen objects get a boost. Instance novelty decays over 30 seconds; class-level novelty habituates as more unique instances of a category are seen.</p>
+          <p class="text-sm text-slate-400">Never-before-seen objects get a boost. In the SalienceNetwork, novelty decays over 30 seconds (<code class="bg-slate-950 px-1 py-0.5 rounded text-xs">novelty_decay_seconds</code>). The NoveltyTracker uses a two-phase model: novelty stays at maximum during focus, then decays after 10 seconds (<code class="bg-slate-950 px-1 py-0.5 rounded text-xs">focus_decay_seconds</code>) and recovers over 20 seconds (<code class="bg-slate-950 px-1 py-0.5 rounded text-xs">recovery_seconds</code>) when not focused. Class-level novelty habituates as more unique instances of a category are seen.</p>
         </div>
       </div>
       <div class="flex items-center gap-4 bg-slate-950 rounded-lg p-4">
@@ -159,7 +159,7 @@
         <span class="text-2xl w-10 text-center">🎯</span>
         <div>
           <h5 class="text-white font-medium">Interest Matching</h5>
-          <p class="text-sm text-slate-400">Objects matching interest classes (person, animals) get a 2x salience boost. All 80 COCO classes are always detected; interests control prioritization, not visibility.</p>
+          <p class="text-sm text-slate-400">Objects matching interest classes (person, animals) get a 1.5x salience boost. All detected classes are always tracked; interests control prioritization, not visibility.</p>
         </div>
       </div>
       <div class="flex items-center gap-4 bg-slate-950 rounded-lg p-4">
@@ -193,7 +193,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h4 class="text-white font-semibold mb-2">Instance Novelty</h4>
-        <p class="text-sm text-slate-400 mb-2">Tracks individual objects by their tracking ID. A new object starts at maximum novelty and decays over ~30 seconds as it becomes familiar.</p>
+        <p class="text-sm text-slate-400 mb-2">Tracks individual objects by their tracking ID. A new object starts at maximum novelty. While focused, novelty stays at maximum; after focus ends, novelty decays over <code class="bg-slate-950 px-1 py-0.5 rounded text-xs">focus_decay_seconds</code> (default: 10s) and then recovers over <code class="bg-slate-950 px-1 py-0.5 rounded text-xs">recovery_seconds</code> (default: 20s) when not attended to.</p>
         <p class="text-sm text-slate-400 italic">"Is this specific object new to me?"</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">

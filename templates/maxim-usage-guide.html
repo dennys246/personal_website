@@ -103,10 +103,10 @@
 
     <ul class="space-y-2 text-slate-300 list-disc pl-5">
       <li><strong class="text-white">Python 3.12+</strong></li>
-      <li><strong class="text-white">Hardware:</strong> Reachy Mini robot (or simulation mode for development)</li>
+      <li><strong class="text-white">Hardware:</strong> Reachy Mini robot (optional &mdash; runs in headless mode without one)</li>
       <li><strong class="text-white">RAM:</strong> 4GB minimum (8GB+ for larger LLMs)</li>
       <li><strong class="text-white">GPU:</strong> Optional. Metal (macOS) or CUDA (Linux) supported</li>
-      <li><strong class="text-white">Network:</strong> Same LAN as Reachy Mini for Zenoh discovery</li>
+      <li><strong class="text-white">Network:</strong> Same LAN as Reachy Mini for Zenoh discovery (if using robot)</li>
     </ul>
 
     <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-6">
@@ -162,10 +162,15 @@ source maxim-env/bin/activate</div>
             <td class="px-4 py-3 font-mono text-xs">pip install -e '.[semantic]'</td>
             <td class="px-4 py-3">Neural similarity (SentenceTransformer)</td>
           </tr>
-          <tr class="hover:bg-slate-800/50">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">Torch LLM</td>
             <td class="px-4 py-3 font-mono text-xs">pip install -e '.[llm-torch]'</td>
             <td class="px-4 py-3">PyTorch transformers backend</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">YOLOv8</td>
+            <td class="px-4 py-3 font-mono text-xs">pip install -e '.[yolo]'</td>
+            <td class="px-4 py-3">YOLOv8 vision engine via Ultralytics (AGPL-3.0). Default engine is RTMDet-m (Apache 2.0)</td>
           </tr>
         </tbody>
       </table>
@@ -231,7 +236,13 @@ MAXIM_LLM_N_GPU_LAYERS=-1             # All layers on GPU
 <span class="text-indigo-400 text-xs uppercase tracking-wider">Display and audio</span>
 
 MAXIM_DISABLE_IMSHOW=1                 # Disable OpenCV windows
-MAXIM_WHISPER_COMPUTE_TYPE=float32     # Whisper precision fallback</div>
+MAXIM_WHISPER_COMPUTE_TYPE=float32     # Whisper precision fallback
+
+<span class="text-indigo-400 text-xs uppercase tracking-wider">Headless / adaptive runtime</span>
+
+MAXIM_ROBOT_TIMEOUT=5                  # Reduce robot connect timeout (default 30s)
+MAXIM_PROVENANCE_VERBOSITY=1           # 0=off, 1=compact, 2=verbose
+MAXIM_PROVENANCE_PERSIST=1             # 0=disable, 1=enable persistence</div>
 
     <h3 class="text-lg font-semibold text-indigo-400">Prompt Profiles</h3>
     <p class="text-slate-300 leading-relaxed">Three tiers of cognitive effort, matched to your hardware:</p>
@@ -414,7 +425,8 @@ maxim [OPTIONS]
 --clear-memory [TYPE]        Clear persistent memory and exit
 --verbosity 0|1|2            Logging level
 --agentic-verbosity 0|1|2|3  Agentic system logging detail
---no-agentic-console         Suppress agentic event output</div>
+--no-agentic-console         Suppress agentic event output
+--audit-architecture         Audit codebase for architecture layer rule violations and exit</div>
   </section>
 
   <!-- 6. Voice Commands -->
@@ -653,7 +665,7 @@ data/
 ├── models/             # ML models
 │   ├── LLM/            # GGUF language models
 │   ├── MotorCortex/    # Vision-to-motor model
-│   └── YOLO/           # Object detection
+│   └── YOLO/           # Vision models (RTMDet-m + RTMPose-m default; YOLOv8 optional)
 ├── sandbox/            # Safe space for generated files
 └── logs/               # Session logs</div>
   </section>
@@ -699,7 +711,8 @@ data/
 
 from maxim.memory.hippocampus import Hippocampus
 
-hippo = Hippocampus.load_from_file("data/util/hippocampus.json")
+hippo = Hippocampus()
+hippo.load("data/util/hippocampus.json")
 print(f"Total memories: {len(hippo.memories)}")
 
 for mem_id, mem in list(hippo.memories.items())[:5]:

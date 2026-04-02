@@ -55,9 +55,14 @@
       <a href="#three-layers" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Three Memory Layers</a>
       <a href="#memory-layer" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">The MemoryLayer Protocol</a>
       <a href="#atl" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">ATL: Anterior Temporal Lobe</a>
+      <a href="#concept-memory" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Concept Memory</a>
+      <a href="#concept-extraction" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Concept Extraction</a>
+      <a href="#concept-grounding" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Concept Grounding</a>
       <a href="#relationships" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Typed Relationships</a>
       <a href="#cross-layer" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Cross-Layer Graph</a>
       <a href="#promotion" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">The Promotion Pipeline</a>
+      <a href="#concept-context" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Concept-Aware Recall</a>
+      <a href="#pattern-completion" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Pattern Completion</a>
       <a href="#knowledge-context" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Knowledge in the Agent Loop</a>
     </div>
   </nav>
@@ -220,6 +225,167 @@ SemanticMemory(MemoryRecord):
       <li><strong class="text-white">Context indexing</strong> &mdash; O(1) lookup by name, category, or property key/value. "All concepts with category=object" is instant.</li>
       <li><strong class="text-white">Consolidation</strong> &mdash; Same pattern as Hippocampus but with slower decay (30-day max age vs 7-day). Concepts are more stable than episodes.</li>
     </ul>
+  </section>
+
+  <!-- Concept Memory -->
+  <section class="space-y-4">
+    <h2 id="concept-memory" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Concept Memory</h2>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">Concepts in the brain aren't isolated labels &mdash; they're rich nodes linking back to the experiences that formed them. The concept "dog" connects to episodic memories of specific dogs, motor programs for petting, and statistical expectations about behavior. This multi-modal grounding is what gives concepts their meaning. Maxim's <em class="text-indigo-400 not-italic font-medium">Concept</em> class mirrors this: each concept maintains cross-layer references back to its source memories.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">Concept</span> class extends <span class="font-mono text-xs text-indigo-400">SemanticMemory</span> with a <span class="font-mono text-xs text-indigo-400">memory_refs</span> dictionary that tracks which records in each memory layer are associated with this concept. This provides the backbone for concept extraction, grounding, pattern completion, and context building.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Concept Data Structure</span>
+
+Concept(SemanticMemory):
+  <span class="text-slate-500"># Inherits: name, definition, category, properties, confidence, ...</span>
+  memory_refs: dict[str, dict[str, None]]   <span class="text-slate-500"># layer_name &rarr; {record_id: None, ...}</span>
+
+  <span class="text-slate-500"># Example:</span>
+  memory_refs = {
+    "hippocampus": {"ep-001": None, "ep-042": None, "ep-103": None},
+    "angular_gyrus": {"math-salience-mug": None},
+  }
+
+  <span class="text-slate-500"># Methods:</span>
+  add_ref(layer, record_id)     <span class="text-slate-500"># Link a memory to this concept</span>
+  remove_ref(layer, record_id)  <span class="text-slate-500"># Unlink a memory</span>
+  reinforce(source_id)          <span class="text-slate-500"># Increment confidence + access tracking</span></div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Why <span class="font-mono text-xs">dict[str, None]</span> Instead of <span class="font-mono text-xs">set</span>?</h3>
+
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">memory_refs</span> uses <span class="font-mono text-xs text-slate-400">dict[str, None]</span> (not <span class="font-mono text-xs text-slate-400">set</span>) as an ordered set. This guarantees true FIFO pruning when refs exceed <span class="font-mono text-xs text-indigo-400">MAX_REFS_PER_LAYER</span> (200) &mdash; the oldest references are evicted first, preserving recency ordering without sorting overhead.</p>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Capacity Enforcement</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">Concepts respect the same capacity management as other memory records:</p>
+
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">Per-concept refs:</strong> Each layer's reference set is capped at 200 entries (FIFO eviction).</li>
+      <li><strong class="text-white">ATL capacity:</strong> ATL enforces <span class="font-mono text-xs text-indigo-400">max_concepts</span> via the same <span class="font-mono text-xs text-indigo-400">MemoryStrategy</span> pipeline used by Hippocampus &mdash; <span class="font-mono text-xs text-slate-400">AccessBasedStrategy</span> (30-day window) plus <span class="font-mono text-xs text-slate-400">TemporalAwareStrategy</span> when SCN is available.</li>
+      <li><strong class="text-white">Consolidation:</strong> <span class="font-mono text-xs text-indigo-400">ATL.consolidate()</span> prunes low-confidence, stale concepts the same way Hippocampus prunes old episodes.</li>
+    </ul>
+  </section>
+
+  <!-- Concept Extraction -->
+  <section class="space-y-4">
+    <h2 id="concept-extraction" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Concept Extraction</h2>
+
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">ConceptExtractor</span> runs as an async background worker that continuously transforms raw episodic memories into concept references. When Hippocampus captures a new episode, the extractor queues it for processing on a dedicated thread &mdash; never blocking the agent's perception-decision-action loop.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Extraction Pipeline</span>
+
+  Hippocampus.capture()
+        │
+        &darr;  <span class="text-slate-500">(capture callback)</span>
+  ConceptExtractor._on_capture(episode)
+        │
+        &darr;  <span class="text-slate-500">(enqueue, non-blocking)</span>
+  Worker Thread
+        │
+        ├─ Extract object names    <span class="text-slate-500">"mug", "chair" &rarr; category=object</span>
+        ├─ Extract person names    <span class="text-slate-500">"Dennis" &rarr; category=person</span>
+        ├─ Tokenize goal string    <span class="text-slate-500">"navigate_to_kitchen" &rarr; ["navigate", "kitchen"]</span>
+        ├─ Tokenize tool name      <span class="text-slate-500">"grasp" &rarr; category=action</span>
+        │
+        &darr;  <span class="text-slate-500">(for each extracted term)</span>
+  ATL.find_or_create(name, category)
+        │
+        &darr;
+  concept.add_ref("hippocampus", episode.id)
+  concept.reinforce(episode.id)</div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Token Normalization</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">Goal strings and tool names are split into meaningful tokens via <span class="font-mono text-xs text-indigo-400">normalize_tokens()</span>. This handles underscores, camelCase, and common separators:</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <p class="text-xs font-mono text-slate-400 mb-1">"navigate_to_kitchen"</p>
+        <p class="text-sm text-indigo-400">&rarr; ["navigate", "kitchen"]</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <p class="text-xs font-mono text-slate-400 mb-1">"graspObject"</p>
+        <p class="text-sm text-indigo-400">&rarr; ["grasp", "object"]</p>
+      </div>
+    </div>
+
+    <p class="text-sm text-slate-400 mt-3">Stop words ("to", "the", "a", "is", etc.) are filtered out. The extractor also handles compression callbacks &mdash; when an episode is compressed, its refs are migrated to the compressed record's ID.</p>
+  </section>
+
+  <!-- Concept Grounding -->
+  <section class="space-y-4">
+    <h2 id="concept-grounding" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Concept Grounding</h2>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">In neuroscience, "grounding" is the process of connecting abstract symbols to sensory experience. The concept "heavy" isn't just a word &mdash; it's grounded in the felt experience of lifting heavy things. The parietal cortex (IPS/Angular Gyrus) provides this mathematical grounding: converting raw observations into statistical summaries that give concepts quantitative meaning.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">ConceptGrounder</span> transforms raw episodic references into statistical summaries stored in the Angular Gyrus. When a concept accumulates enough episode references, the grounder extracts numerical properties (salience, novelty, success rate) and runs them through the IPS&rarr;AG pipeline to produce <span class="font-mono text-xs text-indigo-400">MathMemory</span> records.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Grounding Pipeline</span>
+
+  Concept (memory_refs: 8+ episodes)
+        │
+        &darr;  <span class="text-slate-500">load episodes from hippocampus</span>
+  ConceptGrounder.ground_concept(concept, episodes)
+        │
+        ├─ Extract salience values     <span class="text-slate-500">[0.8, 0.7, 0.9, ...]</span>
+        ├─ Extract novelty values      <span class="text-slate-500">[0.5, 0.3, 0.6, ...]</span>
+        ├─ Compute success rate        <span class="text-slate-500">0.875 (7/8 episodes)</span>
+        │
+        &darr;  <span class="text-slate-500">IPS assessment</span>
+  IPS.assess(values) &rarr; {mean, std, is_random, ...}
+        │
+        &darr;  <span class="text-slate-500">AG storage</span>
+  AngularGyrus.store(MathMemory)
+        │
+        &darr;  <span class="text-slate-500">cross-layer linking</span>
+  concept.add_ref("angular_gyrus", math_record.id)
+  CrossLayerGraph: QUANTIFIES edge (AG &rarr; ATL)</div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">What Gets Grounded</h3>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-slate-700">
+            <th class="text-left py-2 px-3 text-slate-400 font-medium">Property</th>
+            <th class="text-left py-2 px-3 text-slate-400 font-medium">Source</th>
+            <th class="text-left py-2 px-3 text-slate-400 font-medium">AG Record</th>
+            <th class="text-left py-2 px-3 text-slate-400 font-medium">Example Verbal</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
+            <td class="py-2 px-3">Salience</td>
+            <td class="py-2 px-3 text-xs">perception.salience across episodes</td>
+            <td class="py-2 px-3 font-mono text-xs text-purple-400">MathMemory</td>
+            <td class="py-2 px-3 text-xs text-slate-400">"mug salience: mean=0.78, std=0.12"</td>
+          </tr>
+          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
+            <td class="py-2 px-3">Novelty</td>
+            <td class="py-2 px-3 text-xs">perception.novelty across episodes</td>
+            <td class="py-2 px-3 font-mono text-xs text-purple-400">MathMemory</td>
+            <td class="py-2 px-3 text-xs text-slate-400">"mug novelty: mean=0.35, std=0.21"</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="py-2 px-3">Success Rate</td>
+            <td class="py-2 px-3 text-xs">outcome.success across episodes</td>
+            <td class="py-2 px-3 font-mono text-xs text-purple-400">MathMemory</td>
+            <td class="py-2 px-3 text-xs text-slate-400">"mug success rate: 0.875 (7/8)"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Jaccard Co-occurrence Modulation</h3>
+
+    <p class="text-slate-300 leading-relaxed">When two concepts frequently appear in the same episodes, the grounder strengthens the relationship between them via Jaccard similarity on their shared episode sets. If concepts A and B share 6 out of 10 episodes (J=0.6), the grounder creates or reinforces a <span class="font-mono text-xs text-indigo-400">RELATED_TO</span> edge with weight proportional to co-occurrence.</p>
   </section>
 
   <!-- Typed Relationships -->
@@ -416,26 +582,178 @@ PromotionCandidate:
 <span class="text-slate-500">so source episodes still exist when cross-layer edges form.</span></div>
   </section>
 
+  <!-- Concept-Aware Recall -->
+  <section class="space-y-4">
+    <h2 id="concept-context" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Concept-Aware Recall</h2>
+
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">ConceptContextBuilder</span> provides real-time concept context during the agent's perception-decision loop. When the agent sees objects, people, or pursues a goal, the builder finds matching ATL concepts and enriches them with relationship data and AG statistics &mdash; all within a configurable time budget.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">ConceptContextBuilder Flow</span>
+
+  Current Percept (detected_objects, detected_people, active_goal)
+        │
+        &darr;  <span class="text-slate-500">normalize_tokens() for goals, direct lookup for objects/people</span>
+  _find_matching_concepts() &rarr; list[Concept]
+        │
+        &darr;  <span class="text-slate-500">for each concept (sorted by confidence, capped at limit=5)</span>
+        ├─ _collect_relationships()   <span class="text-slate-500">ATL typed edges (IS_A, CAUSES, ...)</span>
+        ├─ _collect_layer_enrichment() <span class="text-slate-500">AG MathMemory (mean, std, verbal)</span>
+        ├─ ground_concept()           <span class="text-slate-500">if grounder available + budget allows</span>
+        │
+        &darr;
+  list[dict]  <span class="text-slate-500">&rarr; StructuredContext.concept_context</span></div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Budget-Bounded Grounding</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">AG grounding involves IPS statistical assessment, which can be expensive for concepts with many episodes. The builder enforces a time budget (default 50ms) and gracefully degrades:</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-green-400 mb-2">Budget Available</h4>
+        <p class="text-xs text-slate-300">Full context: relationships + AG stats + grounding results.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-amber-400 mb-2">Budget Low</h4>
+        <p class="text-xs text-slate-300">Relationships + cached AG records. No new grounding.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-red-400 mb-2">Budget Exhausted</h4>
+        <p class="text-xs text-slate-300">Name + category + episode count only. Still useful for basic context.</p>
+      </div>
+    </div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Context Entry Format</h3>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">What Each Entry Contains</span>
+
+{
+  "name": "mug",
+  "category": "object",
+  "confidence": 0.87,
+  "episode_count": 12,
+  "relationships": [
+    {"type": "IS_A", "target": "container", "weight": 0.8},
+    {"type": "RELATED_TO", "target": "kitchen", "weight": 0.7}
+  ],
+  "properties": {              <span class="text-slate-500"># From AG grounding (if budget allows)</span>
+    "mean_salience": 0.78,
+    "success_rate": 0.92
+  },
+  "layer_context": [           <span class="text-slate-500"># From AG MathMemory records</span>
+    {"layer": "angular_gyrus", "name": "mug_salience",
+     "verbal": "mean=0.78, std=0.12", "confidence": 0.85}
+  ]
+}</div>
+  </section>
+
+  <!-- Pattern Completion -->
+  <section class="space-y-4">
+    <h2 id="pattern-completion" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Pattern Completion</h2>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">When you see a friend reach for their coffee mug, your brain automatically predicts they're about to drink &mdash; before they do it. This is <em class="text-indigo-400 not-italic font-medium">pattern completion</em>: partial cues activate stored patterns, filling in the expected outcome. The hippocampus and neocortex collaborate: concepts activate associated episodes, which activate predicted actions and outcomes. Maxim's PatternCompleter implements exactly this chain.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">PatternCompleter</span> predicts likely outcomes for a partially-formed episode by traversing the concept graph. When a new episode is forming (has perception + context, but no decision/action/outcome yet), the completer chains: <em class="text-indigo-400 not-italic font-medium">matching concepts &rarr; linked episodes &rarr; past outcomes</em>.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Pattern Completion Chain</span>
+
+  FORMING Episode (perception: ["mug"], goal: "grasp_mug")
+        │
+        &darr;  <span class="text-slate-500">_find_matching_concepts()</span>
+  Concepts: [mug (object), grasp (action)]
+        │
+        &darr;  <span class="text-slate-500">collect hippocampus refs (deduplicated)</span>
+  Episode IDs: {ep-001, ep-042, ep-103, ep-042, ...} &rarr; deduplicated
+        │
+        &darr;  <span class="text-slate-500">load + sort by recency, cap at MAX_EPISODES=20</span>
+  Past Episodes: [ep-103 (newest), ep-042, ep-001 (oldest)]
+        │
+        &darr;  <span class="text-slate-500">extract outcomes</span>
+  PredictedOutcome[]:
+    tool="grasp", success=True,  goal="grasp_mug", confidence=0.9
+    tool="grasp", success=True,  goal="grasp_mug", confidence=0.8
+    tool="look",  success=True,  goal="inspect",   confidence=0.7
+        │
+        &darr;  <span class="text-slate-500">enrich with AG math context (memory_refs intersection)</span>
+  PredictedOutcome[0].math_context = [
+    MathContextEntry(name="mug_salience", verbal="mean=0.78", ...)
+  ]</div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">PredictedOutcome</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">Each prediction is a typed dataclass with full traceability back to the source episode and optional mathematical enrichment:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Typed Contract</span>
+
+PredictedOutcome:
+  tool: str                      <span class="text-slate-500"># "grasp", "navigate", "look"</span>
+  success: bool                  <span class="text-slate-500"># Did it work in the past?</span>
+  goal: str | None               <span class="text-slate-500"># What goal was being pursued?</span>
+  confidence: float              <span class="text-slate-500"># Source episode's decision confidence</span>
+  source_episode_id: str         <span class="text-slate-500"># Traceable back to specific memory</span>
+  math_context: list | None      <span class="text-slate-500"># AG enrichment (MathContextEntry[])</span>
+
+MathContextEntry:
+  name: str                      <span class="text-slate-500"># "mug_salience", "grasp_success_rate"</span>
+  verbal: str                    <span class="text-slate-500"># "mean=0.78, std=0.12"</span>
+  confidence: float              <span class="text-slate-500"># Statistical confidence</span>
+  domain: str                    <span class="text-slate-500"># "concept_grounding"</span></div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Wiring</h3>
+
+    <p class="text-slate-300 leading-relaxed">PatternCompleter is created by <span class="font-mono text-xs text-indigo-400">MemoryHub</span> during multi-layer wiring and connected to <span class="font-mono text-xs text-indigo-400">MemoryAgent</span> via <span class="font-mono text-xs text-indigo-400">set_pattern_completion_fn(completer.complete)</span>. During the FORMING stage of memory formation, MemoryAgent calls the completion function to get predictions before the agent commits to a decision.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-blue-400 mb-2">Episodic Predictions</h4>
+        <p class="text-xs text-slate-300">From full <span class="font-mono text-indigo-400">EpisodicMemory</span> records: uses decision.confidence, action.tool_name, outcome.success, and decision.intent for goal.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-slate-400 mb-2">Compressed Predictions</h4>
+        <p class="text-xs text-slate-300">From <span class="font-mono text-indigo-400">CompressedMemory</span> records: uses the compressed fields directly. Confidence defaults to 0.3 (less certain than full episodic recall).</p>
+      </div>
+    </div>
+  </section>
+
   <!-- Knowledge Context -->
   <section class="space-y-4">
     <h2 id="knowledge-context" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Knowledge in the Agent Loop</h2>
 
-    <p class="text-slate-300 leading-relaxed">The point of all this is to make the agent <em>smarter</em>. Knowledge from ATL and Angular Gyrus flows into the LLM's reasoning context via <span class="font-mono text-xs text-indigo-400">StructuredContext.knowledge_context</span>:</p>
+    <p class="text-slate-300 leading-relaxed">The point of all this is to make the agent <em>smarter</em>. Knowledge flows into the LLM's reasoning context via two channels in <span class="font-mono text-xs text-indigo-400">StructuredContext</span>:</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Merged Knowledge Context (what the LLM sees)</span>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-indigo-400 mb-2">knowledge_context</h4>
+        <p class="text-xs text-slate-300 mb-2">Merged ATL concepts + AG patterns via cross-layer spreading activation. Broad, session-level knowledge.</p>
+        <p class="text-xs text-slate-500">Ranked by relevance, capped at 8 entries.</p>
+      </div>
+      <div class="bg-slate-800 border-2 border-indigo-500/50 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-indigo-400 mb-2">concept_context</h4>
+        <p class="text-xs text-slate-300 mb-2">Live concept context from ConceptContextBuilder. Percept-specific: only concepts matching current objects/people/goal.</p>
+        <p class="text-xs text-slate-500">Includes relationships, AG stats, budget-bounded grounding.</p>
+      </div>
+    </div>
 
-<span class="text-slate-500"># ATL concepts (semantic knowledge)</span>
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">What the LLM Sees</span>
+
+<span class="text-slate-500"># knowledge_context (broad semantic + statistical knowledge)</span>
 - "coffee_mug" (object, confidence=0.87): A ceramic container typically found in kitchens.
   Relationships: IS_A container, PROPERTY_OF kitchen_area
-
-<span class="text-slate-500"># AG patterns (statistical knowledge)</span>
 - "stat:tool:navigate:success" (math:PATTERN, confidence=0.73): Navigate tool
   showing declining success rate (R&sup2;=0.73, slope=-0.02/day).
 
-<span class="text-slate-500"># Ranked by relevance, capped at 8 entries</span>
-<span class="text-slate-500"># The LLM sees one unified "what do I know?" section</span></div>
+<span class="text-slate-500"># concept_context (percept-specific, with AG enrichment)</span>
+- "mug" (object, confidence=0.87, 12 episodes):
+  Relationships: IS_A container, RELATED_TO kitchen
+  Stats: salience mean=0.78, success_rate=0.92
 
-    <p class="text-slate-300 leading-relaxed mt-3">This merging strategy ensures the LLM gets both semantic knowledge ("coffee mugs are containers in kitchens") and statistical intelligence ("the navigate tool is declining") in a single ranked list, regardless of which memory layer the knowledge lives in.</p>
+<span class="text-slate-500"># pattern_predictions (from PatternCompleter, during FORMING)</span>
+- Predicted: tool=grasp, success=True, confidence=0.9
+  Math: mug_salience mean=0.78, std=0.12</div>
+
+    <p class="text-slate-300 leading-relaxed mt-3">Together, these channels give the LLM a unified "what do I know about what I'm seeing?" view: broad knowledge context for general reasoning, live concept context for what's currently perceived, and pattern predictions for what's likely to happen next.</p>
   </section>
 
   <!-- Navigation -->

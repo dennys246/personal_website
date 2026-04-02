@@ -567,6 +567,55 @@ SemanticMemory(MemoryRecord):
       <li><strong class="text-white">Context indexing</strong> &mdash; O(1) lookup by name, category, or property key/value. "All concepts with category=object" is instant.</li>
       <li><strong class="text-white">Consolidation</strong> &mdash; Same pattern as Hippocampus but with slower decay (30-day max age vs 7-day). Concepts are more stable than episodes.</li>
     </ul>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Concept Memory Pipeline</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">Beyond basic semantic records, the ATL supports a full concept pipeline that links abstract concepts back to their experiential roots:</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-blue-400 mb-1">ConceptExtractor</h4>
+        <p class="text-xs text-slate-400">Async background worker. Extracts object, person, goal, and tool tokens from new episodes and creates <span class="font-mono text-indigo-400">Concept</span> records with cross-layer <span class="font-mono text-indigo-400">memory_refs</span>.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-purple-400 mb-1">ConceptGrounder</h4>
+        <p class="text-xs text-slate-400">Grounds concepts in mathematical reality via IPS/AG. Extracts salience, novelty, and success stats from linked episodes to create <span class="font-mono text-purple-400">MathMemory</span> records.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-indigo-400 mb-1">ConceptContextBuilder</h4>
+        <p class="text-xs text-slate-400">Budget-bounded real-time recall. Matches current percept to ATL concepts and enriches with relationships and AG stats for <span class="font-mono text-indigo-400">StructuredContext.concept_context</span>.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-green-400 mb-1">PatternCompleter</h4>
+        <p class="text-xs text-slate-400">Predicts outcomes for forming episodes by chaining: matching concepts &rarr; linked past episodes &rarr; past outcomes. Enriched with AG math context.</p>
+      </div>
+    </div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Bio-Skill Integration (A7)</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">Skills can tap into the concept memory pipeline through the <em class="text-indigo-400 not-italic font-medium">BioContext</em> facade &mdash; a lightweight wrapper over MemoryHub that provides skill-friendly methods for concept resolution, episodic recall, numerical grounding, and pattern completion.</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-green-400 mb-1">Skill-Concept Association</h4>
+        <p class="text-xs text-slate-400">When a skill is active during memory formation, ConceptExtractor auto-creates a <span class="font-mono text-green-400">skill:&lt;name&gt;</span> concept with <span class="font-mono text-green-400">EXECUTES_WITH</span> edges to co-occurring concepts. Over time, the system learns which concepts are relevant to which skills.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-green-400 mb-1">Concept-Driven Skill Discovery</h4>
+        <p class="text-xs text-slate-400">ConceptContextBuilder can <span class="font-mono text-green-400">rank_available_skills()</span> by counting EXECUTES_WITH edges between matched concepts and registered skills. No hardcoded triggers &mdash; the ATL graph IS the trigger system.</p>
+      </div>
+    </div>
+
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Provenance Tracing</h3>
+
+    <p class="text-slate-300 leading-relaxed mb-3">Every to_context_dict() output now includes the record's own <span class="font-mono text-indigo-400">id</span> field &mdash; enabling provenance tracing from concept resolution through to user-facing output. The provenance system collects decision traces across the agent pipeline and persists them per-session for cross-run concept lineage queries.</p>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
+      <h4 class="text-sm font-semibold text-indigo-400 mb-1">ID-Text Linking</h4>
+      <p class="text-xs text-slate-400">The same ID flows from ConceptContextBuilder &rarr; BioContext &rarr; ProvenanceRef &rarr; ExplainTool output. A user reading a trace can follow any <span class="font-mono text-indigo-400">`layer:id`</span> reference back to the source record. Example: <span class="font-mono text-indigo-400">`atl:f47ac10b` kitchen (location, confidence: 0.82)</span></p>
+    </div>
+
+    <p class="text-sm text-slate-400 mt-3">See <a href="/maxim/semantic-memory#concept-memory" class="text-indigo-400 hover:text-indigo-300">Semantic Memory &mdash; Concept Memory</a> for full details on each component.</p>
   </section>
 
   <!-- Typed Relationships -->
@@ -617,10 +666,20 @@ SemanticMemory(MemoryRecord):
             <td class="py-2 px-3">No</td>
             <td class="py-2 px-3 text-xs text-slate-400">"success_rate" PHASE_LOCKED_TO "circadian" (metadata: phase, coupling)</td>
           </tr>
-          <tr class="hover:bg-slate-800/50">
+          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
             <td class="py-2 px-3 font-mono text-xs text-amber-400">PREDICTS</td>
             <td class="py-2 px-3">No</td>
             <td class="py-2 px-3 text-xs text-slate-400">"morning_activity" PREDICTS "high_success"</td>
+          </tr>
+          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
+            <td class="py-2 px-3 font-mono text-xs text-green-400">EXECUTES_WITH</td>
+            <td class="py-2 px-3">No</td>
+            <td class="py-2 px-3 text-xs text-slate-400">"skill:patrol_monitor" EXECUTES_WITH "person" &mdash; learned from co-occurrence during skill execution</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="py-2 px-3 font-mono text-xs text-green-400">ALIAS_OF</td>
+            <td class="py-2 px-3">No</td>
+            <td class="py-2 px-3 text-xs text-slate-400">"navigate kitchen" ALIAS_OF "navigate", "kitchen" &mdash; phrase-level compound alias</td>
           </tr>
         </tbody>
       </table>
@@ -662,6 +721,20 @@ SemanticMemory(MemoryRecord):
         │    ╚═════════════════════════════════════════════╝   │
         │                                                      │
         └──────────────────────────────────────────────────────┘</div>
+
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2 mt-6">Causal Memory: Tool Reliability Learning</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">
+      When a tool produces a surprising outcome (high Reward Prediction Error), the system creates
+      <code class="font-mono text-xs text-indigo-400">CAUSES</code> edges in the hippocampal graph
+      connecting event episodes to outcome episodes. These causal chains enable spreading activation
+      to traverse cause-effect relationships &mdash; recalling a past action activates its consequences.
+    </p>
+    <ul class="list-disc pl-5 space-y-2 text-slate-300 mb-4">
+      <li><strong>ToolPainBridge</strong> routes tool errors through PainDetector &rarr; NAc, creating negative causal links</li>
+      <li><strong>RPE-driven salience</strong> &mdash; surprising outcomes (RPE &gt; 0.3) boost hippocampus capture salience, forming stronger memories</li>
+      <li><strong>EC indexing</strong> &mdash; established causal patterns (3+ observations) are registered in the Entorhinal Cortex for similarity-based retrieval</li>
+      <li><strong>SCN temporal context</strong> &mdash; tool events are temporally indexed, enabling discovery of time-based patterns (API rate limits, resource exhaustion)</li>
+    </ul>
 
     <h3 class="text-lg font-semibold text-white mt-6 mb-3">Cross-Layer Spreading Activation</h3>
 
@@ -708,7 +781,7 @@ SemanticMemory(MemoryRecord):
   StatisticianAgent        ─┤      quality gate           Extract recurring elements
     (confirmed patterns)    │      (reject noise)         Create/reinforce concept
                             │                             Form relationships
-  Future sources...        ─┘                             Create cross-layer edges
+  ConceptExtractor         ─┘                             Create cross-layer edges
                                                           │
                                                           &darr;
                                                      ATL SemanticMemory
@@ -771,22 +844,33 @@ PromotionCandidate:
   <section class="space-y-4">
     <h2 id="knowledge-context" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Knowledge in the Agent Loop</h2>
 
-    <p class="text-slate-300 leading-relaxed">The point of all this is to make the agent <em>smarter</em>. Knowledge from ATL and Angular Gyrus flows into the LLM's reasoning context via <span class="font-mono text-xs text-indigo-400">StructuredContext.knowledge_context</span>:</p>
+    <p class="text-slate-300 leading-relaxed">The point of all this is to make the agent <em>smarter</em>. Knowledge from ATL and Angular Gyrus flows into the LLM's reasoning context via two channels in <span class="font-mono text-xs text-indigo-400">StructuredContext</span>:</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Merged Knowledge Context (what the LLM sees)</span>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-indigo-400 mb-2">knowledge_context</h4>
+        <p class="text-xs text-slate-300">Merged ATL concepts + AG patterns via cross-layer spreading activation. Broad, session-level knowledge ranked by relevance (capped at 8 entries).</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-sm font-semibold text-indigo-400 mb-2">concept_context</h4>
+        <p class="text-xs text-slate-300">Live concept context from <span class="font-mono text-indigo-400">ConceptContextBuilder</span>. Percept-specific: only concepts matching current objects/people/goal, enriched with relationships and AG stats.</p>
+      </div>
+    </div>
 
-<span class="text-slate-500"># ATL concepts (semantic knowledge)</span>
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">What the LLM Sees</span>
+
+<span class="text-slate-500"># knowledge_context (broad semantic + statistical knowledge)</span>
 - "coffee_mug" (object, confidence=0.87): A ceramic container typically found in kitchens.
   Relationships: IS_A container, PROPERTY_OF kitchen_area
-
-<span class="text-slate-500"># AG patterns (statistical knowledge)</span>
 - "stat:tool:navigate:success" (math:PATTERN, confidence=0.73): Navigate tool
   showing declining success rate (R&sup2;=0.73, slope=-0.02/day).
 
-<span class="text-slate-500"># Ranked by relevance, capped at 8 entries</span>
-<span class="text-slate-500"># The LLM sees one unified "what do I know?" section</span></div>
+<span class="text-slate-500"># concept_context (percept-specific, with AG enrichment)</span>
+- "mug" (object, confidence=0.87, 12 episodes):
+  Relationships: IS_A container, RELATED_TO kitchen
+  Stats: salience mean=0.78, success_rate=0.92</div>
 
-    <p class="text-slate-300 leading-relaxed mt-3">This merging strategy ensures the LLM gets both semantic knowledge ("coffee mugs are containers in kitchens") and statistical intelligence ("the navigate tool is declining") in a single ranked list, regardless of which memory layer the knowledge lives in.</p>
+    <p class="text-slate-300 leading-relaxed mt-3">Together, these channels give the LLM both broad knowledge ("the navigate tool is declining") and percept-specific concept context ("the mug I'm seeing has high success rate for grasping"), plus <a href="/maxim/semantic-memory#pattern-completion" class="text-indigo-400 hover:text-indigo-300">pattern completion predictions</a> for what's likely to happen next.</p>
   </section>
 
   <!-- Consolidation -->
