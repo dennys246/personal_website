@@ -88,6 +88,14 @@ def maxim_math_cognition():
 def maxim_semantic_memory():
     return render_template("maxim-semantic-memory.html")
 
+@app.route("/maxim/tools")
+def maxim_tools():
+    return render_template("maxim-tools.html")
+
+@app.route("/maxim/simulation")
+def maxim_simulation():
+    return render_template("maxim-simulation.html")
+
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
     return render_template("maxim-privacy-policy.html")
@@ -141,6 +149,8 @@ def sitemap_xml():
         ("maxim_communication", "weekly", "0.9"),
         ("maxim_math_cognition", "weekly", "0.9"),
         ("maxim_semantic_memory", "weekly", "0.9"),
+        ("maxim_tools", "weekly", "0.9"),
+        ("maxim_simulation", "weekly", "0.9"),
         ("maxim_privacy_policy", "monthly", "0.5"),
         ("maxim_terms_and_conditions", "monthly", "0.5"),
         ("gan_training_tips", "monthly", "0.6"),
