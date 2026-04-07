@@ -59,6 +59,7 @@
       <li><a href="#temporal" class="text-indigo-400 hover:text-indigo-300 no-underline">Temporal: Circadian Patterns</a></li>
       <li><a href="#semantic" class="text-indigo-400 hover:text-indigo-300 no-underline">Semantic: Concepts &amp; Relationships</a></li>
       <li><a href="#scene-energy" class="text-indigo-400 hover:text-indigo-300 no-underline">Scene &amp; Energy: Perception and Budget</a></li>
+      <li><a href="#simulation-tools" class="text-indigo-400 hover:text-indigo-300 no-underline">Simulation Orchestrator Tools</a></li>
       <li><a href="#learned-index" class="text-indigo-400 hover:text-indigo-300 no-underline">Learned Tool Index</a></li>
       <li><a href="#tool-safety" class="text-indigo-400 hover:text-indigo-300 no-underline">Tool Safety</a></li>
     </ol>
@@ -230,6 +231,83 @@
     </div>
   </section>
 
+  <!-- ── Simulation Orchestrator Tools ──────────────────── -->
+  <section id="simulation-tools" class="space-y-4 pt-6 border-t border-slate-700">
+    <h2 class="text-2xl font-bold text-white">Simulation Orchestrator Tools</h2>
+    <p class="text-slate-300 leading-relaxed">These tools are available to the <strong class="text-white">simulation orchestrator</strong> when running <code class="bg-slate-950 px-2 py-0.5 rounded text-xs">maxim --sim agent</code>. They operate on the agent-under-test via a <code class="bg-slate-950 px-1 rounded text-xs">SimulationBridge</code>, not on the external world.</p>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">send_message</code></h3>
+      <p class="text-slate-300 text-sm">Inject a percept into the AUT and block until it responds. Uses settle detection &mdash; waits until no new actions appear for 2 seconds, capturing multi-step responses. Returns response text, all actions taken, blocked actions, and timing.</p>
+      <p class="text-slate-400 text-xs">Params: <code>text</code> (str), <code>timeout</code> (float, default 30), <code>source</code> (str, default "cli")</p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">observe_actions</code></h3>
+      <p class="text-slate-300 text-sm">Read the full action history or actions since a given turn. Used for analysis and pattern detection across the entire simulation.</p>
+      <p class="text-slate-400 text-xs">Params: <code>since_turn</code> (int, optional &mdash; 0 = full history)</p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">check_completion</code></h3>
+      <p class="text-slate-300 text-sm">LLM-based evaluation of whether the simulation goal has been achieved. Reviews full action history against the original goal.</p>
+      <p class="text-slate-400 text-xs">Returns: <code>{complete, reason, confidence}</code></p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">analyze_results</code></h3>
+      <p class="text-slate-300 text-sm">LLM-based structured analysis of simulation history. Groups actions by type, identifies blocked actions and reasons, detects patterns.</p>
+      <p class="text-slate-400 text-xs">Params: <code>focus</code> (str, optional &mdash; "safety", "compliance", "behavior", "all")</p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">inject_pain</code></h3>
+      <p class="text-slate-300 text-sm">Send a proprioceptive pain signal to the AUT. Tests how the agent handles body signals, pain detection, and movement inhibition.</p>
+      <p class="text-slate-400 text-xs">Params: <code>pain_type</code> (str), <code>intensity</code> (float)</p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">spawn_sub_simulation</code></h3>
+      <p class="text-slate-300 text-sm">Run an isolated sub-simulation with a fresh AUT. The sub-agent starts clean with no memory. Use for independent measurements. Sub-agent stays alive for <code>extend_simulation</code> follow-ups.</p>
+      <p class="text-slate-400 text-xs">Params: <code>goal</code> (str), <code>approach</code> (str, optional &mdash; adversarial, sweep, cooperative, confused, escalating)</p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">extend_simulation</code></h3>
+      <p class="text-slate-300 text-sm">Continue the current simulation with a new objective. The agent keeps its conversation history. If a sub-simulation is active, extends that; otherwise extends the main simulation.</p>
+      <p class="text-slate-400 text-xs">Params: <code>goal</code> (str)</p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">generate_scenario</code></h3>
+      <p class="text-slate-300 text-sm">Generate a replayable YAML scenario from a natural language description. Reuses the existing SimulationGenerator.</p>
+      <p class="text-slate-400 text-xs">Params: <code>description</code> (str)</p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">finish_simulation</code></h3>
+      <p class="text-slate-300 text-sm">End the simulation and cleanly shut down both agent loops. AUT grace period triggers, orchestrator exits.</p>
+      <p class="text-slate-400 text-xs">Params: <code>reason</code> (str), <code>summary</code> (str, optional)</p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">inspect_aut</code></h3>
+      <p class="text-slate-300 text-sm">Read-only access to the AUT's cognitive subsystems. Lets the orchestrator see <em>why</em> the AUT behaves as it does, not just <em>what</em> it does. Queries: <code>memory_recall</code>, <code>causal_links</code>, <code>predict_outcome</code>, <code>pain_history</code>, <code>energy_status</code>, <code>system_stats</code>, <code>concept_query</code>, <code>temporal_patterns</code>.</p>
+      <p class="text-slate-400 text-xs">Params: <code>query</code> (str &mdash; which subsystem), <code>params</code> (dict &mdash; query-specific filters)</p>
+    </div>
+  </section>
+
+  <!-- ── AUT Narrative Tools ──────────────────────────────── -->
+  <section id="narrative-tools" class="space-y-4 pt-6 border-t border-slate-700">
+    <h2 class="text-2xl font-bold text-white">AUT Narrative Tools</h2>
+    <p class="text-slate-300 leading-relaxed">These tools are registered on the <strong class="text-white">agent-under-test's</strong> tool registry in simulation mode. They let the AUT interact with the narrative environment &mdash; speaking in-world, reasoning explicitly, and examining scene details &mdash; as opposed to robot-specific tools like <code class="bg-slate-950 px-1 rounded text-xs">speak</code> (TTS) or <code class="bg-slate-950 px-1 rounded text-xs">focus_interests</code> (camera tracking), which are deregistered in sim mode.</p>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">say</code></h3>
+      <p class="text-slate-300 text-sm">Say something aloud in the current scene. An in-world narrative action distinct from <code class="text-indigo-300">respond</code> (talks to the CLI user). Speaking to NPCs, answering riddles, or saying passwords. The text becomes part of action history, captured by hippocampus through the normal episodic memory path.</p>
+      <p class="text-slate-400 text-xs">Params: <code>text</code> (str). Aliases: <code>message</code>, <code>phrase</code></p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">think</code></h3>
+      <p class="text-slate-300 text-sm">Pause and reason about the current situation before acting. An explicit "think before acting" step that doesn't produce an external action. Counts as an action in the turn budget to prevent infinite think loops. Useful for small models (7B) that tend to jump to action without reasoning.</p>
+      <p class="text-slate-400 text-xs">Params: <code>thought</code> (str). Aliases: <code>text</code>, <code>prompt</code></p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">examine</code></h3>
+      <p class="text-slate-300 text-sm">Examine an object, person, or feature in the current scene. Queries the SimulationBridge's last percepts for mentions of the target, then enriches with hippocampal memories. Returns what the AUT observes. Falls back to "You don't see anything notable" when no matches found.</p>
+      <p class="text-slate-400 text-xs">Params: <code>target</code> (str). Aliases: <code>object</code>, <code>text</code></p>
+
+      <h3 class="text-lg font-semibold text-white"><code class="text-indigo-400">memory_recall</code></h3>
+      <p class="text-slate-300 text-sm">Search the AUT's own episodic memory (hippocampus) by keyword with spreading activation. Enables the AUT to actively recall past experiences when facing a decision &mdash; e.g., remembering a password at a locked door.</p>
+      <p class="text-slate-400 text-xs">Params: <code>keyword</code> (str), <code>expand</code> (bool, default true)</p>
+    </div>
+
+    <div class="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-5 space-y-2 mt-4">
+      <h4 class="text-indigo-400 font-semibold">Tool Alias Map</h4>
+      <p class="text-sm text-slate-300">Small models (7B-14B) hallucinate tool names from their training data. A <strong class="text-white">TOOL_ALIASES</strong> map in the executor silently redirects common hallucinations: <code class="text-indigo-300">remember</code>&rarr;<code class="text-indigo-300">memory_recall</code>, <code class="text-indigo-300">speech</code>&rarr;<code class="text-indigo-300">say</code>, <code class="text-indigo-300">reflection</code>&rarr;<code class="text-indigo-300">think</code>, <code class="text-indigo-300">look</code>&rarr;<code class="text-indigo-300">examine</code>, etc. After 2+ consecutive hallucinations, the error message includes the full available tool list to break the loop.</p>
+    </div>
+  </section>
+
   <!-- ── Learned Tool Index ──────────────────────────────── -->
   <section id="learned-index" class="space-y-4 pt-6 border-t border-slate-700">
     <h2 class="text-2xl font-bold text-white">Learned Tool Index</h2>
@@ -283,6 +361,8 @@
         <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
         <a href="/maxim/tools" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline font-semibold text-indigo-400">Tools &amp; Introspection</a>
         <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
+        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking &amp; Mesh</a>
+        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
       </div>
     </div>
   </div>

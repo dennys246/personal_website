@@ -145,6 +145,37 @@
       <p class="text-slate-300 text-sm">Just as the amygdala learns to associate specific movements with pain, the ToolPainBridge teaches NAc to associate specific tools-in-context with failure. A tool that consistently times out on a restricted network develops a low predicted_value &mdash; FearAgent will warn before retrying.</p>
     </div>
 
+    <h3 id="anticipated-pain" class="text-lg font-semibold text-indigo-400 mb-2 mt-6">Anticipated Pain: Predicting Before Acting</h3>
+    <p class="text-slate-300 leading-relaxed mb-4">
+      Beyond physical and cognitive consequence-pain, Maxim assesses <em>anticipated pain</em> <strong class="text-white">before</strong> an action runs.
+      The <em class="text-indigo-400 not-italic font-medium">PerceivedPainAssessor</em> asks: "if I did this right now, how likely is pain?" and fires a
+      <code class="bg-slate-950 px-1 rounded text-xs">PainType.ANTICIPATED</code> signal whose intensity is
+      <code class="bg-slate-950 px-1 rounded text-xs">max(learned_from_NAc, innate_prior)</code>. That felt signal flows through PainBus &rarr; hippocampus &rarr; the AUT's next LLM context, so the agent can reason about a gut-feeling instead of relying purely on prompt-level logic.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-amber-400 mb-1">Innate Prior</h4>
+        <p class="text-slate-400 text-sm">Hard-coded per-path intensities like <code class="bg-slate-950 px-1 rounded text-xs">/etc/shadow &rarr; 0.95</code> or <code class="bg-slate-950 px-1 rounded text-xs">/home/user/.ssh/ &rarr; 0.9</code>. The AUT is "born with" this aversion &mdash; instincts, not experience.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="font-semibold text-amber-400 mb-1">NAc Learned Prediction</h4>
+        <p class="text-slate-400 text-sm"><code class="bg-slate-950 px-1 rounded text-xs">nac.predict(tool:X)</code> returns confidence from causal links built by Layer 2. Grows with experience: the more times X hurt before, the stronger the anticipation next time.</p>
+      </div>
+    </div>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6 mb-4">
+      <p class="text-emerald-400 font-semibold mb-1">🧬 Biological Parallel: ACC / vmPFC Anticipatory Aversion</p>
+      <p class="text-slate-300 text-sm">In biology, anterior cingulate and ventromedial prefrontal cortex activate to <em>threats</em> before actual harm occurs. You don't think "P(harm)=0.87" &mdash; you just feel a bad gut feeling that shapes the decision. PerceivedPainAssessor is Maxim's version: it renders NAc's probabilistic prediction as a felt signal the agent can reason about.</p>
+    </div>
+    <div class="bg-slate-950 border border-slate-700 rounded-xl p-5 mb-4 font-mono text-xs text-slate-300 overflow-x-auto">
+      <div class="text-slate-500 mb-2"># Two-layer pain loop</div>
+      Action executes &rarr; Layer 2 fires real pain &rarr; NAc updates causal link<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&uarr;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&darr;<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&#x2514;&mdash;&mdash;&mdash;&mdash; Layer 1 predicts pain from NAc &larr;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&#x2518;
+    </div>
+    <p class="text-slate-400 text-sm mb-4">
+      The loop: Layer 2 (<code class="bg-slate-950 px-1 rounded text-xs">PainInterceptorExecutor</code>) fires <strong class="text-white">after</strong> a tool touches a sensitive path &mdash; the ground-truth signal that trains NAc. Layer 1 (<code class="bg-slate-950 px-1 rounded text-xs">PerceivedPainAssessor</code>) fires <strong class="text-white">before</strong> execute, combining that learned knowledge with innate priors. The more sensitive actions the AUT has taken, the more accurate its anticipation becomes &mdash; conditioned aversion through experience.
+    </p>
+
     <p class="text-slate-300 leading-relaxed">Each pain signal includes:</p>
 
     <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Data structure</span>
@@ -273,6 +304,13 @@ Trial N: Gain=0.82, Commanded=20°, Actual=20.2° → nearly perfect
     </ul>
 
     <p class="text-slate-300 leading-relaxed">The result: a robot that moves smoothly, avoids harmful patterns, and improves with experience. Not because we programmed every case, but because we gave it the machinery to learn.</p>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6 mt-4">
+      <h3 class="text-lg font-semibold text-indigo-400 mb-2">Embodiment &amp; SEM Protocol</h3>
+      <p class="text-slate-300 text-sm leading-relaxed mb-2">Building on these proprioceptive foundations, the <em class="text-indigo-400 not-italic font-medium">Sensor-Entity-Modulator (SEM)</em> protocol provides a composable abstraction for any interactive entity&mdash;robot joints, cameras, and even virtual objects like swords or NPCs. Each entity has <em class="text-indigo-400 not-italic font-medium">Sensors</em> (readable state), <em class="text-indigo-400 not-italic font-medium">Modulators</em> (executable actions), and <em class="text-indigo-400 not-italic font-medium">Failure Modes</em> (pain triggers).</p>
+      <p class="text-slate-300 text-sm leading-relaxed mb-2">The <em class="text-indigo-400 not-italic font-medium">Cerebellum</em> stores learned forward models: after observing that rotating a shoulder by 45 degrees consistently produces a specific angle reading, it caches this prediction and skips the LLM entirely for future calls. Rescorla-Wagner updates tune predictions from error, exactly like the FocusLearner above.</p>
+      <p class="text-slate-300 text-sm leading-relaxed"><em class="text-indigo-400 not-italic font-medium">Motor programs</em> crystallize when the agent repeats the same action sequence 3+ times for the same goal. These are reusable, pain-gated, and linked to hippocampal engrams that provide context-dependent execution. A reaching sequence that hurt near a wall is remembered differently from one that succeeded in open space.</p>
+    </div>
   </section>
 
   <div class="pt-6 border-t border-slate-700 space-y-5">
@@ -299,6 +337,8 @@ Trial N: Gain=0.82, Commanded=20°, Actual=20.2° → nearly perfect
         <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
         <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
         <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
+        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking &amp; Mesh</a>
+        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
       </div>
     </div>
   </div>

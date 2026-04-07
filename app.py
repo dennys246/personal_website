@@ -96,6 +96,22 @@ def maxim_tools():
 def maxim_simulation():
     return render_template("maxim-simulation.html")
 
+@app.route("/maxim/benchmarks")
+def maxim_benchmarks():
+    return render_template("maxim-benchmarks.html")
+
+@app.route("/maxim/embodiment")
+def maxim_embodiment():
+    return render_template("maxim-embodiment.html")
+
+@app.route("/maxim/networking")
+def maxim_networking():
+    return render_template("maxim-networking.html")
+
+@app.route("/maxim/roadmap")
+def maxim_roadmap():
+    return render_template("maxim-roadmap.html")
+
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
     return render_template("maxim-privacy-policy.html")
@@ -151,6 +167,10 @@ def sitemap_xml():
         ("maxim_semantic_memory", "weekly", "0.9"),
         ("maxim_tools", "weekly", "0.9"),
         ("maxim_simulation", "weekly", "0.9"),
+        ("maxim_benchmarks", "weekly", "0.9"),
+        ("maxim_embodiment", "weekly", "0.9"),
+        ("maxim_networking", "weekly", "0.9"),
+        ("maxim_roadmap", "monthly", "0.7"),
         ("maxim_privacy_policy", "monthly", "0.5"),
         ("maxim_terms_and_conditions", "monthly", "0.5"),
         ("gan_training_tips", "monthly", "0.6"),

@@ -192,10 +192,10 @@ Main Thread (observation loop)
 │     Runs Whisper inference
 │     Writes JSONL to data/transcript/
 │
-├─ WorkerPool (typed lanes)
-│  ├─ infer lane  (1 worker, GPU) &mdash; LLM inference
-│  ├─ review lane (1 worker, CPU) &mdash; evaluation
-│  └─ record lane (2 workers)     &mdash; memory writes, I/O
+├─ WorkerPool (tier-based lanes)
+│  ├─ large tier  (1 worker, GPU) &mdash; agent inference, fear review
+│  ├─ medium tier (1 worker, CPU) &mdash; analysis, fallback
+│  └─ small tier  (2 workers)     &mdash; extraction, transcription, JSON repair
 │
 ├─ Hippocampus Capture Thread
 │  └─ Own FIFO queue (bounded, 100 items)
@@ -544,7 +544,22 @@ Agent proposes intent → Planner decomposes into tools
   <section class="space-y-4">
     <h2 id="llm" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">LLM Integration</h2>
 
-    <p class="text-slate-300 leading-relaxed">Maxim runs LLMs locally using <em class="text-indigo-400 not-italic font-medium">llama-cpp-python</em> (GGUF format) for CPU + Metal GPU acceleration. No cloud API calls for inference.</p>
+    <p class="text-slate-300 leading-relaxed">Maxim runs LLMs locally using <em class="text-indigo-400 not-italic font-medium">llama-cpp-python</em> (GGUF format) for CPU + GPU acceleration, or remotely via a peer-to-peer mesh. The LLM routing layer supports multiple backends, multi-lane inference, and distributed compute.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Multi-LLM Architecture</h3>
+    <p class="text-slate-300 leading-relaxed">Inference is organized into capability <span class="text-indigo-400 font-semibold">tiers</span> (large, medium, small), each backed by a different model or remote server. Named functions (agent_inference, concept_extraction, etc.) route to tiers via the <span class="text-indigo-400 font-semibold">FunctionRouter</span> with configurable fallback chains. The <span class="text-indigo-400 font-semibold">LaneBackendManager</span> owns tier-to-backend mappings, while the <span class="text-indigo-400 font-semibold">LLMRouter</span> handles provider selection, cost gates, and failover within each tier.</p>
+
+    <div class="bg-slate-900 rounded-lg p-4 font-mono text-sm text-green-400 overflow-x-auto whitespace-pre">
+Peer's large tier  →  OpenAI client  →  https://tunnel-url/v1/chat/completions
+                                             │ (Cloudflare tunnel)
+                                             ▼
+                                        LeaderProxy (:8099) — auth, logging, GPU metrics
+                                             │
+                                             ▼
+                                        llama-cpp-server (:8100) — GPU inference
+    </div>
+
+    <p class="text-slate-300 leading-relaxed mt-3">The <span class="text-indigo-400 font-semibold">LeaderProxy</span> (stdlib HTTP, ~250 LOC) sits in front of the inference server, enforcing auth, logging every request with correlation IDs, and injecting GPU metrics into response headers. Per-lane <span class="text-indigo-400 font-semibold">LaneMetrics</span> track latency percentiles, failure rates, and token throughput across all backends. A <span class="text-indigo-400 font-semibold">HeartbeatMonitor</span> samples system health (GPU/CPU/RAM/disk/WiFi) every 10 seconds with automatic stall detection. See <a href="/maxim/networking" class="text-indigo-400 hover:text-indigo-300">Networking &amp; Mesh</a> for the full architecture.</p>
 
     <h3 class="text-lg font-semibold text-indigo-400">Model Options</h3>
 
@@ -989,6 +1004,8 @@ Model Cost Multipliers:
         <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
         <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
         <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
+        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking &amp; Mesh</a>
+        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
       </div>
     </div>
   </div>

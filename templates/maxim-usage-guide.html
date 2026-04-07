@@ -87,7 +87,9 @@
       <li><a href="#requirements" class="text-indigo-400 hover:text-indigo-300 no-underline">Requirements</a></li>
       <li><a href="#installation" class="text-indigo-400 hover:text-indigo-300 no-underline">Installation</a></li>
       <li><a href="#configuration" class="text-indigo-400 hover:text-indigo-300 no-underline">Configuration</a></li>
-      <li><a href="#modes" class="text-indigo-400 hover:text-indigo-300 no-underline">Operating Modes</a></li>
+      <li><a href="#modes" class="text-indigo-400 hover:text-indigo-300 no-underline">Operating Modes</a>
+        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking &amp; Mesh</a>
+        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a></li>
       <li><a href="#cli" class="text-indigo-400 hover:text-indigo-300 no-underline">CLI Reference</a></li>
       <li><a href="#voice" class="text-indigo-400 hover:text-indigo-300 no-underline">Voice Commands</a></li>
       <li><a href="#keyboard" class="text-indigo-400 hover:text-indigo-300 no-underline">Keyboard Controls</a></li>
@@ -135,7 +137,7 @@ source maxim-env/bin/activate</div>
         <div class="bg-slate-950 rounded-lg px-4 py-2 mt-2 font-mono text-sm overflow-x-auto whitespace-pre">pip install -e '.[llm]'</div>
       </li>
       <li><strong class="text-white">Download a language model</strong>
-        <div class="bg-slate-950 rounded-lg px-4 py-2 mt-2 font-mono text-sm overflow-x-auto whitespace-pre">./scripts/download_models.sh --llm --enable</div>
+        <div class="bg-slate-950 rounded-lg px-4 py-2 mt-2 font-mono text-sm overflow-x-auto whitespace-pre">./scripts/download_models.sh --llm</div>
         <p class="text-sm text-slate-400 mt-1">This downloads SmolLM 1.7B (~1.1GB), the default CPU-friendly model.</p>
       </li>
     </ol>
@@ -242,7 +244,41 @@ MAXIM_WHISPER_COMPUTE_TYPE=float32     # Whisper precision fallback
 
 MAXIM_ROBOT_TIMEOUT=5                  # Reduce robot connect timeout (default 30s)
 MAXIM_PROVENANCE_VERBOSITY=1           # 0=off, 1=compact, 2=verbose
-MAXIM_PROVENANCE_PERSIST=1             # 0=disable, 1=enable persistence</div>
+MAXIM_PROVENANCE_PERSIST=1             # 0=disable, 1=enable persistence
+
+<span class="text-indigo-400 text-xs uppercase tracking-wider">Networking &amp; diagnostics</span>
+
+MAXIM_ROLE=leader                      # leader / client / solo
+MAXIM_HEARTBEAT=1                      # System health heartbeat (GPU/CPU/RAM)
+MAXIM_LANE_TRACE=1                     # Per-request LLM trace + heartbeat
+MAXIM_PROXY_MAX_CONCURRENT=4           # Max in-flight proxy requests
+MAXIM_PROXY_RATE_LIMIT_RPM=0           # Per-peer rate limit (0=unlimited)</div>
+
+    <h3 class="text-lg font-semibold text-indigo-400">Peer &amp; Tunnel Commands</h3>
+    <p class="text-slate-300 leading-relaxed">Connect peers to a leader's GPU for distributed inference. See <a href="/maxim/networking" class="text-indigo-400 hover:text-indigo-300">Networking &amp; Mesh</a> for full details.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Environment diagnostics</span>
+
+maxim doctor                           # Platform-aware health checks
+maxim doctor --retry                   # Walk through failures interactively
+
+<span class="text-indigo-400 text-xs uppercase tracking-wider">Tunnel setup (leader machine)</span>
+
+maxim tunnel setup                     # One-time guided tunnel config
+maxim tunnel status                    # Show tunnel + key state
+maxim tunnel key rotate                # Generate/replace API key
+maxim tunnel key export                # Print peer export snippets
+
+<span class="text-indigo-400 text-xs uppercase tracking-wider">Peer setup (client machine)</span>
+
+maxim peer connect https://maxim.yourdomain.com/v1
+maxim peer show                        # Verify peer config
+maxim peer test https://maxim.yourdomain.com/v1
+
+<span class="text-indigo-400 text-xs uppercase tracking-wider">Debug trace (see everything)</span>
+
+MAXIM_LANE_TRACE=1 maxim               # Trace every LLM call
+MAXIM_HEARTBEAT=1 maxim                # System health every 10s</div>
 
     <h3 class="text-lg font-semibold text-indigo-400">Prompt Profiles</h3>
     <p class="text-slate-300 leading-relaxed">Three tiers of cognitive effort, matched to your hardware:</p>
@@ -399,6 +435,13 @@ maxim [OPTIONS]
 --reset                      Clear memory on startup
 --enable-embeddings          Enable semantic similarity (Phase 4)
 
+<span class="text-indigo-400 text-xs uppercase tracking-wider">Multi-LLM &amp; Cloud</span>
+
+--cloud-fallback MODEL       Cloud fallback on large tier (e.g., claude-sonnet)
+--cloud-lane TIER MODEL      Assign cloud model to a tier (e.g., small claude-haiku)
+--cloud-budget DOLLARS       Max session cost for cloud providers (default: $5)
+--aut-model MODEL            Separate LLM for agent-under-test (dual-LLM mode)
+
 <span class="text-indigo-400 text-xs uppercase tracking-wider">Network</span>
 
 --internet-access            Enable internet (default)
@@ -480,7 +523,9 @@ maxim [OPTIONS]
       </table>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">See the <a href="/maxim/operating-modes#switching" class="text-indigo-400 hover:text-indigo-300">Operating Modes</a> page for the full list. Custom voice commands can be added in <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">data/util/phrase_responses.json</code>.</p>
+    <p class="text-slate-300 leading-relaxed">See the <a href="/maxim/operating-modes#switching" class="text-indigo-400 hover:text-indigo-300">Operating Modes</a>
+        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking &amp; Mesh</a>
+        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a> page for the full list. Custom voice commands can be added in <code class="bg-slate-950 px-2 py-0.5 rounded text-sm">data/util/phrase_responses.json</code>.</p>
   </section>
 
   <!-- 7. Keyboard Controls -->
@@ -766,6 +811,8 @@ for sig, pred in nac._learned_associations.items():
         <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
         <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
         <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
+        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking &amp; Mesh</a>
+        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
       </div>
     </div>
   </div>
