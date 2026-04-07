@@ -77,24 +77,34 @@
         </thead>
         <tbody>
           <tr class="border-t border-slate-700">
-            <td class="pr-4 py-3 text-white font-medium">Tool Refactoring</td>
+            <td class="pr-4 py-3 text-white font-medium">Agent Mesh</td>
             <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
-            <td class="py-3">All phases: say, think, examine, introspection tools, alias map, usage tracking, proactive tool list</td>
+            <td class="py-3">Complete (Phases Pre-7). Identity, protocol, transport, admission control, knowledge sharing, task delegation, distributed planning, SCN temporal coordination. mDNS + InferenceRouter deferred.</td>
           </tr>
           <tr class="border-t border-slate-700">
-            <td class="pr-4 py-3 text-white font-medium">Introspection API</td>
-            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Phases 1-3</span></td>
-            <td class="py-3">AUTIntrospector class shipped. InspectAUTTool delegates. Remaining: standalone runner, self-introspection</td>
+            <td class="pr-4 py-3 text-white font-medium">Generative Campaigns</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">All stages shipped: narrative arcs, two-call narrator, planner integration, bridge-and-compress, ask_user tool, benchmark tiers, CLI simplification. 71 tests.</td>
           </tr>
           <tr class="border-t border-slate-700">
-            <td class="pr-4 py-3 text-white font-medium">Docker Sandbox</td>
+            <td class="pr-4 py-3 text-white font-medium">Embodiment Core</td>
             <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
-            <td class="py-3">Phase A (TmpdirSandbox + pain triggers) complete</td>
+            <td class="py-3">All software phases shipped: SEM protocol, Cerebellum forward models, motor programs + engrams, composed failures, virtual entities. 164 tests. Hardware adapter deferred to future.</td>
           </tr>
           <tr class="border-t border-slate-700">
-            <td class="pr-4 py-3 text-white font-medium">Multi-LLM Scaling</td>
+            <td class="pr-4 py-3 text-white font-medium">Simulation Benchmark</td>
             <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
-            <td class="py-3">Complete. mDNS + InferenceRouter moved to Agent Mesh as infrastructure phases.</td>
+            <td class="py-3">All phases (0-6). Multi-model comparative testing, narrative transcriber, write-paper, Tier 3 hooks. <code class="bg-slate-950 px-1 rounded text-xs">maxim --sim benchmark --models X,Y --campaign Z</code></td>
+          </tr>
+          <tr class="border-t border-slate-700">
+            <td class="pr-4 py-3 text-white font-medium">Python API</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">Verb-based interface (run, imagine, connect, diagnose, observe, configure). Package: <code class="bg-slate-950 px-1 rounded text-xs">pymaxim</code>.</td>
+          </tr>
+          <tr class="border-t border-slate-700">
+            <td class="pr-4 py-3 text-white font-medium">Lane Tier Architecture</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">FunctionRouter with tier routing (large/medium/small), fallback chains, auto-detection from hardware. Legacy lane names aliased.</td>
           </tr>
           <tr class="border-t border-slate-700">
             <td class="pr-4 py-3 text-white font-medium">Research Protocol</td>
@@ -102,29 +112,39 @@
             <td class="py-3">Complete: mesh primitives, research tools, Writer + Reviewer, dual-LLM. <code class="bg-slate-950 px-1 rounded text-xs">maxim --sim research</code></td>
           </tr>
           <tr class="border-t border-slate-700">
-            <td class="pr-4 py-3 text-white font-medium">Simulation Benchmark</td>
-            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-blue-500/20 text-blue-400">Core Runner</span></td>
-            <td class="py-3">Phase 0 (sim improvements) + Phases 1-2 (BenchmarkRunner + CLI) shipped. <code class="bg-slate-950 px-1 rounded text-xs">maxim --sim benchmark --models X,Y --campaign Z</code></td>
+            <td class="pr-4 py-3 text-white font-medium">Multi-LLM Scaling</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">Complete. LeaderProxy, admission control, LaneMetrics, heartbeat, remote update.</td>
           </tr>
           <tr class="border-t border-slate-700">
-            <td class="pr-4 py-3 text-white font-medium">Agent Mesh</td>
-            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-blue-500/20 text-blue-400">Foundations</span></td>
-            <td class="py-3">Phase 1a-1b foundations in place. Phases 0a-0b (mDNS + InferenceRouter) next.</td>
+            <td class="pr-4 py-3 text-white font-medium">Tool Refactoring</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">All phases: say, think, examine, introspection tools, alias map, usage tracking, proactive tool list</td>
           </tr>
           <tr class="border-t border-slate-700">
-            <td class="pr-4 py-3 text-white font-medium">Embodiment Core</td>
-            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Complete</span></td>
-            <td class="py-3">All software phases shipped: SEM protocol, Cerebellum forward models, motor programs + engrams, composed failures, virtual entities. 164 tests. Hardware adapter deferred to future.</td>
+            <td class="pr-4 py-3 text-white font-medium">Introspection API</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">All phases. Observer (renamed from AUTIntrospector) + standalone <code class="bg-slate-950 px-1 rounded text-xs">run_campaign()</code> shipped</td>
           </tr>
           <tr class="border-t border-slate-700">
-            <td class="pr-4 py-3 text-white font-medium">Generative Campaigns</td>
-            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-slate-600/40 text-slate-400">Not Started</span></td>
-            <td class="py-3">LLM-generated narratives + entity naming. ~600 LOC</td>
+            <td class="pr-4 py-3 text-white font-medium">Docker Sandbox</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">Phase A (TmpdirSandbox + pain triggers) + Phase B (DockerSandbox + ContainerRunner + image catalog + unprivileged user) both shipped</td>
+          </tr>
+          <tr class="border-t border-slate-700">
+            <td class="pr-4 py-3 text-white font-medium">Bio-System Wiring Hardening</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">All phases shipped. Percept abstraction (SensoryModality, SensoryTag, SensoryGate), pipeline correctness, energy&rarr;NAc metabolic cost learning, decision_rationale provenance. Archived.</td>
+          </tr>
+          <tr class="border-t border-slate-700">
+            <td class="pr-4 py-3 text-white font-medium">Mode System Refactor</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">~1,800 LOC removed. Strategies, exploration policy, and LiveModeIntent deleted. Sleep is now a tool. Skills module folded into Cerebellum. Dead runtime modules cleaned up.</td>
           </tr>
           <tr class="border-t border-slate-700">
             <td class="pr-4 py-3 text-white font-medium">DM MVP</td>
-            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-red-500/20 text-red-400">Deferred</span></td>
-            <td class="py-3">Blocked on Embodiment Core + Agent Mesh + DM Spike</td>
+            <td class="pr-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">Done</span></td>
+            <td class="py-3">All 3 slices shipped: dm_schema.py, dm_runtime.py, tools_dm.py. 4 campaigns (heist, poisoned_crown, arena, darkened_cavern). ChooseTool + alias system, bio-system expectations checker. <code class="bg-slate-950 px-1 rounded text-xs">maxim --sim scenarios/campaigns/heist_v1.yaml</code></td>
           </tr>
         </tbody>
       </table>
@@ -135,40 +155,52 @@
   <section class="space-y-4">
     <h2 id="recently-shipped" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">What We Just Shipped</h2>
 
-    <p class="text-slate-300 leading-relaxed">The most recent wave shipped <span class="text-indigo-400 font-semibold">Embodiment Core (Phases 0-1b)</span>&mdash;the Sensor-Entity-Modulator (SEM) protocol for composable hardware/world abstraction, Cerebellum forward models with R-W learning, motor programs (learned action sequences), hippocampal engrams for context-dependent motor execution, and virtual entity support (swords, NPCs, environments). 151 tests across 5 test files. Before that: <span class="text-indigo-400 font-semibold">Tool Refactoring + Introspection API</span>, <span class="text-indigo-400 font-semibold">Research Protocol</span>, and <span class="text-indigo-400 font-semibold">Multi-LLM Scaling</span>.</p>
+    <p class="text-slate-300 leading-relaxed">The most recent completions were <span class="text-indigo-400 font-semibold">DM MVP</span> (bundled SEM characters, cascade DAG, ChooseTool, 4 campaigns) and <span class="text-indigo-400 font-semibold">Bio-System Wiring Hardening</span> (percept abstraction, pipeline correctness, energy&rarr;NAc metabolic cost learning, decision_rationale provenance). With those done, all 14 major initiatives have shipped&mdash;the full cognitive stack is exercised end-to-end through narrative campaigns.</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">Agent Mesh Primitives</h3>
-        <p class="text-slate-300 text-sm leading-relaxed"><code class="bg-slate-950 px-1 rounded text-xs">src/maxim/mesh/</code> &mdash; AgentProfile (identity), UMR naming (<code class="bg-slate-950 px-1 rounded text-xs">researcher.hippo.exp_001</code>), MeshMessage (typed envelopes), and LocalMessageBus (in-process pub/sub). First concrete deliverables from the Agent Mesh plan.</p>
+        <h3 class="text-white font-semibold mb-2">DM MVP</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">Bundled SEM characters with cascade DAG for narrative branching. ChooseTool + alias system for encounter choices. Bio-system expectations checker validates campaign results. 4 campaigns: heist, poisoned_crown, arena, darkened_cavern. <code class="bg-slate-950 px-1 rounded text-xs">maxim --sim scenarios/campaigns/heist_v1.yaml</code></p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">Research Experiment Tools</h3>
-        <p class="text-slate-300 text-sm leading-relaxed"><code class="bg-slate-950 px-1 rounded text-xs">record_experiment</code> and <code class="bg-slate-950 px-1 rounded text-xs">query_experiments</code> tools for structured hypothesis&ndash;method&ndash;result&ndash;conclusion tracking. Available to all sim personas; integrated with JSONL persistence and UMR cross-referencing.</p>
+        <h3 class="text-white font-semibold mb-2">Bio-System Wiring Hardening</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">Percept abstraction layer (SensoryModality, SensoryTag, SensoryGate), pipeline correctness fixes, energy&rarr;NAc metabolic cost learning, <code class="bg-slate-950 px-1 rounded text-xs">decision_rationale</code> provenance field on Perception. 14/14 pipeline audit checks passing.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">LeaderProxy</h3>
-        <p class="text-slate-300 text-sm leading-relaxed">Authentication, GPU metrics exposure, and debug endpoints. The leader acts as the coordination point for all peer inference requests.</p>
+        <h3 class="text-white font-semibold mb-2">Mode System Refactor</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">~1,800 LOC removed. Strategies, exploration policy, and LiveModeIntent deleted. Sleep is now a tool. Skills module folded into Cerebellum motor programs. Dead runtime modules cleaned up (resilient.py, session.py, debug_status_server.py, monitor_registry.py).</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">Admission Control</h3>
-        <p class="text-slate-300 text-sm leading-relaxed">Concurrency caps and rate limiting at the leader level. Prevents overloading any single node when multiple peers submit inference requests simultaneously.</p>
+        <h3 class="text-white font-semibold mb-2">Agent Mesh</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">Full mesh protocol through Phase Pre-7: AgentProfile identity, UMR naming, MeshMessage envelopes, LocalMessageBus, knowledge sharing between agents, task delegation, distributed planning, and SCN temporal coordination. mDNS + InferenceRouter deferred.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">LaneMetrics</h3>
-        <p class="text-slate-300 text-sm leading-relaxed">Per-tier performance counters for the WorkerPool's capability tiers (large, medium, small). Enables monitoring throughput and latency per workload type. Functions route to tiers via FunctionRouter with fallback chains.</p>
+        <h3 class="text-white font-semibold mb-2">Generative Campaign Mode</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">LLM-driven narrative arcs (4 builtin + custom YAML), two-call narrator with AdaptivePlanner integration, bridge-and-compress for multi-arc continuation, <code class="bg-slate-950 px-1 rounded text-xs">ask_user</code> tool, tiered benchmarks, <code class="bg-slate-950 px-1 rounded text-xs">--sim "goal"</code> CLI simplification. 71 tests.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">System Heartbeat</h3>
-        <p class="text-slate-300 text-sm leading-relaxed">Stall detection across the inference pipeline. Automatically identifies when a lane or peer stops responding and triggers recovery.</p>
+        <h3 class="text-white font-semibold mb-2">Lane Tier Architecture</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">FunctionRouter routes functions to capability tiers (large/medium/small) with fallback chains. Auto-detection from hardware VRAM. Legacy lane names (infer/review/record) aliased to tier names automatically.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">Peer-to-Leader Inference</h3>
-        <p class="text-slate-300 text-sm leading-relaxed">Fixed provider priority ordering and pricing gate bugs that prevented peers from correctly routing inference to the leader node.</p>
+        <h3 class="text-white font-semibold mb-2">Simulation Benchmark</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">Phases 0-6 complete: BenchmarkRunner, CLI (<code class="bg-slate-950 px-1 rounded text-xs">maxim --sim benchmark</code>), 6 scenarios, narrative transcriber, write-paper pipeline, Tier 3 hooks for multi-model comparative testing.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">Process Followup Fix</h3>
-        <p class="text-slate-300 text-sm leading-relaxed">Eliminated a 60-second stall in the process followup path. Recovery is now instant, preventing cascading delays across the inference pipeline.</p>
+        <h3 class="text-white font-semibold mb-2">Python API (pymaxim)</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">Verb-based interface: <code class="bg-slate-950 px-1 rounded text-xs">run</code>, <code class="bg-slate-950 px-1 rounded text-xs">imagine</code>, <code class="bg-slate-950 px-1 rounded text-xs">connect</code>, <code class="bg-slate-950 px-1 rounded text-xs">diagnose</code>, <code class="bg-slate-950 px-1 rounded text-xs">observe</code>, <code class="bg-slate-950 px-1 rounded text-xs">configure</code>. Lazy imports, structured return types. Published as <code class="bg-slate-950 px-1 rounded text-xs">pymaxim</code> on PyPI.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">Embodiment Core</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">SEM protocol (Sensor-Entity-Modulator), Cerebellum forward models, motor programs + engrams, composable failures, virtual entities. 164 tests. Hardware adapter deferred to future.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">Multi-LLM Scaling</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">LeaderProxy with authentication + GPU metrics, admission control (concurrency caps + rate limiting), LaneMetrics per-tier counters, system heartbeat with stall detection, remote peer management (<code class="bg-slate-950 px-1 rounded text-xs">maxim peer update/restart/llm</code>).</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">Research Protocol</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">Mesh primitives, research tools (<code class="bg-slate-950 px-1 rounded text-xs">record_experiment</code>, <code class="bg-slate-950 px-1 rounded text-xs">query_experiments</code>), Writer + Reviewer agents, dual-LLM orchestration. <code class="bg-slate-950 px-1 rounded text-xs">maxim --sim research</code></p>
       </div>
     </div>
   </section>
@@ -177,42 +209,28 @@
   <section class="space-y-4">
     <h2 id="next-up" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Next Up</h2>
 
-    <p class="text-slate-300 leading-relaxed">Prioritized by impact on daily development velocity. Items higher on the list unblock more downstream work.</p>
+    <p class="text-slate-300 leading-relaxed">All major initiatives are complete. These three priorities are independent and can ship in any order.</p>
 
     <div class="space-y-3">
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex items-start gap-4">
         <span class="text-2xl font-bold text-indigo-500 shrink-0">1</span>
         <div>
-          <h3 class="text-white font-semibold">Simulation Benchmark</h3>
-          <p class="text-slate-300 text-sm leading-relaxed">Multi-model comparative testing via <code class="bg-slate-950 px-1 rounded text-xs">maxim --sim benchmark</code>. Validates tool refactoring, creates model baselines, reuses existing campaign + report infrastructure. ~680 LOC.</p>
+          <h3 class="text-white font-semibold">Hippocampus AUT Memory Refinement <span class="text-slate-500 font-normal text-sm">(~300-500 LOC)</span></h3>
+          <p class="text-slate-300 text-sm leading-relaxed">Improve recall precision for campaign-specific queries. Modality-aware recall ("what did I hear?" vs "what did I see?") using SensoryTag metadata. <code class="bg-slate-950 px-1 rounded text-xs">decision_rationale</code> search for why actions were chosen. Reduce observation capture spam.</p>
         </div>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex items-start gap-4">
         <span class="text-2xl font-bold text-indigo-500 shrink-0">2</span>
         <div>
-          <h3 class="text-white font-semibold">Embodiment Hardware Adapter (When Needed)</h3>
-          <p class="text-slate-300 text-sm leading-relaxed">Wrap real robot SDKs (Reachy Mini, custom arms) as SEM `HardwareSensor`/`HardwareModulator` backends. All software phases complete&mdash;this only ships when deploying to physical hardware.</p>
+          <h3 class="text-white font-semibold">DM Generative Architect <span class="text-slate-500 font-normal text-sm">(~500 LOC)</span></h3>
+          <p class="text-slate-300 text-sm leading-relaxed">A <code class="bg-slate-950 px-1 rounded text-xs">--dm</code> flag with goal strings generates campaigns via an architect persona. The architect interviews the user via <code class="bg-slate-950 px-1 rounded text-xs">ask_user</code> tool, creates characters and encounters, and produces runnable campaign YAML. Builds on the shipped DM MVP.</p>
         </div>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex items-start gap-4">
         <span class="text-2xl font-bold text-indigo-500 shrink-0">3</span>
         <div>
-          <h3 class="text-white font-semibold">Generative Campaign Mode</h3>
-          <p class="text-slate-300 text-sm leading-relaxed">LLM-generated narrative campaigns with entity naming (~600 LOC). Exercises new examine/say/think tools at scale. Dynamic story arcs adapting to AUT responses.</p>
-        </div>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex items-start gap-4">
-        <span class="text-2xl font-bold text-indigo-500 shrink-0">4</span>
-        <div>
-          <h3 class="text-white font-semibold">Agent Mesh Phase 2+</h3>
-          <p class="text-slate-300 text-sm leading-relaxed">Network transport, mDNS discovery, and distributed planning. Builds on Phase 1a-1b foundations (AgentProfile, UMR, MeshMessage, LocalMessageBus).</p>
-        </div>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex items-start gap-4">
-        <span class="text-2xl font-bold text-indigo-500 shrink-0">5</span>
-        <div>
-          <h3 class="text-white font-semibold">DM Choice Classifier Spike</h3>
-          <p class="text-slate-300 text-sm leading-relaxed">Half-day validation that ATL concept similarity + NAc causal scoring can classify AUT free-text responses against campaign choices (~150 LOC). Gate for DM MVP.</p>
+          <h3 class="text-white font-semibold">PyPI Publication Ph3-6 <span class="text-slate-500 font-normal text-sm">(~200 LOC)</span></h3>
+          <p class="text-slate-300 text-sm leading-relaxed">Multi-robot plugins via entry-point discovery (Ph3), CI/CD pipeline (Ph4), README rewrite (Ph5), Test PyPI dry run (Ph6). Package <code class="bg-slate-950 px-1 rounded text-xs">pymaxim</code> phases 0-2 already shipped.</p>
         </div>
       </div>
     </div>
@@ -252,36 +270,25 @@
   <section class="space-y-4">
     <h2 id="dependency-graph" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Dependency Graph</h2>
 
-    <p class="text-slate-300 leading-relaxed">Not everything can run in parallel. This graph shows what blocks what&mdash;read arrows as "must finish before."</p>
+    <p class="text-slate-300 leading-relaxed">All major initiatives are complete. The three current priorities are independent of each other. Future work is demand-driven.</p>
 
     <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
       <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Dependencies</span>
 
-Multi-LLM Scaling ──── COMPLETE (all phases)
-      │
-      ▼
-Agent Mesh Phase 0a (mDNS) ──&gt; Phase 0b (InferenceRouter)
-      │                              │
-      ▼                              ▼
-Agent Mesh Phases 1+ (identity, protocol, knowledge sharing)
-                          &uarr;
-Research Protocol Phase 0-1 ── DONE (mesh primitives + research tools)
-                          │
-Research Protocol Phases 2-4 ─┘
-
-Embodiment Core ──&gt; Embodiment Hardware Adapter
-  (independent track, no blockers)
-
-Simulation Test Bed
-  (independent, unblocks safer iteration)
-
-DM MVP
-  (blocked on Agent Mesh + Embodiment)</div>
+<span class="text-green-400">COMPLETED FOUNDATION</span> (all major initiatives)
+  │
+  ├──&gt; Hippocampus Refinement (independent)  ◀── <span class="text-blue-400">NEXT</span>
+  ├──&gt; DM Architect (independent, builds on DM MVP)  ◀── <span class="text-blue-400">NEXT</span>
+  ├──&gt; PyPI Publication (independent)  ◀── <span class="text-blue-400">NEXT</span>
+  │
+  Future (demand-driven):
+    SEM Component DB, Hardware Adapter, Capability Agent,
+    DM Extensions, Multi-AUT Party Mode</div>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">The <span class="text-indigo-400 font-semibold">InferenceRouter</span> (7d) is the key bottleneck: it needs both mDNS discovery (7c) and the Phase 7b/8 infrastructure. Once 7d lands, the Agent Mesh becomes unblocked on its networking side. The Research Protocol unblocks the mesh on its protocol side. Both must converge before mesh work can begin.</p>
+    <p class="text-slate-300 leading-relaxed">With all 14 major initiatives shipped, the three current priorities are independent and can proceed in any order. <span class="text-indigo-400 font-semibold">Hippocampus Refinement</span> improves recall precision (the weakest link exposed by DM campaigns). <span class="text-indigo-400 font-semibold">DM Architect</span> builds on the shipped DM MVP to generate campaigns from goal strings. <span class="text-indigo-400 font-semibold">PyPI Publication</span> finishes getting the package into the ecosystem.</p>
 
-    <p class="text-slate-300 leading-relaxed"><span class="text-indigo-400 font-semibold">Embodiment</span> runs on an independent track. It doesn't depend on the multi-LLM or mesh work, so it can progress whenever engineering bandwidth is available.</p>
+    <p class="text-slate-300 leading-relaxed">Future work (SEM Component DB, Hardware Adapter, Capability Agent, DM encounter library, Multi-AUT Party Mode) ships when demand surfaces&mdash;none are blocked, just not yet prioritized.</p>
   </section>
 
   <!-- 6. Contributing -->
@@ -309,9 +316,9 @@ DM MVP
 
   <div class="pt-6 border-t border-slate-700 space-y-5">
     <div class="flex justify-start items-stretch gap-4">
-      <a href="/maxim/networking" class="flex-1 max-w-xs bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
+      <a href="/maxim/agent-mesh" class="flex-1 max-w-xs bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
         <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
-        <span class="block text-white font-medium mt-1">Networking</span>
+        <span class="block text-white font-medium mt-1">Agent Mesh</span>
       </a>
     </div>
     <div class="text-center space-y-2">
@@ -328,6 +335,10 @@ DM MVP
         <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
         <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
         <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking</a>
+        <a href="/maxim/simulation" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Simulation</a>
+        <a href="/maxim/benchmarks" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Benchmarks</a>
+        <a href="/maxim/embodiment" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Embodiment</a>
+        <a href="/maxim/agent-mesh" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Agent Mesh</a>
         <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
       </div>
     </div>
