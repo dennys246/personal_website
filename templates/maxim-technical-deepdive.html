@@ -176,7 +176,7 @@ Main Thread (observation loop)
 │
 ├─ Video Writer Thread
 │  └─ Consumes video_save_queue
-│     Writes MP4 to data/videos/
+│     Writes MP4 to ~/.maxim/videos/
 │
 ├─ Audio Capture Thread
 │  └─ Reads from RobotController.get_audio_stream()
@@ -185,12 +185,12 @@ Main Thread (observation loop)
 │
 ├─ Audio Writer Thread
 │  └─ Consumes audio_save_queue
-│     Writes WAV to data/audio/
+│     Writes WAV to ~/.maxim/audio/
 │
 ├─ Transcription Process
 │  └─ Consumes audio chunks
 │     Runs Whisper inference
-│     Writes JSONL to data/transcript/
+│     Writes JSONL to ~/.maxim/transcript/
 │
 ├─ WorkerPool (tier-based lanes)
 │  ├─ large tier  (1 worker, GPU) &mdash; agent inference, fear review
@@ -505,7 +505,7 @@ Agent proposes intent → Planner decomposes into tools
     </div>
 
     <h3 class="text-lg font-semibold text-white mt-5 mb-3">Session-Aware Persistence</h3>
-    <p class="text-slate-300 leading-relaxed mb-3">Each Maxim session gets a UUID session_id. Traces and activities are written to per-session JSONL files (<span class="font-mono text-slate-400">data/provenance/{session_id}.jsonl</span>) with an atomic <span class="font-mono text-slate-400">sessions.json</span> manifest. Cross-run queries enable concept lineage: "When did Maxim first learn about kitchens? How has confidence evolved?"</p>
+    <p class="text-slate-300 leading-relaxed mb-3">Each Maxim session gets a UUID session_id. Traces and activities are written to per-session JSONL files (<span class="font-mono text-slate-400">~/.maxim/provenance/{session_id}.jsonl</span>) with an atomic <span class="font-mono text-slate-400">sessions.json</span> manifest. Cross-run queries enable concept lineage: "When did Maxim first learn about kitchens? How has confidence evolved?"</p>
 
     <h3 class="text-lg font-semibold text-white mt-5 mb-3">Verbosity Levels</h3>
     <div class="overflow-x-auto">
@@ -806,62 +806,62 @@ hub.consolidate_during_sleep()       # Wave consolidation + compress &amp; clean
         <tbody class="text-slate-300">
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">Hippocampus</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/hippocampus.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/memory/hippocampus.json</td>
             <td class="px-4 py-3">All episodic memories + associative graph + context indices (the single source of truth for episodic storage)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">NAc</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/nac_state.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/nac_state.json</td>
             <td class="px-4 py-3">Learned causal links (action &rarr; outcome)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">SCN</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/scn_state.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/scn_state.json</td>
             <td class="px-4 py-3">Temporal bin distributions (v3.0 with BoundedBin significance)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">SignificanceWeights</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/significance_weights.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/significance_weights.json</td>
             <td class="px-4 py-3">Learned heuristic weights + RPE stats</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">SimilarityIndex</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/context_index.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/context_index.json</td>
             <td class="px-4 py-3">LSH bands + MinHash signatures (context)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">SimilarityIndex</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/percept_index.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/percept_index.json</td>
             <td class="px-4 py-3">LSH bands + MinHash signatures (percept)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">Staged Sidecars</td>
-            <td class="px-4 py-3 font-mono text-xs">data/short_term_memory/*.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/short_term_memory/*.json</td>
             <td class="px-4 py-3">Acute/chronic staged moments awaiting consolidation</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">FocusLearner</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/focus_learner.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/focus_learner.json</td>
             <td class="px-4 py-3">Movement gain values (Rescorla-Wagner)</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">WorkspaceBounds</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/learned_bounds.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/learned_bounds.json</td>
             <td class="px-4 py-3">Discovered reachable space limits</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">FearCircuit</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/fear_learning.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/fear_learning.json</td>
             <td class="px-4 py-3">Learned aversive action patterns</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">PainDetector</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/pain_detector.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/pain_detector.json</td>
             <td class="px-4 py-3">Pain threshold adaptations</td>
           </tr>
           <tr class="hover:bg-slate-800/50">
             <td class="px-4 py-3">Thresholds</td>
-            <td class="px-4 py-3 font-mono text-xs">data/util/adaptive_thresholds.json</td>
+            <td class="px-4 py-3 font-mono text-xs">~/.maxim/util/adaptive_thresholds.json</td>
             <td class="px-4 py-3">Learned escalation/pain thresholds</td>
           </tr>
         </tbody>
@@ -899,7 +899,7 @@ tree, config, budgets = persistence.recover(checkpoint_id)</div>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">1. Stage</td>
             <td class="px-4 py-3">SignificanceWeightLearner evaluates 6 heuristics</td>
-            <td class="px-4 py-3">JSON sidecar written to data/short_term_memory/</td>
+            <td class="px-4 py-3">JSON sidecar written to ~/.maxim/short_term_memory/</td>
           </tr>
           <tr class="border-b border-slate-700 hover:bg-slate-800/50">
             <td class="px-4 py-3">2. Wave Score</td>
