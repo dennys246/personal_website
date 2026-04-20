@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block title %}Prompt System &amp; Tool Injection — Maxim Docs | LLM Context Construction{% endblock %}
+
+{% block meta_description %}How Maxim's LLM agent sees the world: prompt assembly chain, priority-based section dropping, tool registration and discovery, scene-scoped tools, and the NAc-driven tool learning feedback loop.{% endblock %}
+
+{% block meta_keywords %}Maxim prompt system, prompt builder, tool injection, scene-scoped tools, LLM context, NAc tool learning, FearAgent, autonomy policy, agentic robotics{% endblock %}
+
+{% block meta_author %}Maxim Project{% endblock %}
+{% block og_site_name %}Maxim{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Prompt System & Tool Injection — How the Maxim LLM Sees the World",
+  "description": "Prompt assembly chain, priority-based section dropping, tool registration and discovery, and the NAc-driven tool learning feedback loop.",
+  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
+  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/prompt-system",
+  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "keywords": ["prompt system", "tool injection", "LLM context", "NAc learning", "scene-scoped tools"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 2, "name": "Prompt System", "item": "https://www.dennyschaedig.com/maxim/prompt-system" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
+
+  <header class="text-center space-y-2">
+    <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM</p>
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Prompt System &amp; Tool Injection</h1>
+    <p class="text-indigo-400 font-medium">How the LLM Sees the World</p>
+  </header>
+
+  <p class="text-slate-300 leading-relaxed">How the LLM sees the world: prompt construction, tool discovery, and the learning feedback loop.</p>
+
+  <!-- Prompt Assembly Chain -->
+  <section class="space-y-4">
+    <h2 id="assembly" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Prompt Assembly Chain</h2>
+
+    <p class="text-slate-300 leading-relaxed">The agent's system prompt is assembled by <code class="bg-slate-950 px-1 rounded text-xs">prompt_builder.py</code> with sections at different priority levels. When the token budget is tight, lower-priority sections are dropped. This means the LLM's context varies based on conversation length.</p>
+
+    <div class="bg-slate-800 border-l-4 border-red-500 rounded-xl p-5">
+      <span class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-red-500 text-white mb-2">MANDATORY</span>
+      <h3 class="text-lg font-semibold text-white mb-2">Always Present</h3>
+      <ul class="space-y-1 text-slate-300 list-disc pl-5">
+        <li><strong class="text-white">instructions</strong> &mdash; Response format rules (JSON action schema)</li>
+        <li><strong class="text-white">user_request</strong> &mdash; The triggering input/percept text</li>
+      </ul>
+    </div>
+
+    <div class="bg-slate-800 border-l-4 border-red-500 rounded-xl p-5">
+      <span class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-red-500 text-white mb-2">CRITICAL</span>
+      <h3 class="text-lg font-semibold text-white mb-2">Almost Never Dropped</h3>
+      <ul class="space-y-1 text-slate-300 list-disc pl-5">
+        <li><strong class="text-white">identity</strong> &mdash; "You are Maxim, a robot assistant" + operational state + simulation/interactive instructions</li>
+        <li><strong class="text-white">tools</strong> &mdash; Full available tools list with descriptions, params, and examples</li>
+      </ul>
+    </div>
+
+    <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-5">
+      <span class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-amber-500 text-black mb-2">IMPORTANT</span>
+      <h3 class="text-lg font-semibold text-white mb-2">Dropped Under Pressure</h3>
+      <ul class="space-y-1 text-slate-300 list-disc pl-5">
+        <li><strong class="text-white">acting_coach</strong> &mdash; Affordance exploration meta-prompting (B3, embodiment only)</li>
+        <li><strong class="text-white">entity_context</strong> &mdash; SEM entity capabilities: affordance descriptions + failure triggers (E2, embodiment only)</li>
+        <li><strong class="text-white">tool_guidance</strong> &mdash; Parameter examples + selection guidance</li>
+        <li><strong class="text-white">datetime</strong> &mdash; Current date/time</li>
+        <li><strong class="text-white">conversation</strong> &mdash; Conversation history</li>
+        <li><strong class="text-white">context_pool</strong> &mdash; Memory agent context (recalled episodes, causal links)</li>
+        <li><strong class="text-white">foundational</strong> &mdash; Constitution + agent behavioral rules</li>
+      </ul>
+    </div>
+
+    <div class="bg-slate-800 border-l-4 border-slate-500 rounded-xl p-5">
+      <span class="inline-block px-2 py-0.5 rounded text-xs font-bold bg-slate-500 text-white mb-2">NICE TO HAVE</span>
+      <h3 class="text-lg font-semibold text-white mb-2">Frequently Dropped</h3>
+      <ul class="space-y-1 text-slate-300 list-disc pl-5">
+        <li><strong class="text-white">mode_context</strong> &mdash; "ACTIVE MODE" instructions (filesystem permissions, cognitive tools)</li>
+        <li><strong class="text-white">observation, speech, agent_states</strong> &mdash; Environmental context</li>
+        <li><strong class="text-white">memory sections</strong> &mdash; Extended memory summaries</li>
+      </ul>
+    </div>
+
+    <div class="bg-slate-800 border-l-4 border-red-500 rounded-xl p-5">
+      <p class="text-slate-300"><strong class="text-red-400">Key insight:</strong> The mode_context section (which explains filesystem rules, cognitive tools, and behavioral guidelines) is at NICE_TO_HAVE priority and is <em>frequently dropped</em>. The agent often operates with just identity + tools + foundational rules.</p>
+    </div>
+  </section>
+
+  <!-- Identity Section -->
+  <section class="space-y-4">
+    <h2 id="identity" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Identity Section</h2>
+
+    <p class="text-slate-300 leading-relaxed">The identity section (<code class="bg-slate-950 px-1 rounded text-xs">build_identity_section()</code>) is at CRITICAL priority and always present. It contains:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">You are Maxim, a robot assistant.
+
+=== OPERATIONAL STATE ===
+Mode: ACTIVE
+Mode goal: Execute tasks and take actions within defined boundaries
+Autonomy level: autonomous
+Processing state: AWAKE
+
+SIMULATION ENVIRONMENT: You are in a controlled simulation for
+testing and evaluation. Scenarios presented to you are simulated...
+
+INTERACTIVE MODE: A human user is present and watching. You can
+and should ask them questions using request_interaction...</div>
+
+    <p class="text-slate-300 leading-relaxed">The <strong class="text-white">SIMULATION ENVIRONMENT</strong> block appears when <code class="bg-slate-950 px-1 rounded text-xs">_sim_active</code> is True. The <strong class="text-white">INTERACTIVE MODE</strong> block appears when <code class="bg-slate-950 px-1 rounded text-xs">InteractiveMode.ON</code>. Both are in the identity section so they're never budget-dropped.</p>
+  </section>
+
+  <!-- Tool Injection Chain -->
+  <section class="space-y-4">
+    <h2 id="injection-chain" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Tool Injection Chain</h2>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">build_tool_registry()          Always-registered: filesystem, display, response
+        |
+_inject_pending_tools()        User tools from @maxim.tool / register_tool()
+        |
+Introspection tools            memory_recall, causal_links, pain_history, etc.
+        |
+Narrative tools                say, think, examine (sim-only)
+        |
+Robot tools DEREGISTERED       focus_interests, track_target, move (no live robot)
+        |
+Scene-scoped activation (0.7+) register_scene_tools / deactivate_scene / activate_scene
+        |                       Cap: 20 active scene tools (core tools exempt)
+        |                       Auto-evicts oldest scene on overflow
+        |
+Mode filtering                 active mode: all tools visible (no filter)
+        |
+registry.list()                Returns ACTIVE tools only (deactivated scene tools excluded)
+        |
+Prompt builder                 TOOL_DESCRIPTIONS dict OR dynamic Tool.description
+        |
+=== Available Tools ===        What the LLM actually sees in the prompt
+  - respond: Answer questions...
+  - request_interaction: Ask the user...
+  - memory_recall: Search episodic memory...
+        |
+LLM generates action JSON      {"tool_name": "respond", "params": {"message": "..."}}
+        |
+Autonomy policy                Execution-level gate (allowed_tools whitelist)
+        |
+FearAgent review               Independent safety gate (action content, not beliefs)
+        |
+Tool.execute()                 Runs the tool, returns ToolOutput</div>
+  </section>
+
+  <!-- Tool Description Sources -->
+  <section class="space-y-4">
+    <h2 id="description-sources" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Tool Description Sources</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Source</th>
+            <th class="px-4 py-3">Priority</th>
+            <th class="px-4 py-3 rounded-tr-lg">When Used</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">TOOL_DESCRIPTIONS</code> dict<br><span class="text-xs text-slate-500">modes/definitions.py</span></td>
+            <td class="px-4 py-3">Primary</td>
+            <td class="px-4 py-3">All built-in tools. Contains description, params, example, followup_type.</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">Tool.description</code> + <code class="bg-slate-950 px-1 rounded text-xs">Tool.input_schema</code><br><span class="text-xs text-slate-500">tools/base.py</span></td>
+            <td class="px-4 py-3">Fallback</td>
+            <td class="px-4 py-3">User-registered tools, SEM affordance tools, anything not in TOOL_DESCRIPTIONS.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-5">
+      <p class="text-slate-300"><strong class="text-amber-400">Tip:</strong> If a tool is registered but the LLM never calls it, check whether it has an entry in <code class="bg-slate-950 px-1 rounded text-xs">TOOL_DESCRIPTIONS</code>. The fallback description from the Tool class is often too terse for the LLM to understand when to use it.</p>
+    </div>
+  </section>
+
+  <!-- Tool Learning Feedback Loop -->
+  <section class="space-y-4">
+    <h2 id="learning-loop" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Tool Learning Feedback Loop</h2>
+
+    <p class="text-slate-300 leading-relaxed">The agent learns which tools work through the NAc causal learning system:</p>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Mechanism</th>
+            <th class="px-4 py-3">What It Does</th>
+            <th class="px-4 py-3 rounded-tr-lg">Where</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Direct attribution</td>
+            <td class="px-4 py-3">Records tool outcomes to NAc: <code class="bg-slate-950 px-1 rounded text-xs">(context, tool) &rarr; success/pain</code></td>
+            <td class="px-4 py-3">ToolPainBridge</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Causal links in prompt</td>
+            <td class="px-4 py-3">LLM sees learned tool-outcome associations in context_pool</td>
+            <td class="px-4 py-3">prompt_builder.py</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Recent outcomes</td>
+            <td class="px-4 py-3">Last N tool results shown in prompt for immediate context</td>
+            <td class="px-4 py-3">agent_loop.py</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">Relevance filter</td>
+            <td class="px-4 py-3">Learned index trims tool manifest to relevant subset (passive mode only)</td>
+            <td class="px-4 py-3">LearnedToolIndex</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Tool learning is <strong class="text-white">indirect</strong> &mdash; NAc learns outcome associations that appear in the prompt as context, but the LLM still sees the full tool manifest. Learning influences <em>when</em> to call a tool, not <em>whether</em> it appears.</p>
+  </section>
+
+  <!-- Simulation vs Live -->
+  <section class="space-y-4">
+    <h2 id="sim-vs-live" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Simulation vs Live: Tool Differences</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">Tool Category</th>
+            <th class="px-4 py-3">AUT (Agent Under Test)</th>
+            <th class="px-4 py-3 rounded-tr-lg">Orchestrator</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Filesystem (read, write, bash)</td>
+            <td class="px-4 py-3 text-green-400">Yes (sandboxed)</td>
+            <td class="px-4 py-3 text-red-400">No</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Sim tools (send_message, observe_actions)</td>
+            <td class="px-4 py-3 text-red-400">No</td>
+            <td class="px-4 py-3 text-green-400">Yes</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Introspection (memory_recall, causal_links)</td>
+            <td class="px-4 py-3 text-green-400">Yes</td>
+            <td class="px-4 py-3 text-red-400">No</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Interactive (request_interaction, set_scene)</td>
+            <td class="px-4 py-3 text-green-400">Yes</td>
+            <td class="px-4 py-3 text-red-400">No</td>
+          </tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
+            <td class="px-4 py-3">Robot (move, track_target)</td>
+            <td class="px-4 py-3 text-red-400">Deregistered</td>
+            <td class="px-4 py-3 text-red-400">Not added</td>
+          </tr>
+          <tr class="hover:bg-slate-800/50">
+            <td class="px-4 py-3">Response (respond, speak)</td>
+            <td class="px-4 py-3 text-green-400">Yes</td>
+            <td class="px-4 py-3">sim_respond only</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Adding a New Tool -->
+  <section class="space-y-4">
+    <h2 id="adding-tool" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Adding a New Tool</h2>
+
+    <ol class="space-y-2 text-slate-300 list-decimal pl-5">
+      <li>Create a <code class="bg-slate-950 px-1 rounded text-xs">Tool</code> subclass in <code class="bg-slate-950 px-1 rounded text-xs">src/maxim/tools/</code> with <code class="bg-slate-950 px-1 rounded text-xs">name</code>, <code class="bg-slate-950 px-1 rounded text-xs">description</code>, <code class="bg-slate-950 px-1 rounded text-xs">input_schema</code>, and <code class="bg-slate-950 px-1 rounded text-xs">execute()</code></li>
+      <li>Register in <code class="bg-slate-950 px-1 rounded text-xs">build_tool_registry()</code> (<code class="bg-slate-950 px-1 rounded text-xs">runtime/bootstrap.py</code>)</li>
+      <li>Add to <code class="bg-slate-950 px-1 rounded text-xs">TOOL_DESCRIPTIONS</code> (<code class="bg-slate-950 px-1 rounded text-xs">modes/definitions.py</code>) with description, params, example, and followup_type</li>
+      <li>Add to the AUT's <code class="bg-slate-950 px-1 rounded text-xs">allowed_tools</code> whitelist (<code class="bg-slate-950 px-1 rounded text-xs">simulation/orchestrator.py</code>) if it should be usable in simulation</li>
+      <li>If it uses JSON Schema <code class="bg-slate-950 px-1 rounded text-xs">input_schema</code>, verify <code class="bg-slate-950 px-1 rounded text-xs">_validate_input()</code> handles it (tools/base.py detects both formats)</li>
+      <li><strong class="text-white">(0.7+) Scene-scoped tools:</strong> For tools tied to an entity/scene, use <code class="bg-slate-950 px-1 rounded text-xs">registry.register_scene_tools(tools, scene_id="...")</code> instead of <code class="bg-slate-950 px-1 rounded text-xs">register()</code>. Scene tools are deactivated on scene transition (not deleted) and can be re-activated. The executor gates on active status &mdash; deactivated tools return a descriptive error.</li>
+    </ol>
+
+    <div class="bg-slate-800 border-l-4 border-red-500 rounded-xl p-5">
+      <p class="text-slate-300"><strong class="text-red-400">Common pitfall:</strong> A tool can be registered and allowed but the LLM never calls it because:</p>
+      <ul class="space-y-1 text-slate-300 list-disc pl-5 mt-2">
+        <li>No entry in <code class="bg-slate-950 px-1 rounded text-xs">TOOL_DESCRIPTIONS</code> (fallback description too terse)</li>
+        <li>System prompt context discourages it (e.g., "autonomous" mode + "ask user" tool)</li>
+        <li>JSON Schema <code class="bg-slate-950 px-1 rounded text-xs">input_schema</code> causes silent validation failure in <code class="bg-slate-950 px-1 rounded text-xs">_validate_input()</code></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Files Reference -->
+  <section class="space-y-4">
+    <h2 id="files" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Files Reference</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="bg-indigo-700 text-white">
+            <th class="px-4 py-3 rounded-tl-lg">File</th>
+            <th class="px-4 py-3 rounded-tr-lg">Role</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300">
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50"><td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">agents/prompt_builder.py</code></td><td class="px-4 py-3">Section assembly + budget management</td></tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50"><td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">agents/llm_worker.py</code></td><td class="px-4 py-3">Delegates to prompt builder, submits to LLM</td></tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50"><td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">modes/definitions.py</code></td><td class="px-4 py-3">Mode definitions + TOOL_DESCRIPTIONS dict</td></tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50"><td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">runtime/bootstrap.py</code></td><td class="px-4 py-3">build_tool_registry() &mdash; canonical tool registration</td></tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50"><td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">runtime/autonomy.py</code></td><td class="px-4 py-3">Execution-level tool gating (not prompt-level)</td></tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50"><td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">simulation/orchestrator.py</code></td><td class="px-4 py-3">AUT vs orchestrator tool registry setup</td></tr>
+          <tr class="border-b border-slate-700 hover:bg-slate-800/50"><td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">tools/base.py</code></td><td class="px-4 py-3">Tool base class + _validate_input (JSON Schema support)</td></tr>
+          <tr class="hover:bg-slate-800/50"><td class="px-4 py-3"><code class="bg-slate-950 px-1 rounded text-xs">api.py</code></td><td class="px-4 py-3">register_tool() / @maxim.tool dynamic registration</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="pt-6 border-t border-slate-700 space-y-5">
+    <div class="flex justify-between items-stretch gap-4">
+      <a href="/maxim/tools" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
+        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
+        <span class="block text-white font-medium mt-1">Tools &amp; Introspection</span>
+      </a>
+      <a href="/maxim/operating-modes" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
+        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
+        <span class="block text-white font-medium mt-1">Operating Modes</span>
+      </a>
+    </div>
+    <div class="text-center space-y-2">
+      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
+      <div class="flex flex-wrap justify-center gap-2">
+        <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
+        <a href="/maxim/agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
+        <a href="/maxim/memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
+        <a href="/maxim/semantic-memory" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Semantic Memory</a>
+        <a href="/maxim/concept-decomposition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Concept Decomposition</a>
+        <a href="/maxim/math-cognition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Math &amp; Statistics</a>
+        <a href="/maxim/attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
+        <a href="/maxim/proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
+        <a href="/maxim/embodiment" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Embodiment</a>
+        <a href="/maxim/imagination" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Imagination</a>
+        <a href="/maxim/component-library" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Component Library</a>
+        <a href="/maxim/communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
+        <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
+        <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
+        <a href="/maxim/tools" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Tools &amp; Introspection</a>
+        <a href="/maxim/prompt-system" class="text-xs text-indigo-400 font-medium transition px-2 py-1 rounded bg-slate-800 no-underline">Prompt System</a>
+        <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
+        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking</a>
+        <a href="/maxim/agent-mesh" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Agent Mesh</a>
+        <a href="/maxim/simulation" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Simulation</a>
+        <a href="/maxim/dm-campaigns" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">DM Campaigns</a>
+        <a href="/maxim/benchmarks" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Benchmarks</a>
+        <a href="/maxim/experiments" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Experiments</a>
+        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

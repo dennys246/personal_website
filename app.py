@@ -132,6 +132,14 @@ def maxim_concept_decomposition():
 def maxim_experiments():
     return render_template("maxim-experiments.html")
 
+@app.route("/maxim/imagination")
+def maxim_imagination():
+    return render_template("maxim-imagination.html")
+
+@app.route("/maxim/prompt-system")
+def maxim_prompt_system():
+    return render_template("maxim-prompt-system.html")
+
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
     return render_template("maxim-privacy-policy.html")
@@ -195,6 +203,8 @@ def sitemap_xml():
         ("maxim_component_library", "weekly", "0.9"),
         ("maxim_concept_decomposition", "weekly", "0.9"),
         ("maxim_experiments", "weekly", "0.9"),
+        ("maxim_imagination", "weekly", "0.9"),
+        ("maxim_prompt_system", "weekly", "0.9"),
         ("maxim_roadmap", "monthly", "0.7"),
         ("maxim_privacy_policy", "monthly", "0.5"),
         ("maxim_terms_and_conditions", "monthly", "0.5"),
