@@ -122,6 +122,77 @@
     <p class="text-slate-300 leading-relaxed">The LLM is a <strong class="text-white">teacher</strong>, not a per-tick oracle. After enough observations, the Cerebellum handles predictions deterministically. In testing, LLM calls drop from 100 to &le;40 over 100 actions.</p>
   </section>
 
+  <!-- SEM Learning Loop -->
+  <section class="space-y-4">
+    <h2 id="sem-learning-loop" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The SEM Learning Loop</h2>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">In the brain, the cerebellum doesn't just predict &mdash; it emits signals when predictions fail <em>or</em> succeed. These signals propagate to the hippocampus (contextual memory) and nucleus accumbens (reward learning) simultaneously, closing the loop between motor execution and long-term behavioral adaptation. Success and failure are not symmetric: negative outcomes carry disproportionate weight, a phenomenon known as <em>negativity bias</em>.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">When the Cerebellum evaluates an affordance, the outcome flows through the bio-pipeline as a <em class="text-indigo-400 not-italic font-medium">reaction</em> &mdash; a typed evaluative signal that drives learning across multiple systems simultaneously. This is the SEM Learning Loop.</p>
+
+    <h3 class="text-white font-semibold mt-4">CerebellumModulator Outcomes</h3>
+    <p class="text-slate-300 leading-relaxed">The <code class="bg-slate-950 px-1 rounded text-xs">CerebellumModulator</code> classifies each affordance execution into one of three outcome paths:</p>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-emerald-400 font-semibold mb-2">Confident Prediction</h4>
+        <p class="text-slate-300 text-sm">Confidence &ge; 0.3 and low variance. The Cerebellum handles the prediction without LLM fallback. Emits a <strong class="text-white">success reaction</strong> with positive valence.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-amber-400 font-semibold mb-2">LLM Fallback</h4>
+        <p class="text-slate-300 text-sm">Confidence &lt; 0.3 or high variance. The LLM acts as teacher. The Cerebellum trains on the LLM's response via Rescorla-Wagner update. No reaction emitted &mdash; the system is still learning.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-red-400 font-semibold mb-2">Failure</h4>
+        <p class="text-slate-300 text-sm">Affordance execution triggers a failure mode (e.g., shatter, overheat). Emits a <strong class="text-white">pain reaction</strong> with negative valence via the PainBus.</p>
+      </div>
+    </div>
+
+    <h3 class="text-white font-semibold mt-6">Signal Flow</h3>
+    <p class="text-slate-300 leading-relaxed">Both success and pain reactions flow through the <code class="bg-slate-950 px-1 rounded text-xs">ReactionBus</code>, which dispatches to two subscribers in parallel:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">SEM Learning Loop Signal Flow</span>
+
+CerebellumModulator
+  |
+  |-- confident prediction --&rarr; _emit_success_reaction(valence=+0.3..+1.0)
+  |-- failure mode fired   --&rarr; PainBus.publish(PainSignal) --&rarr; pain_signal_to_reaction
+  |
+  &darr;
+ReactionBus.dispatch(reaction)
+  |
+  |-- Subscriber 1: Hippocampus
+  |     Episode captures the reaction context
+  |     Episode.valence set at finalize (mean of all reactions)
+  |     Hebbian edges annotated with Edge.metadata["valence"]
+  |
+  |-- Subscriber 2: NAc (via distribute_reward)
+  |     Adjusts per-node reward_bias in the Hebbian graph
+  |     EC similarity thresholds shift: positive &rarr; tighter, negative &rarr; looser
+  |
+  &darr;
+Episode boundary: salience_spike_rule
+  Pain spike (intensity &ge; 0.7) forces episode close
+  New episode starts with clean slate
+  |
+  &darr;
+Future retrieval: retrieve_on_cue(include_valence=True)
+  Spreading activation propagates edge valence
+  Recalled memories carry affective coloring</div>
+
+    <h3 class="text-white font-semibold mt-6">Negativity Bias</h3>
+    <p class="text-slate-300 leading-relaxed">Success reactions carry positive valence but at lower intensity than pain reactions &mdash; mirroring biological negativity bias. A single painful failure creates a stronger learning signal than several routine successes. This asymmetry means the agent develops caution around dangerous affordances faster than it develops confidence around safe ones, which is the correct survival trade-off for an embodied system.</p>
+
+    <h3 class="text-white font-semibold mt-6">Cerebellum Activation via BioStack</h3>
+    <p class="text-slate-300 leading-relaxed">In production, the Cerebellum is wired through <code class="bg-slate-950 px-1 rounded text-xs">BioStack.cerebellum</code> and activated by <code class="bg-slate-950 px-1 rounded text-xs">build_executor</code>. This means every agent entry point that constructs a bio-stack gets Cerebellum forward models and the full SEM Learning Loop automatically &mdash; no per-caller wiring required.</p>
+
+    <h3 class="text-white font-semibold mt-6">Behavioral Convergence Wiring</h3>
+    <p class="text-slate-300 leading-relaxed">The SEM Learning Loop produces valence and reward bias in the substrate, but the LLM also needs to see this information. Behavioral convergence wiring (shipped 2026-04-17) closes four gaps: valence annotations in PromptAssembler so the LLM sees &ldquo;this entity is associated with negative experiences,&rdquo; <code class="bg-slate-950 px-1 rounded text-xs">observe_episode_event</code> in the agent loop for real-time episode capture, an energy&rarr;Reaction bridge that fires hunger/fatigue/satiation interoceptive reactions from energy depletion, and bundled food/water/poison SEM specs. Validated by two experiments: cross-session affective memory (11/11 PASS) and energy-driven consumable learning (13/13 PASS). See <a href="/maxim/experiments" class="text-indigo-400 hover:text-indigo-300 no-underline">Experiments &amp; Results</a> for details.</p>
+  </section>
+
   <!-- Motor Programs -->
   <section class="space-y-4">
     <h2 id="motor-programs" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Motor Programs</h2>
@@ -220,6 +291,58 @@ recovery_condition: {field: fatigue, op: "<", value: 0.2}</div>
     <p class="text-slate-300 leading-relaxed">Failures route through the existing <em class="text-indigo-400 not-italic">PainBus</em> and <em class="text-indigo-400 not-italic">ToolPainBridge</em>. NAc learns <code class="bg-slate-950 px-1 rounded text-xs">(affordance, entity_state) &rarr; failure</code> causal links. Persistent failures stay active until recovery conditions are met. All failure state persists across sessions.</p>
   </section>
 
+  <!-- Running an agent with a SEM body -->
+  <section class="space-y-4">
+    <h2 id="running-with-body" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Running an Agent with a SEM Body</h2>
+
+    <p class="text-slate-300 leading-relaxed">A live agent can take a SEM body in one CLI flag. <code class="bg-slate-950 px-1 rounded text-xs">--embodiment &lt;ref&gt;</code> loads a bundled component, wraps it in <code class="bg-slate-950 px-1 rounded text-xs">Embodiment(pain_bus=...)</code>, and registers all of its affordance tools into the agent's tool registry &mdash; the agent can then invoke them on its own timeline through normal tool dispatch with the full pain cascade running end-to-end.</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Validate the ref, then run</span>
+$ maxim doctor --embodiment weapons/rusty_sword
+... [ doctor checks ]
+━━━ Embodiment ━━━
+  ✓ Embodiment ref: 'weapons/rusty_sword' resolves &rarr; entity='rusty_sword'
+
+$ maxim --llm mistral-7b --embodiment weapons/rusty_sword
+... [ agent runs with rusty_sword_slash, rusty_sword_parry,
+      rusty_sword_throw, rusty_sword_sharpen, rusty_sword_repair
+      registered as tools ]</div>
+
+    <p class="text-slate-300 leading-relaxed mt-3">If the ref is wrong, doctor groups same-category alternatives first so a typo in <code class="bg-slate-950 px-1 rounded text-xs">weapons/X</code> shows you the other weapons before unrelated categories:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Typo &rarr; actionable hint</span>
+$ maxim doctor --embodiment weapons/nonexistent_sword
+━━━ Embodiment ━━━
+  ✗ Embodiment ref: Component ref 'weapons/nonexistent_sword' not found
+    &rarr; Components in 'weapons':
+    &rarr;   weapons/combat_knife
+    &rarr;   weapons/enchanted_bow
+    &rarr;   weapons/longbow
+    &rarr;   weapons/magic_staff
+    &rarr;   weapons/neural_disruptor
+    &rarr;   weapons/plasma_rifle
+    &rarr;   weapons/poison_dagger
+    &rarr;   weapons/rusty_sword
+    &rarr;   weapons/shock_baton
+    &rarr;
+    &rarr; Other available components:
+    &rarr;   bodies/cybernetic_arm
+    &rarr;   ...and N more</div>
+
+    <h3 class="text-white font-semibold mt-4">Behind the Scenes</h3>
+    <ol class="space-y-2 text-slate-300 list-decimal pl-5">
+      <li><code class="bg-slate-950 px-1 rounded text-xs">cli.py</code> reads <code class="bg-slate-950 px-1 rounded text-xs">--embodiment weapons/rusty_sword</code>.</li>
+      <li><code class="bg-slate-950 px-1 rounded text-xs">runtime/bootstrap.py::build_executor</code> &mdash; the canonical agent-construction site since the executor bootstrap unification &mdash; instantiates the entity via <code class="bg-slate-950 px-1 rounded text-xs">ComponentRegistry</code>, wraps it in <code class="bg-slate-950 px-1 rounded text-xs">Embodiment(pain_bus=...)</code>, and calls <code class="bg-slate-950 px-1 rounded text-xs">generate_tools_for_entity</code>.</li>
+      <li>The agent's LLM sees the affordance tools alongside the standard tools and can invoke them via normal tool dispatch.</li>
+      <li>When the agent invokes <code class="bg-slate-950 px-1 rounded text-xs">rusty_sword_slash</code> on a low-durability sword, <code class="bg-slate-950 px-1 rounded text-xs">embodiment.evaluate_failures()</code> fires the <code class="bg-slate-950 px-1 rounded text-xs">shatter</code> failure mode &rarr; <code class="bg-slate-950 px-1 rounded text-xs">PainBus.publish(PainSignal)</code> &rarr; the executor's <code class="bg-slate-950 px-1 rounded text-xs">ToolPainBridge</code> calls <code class="bg-slate-950 px-1 rounded text-xs">record_tool_embodiment_failure</code> &rarr; NAc forms a NEGATIVE causal link.</li>
+      <li>On the next turn, <code class="bg-slate-950 px-1 rounded text-xs">nac.predict()</code> returns NEGATIVE for that tool, informing the agent's policy.</li>
+    </ol>
+
+    <p class="text-slate-300 leading-relaxed mt-3 text-sm"><strong class="text-white">Structural enforcement:</strong> the <code class="bg-slate-950 px-1 rounded text-xs">build_executor</code> constructor requires an explicit <code class="bg-slate-950 px-1 rounded text-xs">pain_bus=</code> decision (no default), so forgetting to wire the bridge is a <code class="bg-slate-950 px-1 rounded text-xs">TypeError</code> instead of a silent no-op. Every agent entry point in the codebase makes an explicit pain_bus decision; the prior helper-discipline approach was deprecated after three identical "forgot to wire ToolPainBridge" bugs in three weeks &mdash; three-times-is-structural.</p>
+
+    <p class="text-slate-300 leading-relaxed mt-3 text-sm"><strong class="text-white">Verified end-to-end</strong> by <code class="bg-slate-950 px-1 rounded text-xs">tests/substrate/test_sem_execution_production.py</code> against the real bundled <code class="bg-slate-950 px-1 rounded text-xs">weapons/rusty_sword.yaml</code> &mdash; no mocks in the cascade chain. <strong class="text-white">Current constraints</strong>: <code class="bg-slate-950 px-1 rounded text-xs">--embodiment</code> is mutually exclusive with <code class="bg-slate-950 px-1 rounded text-xs">--sim</code> (sim-mode SEM body wiring is tracked under the AgentFactory canonicalization plan); only one entity can be loaded via the flag (multi-entity bodies are still loaded the old way via <code class="bg-slate-950 px-1 rounded text-xs">Embodiment(spec.root_entity)</code> in code).</p>
+  </section>
+
   <!-- Component Library + Genre Gating -->
   <section class="space-y-4">
     <h2 id="component-library" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Component Library &amp; Genre Gating</h2>
@@ -287,9 +410,92 @@ YAML Spec ──&rarr; Entity Tree ──&rarr; Auto-Generated Tools ──&rarr
           <tr><td class="py-1 pr-4 text-slate-300">embodiment/llm_backend.py</td><td>LLM + Narrative sensor/modulator backends</td></tr>
           <tr><td class="py-1 pr-4 text-slate-300">embodiment/percepts.py</td><td>EmbodimentPerceptSource (1Hz polling, demand mode)</td></tr>
           <tr><td class="py-1 pr-4 text-slate-300">embodiment/atl_integration.py</td><td>Auto-register ATL body_part concepts</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/component_registry.py</td><td>Component discovery, genre filtering, instantiation, inheritance</td></tr>
+          <tr><td class="py-1 pr-4 text-slate-300">embodiment/component_registry.py</td><td>Component discovery, genre filtering, instantiation, inheritance, ephemeral overlay (thread-safe)</td></tr>
+          <tr><td class="py-1 pr-4 text-slate-300">embodiment/component_index.py</td><td>Semantic discovery: alias hash table (O(1)) + embedding index (cosine similarity)</td></tr>
+          <tr><td class="py-1 pr-4 text-slate-300">imagination/trigger.py</td><td>Entity noun-phrase extraction, ComponentIndex lookup, design dispatch</td></tr>
+          <tr><td class="py-1 pr-4 text-slate-300">imagination/designer.py</td><td>ImaginationDesigner: wraps EntityDesigner for real-time entity generation</td></tr>
+          <tr><td class="py-1 pr-4 text-slate-300">imagination/cache.py</td><td>Session-scoped ImaginationCache, thread-safe, shared AUT + orchestrator</td></tr>
+          <tr><td class="py-1 pr-4 text-slate-300">prompts/acting_coach.py</td><td>B3 Acting Coach: bio-modulated exploration meta-prompt (NAc valence, pain anticipation, cerebellum predictions)</td></tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <!-- Imagination (I1 + I2) -->
+  <section class="space-y-4">
+    <h2 id="imagination" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Imagination <span class="text-xs font-mono text-indigo-400 ml-2">I1+I2 &mdash; 0.7</span></h2>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">Biological Inspiration</h3>
+      <p class="text-slate-300">Imagination fires during low-arousal idle states &mdash; the same way you don't daydream while fighting. When the brain encounters something unfamiliar, it constructs a mental model from prior experience to reason about the novel entity before physically interacting with it. The Default Network, which activates during rest and mind-wandering, gates this process.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">When the agent encounters a <strong class="text-white">novel entity</strong> mentioned in percept text that has no existing SEM component, the imagination system designs one in real-time:</p>
+
+    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Imagination Pipeline</span>
+
+Percept Text ──&rarr; Entity Extraction ──&rarr; ComponentIndex Lookup
+                                              │
+                                    ┌─── Match found ───&rarr; Skip (already known)
+                                    │
+                                    └─── No match ──&rarr; DN Arousal Gate
+                                                          │
+                                                    Energy Budget ──&rarr; EntityDesigner (LLM)
+                                                                          │
+                                                                    Quick Validation
+                                                                          │
+                                                              register_ephemeral + Index.add
+                                                                          │
+                                                              Scene-scoped Tool Registration</div>
+
+    <h3 class="text-white font-semibold mt-4">Entity Extraction</h3>
+    <p class="text-slate-300 leading-relaxed">Lightweight NLP heuristics extract entity-like noun phrases from narration text &mdash; physical objects, creatures, weapons, environmental features, items, vehicles, and NPCs. Abstract concepts, body parts, and clothing are filtered out. Two strategies: sentence-level intro patterns (<code class="bg-slate-950 px-1 rounded text-xs">"You see a rusty gate"</code>) and head-noun scanning against a curated indicator vocabulary.</p>
+
+    <h3 class="text-white font-semibold mt-4">ComponentIndex: Two-Layer Lookup</h3>
+    <p class="text-slate-300 leading-relaxed">Before imagining, each candidate phrase is checked against the <code class="bg-slate-950 px-1 rounded text-xs">ComponentIndex</code>:</p>
+    <ul class="space-y-2 text-slate-300 list-disc pl-5">
+      <li><strong class="text-white">Layer 1: Alias table (O(1))</strong> &mdash; exact match against component names and synonyms</li>
+      <li><strong class="text-white">Layer 2: Embedding similarity</strong> &mdash; cosine similarity against all component signatures (threshold 0.65)</li>
+    </ul>
+    <p class="text-slate-300 leading-relaxed">This means <code class="bg-slate-950 px-1 rounded text-xs">"old iron door"</code> finds <code class="bg-slate-950 px-1 rounded text-xs">environments/rusty_gate</code> and skips imagination.</p>
+
+    <h3 class="text-white font-semibold mt-4">Ephemeral Registration</h3>
+    <p class="text-slate-300 leading-relaxed">Imagined entities are registered in a <strong class="text-white">separate overlay</strong> (<code class="bg-slate-950 px-1 rounded text-xs">_ephemeral_index</code>) from the persistent component index. They're visible to <code class="bg-slate-950 px-1 rounded text-xs">get()</code>, <code class="bg-slate-950 px-1 rounded text-xs">has()</code>, and <code class="bg-slate-950 px-1 rounded text-xs">query()</code> during the session, but cleared at session end via <code class="bg-slate-950 px-1 rounded text-xs">clear_ephemeral()</code>.</p>
+
+    <h3 class="text-white font-semibold mt-4">Provenance Tagging</h3>
+    <p class="text-slate-300 leading-relaxed">Episodes and CausalLinks from imagined entity interactions carry <code class="bg-slate-950 px-1 rounded text-xs">imagined=True</code>. On entity discard (session end), imagined causal links get 50% confidence decay &mdash; partial learning is useful, but reduced confidence reflects simulated origin.</p>
+
+    <h3 class="text-white font-semibold mt-4">Gates</h3>
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-indigo-400 font-semibold mb-2">Mention Threshold</h4>
+        <p class="text-slate-300 text-sm">Default 2 mentions before triggering. Prevents one-off noise from spawning entities.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-indigo-400 font-semibold mb-2">DN Arousal</h4>
+        <p class="text-slate-300 text-sm">Only fires during low-arousal idle states. Blocked when DN is inhibited or recent interesting events occurred.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h4 class="text-indigo-400 font-semibold mb-2">Energy Budget</h4>
+        <p class="text-slate-300 text-sm">Skipped when LLM energy is critical (&lt;10%). Falls back gracefully to verbal-only interaction.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Acting Coach (B3) -->
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold text-white">Acting Coach <span class="text-xs font-mono text-indigo-400 ml-2">B3 &mdash; 0.7</span></h2>
+    <p class="text-slate-300 leading-relaxed">The <strong class="text-white">Acting Coach</strong> is a meta-prompt system that prevents the agent from entering respond loops when embodied. Instead of asking "what should I do?", the agent explores its physical affordances proactively.</p>
+
+    <div class="bg-slate-900/50 border border-slate-700 rounded-xl p-5 space-y-3">
+      <h3 class="text-white font-medium text-sm">Bio-System Modulation (not suppression)</h3>
+      <p class="text-slate-300 text-sm leading-relaxed">The coach is a <em class="text-indigo-400 not-italic">default policy</em> that three bio-systems continuously modulate:</p>
+      <ol class="list-decimal list-inside text-slate-300 text-sm space-y-1.5">
+        <li><strong class="text-white">NAc valence</strong> &mdash; learned caution or preference annotations on specific affordances ("sword_slash has caused damage before")</li>
+        <li><strong class="text-white">Pain anticipation</strong> &mdash; anticipatory anxiety from hippocampal pattern-matching against past pain episodes</li>
+        <li><strong class="text-white">Cerebellum predictions</strong> &mdash; forward model outcome forecasts ("predicted low success, risks: jammed")</li>
+      </ol>
+      <p class="text-slate-400 text-xs">Composition order: base directive &rarr; NAc caution &rarr; pain anticipation &rarr; cerebellum predictions. Each layer <em>adds</em> information; none removes the base exploration directive.</p>
     </div>
   </section>
 

@@ -138,7 +138,19 @@
   <section class="space-y-4">
     <h2 id="interactive" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Interactive Mode</h2>
 
-    <p class="text-slate-300">Run <code class="bg-slate-950 px-2 py-0.5 rounded text-xs">maxim --sim</code> with no arguments to launch an interactive REPL. The pipeline boots once, waits for the LLM to load, then drops you into a conversational prompt:</p>
+    <p class="text-slate-300">Interactive mode is <strong class="text-white">ON by default</strong> when running from a TTY. In generative and DM campaigns, a Rich split-panel display shows the narrative in the main panel and a scrollable log below. The human can type responses, make choices, and roleplay directly into the simulation.</p>
+
+    <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-5 mb-4">
+      <h4 class="text-amber-400 font-semibold mb-1">NAc Learning Suppressed</h4>
+      <p class="text-slate-300 text-sm">When interactive mode is active, NAc causal learning is suppressed. Human choices are unpredictable from the agent's perspective &mdash; recording causal links from human-driven decisions would pollute the learned associations with noise the agent cannot reproduce autonomously.</p>
+    </div>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-5 mb-4">
+      <h4 class="text-indigo-400 font-semibold mb-1">--sim interactive Redirect</h4>
+      <p class="text-slate-300 text-sm"><code class="bg-slate-950 px-1 rounded text-xs">maxim --sim interactive</code> now redirects to the full generative simulation with interactive mode enabled, rather than the old standalone REPL. This provides the same conversational experience but with the narrator, arc system, and Rich display.</p>
+    </div>
+
+    <p class="text-slate-300">The old standalone REPL is still available via <code class="bg-slate-950 px-2 py-0.5 rounded text-xs">maxim --sim</code> with no arguments when no TTY is attached. With a TTY, running <code class="bg-slate-950 px-2 py-0.5 rounded text-xs">maxim --sim</code> launches the interactive prompt:</p>
 
     <div class="bg-slate-900 border border-slate-700 rounded-xl overflow-hidden">
       <div class="trace-line"><span class="text-slate-500">Loading LLM...</span></div>
@@ -322,10 +334,7 @@ maxim --sim "test memory recall under interference"
 <span class="text-slate-500"># With a specific persona</span>
 maxim --sim "test safety boundaries" --persona adversarial
 
-<span class="text-slate-500"># With a custom narrative arc</span>
-maxim --sim "test skill learning" --arc scenarios/arcs/herbalism_skill.yaml
-
-<span class="text-slate-500"># Interactive mode — ask_user tool pauses for human input</span>
+<span class="text-slate-500"># Interactive mode — request_interaction tool pauses for human input</span>
 maxim --sim "test cooperative behavior" --interactive</div>
 
     <h3 class="text-lg font-semibold text-indigo-400 mt-4">Narrative Arcs</h3>
@@ -352,10 +361,14 @@ maxim --sim "test cooperative behavior" --interactive</div>
   <section class="space-y-4">
     <h2 id="dm-campaigns" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">DM Campaigns &amp; Genre Gating</h2>
 
-    <p class="text-slate-300">For deterministic, reproducible tests, write campaign YAML files with encounters, NPCs, choices, and branches. The DM runtime drives the AUT through the story and measures how the bio-stack responds:</p>
+    <p class="text-slate-300">For deterministic, reproducible tests, write campaign YAML files with encounters, NPCs, choices, and branches. The DM runtime drives the AUT through the story and measures how the bio-stack responds. <strong class="text-white">Interactive mode is ON by default</strong> for DM campaigns &mdash; the human picks choices from the encounter options and can type free-text roleplay that gets woven into the scene.</p>
 
     <div class="bg-slate-950 rounded-lg px-4 py-3 font-mono text-sm overflow-x-auto whitespace-pre text-slate-300"><span class="text-slate-500"># Run a DM campaign (auto-detected from YAML structure)</span>
+<span class="text-slate-500"># Interactive mode ON by default — human picks choices</span>
 maxim --sim scenarios/campaigns/heist_v1.yaml
+
+<span class="text-slate-500"># Non-interactive (AUT decides autonomously, for CI/benchmarks)</span>
+maxim --sim scenarios/campaigns/heist_v1.yaml --interactive false
 
 <span class="text-slate-500"># Cyberpunk stress test with SEM component swaps</span>
 maxim --sim scenarios/campaigns/neon_gauntlet_v1.yaml</div>
@@ -408,6 +421,36 @@ maxim --sim "hippocampal recall" --research \
   --language-model claude-sonnet --aut-model mistral-7b</div>
 
     <p class="text-slate-300 mt-3">After the simulation completes, a <span class="text-indigo-400 font-semibold">Writer</span> agent produces a structured research paper and a <span class="text-indigo-400 font-semibold">Reviewer</span> agent evaluates it. Both use mesh primitives (<code class="text-indigo-400">AgentProfile</code>, <code class="text-indigo-400">MeshMessage</code>) for communication. The <code class="bg-slate-950 px-1 rounded text-xs">ExperimentLog</code> tracks all runs with structured metadata for querying.</p>
+  </section>
+
+  <!-- 2b. Fixture-Driven Mode (Substrate Testing) -->
+  <section class="space-y-4">
+    <h2 id="fixture-mode" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Fixture-Driven Mode (Substrate Testing)</h2>
+
+    <p class="text-slate-300">Run YAML fixtures through the agent loop <strong>without a narrator LLM</strong>. Fastest and most deterministic mode &mdash; designed for substrate phase testing but usable for any repeatable scenario.</p>
+
+    <div class="bg-slate-950 rounded-lg px-4 py-3 font-mono text-sm overflow-x-auto whitespace-pre text-slate-300"># Run a substrate fixture
+maxim --sim scenarios/substrate/P0_paraphrase_collapse.yaml
+
+# With deterministic seeding for reproducible results
+maxim --sim scenarios/substrate/P0_paraphrase_collapse.yaml --seed 42</div>
+
+    <p class="text-slate-300">Features: no narrator LLM cost, bio-system state snapshots at end-of-run (Hippocampus, NAc, ATL, percept trace buffer, EC substrate nodes), substrate_metrics in session report, automatic expectation checking.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400 mt-4">Deterministic Seeding</h3>
+    <p class="text-slate-300">The <code class="text-indigo-300">--seed N</code> flag sets all RNG sources (Python random, numpy, torch) from a single integer. Two runs with the same seed and fixture produce identical results. Per-agent RNG streams prevent cross-agent correlation in multi-agent sims.</p>
+
+    <h3 class="text-lg font-semibold text-indigo-400 mt-4">Substrate Recognition Tests (P1)</h3>
+    <p class="text-slate-300">The P1 recognition sweep runs all 155 paraphrase sentences through the substrate pipeline (LinguisticEncoder &rarr; EC pattern completion &rarr; ATL) and measures collapse rate, cross-cluster distinctness, and node stability. Results are recorded in the lab notebook at <code class="text-indigo-300">docs/experiments/</code>.</p>
+
+    <div class="bg-slate-950 rounded-lg px-4 py-3 font-mono text-sm overflow-x-auto whitespace-pre text-slate-300"><span class="text-slate-500"># Run the official 10-seed P1 gate test</span>
+python -m pytest tests/substrate/test_p1_recognition.py::TestP1RecognitionSweep::test_sweep_10_seeds -v -s
+
+<span class="text-slate-500"># Run all P1 validation (sweep + degenerate control + persistence round-trip)</span>
+python -m pytest tests/substrate/test_p1_recognition.py -v -s -k "degenerate or persistence or sweep_10"
+
+<span class="text-slate-500"># Model comparison across thresholds</span>
+python -m pytest tests/substrate/test_p1_recognition.py::TestP1RecognitionSweep::test_model_comparison -v -s</div>
   </section>
 
   <!-- 3. Running YAML Scenarios -->
@@ -858,9 +901,12 @@ Actions recorded: 3
      +------ <span class="text-white">PerceptSource protocol</span> ------+
     |
     v
-<span class="text-white">run_agentic_loop(percept_source=source, action_sink=sink)</span>
+<span class="text-white">run_agentic_loop(percept_source=source, action_sink=sink,
+                  imagination_trigger=trigger)</span>
     |
     +---> <span class="text-purple-400">Percept</span> --> MemoryAgent --> Hippocampus
+    |         |
+    |         +---> <span class="text-amber-400">ImaginationTrigger</span> --> ComponentIndex --> EntityDesigner
     |                              |
     |     (if proprioception) -----+---> <span class="text-red-400">PainBus</span> --> NAc + Hippocampus
     |

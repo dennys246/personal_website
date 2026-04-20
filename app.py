@@ -124,6 +124,14 @@ def maxim_dm_campaigns():
 def maxim_component_library():
     return render_template("maxim-component-library.html")
 
+@app.route("/maxim/concept-decomposition")
+def maxim_concept_decomposition():
+    return render_template("maxim-concept-decomposition.html")
+
+@app.route("/maxim/experiments")
+def maxim_experiments():
+    return render_template("maxim-experiments.html")
+
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
     return render_template("maxim-privacy-policy.html")
@@ -185,6 +193,8 @@ def sitemap_xml():
         ("maxim_agent_mesh", "weekly", "0.9"),
         ("maxim_dm_campaigns", "weekly", "0.9"),
         ("maxim_component_library", "weekly", "0.9"),
+        ("maxim_concept_decomposition", "weekly", "0.9"),
+        ("maxim_experiments", "weekly", "0.9"),
         ("maxim_roadmap", "monthly", "0.7"),
         ("maxim_privacy_policy", "monthly", "0.5"),
         ("maxim_terms_and_conditions", "monthly", "0.5"),
