@@ -140,6 +140,14 @@ def maxim_imagination():
 def maxim_prompt_system():
     return render_template("maxim-prompt-system.html")
 
+@app.route("/maxim/hivemind")
+def maxim_hivemind():
+    return render_template("maxim-hivemind.html")
+
+@app.route("/maxim/substrate-primary")
+def maxim_substrate_primary():
+    return render_template("maxim-substrate-primary.html")
+
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
     return render_template("maxim-privacy-policy.html")
@@ -205,6 +213,8 @@ def sitemap_xml():
         ("maxim_experiments", "weekly", "0.9"),
         ("maxim_imagination", "weekly", "0.9"),
         ("maxim_prompt_system", "weekly", "0.9"),
+        ("maxim_hivemind", "weekly", "0.9"),
+        ("maxim_substrate_primary", "weekly", "0.9"),
         ("maxim_roadmap", "monthly", "0.7"),
         ("maxim_privacy_policy", "monthly", "0.5"),
         ("maxim_terms_and_conditions", "monthly", "0.5"),
