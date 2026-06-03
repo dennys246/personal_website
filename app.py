@@ -148,6 +148,10 @@ def maxim_hivemind():
 def maxim_substrate_primary():
     return render_template("maxim-substrate-primary.html")
 
+@app.route("/maxim/deliberation")
+def maxim_deliberation():
+    return render_template("maxim-deliberation.html")
+
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
     return render_template("maxim-privacy-policy.html")
@@ -215,6 +219,7 @@ def sitemap_xml():
         ("maxim_prompt_system", "weekly", "0.9"),
         ("maxim_hivemind", "weekly", "0.9"),
         ("maxim_substrate_primary", "weekly", "0.9"),
+        ("maxim_deliberation", "weekly", "0.9"),
         ("maxim_roadmap", "monthly", "0.7"),
         ("maxim_privacy_policy", "monthly", "0.5"),
         ("maxim_terms_and_conditions", "monthly", "0.5"),

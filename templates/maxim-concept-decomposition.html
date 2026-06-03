@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Concept Decomposition — Maxim Docs | Agentic Robotics Framework{% endblock %}
+{% block title %}Concept Decomposition — Maxim Docs | Agentic Robotics{% endblock %}
 
-{% block meta_description %}How Maxim breaks text into concept-level substrate nodes. Protocol-based noun-phrase extraction enables finer-grained Hebbian binding, cross-modal retrieval, and valence association for bio-inspired cognitive agents.{% endblock %}
+{% block meta_description %}How Maxim breaks text into concept-level substrate nodes via noun-phrase extraction, enabling Hebbian binding and cross-modal retrieval.{% endblock %}
 
 {% block meta_keywords %}concept decomposition, noun phrase extraction, substrate nodes, Hebbian binding, cross-modal retrieval, concept-level AI, spaCy NLP, bio-inspired memory, embodied cognition, agentic AI{% endblock %}
 
@@ -307,5 +307,6 @@ MAXIM_SUBSTRATE_PATH=1 MAXIM_CONCEPT_DECOMPOSITION=1 maxim --llm mistral-7b</div
       </div>
     </div>
   </div>
+  {% include "_maxim_footer.html" %}
 </div>
 {% endblock %}

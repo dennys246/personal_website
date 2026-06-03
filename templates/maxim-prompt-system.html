@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Prompt System &amp; Tool Injection — Maxim Docs | LLM Context Construction{% endblock %}
+{% block title %}Prompt System &amp; Tool Injection — Maxim Docs{% endblock %}
 
-{% block meta_description %}How Maxim's LLM agent sees the world: prompt assembly chain, priority-based section dropping, tool registration and discovery, scene-scoped tools, and the NAc-driven tool learning feedback loop.{% endblock %}
+{% block meta_description %}How Maxim's LLM agent sees the world: prompt assembly, priority-based section dropping, scene-scoped tools, and NAc-driven tool learning.{% endblock %}
 
 {% block meta_keywords %}Maxim prompt system, prompt builder, tool injection, scene-scoped tools, LLM context, NAc tool learning, FearAgent, autonomy policy, agentic robotics{% endblock %}
 
@@ -377,5 +377,6 @@ Tool.execute()                 Runs the tool, returns ToolOutput</div>
       </div>
     </div>
   </div>
+  {% include "_maxim_footer.html" %}
 </div>
 {% endblock %}
