@@ -108,6 +108,10 @@ def maxim_embodiment():
 def maxim_networking():
     return render_template("maxim-networking.html")
 
+@app.route("/maxim/sound-orientation")
+def maxim_sound_orientation():
+    return render_template("maxim-sound-orientation.html")
+
 @app.route("/maxim/roadmap")
 def maxim_roadmap():
     return render_template("maxim-roadmap.html")
@@ -213,6 +217,7 @@ def sitemap_xml():
         ("maxim_simulation", "weekly", "0.9"),
         ("maxim_benchmarks", "weekly", "0.9"),
         ("maxim_embodiment", "weekly", "0.9"),
+        ("maxim_sound_orientation", "weekly", "0.9"),
         ("maxim_networking", "weekly", "0.9"),
         ("maxim_agent_mesh", "weekly", "0.9"),
         ("maxim_dm_campaigns", "weekly", "0.9"),
