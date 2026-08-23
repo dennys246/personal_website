@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, url_for, redirect
+from flask import Flask, render_template, Response, url_for, redirect, abort
 import os
 from datetime import datetime
 
@@ -159,6 +159,35 @@ def maxim_deliberation():
 @app.route("/maxim/release-1-0")
 def maxim_release_1_0():
     return render_template("maxim-1-0-release.html")
+
+# --- Legacy PyPI README links -------------------------------------------------
+# The pymaxim 1.0.9 README (immutable on PyPI) links to /maxim/maxim-<slug> URLs
+# that never existed on this site. Permanently redirect them to the docs site.
+# This is a lookup table, not a wildcard: unknown slugs still 404.
+PYMAXIM_DOCS = "https://pymaxim.bio"
+LEGACY_MAXIM_REDIRECTS = {
+    "maxim-1-0-release": "/research/evidence/",
+    "maxim-experiments": "/research/experiments/",
+    "maxim-substrate-primary": "/research/experiments/substrate-primary-evidence/",
+}
+for _slug in (
+    "maxim-overview", "maxim-agent-architecture", "maxim-memory-systems",
+    "maxim-semantic-memory", "maxim-embodiment", "maxim-proprioception",
+    "maxim-prompt-system", "maxim-deliberation", "maxim-imagination",
+    "maxim-simulation", "maxim-dm-campaigns", "maxim-benchmarks",
+    "maxim-component-library", "maxim-concept-decomposition",
+    "maxim-attention-salience", "maxim-operating-modes", "maxim-networking",
+    "maxim-agent-mesh", "maxim-hivemind", "maxim-tools", "maxim-math-cognition",
+    "maxim-technical-deepdive", "maxim-usage-guide", "maxim-roadmap",
+):
+    LEGACY_MAXIM_REDIRECTS[_slug] = "/getting-started/"
+
+@app.route("/maxim/<slug>")
+def maxim_legacy_redirect(slug):
+    target = LEGACY_MAXIM_REDIRECTS.get(slug)
+    if target is None:
+        abort(404)
+    return redirect(PYMAXIM_DOCS + target, code=301)
 
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
