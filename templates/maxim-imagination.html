@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Imagination — Maxim Docs | Real-Time Entity Design{% endblock %}
+{% block title %}Imagination — Maxim Design Essays | Real-Time Entity Design{% endblock %}
 
 {% block meta_description %}How Maxim's imagination system designs SEM entities in real-time when the agent encounters novel objects, creatures, or NPCs in narration.{% endblock %}
 
@@ -29,8 +29,10 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
-    { "@type": "ListItem", "position": 2, "name": "Imagination", "item": "https://www.dennyschaedig.com/maxim/imagination" }
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Ramblings", "item": "https://www.dennyschaedig.com/ramblings" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "Imagination", "item": "https://www.dennyschaedig.com/maxim/imagination" }
   ]
 }
 </script>
@@ -44,8 +46,14 @@
     <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM</p>
     <h1 class="text-3xl md:text-4xl font-bold text-white">Imagination</h1>
     <p class="text-indigo-400 font-medium">Real-Time Entity Design from Novel Percepts</p>
-    <p class="text-slate-400 text-sm">Shipped in v0.7.0 (I1 + I2); evolved through v0.8&ndash;0.9</p>
   </header>
+
+  {% set maxim_written = "April 2026" %}
+  {% set maxim_updated = "August 2026" %}
+  {% set maxim_docs = [("Imagination", "https://pymaxim.bio/embodiment/imagination/"), ("Asset Foundry", "https://pymaxim.bio/embodiment/asset-foundry/")] %}
+  {% set maxim_related = ["embodiment", "memory-systems"] %}
+  {% include "_maxim_status.html" %}
+
 
   <!-- Core Concept -->
   <section class="space-y-4">
@@ -56,16 +64,11 @@
       <p class="text-slate-300">Imagination fires during low-arousal idle states &mdash; the same way you don't daydream while fighting. When the brain encounters something unfamiliar, it constructs a mental model from prior experience to reason about the novel entity before physically interacting with it. The Default Network, which activates during rest and mind-wandering, gates this process.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">When the agent encounters a <strong class="text-white">novel entity</strong> mentioned in percept text that has no existing SEM component, the imagination system designs one in real-time. The result is a fully functional entity with sensors, affordances, and failure modes &mdash; registered ephemerally for the session as an observable scene entity, sensable via <code class="bg-slate-950 px-1 rounded text-xs">sense</code> / <code class="bg-slate-950 px-1 rounded text-xs">sense_presence</code>.</p>
+    <p class="text-slate-300 leading-relaxed">When the agent encounters a <strong class="text-white">novel entity</strong> mentioned in percept text that has no existing SEM component, the imagination system designs one in real-time. The result is a fully functional entity with sensors, affordances, and failure modes &mdash; registered ephemerally for the session as an observable scene entity the agent can sense.</p>
 
     <div class="bg-indigo-900/30 border border-indigo-500/50 rounded-xl p-5">
       <h4 class="text-indigo-400 font-semibold mb-1">Why This Matters</h4>
       <p class="text-slate-300 text-sm">Without imagination, the agent can only sense entities that were pre-authored as YAML components. Narration that mentions a "rusted padlock" or "crystal chandelier" would have no sensors or failure modes &mdash; the agent could only talk about them. Imagination closes this gap by designing components on-the-fly, making novel entities observable and substrate-encodable.</p>
-    </div>
-
-    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-      <h4 class="text-slate-300 font-semibold mb-1">Implementation history</h4>
-      <p class="text-slate-400 text-sm leading-relaxed">The core pipeline (I1 entity extraction + I2 EntityDesigner + I3 scene-scoped tools) shipped in v0.7.0. Post-0.7.0 additions: <strong class="text-slate-300">archetype scaffolding</strong> &mdash; the designer infers a structural archetype (humanoid, creature, weapon&hellip;) and merges its body-part vocabulary into the LLM-generated spec, reducing hallucinated modulator names on common entity categories; <strong class="text-slate-300">manifest pre-trigger</strong> (<code class="bg-slate-950 px-1 rounded text-xs">process_manifest()</code>) &mdash; called by the orchestrator before the first sim turn to pre-instantiate entities from the scene description, bypassing the mention threshold and arousal gate; and confirmed <strong class="text-slate-300">observe-only scene registration</strong> &mdash; imagined entities land in the EntityMap as observe-only, sensable via <code class="bg-slate-950 px-1 rounded text-xs">sense</code>/<code class="bg-slate-950 px-1 rounded text-xs">sense_presence</code> but with no directly callable affordance tools (the agent interacts via its own body tools).</p>
     </div>
   </section>
 
@@ -87,21 +90,21 @@ ComponentIndex Two-Layer Lookup
   &darr;
   └── No match &rarr; Mention Counter
                       &darr;
-                Count &ge; threshold (default 2)?
+                Mentioned often enough?
                       &darr;
                 DN Arousal Gate (low arousal only)
                       &darr;
-                Energy Budget Check (&ge;10% remaining)
+                Energy Budget Check
                       &darr;
                 EntityDesigner LLM Call
                       &darr;
                 Quick Validation (SEM protocol)
                       &darr;
-                register_ephemeral() + ComponentIndex.add()
+                Ephemeral registration + ComponentIndex add
                       &darr;
                 Scene EntityMap Registration (observe-only)</div>
 
-    <p class="text-slate-300 leading-relaxed mt-4">Each stage is a gate. If any gate fails, the pipeline short-circuits gracefully &mdash; the agent falls back to verbal-only interaction with the entity.</p>
+    <p class="text-slate-300 leading-relaxed mt-4">Each stage is a gate. If any gate fails, the pipeline short-circuits gracefully &mdash; the agent falls back to verbal-only interaction with the entity. The trigger fires each turn after the agent has updated its state on the percept, before it decides what to do.</p>
   </section>
 
   <!-- Entity Extraction -->
@@ -134,27 +137,22 @@ ComponentIndex Two-Layer Lookup
   <section class="space-y-4">
     <h2 id="component-index" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">ComponentIndex: Two-Layer Lookup</h2>
 
-    <p class="text-slate-300 leading-relaxed">Before imagining anything, each candidate phrase is checked against the <code class="bg-slate-950 px-1 rounded text-xs">ComponentIndex</code> to see if an existing component already covers it:</p>
+    <p class="text-slate-300 leading-relaxed">Before imagining anything, each candidate phrase is checked against the ComponentIndex to see if an existing component already covers it:</p>
 
     <div class="grid md:grid-cols-2 gap-4">
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-indigo-400 font-semibold mb-2">Layer 1: Alias Table (O(1))</h3>
-        <p class="text-slate-300 text-sm">Exact match against component names and declared synonyms from the <code class="bg-slate-950 px-1 rounded text-xs">component.synonyms</code> YAML field.</p>
+        <h3 class="text-indigo-400 font-semibold mb-2">Layer 1: Alias Table</h3>
+        <p class="text-slate-300 text-sm">Exact match against component names and the synonyms each component declares in its YAML.</p>
         <p class="text-slate-500 text-xs mt-2">"sword" &rarr; weapons/rusty_sword</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h3 class="text-indigo-400 font-semibold mb-2">Layer 2: Embedding Similarity</h3>
-        <p class="text-slate-300 text-sm">Cosine similarity against all component signature embeddings. Threshold: 0.65. Uses the shared <code class="bg-slate-950 px-1 rounded text-xs">similarity.encoder</code> singleton.</p>
-        <p class="text-slate-500 text-xs mt-2">"old iron door" &rarr; environments/rusty_gate (0.72)</p>
+        <p class="text-slate-300 text-sm">Cosine similarity against every component's signature embedding, accepted above a threshold. Catches paraphrases the alias table can't.</p>
+        <p class="text-slate-500 text-xs mt-2">"old iron door" &rarr; environments/rusty_gate</p>
       </div>
     </div>
 
-    <p class="text-slate-300 leading-relaxed mt-4">If either layer finds a match, imagination is skipped for that phrase. This prevents the system from creating duplicate components under different names.</p>
-
-    <div class="bg-indigo-900/30 border border-indigo-500/50 rounded-xl p-5 mt-4">
-      <h4 class="text-indigo-400 font-semibold mb-1">Thread Safety</h4>
-      <p class="text-slate-300 text-sm">The ComponentIndex is protected by an RLock. Multiple threads (AUT + orchestrator) can query it concurrently. Persistence uses <code class="bg-slate-950 px-1 rounded text-xs">.npy</code> + <code class="bg-slate-950 px-1 rounded text-xs">.json</code> sidecar &mdash; no pickle, ever.</p>
-    </div>
+    <p class="text-slate-300 leading-relaxed mt-4">If either layer finds a match, imagination is skipped for that phrase. This prevents duplicate components under different names. The catalog it searches is documented in the <a href="https://pymaxim.bio/embodiment/component-library/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">component library reference</a>.</p>
   </section>
 
   <!-- Gates -->
@@ -167,7 +165,7 @@ ComponentIndex Two-Layer Lookup
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition">
         <div class="text-3xl mb-2">&#x1F522;</div>
         <h4 class="text-indigo-400 font-semibold mb-2">Mention Threshold</h4>
-        <p class="text-slate-300 text-sm">Default 2 mentions before triggering. A one-off phrase ("you notice a crack in the wall") won't spawn an entity. Repeated mentions signal narrative importance.</p>
+        <p class="text-slate-300 text-sm">A one-off phrase ("you notice a crack in the wall") won't spawn an entity. Repeated mentions signal narrative importance.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition">
         <div class="text-3xl mb-2">&#x1F4A4;</div>
@@ -177,21 +175,18 @@ ComponentIndex Two-Layer Lookup
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition">
         <div class="text-3xl mb-2">&#x1F50B;</div>
         <h4 class="text-indigo-400 font-semibold mb-2">Energy Budget</h4>
-        <p class="text-slate-300 text-sm">Skipped when LLM energy is critical (&lt;10% remaining). Falls back gracefully to verbal-only interaction with the entity.</p>
+        <p class="text-slate-300 text-sm">Skipped when LLM energy is critically low. Falls back gracefully to verbal-only interaction with the entity.</p>
       </div>
     </div>
 
-    <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-5 mt-4">
-      <h4 class="text-amber-400 font-semibold mb-1">Per-Phrase Design Guard</h4>
-      <p class="text-slate-300 text-sm">A per-phrase lock prevents concurrent LLM calls for the same entity phrase. In multi-thread setups (AUT + orchestrator), only one thread designs a given entity; the other waits for the result. Thread-safe throughout via RLock.</p>
-    </div>
+    <p class="text-slate-300 leading-relaxed mt-4">The thresholds are configuration; see the <a href="https://pymaxim.bio/embodiment/imagination/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">imagination reference</a>.</p>
   </section>
 
   <!-- EntityDesigner -->
   <section class="space-y-4">
     <h2 id="designer" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">EntityDesigner</h2>
 
-    <p class="text-slate-300 leading-relaxed">When all gates pass, the <code class="bg-slate-950 px-1 rounded text-xs">ImaginationDesigner</code> wraps the <code class="bg-slate-950 px-1 rounded text-xs">EntityDesigner</code> and makes a single LLM call to generate a complete SEM component specification from the entity phrase and surrounding narrative context.</p>
+    <p class="text-slate-300 leading-relaxed">When all gates pass, the <code class="bg-slate-950 px-1 rounded text-xs">EntityDesigner</code> makes a single LLM call to generate a complete SEM component specification from the entity phrase and surrounding narrative context. It first infers a structural archetype (humanoid, creature, weapon&hellip;) and merges that archetype's body-part vocabulary into the generated spec, which cuts down on hallucinated modulator names.</p>
 
     <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">LLM Input</span>
 Entity phrase: "crystal chandelier"
@@ -213,96 +208,22 @@ entity:
     shatter_crystal: {params: {target: string}, timeout: 2}
     cut_chain: {params: {}, timeout: 5}
   failure_modes:
-    collapse: {trigger: {field: stability, op: "<", value: 0.1},
+    collapse: {trigger: {field: stability, op: "&lt;", value: 0.1},
                pain_intensity: 0.9}
-    darkness: {trigger: {field: crystal_count, op: "<", value: 5},
+    darkness: {trigger: {field: crystal_count, op: "&lt;", value: 5},
                pain_intensity: 0.2}</div>
 
     <h3 class="text-white font-semibold mt-4">Quick Validation</h3>
-    <p class="text-slate-300 leading-relaxed">After generation, the spec is validated against the SEM protocol: required fields present, sensor ranges valid, modulator params typed, failure triggers well-formed. Invalid specs are discarded &mdash; the agent falls back to verbal interaction.</p>
+    <p class="text-slate-300 leading-relaxed">The spec is validated against the SEM protocol: required fields present, sensor ranges valid, modulator params typed, failure triggers well-formed. Invalid specs are discarded &mdash; the agent falls back to verbal interaction. The <a href="https://pymaxim.bio/embodiment/asset-foundry/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">Asset Foundry</a> is the batch equivalent, with gauntlet testing.</p>
   </section>
 
-  <!-- Ephemeral Registration -->
+  <!-- Bookkeeping -->
   <section class="space-y-4">
-    <h2 id="ephemeral" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Ephemeral Registration</h2>
+    <h2 id="bookkeeping" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Bookkeeping</h2>
 
-    <p class="text-slate-300 leading-relaxed">Imagined entities live in a <strong class="text-white">separate overlay</strong> (<code class="bg-slate-950 px-1 rounded text-xs">_ephemeral_index</code>) from the persistent component registry. This separation is architectural:</p>
+    <p class="text-slate-300 leading-relaxed">Imagined entities live in a <strong class="text-white">separate overlay</strong> from the persistent component registry. During the session the entity is visible to lookups, added to the ComponentIndex for dedup, and registered as an <strong class="text-white">observe-only scene entity</strong>: the agent can sense it but cannot call its affordances directly as tools. It interacts using its own body&rsquo;s tools, while the imagined affordance names are encoded through the substrate path for concept transfer (EC &rarr; ATL &rarr; NAc eligibility) &mdash; the same lifecycle as pre-authored scene entities, described in the <a href="https://pymaxim.bio/reference/tools/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">tools reference</a>. A session-scoped cache shared by the agent and the orchestrator stores successes and failures alike, so a phrase both extract fires one design call, and a failed validation for "vague smoke" won't retry every turn.</p>
 
-    <div class="grid md:grid-cols-2 gap-4">
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">During Session</h3>
-        <ul class="text-slate-300 text-sm space-y-1 list-disc pl-5">
-          <li>Visible to <code class="bg-slate-950 px-1 rounded text-xs">get()</code>, <code class="bg-slate-950 px-1 rounded text-xs">has()</code>, <code class="bg-slate-950 px-1 rounded text-xs">query()</code></li>
-          <li>Registered as observe-only scene entity (sensable via <code class="bg-slate-950 px-1 rounded text-xs">sense</code> / <code class="bg-slate-950 px-1 rounded text-xs">sense_presence</code>)</li>
-          <li>Added to ComponentIndex for dedup</li>
-          <li>Affordance metadata present for substrate encoding; agent interacts via its own body tools</li>
-        </ul>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">At Session End</h3>
-        <ul class="text-slate-300 text-sm space-y-1 list-disc pl-5">
-          <li>Cleared via <code class="bg-slate-950 px-1 rounded text-xs">clear_ephemeral()</code></li>
-          <li>Tools deregistered</li>
-          <li>Episodes persist (with provenance)</li>
-          <li>Causal links get 50% confidence decay</li>
-        </ul>
-      </div>
-    </div>
-
-    <p class="text-slate-300 leading-relaxed mt-4">This means the agent <em class="text-indigo-400 not-italic">learns</em> from imagined interactions (pain avoidance, reward prediction) but with reduced confidence, reflecting the simulated origin.</p>
-  </section>
-
-  <!-- Provenance -->
-  <section class="space-y-4">
-    <h2 id="provenance" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Provenance Tagging</h2>
-
-    <p class="text-slate-300 leading-relaxed">All learning from imagined entities carries <code class="bg-slate-950 px-1 rounded text-xs">imagined=True</code> provenance:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Provenance Flow</span>
-
-Episode from imagined entity interaction:
-  episode.metadata["imagined"] = True
-  episode.metadata["imagined_entity"] = "crystal_chandelier"
-
-CausalLink from imagined entity outcome:
-  link.metadata["imagined"] = True
-
-On session end (entity discard):
-  NAc.decay_imagined_links(factor=0.5)
-  &rarr; All links with imagined=True get confidence *= 0.5</div>
-
-    <p class="text-slate-300 leading-relaxed mt-4">The 50% decay means the agent retains partial learning ("chandeliers can collapse") but with appropriately reduced confidence compared to verified real-world interactions. If the agent encounters the same entity type again and the interaction confirms the learned pattern, confidence rebuilds naturally through standard Rescorla-Wagner updates.</p>
-  </section>
-
-  <!-- Scene-Scoped Tools -->
-  <section class="space-y-4">
-    <h2 id="scene-tools" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Scene Entity Registration</h2>
-
-    <p class="text-slate-300 leading-relaxed">Imagined entities are registered as <strong class="text-white">observe-only scene entities</strong> in the EntityMap. The agent can sense them but cannot call their affordances directly as tools. The agent interacts using its own body&rsquo;s tools (the self-entity), not the scene entity&rsquo;s affordances. This means:</p>
-
-    <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li>Sensable via <code class="bg-slate-950 px-1 rounded text-xs">sense</code> and <code class="bg-slate-950 px-1 rounded text-xs">sense_presence</code> tools</li>
-      <li>Affordance names are encoded through the substrate path for concept transfer (EC &rarr; ATL &rarr; NAc eligibility)</li>
-      <li>The scene-scoped tool cap (I3) applies to the agent&rsquo;s own body tools, not to imagined scene entities</li>
-    </ul>
-
-    <p class="text-slate-300 leading-relaxed mt-3">This integrates with the <a href="/maxim/tools#scene-scoped" class="text-indigo-400 hover:text-indigo-300 no-underline">scene-scoped tool system</a> &mdash; imagined entities follow the same observe-only lifecycle as pre-authored scene entities.</p>
-  </section>
-
-  <!-- ImaginationCache -->
-  <section class="space-y-4">
-    <h2 id="cache" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">ImaginationCache</h2>
-
-    <p class="text-slate-300 leading-relaxed">A session-scoped cache prevents redundant design attempts:</p>
-
-    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-      <ul class="text-slate-300 text-sm space-y-2 list-disc pl-5">
-        <li><strong class="text-white">Shared across AUT + orchestrator</strong> &mdash; if the orchestrator's narration mentions "crystal chandelier" and the AUT's perception also extracts it, only one design call fires</li>
-        <li><strong class="text-white">Stores both successes and failures</strong> &mdash; a failed validation for "vague smoke" won't retry every turn</li>
-        <li><strong class="text-white">Thread-safe</strong> via RLock</li>
-        <li><strong class="text-white">Cleared at session end</strong> alongside the ephemeral registry</li>
-      </ul>
-    </div>
+    <p class="text-slate-300 leading-relaxed">At session end the overlay and cache are cleared, but the learning is not thrown away. Every episode and causal link from an imagined entity carries <code class="bg-slate-950 px-1 rounded text-xs">imagined=True</code> provenance, and on discard those links get a 50% confidence decay. The agent retains partial learning ("chandeliers can collapse") with appropriately reduced confidence compared to verified real-world interactions; if a later encounter confirms the pattern, confidence rebuilds through standard Rescorla-Wagner updates.</p>
   </section>
 
   <!-- Integration with Bio-Systems -->
@@ -345,103 +266,6 @@ On session end (entity discard):
     </div>
   </section>
 
-  <!-- Architecture -->
-  <section class="space-y-4">
-    <h2 id="architecture" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Architecture</h2>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-xs text-slate-400 overflow-x-auto">
-      <table class="w-full text-left">
-        <thead><tr class="text-indigo-400 border-b border-slate-700">
-          <th class="pb-2 pr-4">Module</th><th class="pb-2">Purpose</th>
-        </tr></thead>
-        <tbody>
-          <tr><td class="py-1 pr-4 text-slate-300">imagination/trigger.py</td><td>Entity noun-phrase extraction, ComponentIndex lookup, design dispatch</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">imagination/designer.py</td><td>ImaginationDesigner: wraps EntityDesigner for real-time entity generation</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">imagination/cache.py</td><td>Session-scoped ImaginationCache, thread-safe, shared AUT + orchestrator</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/component_registry.py</td><td>register_ephemeral(), clear_ephemeral(), ephemeral overlay</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/component_index.py</td><td>Two-layer semantic discovery (alias hash + embedding cosine)</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">tools/registry.py</td><td>Scene-scoped activation, active tool cap, executor gate</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">runtime/agent_loop.py</td><td>imagination_trigger parameter on run_agentic_loop</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3 class="text-white font-semibold mt-4">Wiring</h3>
-    <p class="text-slate-300 leading-relaxed">The imagination trigger is passed as a parameter to <code class="bg-slate-950 px-1 rounded text-xs">run_agentic_loop</code> and fires post-<code class="bg-slate-950 px-1 rounded text-xs">state.update()</code> on every turn. This placement means the agent has already processed the percept and updated its state before imagination considers whether to design a new entity.</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Agent Loop Integration</span>
-
-while running:
-    percept = await percept_source.next()
-    state.update(percept)
-
-    <span class="text-indigo-400"># Imagination fires here &mdash; after state update, before decision</span>
-    if imagination_trigger:
-        imagination_trigger.process(percept.text, scene_context)
-
-    decision = await exec_agent.decide(state)
-    result = await executor.execute(decision)</div>
-  </section>
-
-  <!-- Related -->
-  <section class="space-y-4">
-    <h2 id="related" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Related Systems</h2>
-
-    <div class="grid md:grid-cols-2 gap-4">
-      <a href="/maxim/embodiment" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline">
-        <h3 class="text-indigo-400 font-semibold mb-1">Embodiment (SEM Protocol)</h3>
-        <p class="text-slate-400 text-sm">The entity format imagination generates. Sensors, modulators, failure modes.</p>
-      </a>
-      <a href="/maxim/component-library" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline">
-        <h3 class="text-indigo-400 font-semibold mb-1">Component Library</h3>
-        <p class="text-slate-400 text-sm">80+ pre-authored entities. ComponentIndex searches these before imagining.</p>
-      </a>
-      <a href="/maxim/embodiment#asset-foundry" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline">
-        <h3 class="text-indigo-400 font-semibold mb-1">Asset Foundry</h3>
-        <p class="text-slate-400 text-sm">Batch entity generation with gauntlet testing. Imagination is the real-time equivalent.</p>
-      </a>
-      <a href="/maxim/tools#scene-scoped" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline">
-        <h3 class="text-indigo-400 font-semibold mb-1">Scene-Scoped Tools</h3>
-        <p class="text-slate-400 text-sm">How imagined entity tools activate/deactivate with scene changes.</p>
-      </a>
-    </div>
-  </section>
-
-  <!-- Navigation -->
-  <div class="pt-6 border-t border-slate-700 space-y-5">
-    <div class="flex justify-between items-stretch gap-4">
-      <a href="/maxim/embodiment" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
-        <span class="block text-white font-medium mt-1">Embodiment</span>
-      </a>
-      <a href="/maxim/component-library" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
-        <span class="block text-white font-medium mt-1">Component Library</span>
-      </a>
-    </div>
-    <div class="text-center space-y-2">
-      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
-      <div class="flex flex-wrap justify-center gap-2">
-        <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
-        <a href="/maxim/agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
-        <a href="/maxim/memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
-        <a href="/maxim/math-cognition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Math Cognition</a>
-        <a href="/maxim/attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
-        <a href="/maxim/proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
-        <a href="/maxim/embodiment" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Embodiment</a>
-        <a href="/maxim/imagination" class="text-xs text-indigo-400 font-medium transition px-2 py-1 rounded bg-slate-800 no-underline">Imagination</a>
-        <a href="/maxim/component-library" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Component Library</a>
-        <a href="/maxim/communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
-        <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
-        <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
-        <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
-        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking</a>
-        <a href="/maxim/simulation" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Simulation</a>
-        <a href="/maxim/benchmarks" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Benchmarks</a>
-        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
-      </div>
-    </div>
-  </div>
-  {% include "_maxim_footer.html" %}
+  {% include "_maxim_related.html" %}
 </div>
 {% endblock %}

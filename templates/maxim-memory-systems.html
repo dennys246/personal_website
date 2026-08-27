@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Memory Systems — Maxim Docs | Agentic Robotics Framework{% endblock %}
+{% block title %}Memory Systems — Maxim Design Essays | Agentic Robotics Framework{% endblock %}
 
-{% block meta_description %}How Maxim remembers, predicts, and learns. Hippocampus, SCN, Nucleus Accumbens, Entorhinal Cortex, and ATL — biologically-inspired memory for embodied AI.{% endblock %}
+{% block meta_description %}How Maxim remembers, predicts, and learns. Hippocampus, SCN, Nucleus Accumbens, Entorhinal Cortex, and the ATL semantic memory that distills episodes into concepts — biologically-inspired memory for embodied AI.{% endblock %}
 
-{% block meta_keywords %}Maxim memory systems, robot memory, hippocampus AI, episodic memory robot, reward prediction, entorhinal cortex, circadian rhythm AI, agentic memory, embodied AI memory, semantic memory, ATL anterior temporal lobe, cross-layer graph, semantic promoter, knowledge graph{% endblock %}
+{% block meta_keywords %}Maxim memory systems, robot memory, hippocampus AI, episodic memory robot, reward prediction, entorhinal cortex, circadian rhythm AI, agentic memory, embodied AI memory, semantic memory, ATL anterior temporal lobe, concept memory, pattern completion, cross-layer graph, semantic promoter, knowledge graph{% endblock %}
 
 {% block meta_author %}Maxim Project{% endblock %}
 {% block og_site_name %}Maxim{% endblock %}
@@ -16,12 +16,12 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Memory Systems — How Maxim Remembers, Predicts, and Builds Lasting Knowledge",
-  "description": "How Maxim remembers, predicts, and learns. Explore the Hippocampus, SCN, Nucleus Accumbens, Entorhinal Cortex, and ATL semantic memory — biologically-inspired memory systems, cross-layer graphs, and the promotion pipeline for embodied AI agents.",
+  "description": "How Maxim remembers, predicts, and learns. The Hippocampus, SCN, Nucleus Accumbens, Entorhinal Cortex, and the ATL semantic memory now covered here — concept memory, pattern completion, cross-layer graphs, and the promotion pipeline that turns episodes into lasting knowledge for embodied AI agents.",
   "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
   "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/memory-systems",
   "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
-  "keywords": ["memory systems", "hippocampus", "episodic memory", "reward prediction", "entorhinal cortex", "semantic memory", "ATL", "cross-layer graph", "knowledge promotion"]
+  "keywords": ["memory systems", "hippocampus", "episodic memory", "reward prediction", "entorhinal cortex", "semantic memory", "ATL", "concept memory", "pattern completion", "cross-layer graph", "knowledge promotion"]
 }
 </script>
 <script type="application/ld+json">
@@ -29,8 +29,10 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
-    { "@type": "ListItem", "position": 2, "name": "Memory Systems", "item": "https://www.dennyschaedig.com/maxim/memory-systems" }
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Ramblings", "item": "https://www.dennyschaedig.com/ramblings" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "Memory Systems", "item": "https://www.dennyschaedig.com/maxim/memory-systems" }
   ]
 }
 </script>
@@ -46,7 +48,35 @@
     <p class="text-indigo-400 font-medium">How Maxim Remembers, Predicts, and Learns</p>
   </header>
 
-  <p class="text-slate-300 leading-relaxed">Memory in biological systems isn't a filing cabinet. It's not even a database. It's a dynamic, reconstructive process where <em class="text-indigo-400 not-italic font-medium">anatomically distinct brain regions</em> collaborate to store, index, and retrieve experiences. The hippocampus, SCN, nucleus accumbens, and entorhinal cortex are separate structures scattered across the brain&mdash;hypothalamus, ventral striatum, medial temporal lobe&mdash;connected by neural pathways that let them work as complementary partners. Maxim mirrors this: independent subsystems coordinated by the MemoryHub. The Hippocampus is the long-term store&mdash;it owns all episodic memories and the associative connections between them. The MemoryAgent acts as the gatekeeper, deciding what's important and what's relevant, staging new observations before committing them to permanent storage.</p>
+  {% set maxim_written = "February 2026" %}
+  {% set maxim_updated = "August 2026" %}
+  {% set maxim_docs = [("Memory & consolidation", "https://pymaxim.bio/memory/overview/"), ("Hippocampus — episodic", "https://pymaxim.bio/systems/hippocampus/"), ("Anterior temporal lobe — semantic", "https://pymaxim.bio/systems/anterior-temporal-lobe/"), ("Entorhinal cortex — indexing", "https://pymaxim.bio/systems/entorhinal-cortex/"), ("Nucleus accumbens — reward", "https://pymaxim.bio/systems/nucleus-accumbens/")] %}
+  {% set maxim_related = ["attention-salience", "math-cognition", "agent-architecture", "substrate-primary"] %}
+  {% include "_maxim_status.html" %}
+
+
+  <p class="text-slate-300 leading-relaxed">Memory in biological systems isn't a filing cabinet. It's not even a database. It's a dynamic, reconstructive process where <em class="text-indigo-400 not-italic font-medium">anatomically distinct brain regions</em> collaborate to store, index, and retrieve experiences. The hippocampus, SCN, nucleus accumbens, and entorhinal cortex are separate structures scattered across the brain&mdash;hypothalamus, ventral striatum, medial temporal lobe&mdash;connected by neural pathways that let them work as complementary partners. Maxim mirrors this: independent subsystems coordinated by the MemoryHub. The Hippocampus is the long-term store&mdash;it owns all episodic memories and the associative connections between them. The MemoryAgent acts as the gatekeeper, deciding what's important and what's relevant, staging new observations before committing them to permanent storage. And above the episodes sits the anterior temporal lobe, where repeated experience is distilled into concepts the agent simply <em>knows</em>.</p>
+
+  <!-- TOC -->
+  <nav class="bg-slate-800/60 border border-slate-700 rounded-xl p-4">
+    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Contents</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1">
+      <a href="#three-layers" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Three Memory Layers</a>
+      <a href="#staged-formation" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Staged Memory Formation</a>
+      <a href="#hippocampus" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">The Hippocampus: Episodic Memory</a>
+      <a href="#associative-graph" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">The Associative Graph</a>
+      <a href="#scn" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">The SCN: Temporal Rhythm Indexing</a>
+      <a href="#nucleus-accumbens" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">The Nucleus Accumbens: Reward Prediction</a>
+      <a href="#entorhinal-cortex" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">The Entorhinal Cortex: Similarity Matching</a>
+      <a href="#semantic" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Semantic Memory: The Anterior Temporal Lobe</a>
+      <a href="#cross-layer" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Relationships Within and Across Layers</a>
+      <a href="#promotion" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">The Promotion Pipeline</a>
+      <a href="#knowledge-context" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Knowledge in the Agent Loop</a>
+      <a href="#episode-valence" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Episode Valence &amp; Affective Memory</a>
+      <a href="#episode-boundaries" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Episode Boundaries</a>
+      <a href="#consolidation" class="text-sm text-slate-300 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800/50 no-underline">Memory Consolidation: Sleep</a>
+    </div>
+  </nav>
 
   <!-- ============================================================ -->
   <!--  PART 1 — THE BIG PICTURE                                    -->
@@ -67,92 +97,21 @@
       <a href="#hippocampus" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-indigo-500/50 hover:-translate-y-1 transition no-underline">
         <h3 class="text-lg font-semibold text-blue-400 mb-1">Hippocampus</h3>
         <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Episodic Memory</p>
-        <p class="text-sm text-slate-300 mb-2">"What happened." Rich contextual records of observe&rarr;decide&rarr;act&rarr;evaluate cycles.</p>
-        <ul class="text-xs text-slate-400 space-y-1">
-          <li>Record type: <span class="font-mono text-blue-400">EpisodicMemory</span></li>
-          <li>Decay: 7-day max without access</li>
-          <li>Compression: 2.5KB &rarr; ~200 bytes</li>
-        </ul>
+        <p class="text-sm text-slate-300">"What happened." Rich contextual records of observe&rarr;decide&rarr;act&rarr;evaluate cycles.</p>
       </a>
-      <a href="#atl" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-indigo-500/50 hover:-translate-y-1 transition no-underline">
+      <a href="#semantic" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-indigo-500/50 hover:-translate-y-1 transition no-underline">
         <h3 class="text-lg font-semibold text-indigo-400 mb-1">ATL</h3>
         <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Semantic Memory</p>
-        <p class="text-sm text-slate-300 mb-2">"What things mean." Concepts, facts, and relationships stripped of episodic context.</p>
-        <ul class="text-xs text-slate-400 space-y-1">
-          <li>Record type: <span class="font-mono text-indigo-400">SemanticMemory</span></li>
-          <li>Decay: 30-day max (slower than episodes)</li>
-          <li>Built from: Promoted episodes + agent inference</li>
-        </ul>
+        <p class="text-sm text-slate-300">"What things mean." Concepts, facts, and relationships stripped of episodic context. Built from promoted episodes and agent inference.</p>
       </a>
       <a href="/maxim/math-cognition#angular-gyrus" class="bg-slate-800 border border-slate-700 rounded-xl p-5 hover:border-indigo-500/50 hover:-translate-y-1 transition no-underline">
         <h3 class="text-lg font-semibold text-purple-400 mb-1">Angular Gyrus</h3>
         <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Mathematical Memory</p>
-        <p class="text-sm text-slate-300 mb-2">"What the numbers say." Facts, formulas, methods, and learned statistical patterns.</p>
-        <ul class="text-xs text-slate-400 space-y-1">
-          <li>Record type: <span class="font-mono text-purple-400">MathRecord</span></li>
-          <li>Categories: FACT, FORMULA, METHOD, CONSTANT, PATTERN</li>
-          <li>Seeded with mathematical constants at startup</li>
-        </ul>
+        <p class="text-sm text-slate-300">"What the numbers say." Facts, formulas, methods, and learned statistical patterns.</p>
       </a>
     </div>
-  </section>
 
-  <!-- MemoryLayer Protocol -->
-  <section class="space-y-4">
-    <h2 id="memory-layer" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The MemoryLayer Protocol</h2>
-
-    <p class="text-slate-300 leading-relaxed">All three layers implement the same abstract protocol, enabling the MemoryHub and CrossLayerGraph to work with any layer uniformly:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">MemoryLayer ABC</span>
-
-class MemoryLayer(ABC):
-    layer_name &rarr; str              <span class="text-slate-500"># "hippocampus", "atl", "angular_gyrus"</span>
-    store(record) &rarr; str           <span class="text-slate-500"># Store record, return ID</span>
-    get(record_id) &rarr; Record       <span class="text-slate-500"># Retrieve by ID</span>
-    remove(record_id)               <span class="text-slate-500"># Delete + cleanup edges</span>
-    recall(limit, **filters)        <span class="text-slate-500"># Filtered retrieval</span>
-    recall_associated(seed_ids)     <span class="text-slate-500"># Spreading activation recall</span>
-    graph &rarr; DependencyGraph        <span class="text-slate-500"># Internal associative graph</span>
-    save(path) / load(path)         <span class="text-slate-500"># Persistence</span>
-    consolidate(**kw)               <span class="text-slate-500"># Compress, decay, prune</span>
-    register_capture_callback(cb)   <span class="text-slate-500"># Notify on new record</span>
-    register_deletion_callback(cb)  <span class="text-slate-500"># Notify on removal</span>
-    stats() / __len__ / __iter__    <span class="text-slate-500"># Inspection</span></div>
-
-    <p class="text-slate-300 leading-relaxed mt-3">All three layers share a common base record type (<span class="font-mono text-xs text-indigo-400">MemoryRecord</span>) with fields for ID, timestamps, access tracking, and long-term status. Every record knows how to describe itself: <span class="font-mono text-xs text-blue-400">keywords()</span> extracts searchable terms, and <span class="font-mono text-xs text-blue-400">to_context_dict()</span> formats the record for the LLM&mdash;so the system can build context from any mix of memory types without needing to know which layer they came from. Each layer extends MemoryRecord with its own domain-specific fields.</p>
-
-    <div class="overflow-x-auto mt-3">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="border-b border-slate-700">
-            <th class="text-left py-2 px-3 text-slate-400 font-medium">Layer</th>
-            <th class="text-left py-2 px-3 text-slate-400 font-medium">Record Type</th>
-            <th class="text-left py-2 px-3 text-slate-400 font-medium">Key Fields</th>
-            <th class="text-left py-2 px-3 text-slate-400 font-medium">Compressed Form</th>
-          </tr>
-        </thead>
-        <tbody class="text-slate-300">
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3">Hippocampus</td>
-            <td class="py-2 px-3 font-mono text-xs text-blue-400">EpisodicMemory</td>
-            <td class="py-2 px-3 text-xs">perception, context, decision, action, outcome, run_id</td>
-            <td class="py-2 px-3 font-mono text-xs text-slate-500">CompressedMemory</td>
-          </tr>
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3">ATL</td>
-            <td class="py-2 px-3 font-mono text-xs text-indigo-400">SemanticMemory</td>
-            <td class="py-2 px-3 text-xs">name, definition, category, properties, provenance, confidence</td>
-            <td class="py-2 px-3 font-mono text-xs text-slate-500">CompressedSemantic</td>
-          </tr>
-          <tr class="hover:bg-slate-800/50">
-            <td class="py-2 px-3">Angular Gyrus</td>
-            <td class="py-2 px-3 font-mono text-xs text-purple-400">MathRecord</td>
-            <td class="py-2 px-3 text-xs">name, category, domain, verbal, code, confidence</td>
-            <td class="py-2 px-3 font-mono text-xs text-slate-500">CompressedMathRecord</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <p class="text-slate-300 leading-relaxed">All three layers implement the same abstract <em class="text-indigo-400 not-italic font-medium">MemoryLayer</em> protocol, so the MemoryHub and the cross-layer graph can work with any layer uniformly and every record knows how to describe itself to the LLM; the protocol and record fields are documented under <a href="https://pymaxim.bio/memory/overview/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">Memory &amp; consolidation</a> on pymaxim.bio.</p>
   </section>
 
   <!-- Staged Formation Pipeline -->
@@ -164,43 +123,9 @@ class MemoryLayer(ABC):
       <p class="text-slate-300">In the brain, new experiences don't instantly become stable memories. They pass through labile encoding stages&mdash;initially held in working memory by prefrontal activity, then consolidated via hippocampal replay during rest. Disrupting this process (e.g., via concussion) prevents memory formation even though the event was perceived.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">The MemoryAgent implements a staged formation pipeline. Rather than capturing memories immediately, observations progress through tiers before reaching the Hippocampus for permanent storage:</p>
+    <p class="text-slate-300 leading-relaxed">The MemoryAgent implements a staged formation pipeline. Rather than capturing memories immediately, observations progress through tiers before reaching the Hippocampus for permanent storage: <em class="text-indigo-400 not-italic font-medium">forming</em>, still accumulating context and protected from eviction during the active session; <em class="text-indigo-400 not-italic font-medium">short-term</em>, committed to the Hippocampus and subject to consolidation during sleep; and <em class="text-indigo-400 not-italic font-medium">long-term</em>, having survived consolidation waves.</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Memory Tier Progression</span>
-
-FORMING    &rarr;  Initial observation, still accumulating context
-               Protected from eviction during the active session
-
-SHORT_TERM &rarr;  Committed to the Hippocampus for storage
-               Subject to consolidation during sleep
-
-LONG_TERM  &rarr;  Survived consolidation waves
-               Permanent storage in the Hippocampus</div>
-
-    <p class="text-slate-300 leading-relaxed">While observations are in the FORMING tier, each one is wrapped in a <span class="font-mono text-xs text-blue-400">WorkingMemoryEntry</span>&mdash;a container that tracks how important, how fresh, and how relevant the observation is, independently of the memory record itself. The ATL can also inject predicted outcomes into forming memories before they're committed, letting the system pre-fill expectations like "last time I saw this, X happened."</p>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h4 class="text-sm font-semibold text-blue-400 mb-2">MemoryAgent Owns</h4>
-        <ul class="text-xs text-slate-300 space-y-1 list-disc pl-4">
-          <li>Deciding what's important (salience scoring)</li>
-          <li>Deciding what's relevant (relevance ranking)</li>
-          <li>Building context for the LLM (StructuredContext)</li>
-          <li>Staging observations before they're committed</li>
-          <li>Injecting predictions into forming memories</li>
-        </ul>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h4 class="text-sm font-semibold text-blue-400 mb-2">Hippocampus Owns</h4>
-        <ul class="text-xs text-slate-300 space-y-1 list-disc pl-4">
-          <li>All long-term episodic memory storage</li>
-          <li>Associative connections between memories</li>
-          <li>Indexing and recall by context</li>
-          <li>Saving and loading across sessions</li>
-          <li>Sleep consolidation (compress, decay, prune)</li>
-        </ul>
-      </div>
-    </div>
+    <p class="text-slate-300 leading-relaxed">While observations are forming, each one is wrapped in a container that tracks how important, how fresh, and how relevant it is, independently of the memory record itself. The ATL can also inject predicted outcomes into forming memories before they're committed, letting the system pre-fill expectations like "last time I saw this, X happened"&mdash;that mechanism is <a href="#pattern-completion" class="text-indigo-400 hover:text-indigo-300">pattern completion</a>, described below.</p>
   </section>
 
   <!-- ============================================================ -->
@@ -216,23 +141,18 @@ LONG_TERM  &rarr;  Survived consolidation waves
       <p class="text-slate-300">The hippocampus in mammals is crucial for forming new episodic memories, those rich, contextual records of "what happened, where, and when." Damage to it famously prevents forming new long-term memories while leaving older ones intact.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Maxim's Hippocampus stores <em class="text-indigo-400 not-italic font-medium">EpisodicMemory</em> objects, each capturing a complete cycle:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Flow</span>
-Perception → Decision → Action → Outcome</div>
-
-    <p class="text-slate-300 leading-relaxed">Not every moment gets recorded. The system uses <em class="text-indigo-400 not-italic font-medium">selective capture</em> to avoid memory bloat:</p>
+    <p class="text-slate-300 leading-relaxed">Maxim's Hippocampus stores <em class="text-indigo-400 not-italic font-medium">EpisodicMemory</em> objects, each capturing a complete cycle: perception, decision, action, outcome. Not every moment gets recorded. The system uses <em class="text-indigo-400 not-italic font-medium">selective capture</em> to avoid memory bloat:</p>
 
     <ul class="space-y-2 text-slate-300 list-disc pl-5">
       <li><strong class="text-white">User interactions</strong> - Always recorded (humans are important)</li>
-      <li><strong class="text-white">High novelty</strong> - New situations worth remembering (threshold: 0.7)</li>
+      <li><strong class="text-white">High novelty</strong> - New situations worth remembering</li>
       <li><strong class="text-white">High salience</strong> - Emotionally or contextually significant events</li>
       <li><strong class="text-white">Goal changes</strong> - Transitions in what the robot is trying to do</li>
       <li><strong class="text-white">Failures</strong> - Mistakes are valuable teachers</li>
       <li><strong class="text-white">Periodic checkpoints</strong> - Regular snapshots for continuity</li>
     </ul>
 
-    <p class="text-slate-300 leading-relaxed">Memories are indexed by multiple keys (goal, tool, object, person, success, mode) enabling O(1) retrieval. Need all memories involving "coffee mug"? Instant lookup.</p>
+    <p class="text-slate-300 leading-relaxed">Memories are indexed by multiple keys (goal, tool, object, person, success, mode) enabling O(1) retrieval. Need all memories involving "coffee mug"? Instant lookup. Capture rules and the record format are documented under <a href="https://pymaxim.bio/systems/hippocampus/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">Hippocampus</a> on pymaxim.bio.</p>
   </section>
 
   <!-- Associative Graph -->
@@ -248,104 +168,13 @@ Perception → Decision → Action → Outcome</div>
 
     <h3 class="text-lg font-semibold text-white mt-6">From Engrams to Edges</h3>
 
-    <p class="text-slate-300 leading-relaxed">Pioneering work by Josselyn and Bhatt showed that individual engram cells can be tagged, reactivated with optogenetics, and even artificially linked&mdash;activating two engrams simultaneously creates a new association, exactly as if the animal had experienced both events together. The strength of biological engram links depends on how many neurons two ensembles share, which is governed by neuronal excitability at encoding time, perceptual similarity, and top-down goal states. Maxim's edge weight formula maps directly onto these mechanisms:</p>
-
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm text-left">
-        <thead>
-          <tr class="bg-emerald-700 text-white">
-            <th class="px-4 py-3 rounded-tl-lg">Biological Mechanism</th>
-            <th class="px-4 py-3">Maxim Analogue</th>
-            <th class="px-4 py-3 rounded-tr-lg">Weight</th>
-          </tr>
-        </thead>
-        <tbody class="text-slate-300">
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3"><strong class="text-white">Pattern overlap</strong> &mdash; engrams for similar percepts recruit overlapping neural populations</td>
-            <td class="px-4 py-3">Shared detected objects and people between two memories</td>
-            <td class="px-4 py-3">60%</td>
-          </tr>
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3"><strong class="text-white">Goal-state modulation</strong> &mdash; prefrontal cortex biases which neurons are excitable, linking goal-relevant memories preferentially</td>
-            <td class="px-4 py-3">Matching or overlapping active goals (word-level Jaccard)</td>
-            <td class="px-4 py-3">25%</td>
-          </tr>
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3"><strong class="text-white">Co-allocation</strong> &mdash; neuronal excitability lingers after encoding, so memories formed close in time share more neurons</td>
-            <td class="px-4 py-3">Closer in time = stronger link (decays over hours)</td>
-            <td class="px-4 py-3">15%</td>
-          </tr>
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3"><strong class="text-white">Subthreshold propagation</strong> &mdash; recalling an engram sends graded activation through shared neurons to linked engrams</td>
-            <td class="px-4 py-3">BFS spreading activation with exponential decay (0.5 per hop, max 3 hops)</td>
-            <td class="px-4 py-3">&mdash;</td>
-          </tr>
-          <tr class="hover:bg-slate-800/50">
-            <td class="px-4 py-3"><strong class="text-white">Synaptic homeostasis</strong> &mdash; during sleep, weak synaptic links are pruned while strong ones consolidate</td>
-            <td class="px-4 py-3">Sleep cycle prunes weakly connected memories; well-linked ones score higher in retention</td>
-            <td class="px-4 py-3">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Edge Formation During Capture</span>
-1. New memory captured: "found cup on kitchen table"
-2. recall_similar() fires automatically
-3. Returns: "picked up cup yesterday", "cleaned table last week"
-4. Bidirectional edges formed:
-   found_cup ←→ picked_up_cup    (weight: 0.81)
-   found_cup ←→ cleaned_table    (weight: 0.75)</div>
+    <p class="text-slate-300 leading-relaxed">Pioneering work by Josselyn and Bhatt showed that individual engram cells can be tagged, reactivated with optogenetics, and even artificially linked&mdash;activating two engrams simultaneously creates a new association, exactly as if the animal had experienced both events together. The strength of biological engram links depends on how many neurons two ensembles share, which is governed by neuronal excitability at encoding time, perceptual similarity, and top-down goal states. Maxim's edge weight formula maps directly onto these mechanisms: <em class="text-indigo-400 not-italic font-medium">pattern overlap</em> becomes shared detected objects and people between two memories (the largest share of the weight); <em class="text-indigo-400 not-italic font-medium">goal-state modulation</em> becomes matching or overlapping active goals; and <em class="text-indigo-400 not-italic font-medium">co-allocation</em> becomes closer in time = stronger link, decaying over hours. Synaptic homeostasis has its analogue too: sleep prunes weakly connected memories while well-linked ones score higher in retention.</p>
 
     <h3 class="text-lg font-semibold text-white mt-6">Spreading Activation: Multi-Hop Recall</h3>
 
-    <p class="text-slate-300 leading-relaxed">The real power emerges during recall. Just as recalling a biological engram sends subthreshold activation through shared neurons to linked ensembles, Maxim uses <em class="text-indigo-400 not-italic font-medium">spreading activation</em> to propagate signals through the graph. Activation flows from seed memories through edges, decaying at each hop:</p>
+    <p class="text-slate-300 leading-relaxed">The real power emerges during recall. Just as recalling a biological engram sends subthreshold activation through shared neurons to linked ensembles, Maxim uses <em class="text-indigo-400 not-italic font-medium">spreading activation</em> to propagate signals through the graph, decaying at each hop. A query for "make coffee" directly recalls "made coffee at 9am yesterday"; that memory's edge leads to "found cup on kitchen table", which in turn leads to "cleaned kitchen table last week"&mdash;two hops away from "coffee", but still contextually relevant. This is <em class="text-indigo-400 not-italic font-medium">context-bridging recall</em>: the cup memory becomes reachable from a "make coffee" query even though "cup" and "coffee" share no direct index keys. The graph bridges contexts that flat recall cannot.</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Spreading Activation Example</span>
-Query: "make coffee"
-  │
-  ▼ direct recall (activation: 1.0)
-  ┌──────────────────┐
-  │ "made coffee at   │
-  │  9am yesterday"   │
-  └────────┬─────────┘
-           │ edge (weight: 0.81)
-           ▼ activation: 1.0 × 0.5 × 0.81 = 0.41
-  ┌──────────────────┐
-  │ "found cup on     │──── This memory has NO "coffee"
-  │  kitchen table"   │     in its index keys, but is
-  └────────┬─────────┘     reachable through association
-           │ edge (weight: 0.75)
-           ▼ activation: 0.41 × 0.5 × 0.75 = 0.15
-  ┌──────────────────┐
-  │ "cleaned kitchen  │──── Two hops away from "coffee"
-  │  table last week" │     but still contextually relevant
-  └──────────────────┘</div>
-
-    <p class="text-slate-300 leading-relaxed">This enables <em class="text-indigo-400 not-italic font-medium">context-bridging recall</em>. A memory about finding a cup (which was recalled when the coffee memory was formed) becomes reachable from a "make coffee" query, even though "cup" and "coffee" share no direct index keys. The graph bridges contexts that flat recall cannot.</p>
-
-    <h3 class="text-lg font-semibold text-white mt-6">Bridge Integration</h3>
-
-    <p class="text-slate-300 leading-relaxed">Every memory bridge in the system is enriched with associative recall, expanding their knowledge beyond direct filter matches:</p>
-
-    <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">Planning Bridge</strong> &mdash; Finds successful plan templates not just for the exact goal, but for associatively related goals. "Navigate to kitchen" recalls templates from "fetch cup from kitchen."</li>
-      <li><strong class="text-white">Salience Bridge</strong> &mdash; Builds richer interaction history by pulling in associated memories, boosting salience for objects that appeared in related successful contexts.</li>
-      <li><strong class="text-white">Spatial Bridge</strong> &mdash; Expands location priors with associated memories, learning that "cups are often on the kitchen table" even from memories primarily about cooking.</li>
-      <li><strong class="text-white">Fear Bridge</strong> &mdash; Contextualizes risk assessments with associative history&mdash;if similar past contexts led to failures, risk thresholds adjust accordingly.</li>
-      <li><strong class="text-white">Escalation Bridge</strong> &mdash; Informs when to ask for human help by checking whether associated memories show high failure rates in similar contexts.</li>
-    </ul>
-
-    <h3 class="text-lg font-semibold text-white mt-6">Lifecycle</h3>
-
-    <p class="text-slate-300 leading-relaxed">The graph is fully integrated with the memory lifecycle:</p>
-
-    <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">Capture:</strong> Edges formed automatically (configurable: <code class="bg-slate-800 px-1.5 py-0.5 rounded text-indigo-300 text-sm">association_limit=5</code>, <code class="bg-slate-800 px-1.5 py-0.5 rounded text-indigo-300 text-sm">association_threshold=0.5</code>)</li>
-      <li><strong class="text-white">Persistence:</strong> Graph serialized alongside memories (v3.0 format, backward-compatible)</li>
-      <li><strong class="text-white">Sleep:</strong> When memories are pruned or compressed, their graph edges are cleaned up automatically. Well-connected memories score higher in retention.</li>
-      <li><strong class="text-white">Consistency:</strong> Graph nodes are validated against the memory store and orphans are repaired</li>
-    </ul>
+    <p class="text-slate-300 leading-relaxed">Every memory bridge in the system is enriched with this associative recall: the Planning Bridge finds plan templates for associatively related goals ("navigate to kitchen" recalls templates from "fetch cup from kitchen"), the Spatial Bridge learns that "cups are often on the kitchen table" even from memories primarily about cooking, and the Fear and Escalation Bridges adjust their thresholds when associated memories show failures in similar contexts.</p>
   </section>
 
   <!-- ============================================================ -->
@@ -361,86 +190,19 @@ Query: "make coffee"
       <p class="text-slate-300">The Suprachiasmatic Nucleus (SCN) sits in the <em class="text-emerald-300 not-italic font-medium">hypothalamus</em>, not the hippocampus&mdash;it's a separate brain structure that serves as the brain's master clock. This tiny cluster of ~20,000 neurons orchestrates circadian rhythms across the entire body. It communicates with the hippocampus and other memory systems via neural pathways, enabling temporal context for memory formation and recall. It's why jet lag hurts and why you get hungry at the same time each day.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Maxim's SCN provides temporal indexing across multiple timescales:</p>
-
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm text-left">
-        <thead>
-          <tr class="bg-indigo-700 text-white">
-            <th class="px-4 py-3 rounded-tl-lg">Timescale</th>
-            <th class="px-4 py-3">Bins</th>
-            <th class="px-4 py-3 rounded-tr-lg">Use Case</th>
-          </tr>
-        </thead>
-        <tbody class="text-slate-300">
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3">Hourly</td>
-            <td class="px-4 py-3">24 bins</td>
-            <td class="px-4 py-3">"What usually happens at 9 AM?"</td>
-          </tr>
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3">Daily</td>
-            <td class="px-4 py-3">7 bins</td>
-            <td class="px-4 py-3">"What's different on Mondays?"</td>
-          </tr>
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3">Weekly</td>
-            <td class="px-4 py-3">4 bins</td>
-            <td class="px-4 py-3">"First week of month patterns"</td>
-          </tr>
-          <tr class="hover:bg-slate-800/50">
-            <td class="px-4 py-3">Monthly</td>
-            <td class="px-4 py-3">12 bins</td>
-            <td class="px-4 py-3">"Seasonal patterns"</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p class="text-slate-300 leading-relaxed">This enables queries like "What typically happens around this time on weekday mornings?" with minimal computational cost. The memory footprint is remarkably small: 10,000 memories require only ~500KB of index storage.</p>
+    <p class="text-slate-300 leading-relaxed">Maxim's SCN provides temporal indexing across multiple timescales&mdash;hourly, daily, weekly, and monthly bins&mdash;so the system can answer "What usually happens at 9 AM?" or "What's different on Mondays?" with minimal computational cost and a remarkably small memory footprint.</p>
 
     <h3 id="oscillator" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Coupled Oscillator Network</h3>
 
     <p class="text-slate-300 leading-relaxed">The biological SCN isn't just a clock&mdash;it's a network of ~20,000 coupled oscillators synchronized via a coupling matrix. "Monday mornings" isn't the intersection of a Monday bin and a 9am bin. It's an <em class="text-indigo-400 not-italic font-medium">emergent rhythm</em> from learned coupling between circadian and weekly oscillators.</p>
 
-    <p class="text-slate-300 leading-relaxed">Maxim's SCN embeds an optional <em class="text-indigo-400 not-italic font-medium">Kuramoto-inspired coupled oscillator network</em> alongside the existing bin indices. Four oscillators&mdash;circadian (24h), weekly (7d), monthly (30d), and annual (365d)&mdash;evolve according to coupled phase dynamics:</p>
+    <p class="text-slate-300 leading-relaxed">Maxim's SCN embeds an optional <em class="text-indigo-400 not-italic font-medium">Kuramoto-inspired coupled oscillator network</em> alongside the bin indices. Four oscillators&mdash;circadian (24h), weekly (7d), monthly (30d), and annual (365d)&mdash;evolve according to coupled phase dynamics:</p>
 
     <div class="bg-slate-950 rounded-lg px-6 py-3 font-serif text-lg text-slate-200 inline-block">
       d&theta;<sub>i</sub>/dt = &omega;<sub>i</sub> + (K/N) &Sigma;<sub>j</sub> W[i][j] &middot; sin(&theta;<sub>j</sub> &minus; &theta;<sub>i</sub>)
     </div>
 
-    <p class="text-slate-300 leading-relaxed">The coupling matrix W learns via <em class="text-indigo-400 not-italic font-medium">Hebbian learning</em>: when two oscillators are co-active (similar phases), their coupling strengthens. This is how "Monday mornings" emerge&mdash;repeated observations where circadian and weekly oscillators activate together strengthen their link. Over time, the system develops temporal expectations that go beyond simple bin lookups.</p>
-
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm text-left">
-        <thead>
-          <tr class="bg-indigo-700 text-white">
-            <th class="px-4 py-3 rounded-tl-lg">Capability</th>
-            <th class="px-4 py-3 rounded-tr-lg">What It Does</th>
-          </tr>
-        </thead>
-        <tbody class="text-slate-300">
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3"><strong class="text-white">Phase prediction</strong></td>
-            <td class="px-4 py-3">Forward-simulate oscillator phases to predict when patterns will recur</td>
-          </tr>
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3"><strong class="text-white">Coherence detection</strong></td>
-            <td class="px-4 py-3">Kuramoto order parameter r &isin; [0,1] measures how synchronized the system is</td>
-          </tr>
-          <tr class="border-b border-slate-700 hover:bg-slate-800/50">
-            <td class="px-4 py-3"><strong class="text-white">Anomaly scoring</strong></td>
-            <td class="px-4 py-3">Circular distance between predicted and observed phases flags temporally unusual events</td>
-          </tr>
-          <tr class="hover:bg-slate-800/50">
-            <td class="px-4 py-3"><strong class="text-white">Coupling analysis</strong></td>
-            <td class="px-4 py-3">Eigenvalues of the coupling matrix reveal dominant rhythm structures</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p class="text-slate-300 leading-relaxed">The oscillator is fully optional&mdash;existing bin-based methods remain unchanged, and the oscillator only activates when enabled. This means zero breaking changes for existing consumers. <a href="/maxim/math-cognition#oscillator" class="text-indigo-400 hover:text-indigo-300">Read the full oscillator math &rarr;</a></p>
+    <p class="text-slate-300 leading-relaxed">The coupling matrix W learns via <em class="text-indigo-400 not-italic font-medium">Hebbian learning</em>: when two oscillators are co-active (similar phases), their coupling strengthens. This is how "Monday mornings" emerge&mdash;repeated observations where circadian and weekly oscillators activate together strengthen their link. Over time, the system develops temporal expectations that go beyond simple bin lookups: predicting when patterns will recur and flagging temporally unusual events. <a href="/maxim/math-cognition#oscillator" class="text-indigo-400 hover:text-indigo-300">Read the full oscillator math &rarr;</a> Bin structure and configuration live under <a href="https://pymaxim.bio/systems/suprachiasmatic-nucleus/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">SCN</a> on pymaxim.bio.</p>
   </section>
 
   <!-- Nucleus Accumbens -->
@@ -452,21 +214,7 @@ Query: "make coffee"
       <p class="text-slate-300">The Nucleus Accumbens (NAc) sits in the <em class="text-emerald-300 not-italic font-medium">ventral striatum</em>&mdash;a deep brain structure distinct from the hippocampus, though heavily interconnected with it. The NAc is central to reward processing and motivation, receiving dopaminergic input from the ventral tegmental area and contextual signals from the hippocampus and prefrontal cortex. It learns to predict outcomes based on prior experience, essentially asking: "What happened last time I did this?"</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Maxim's NAc learns <em class="text-indigo-400 not-italic font-medium">causal links</em> between events and outcomes:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Data structure</span>
-Event (e.g., "internet_search") → Outcome (e.g., "success_with_results")
-    ↓
-CausalLink:
-  - event_signature: hash of action + parameters
-  - outcome_signature: hash of result type
-  - valence: POSITIVE | NEUTRAL | NEGATIVE
-  - strength: 0.0 - 1.0
-  - confidence: reliability of prediction
-  - observation_count: how many times seen
-  - context_conditions: when this applies</div>
-
-    <p class="text-slate-300 leading-relaxed">The learning algorithm is <em class="text-indigo-400 not-italic font-medium">Rescorla-Wagner</em>, the same mathematical model used in behavioral psychology:</p>
+    <p class="text-slate-300 leading-relaxed">Maxim's NAc learns <em class="text-indigo-400 not-italic font-medium">causal links</em> between events and outcomes&mdash;an action like "internet_search" paired with a result like "success_with_results", each link carrying a valence, a strength, a confidence, and the context conditions under which it applies. The learning algorithm is <em class="text-indigo-400 not-italic font-medium">Rescorla-Wagner</em>, the same mathematical model used in behavioral psychology:</p>
 
     <div class="bg-slate-950 rounded-lg px-6 py-3 font-serif text-lg text-slate-200 inline-block">
       ΔV = α(λ - V)
@@ -474,7 +222,7 @@ CausalLink:
 
     <p class="text-slate-300 leading-relaxed">Where α is learning rate, λ is the actual outcome, and V is the current prediction. This produces smooth, asymptotic learning without oscillation.</p>
 
-    <p class="text-slate-300 leading-relaxed">The key insight: before executing any action, Maxim can predict its likely outcome. This enables <em class="text-indigo-400 not-italic font-medium">proactive</em> rather than purely reactive decision-making.</p>
+    <p class="text-slate-300 leading-relaxed">The key insight: before executing any action, Maxim can predict its likely outcome. This enables <em class="text-indigo-400 not-italic font-medium">proactive</em> rather than purely reactive decision-making. The causal-link record and its parameters are documented under <a href="https://pymaxim.bio/systems/nucleus-accumbens/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">Nucleus accumbens</a> on pymaxim.bio.</p>
   </section>
 
   <!-- Entorhinal Cortex -->
@@ -486,21 +234,7 @@ CausalLink:
       <p class="text-slate-300">The Entorhinal Cortex (EC) is a cortical region in the <em class="text-emerald-300 not-italic font-medium">medial temporal lobe</em>, anatomically adjacent to but distinct from the hippocampus. It serves as the primary gateway between the hippocampus and neocortex, supporting pattern completion and spatial navigation. Grid cells here create abstract representations that generalize across specific experiences. The EC and hippocampus work as complementary partners: the EC provides the similarity-matching "address system" while the hippocampus stores the actual episodic content.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Maxim's EC enables similarity queries: "Find memories similar to this situation." This is crucial because exact matches are rare. You want to find relevant past experience even when details differ.</p>
-
-    <p class="text-slate-300 leading-relaxed">The implementation uses <em class="text-indigo-400 not-italic font-medium">Locality-Sensitive Hashing (LSH)</em>&mdash;a technique that groups similar items into the same "bucket" for fast lookup&mdash;enabling approximate nearest-neighbor search in constant time:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Example</span>
-Current situation: "find the red cup in the kitchen"
-    ↓
-Situation Signature: [semantic, structural, temporal features]
-    ↓
-LSH lookup: ~10ms regardless of memory size
-    ↓
-Returns: "find the blue mug in the kitchen" (last week)
-         "find the water bottle in the kitchen" (yesterday)</div>
-
-    <p class="text-slate-300 leading-relaxed">Optional neural embeddings (SentenceTransformer) provide richer semantic similarity for Phase 4 deployments.</p>
+    <p class="text-slate-300 leading-relaxed">Maxim's EC enables similarity queries: "Find memories similar to this situation." This is crucial because exact matches are rare. You want to find relevant past experience even when details differ&mdash;"find the red cup in the kitchen" should surface last week's "find the blue mug in the kitchen." The implementation uses <em class="text-indigo-400 not-italic font-medium">Locality-Sensitive Hashing (LSH)</em>&mdash;a technique that groups similar items into the same "bucket" for fast lookup&mdash;enabling approximate nearest-neighbor search in constant time regardless of memory size; optional neural embeddings provide richer semantic similarity. Signature format and embedding options are documented under <a href="https://pymaxim.bio/systems/entorhinal-cortex/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">Entorhinal cortex</a> on pymaxim.bio.</p>
   </section>
 
   <!-- ============================================================ -->
@@ -509,252 +243,74 @@ Returns: "find the blue mug in the kitchen" (last week)
 
   <!-- Semantic Memory (ATL) -->
   <section class="space-y-4">
-    <h2 id="atl" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Beyond Episodes: The ATL</h2>
+    <h2 id="semantic" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Semantic Memory: The Anterior Temporal Lobe</h2>
+
+    <p class="text-slate-300 leading-relaxed">Episodic memory records <em class="text-indigo-400 not-italic font-medium">what happened</em>. Semantic memory captures <em class="text-indigo-400 not-italic font-medium">what things mean</em>. Humans don't remember the exact moment they learned that fire is hot &mdash; they just <em>know</em> it. That knowledge was distilled from many episodes into a concept. Maxim implements this same progression: repeated experiences get promoted from episodic memories into stable semantic concepts.</p>
+
+    <h3 id="atl" class="text-lg font-semibold text-white mt-6 mb-3 scroll-mt-32">The ATL as Semantic Hub</h3>
 
     <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
       <h3 class="text-lg font-semibold text-emerald-400 mb-2">🧬 Biological Inspiration</h3>
       <p class="text-slate-300">The anterior temporal lobe is the brain's "semantic hub" &mdash; where concepts are stored independently of the episodes that formed them. You know that dogs bark, have four legs, and are pets, without remembering the specific experiences that taught you this. The ATL integrates information from multiple sensory modalities into amodal concept representations.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Episodic memory records <em class="text-indigo-400 not-italic font-medium">what happened</em>. Semantic memory captures <em class="text-indigo-400 not-italic font-medium">what things mean</em>. Humans don't remember the exact moment they learned that fire is hot &mdash; they just <em>know</em> it. That knowledge was distilled from many episodes into a concept. Maxim implements this same progression: repeated experiences get promoted from episodic memories into stable semantic concepts.</p>
+    <p class="text-slate-300 leading-relaxed">Maxim's ATL stores <em class="text-indigo-400 not-italic font-medium">SemanticMemory</em> objects &mdash; concepts with names, definitions, properties, and typed relationships to other concepts. It mirrors the Hippocampus architecture (context indexing, associative graph, consolidation) but with slower decay and higher stability. Before creating a concept the ATL checks whether a similarly named one already exists, and it can ask the EC "do I already know about this?" &mdash; which is how the promoter avoids concept duplication.</p>
 
-    <p class="text-slate-300 leading-relaxed">Maxim's ATL stores <em class="text-indigo-400 not-italic font-medium">SemanticMemory</em> objects &mdash; concepts with names, definitions, properties, and typed relationships to other concepts. It mirrors the Hippocampus architecture (context indexing, associative graph, consolidation) but with slower decay and higher stability.</p>
+    <p class="text-slate-300 leading-relaxed">Every concept knows how it was formed, enabling the system to weight newer, less-verified concepts differently from well-established ones. The most common path is <em class="text-indigo-400 not-italic font-medium">episodic consolidation</em>: extracted from repeated episodes via NAc reward signals &mdash; "I've seen this pattern enough times to call it knowledge." Concepts can also arrive by <em class="text-indigo-400 not-italic font-medium">agent inference</em>, proposed by the StatisticianAgent from confirmed operational patterns; by <em class="text-indigo-400 not-italic font-medium">direct ingestion</em> from RAG or documents; or as a <em class="text-indigo-400 not-italic font-medium">hybrid</em> of both. Confidence grows with the number of episodes that reinforce a concept. The record format and consolidation settings are documented under <a href="https://pymaxim.bio/systems/anterior-temporal-lobe/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">Anterior temporal lobe</a> on pymaxim.bio.</p>
 
-    <h3 id="semantic-record" class="text-lg font-semibold text-white mt-6 mb-3 scroll-mt-32">SemanticMemory Record</h3>
+    <h3 id="concept-memory" class="text-lg font-semibold text-white mt-6 mb-3 scroll-mt-32">Concept Memory</h3>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Data Structure</span>
-
-SemanticMemory(MemoryRecord):
-  name: str              <span class="text-slate-500"># "coffee mug", "navigate_tool_reliability"</span>
-  definition: str        <span class="text-slate-500"># Natural language definition</span>
-  category: str          <span class="text-slate-500"># "object", "person", "action", "causal_pattern", "operational_pattern"</span>
-  properties: dict       <span class="text-slate-500"># {"color": "blue", "location": "kitchen"}</span>
-  provenance: enum       <span class="text-slate-500"># How this concept was formed</span>
-  source_episode_ids: list  <span class="text-slate-500"># Hippocampus episodes that contributed</span>
-  confidence: float      <span class="text-slate-500"># min(0.99, 0.5 + 0.1 &times; &radic;reinforcement_count)</span>
-  reinforcement_count: int  <span class="text-slate-500"># How many episodes confirmed this</span>
-  embedding_text: str    <span class="text-slate-500"># Text used for EC similarity matching</span></div>
-
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Concept Provenance</h3>
-    <p class="text-slate-300 leading-relaxed mb-3">Every concept knows how it was formed, enabling the system to weight newer, less-verified concepts differently from well-established ones:</p>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-blue-400 mb-1">EPISODIC_CONSOLIDATION</h4>
-        <p class="text-xs text-slate-400">Extracted from repeated episodes via NAc reward signals. The most common path &mdash; "I've seen this pattern enough times to call it knowledge."</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-purple-400 mb-1">AGENT_INFERENCE</h4>
-        <p class="text-xs text-slate-400">Proposed by the StatisticianAgent from confirmed operational patterns. "The data shows this is a real trend, not noise."</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-green-400 mb-1">DIRECT_INGESTION</h4>
-        <p class="text-xs text-slate-400">From RAG / document ingestion. Knowledge imported directly without episodic formation.</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-amber-400 mb-1">HYBRID</h4>
-        <p class="text-xs text-slate-400">Multiple sources contributed. Both episodic observation and statistical confirmation.</p>
-      </div>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">🧬 Biological Inspiration</h3>
+      <p class="text-slate-300">Concepts in the brain aren't isolated labels &mdash; they're rich nodes linking back to the experiences that formed them. The concept "dog" connects to episodic memories of specific dogs, motor programs for petting, and statistical expectations about behavior. This multi-modal grounding is what gives concepts their meaning. Maxim's <em class="text-indigo-400 not-italic font-medium">Concept</em> class mirrors this: each concept maintains cross-layer references back to its source memories.</p>
     </div>
 
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">ATL-Specific Features</h3>
-    <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">find_or_create</strong> &mdash; Deduplication by name similarity. Before creating "coffee_mug", checks if "coffee mug" already exists. Returns (id, was_created) tuple.</li>
-      <li><strong class="text-white">recall_similar</strong> &mdash; Semantic similarity search via EC embeddings. "Do I already know about this?" Used by the promoter to avoid concept duplication.</li>
-      <li><strong class="text-white">Context indexing</strong> &mdash; O(1) lookup by name, category, or property key/value. "All concepts with category=object" is instant.</li>
-      <li><strong class="text-white">Consolidation</strong> &mdash; Same pattern as Hippocampus but with slower decay (30-day max age vs 7-day). Concepts are more stable than episodes.</li>
-    </ul>
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">Concept</span> class extends <span class="font-mono text-xs text-indigo-400">SemanticMemory</span> with a set of <em class="text-indigo-400 not-italic font-medium">memory references</em> that track which records in each memory layer are associated with this concept &mdash; the Hippocampus episodes where a mug appeared, the Angular Gyrus record holding its salience statistics. This provides the backbone for concept extraction, grounding, pattern completion, and context building. References are capped with oldest-first eviction, and the ATL prunes low-confidence, stale concepts during consolidation the same way the Hippocampus prunes old episodes.</p>
 
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Concept Memory Pipeline</h3>
+    <h3 id="concept-extraction" class="text-lg font-semibold text-white mt-6 mb-3 scroll-mt-32">Concept Extraction</h3>
 
-    <p class="text-slate-300 leading-relaxed mb-3">Beyond basic semantic records, the ATL supports a full concept pipeline that links abstract concepts back to their experiential roots:</p>
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">ConceptExtractor</span> runs as an async background worker that continuously transforms raw episodic memories into concept references. When the Hippocampus captures a new episode, the extractor queues it for processing on a dedicated thread &mdash; never blocking the agent's perception-decision-action loop. From each episode it pulls object and person names as concepts and tokenizes the goal string and tool name, so "navigate_to_kitchen" becomes the concepts "navigate" and "kitchen". Each term is found-or-created in the ATL, linked back to the episode, and reinforced.</p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-blue-400 mb-1">ConceptExtractor</h4>
-        <p class="text-xs text-slate-400">Async background worker. Extracts object, person, goal, and tool tokens from new episodes and creates <span class="font-mono text-indigo-400">Concept</span> records with cross-layer <span class="font-mono text-indigo-400">memory_refs</span>.</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-purple-400 mb-1">ConceptGrounder</h4>
-        <p class="text-xs text-slate-400">Grounds concepts in mathematical reality via IPS/AG. Extracts salience, novelty, and success stats from linked episodes to create <span class="font-mono text-purple-400">MathMemory</span> records.</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-indigo-400 mb-1">ConceptContextBuilder</h4>
-        <p class="text-xs text-slate-400">Budget-bounded real-time recall. Matches current percept to ATL concepts and enriches with relationships and AG stats for <span class="font-mono text-indigo-400">StructuredContext.concept_context</span>.</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-green-400 mb-1">PatternCompleter</h4>
-        <p class="text-xs text-slate-400">Predicts outcomes for forming episodes by chaining: matching concepts &rarr; linked past episodes &rarr; past outcomes. Enriched with AG math context.</p>
-      </div>
+    <p class="text-slate-300 leading-relaxed">Skills tap into the same pipeline. When a skill is active during memory formation, the extractor auto-creates a <span class="font-mono text-xs text-green-400">skill:&lt;name&gt;</span> concept with <span class="font-mono text-xs text-green-400">EXECUTES_WITH</span> edges to co-occurring concepts, so the system learns which concepts are relevant to which skills and can rank available skills against what it currently perceives. No hardcoded triggers &mdash; the ATL graph <em>is</em> the trigger system.</p>
+
+    <h3 id="concept-grounding" class="text-lg font-semibold text-white mt-6 mb-3 scroll-mt-32">Concept Grounding</h3>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">🧬 Biological Inspiration</h3>
+      <p class="text-slate-300">In neuroscience, "grounding" is the process of connecting abstract symbols to sensory experience. The concept "heavy" isn't just a word &mdash; it's grounded in the felt experience of lifting heavy things. The parietal cortex (IPS/Angular Gyrus) provides this mathematical grounding: converting raw observations into statistical summaries that give concepts quantitative meaning.</p>
     </div>
 
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Bio-Skill Integration (A7)</h3>
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">ConceptGrounder</span> transforms raw episodic references into statistical summaries stored in the Angular Gyrus. When a concept accumulates enough episode references, the grounder extracts numerical properties (salience, novelty, success rate) and runs them through the <a href="/maxim/math-cognition#ips" class="text-indigo-400 hover:text-indigo-300">IPS&rarr;AG pipeline</a> to produce math records &mdash; "mug salience: mean=0.78, std=0.12" &mdash; linked back to the concept with a <span class="font-mono text-xs text-indigo-400">QUANTIFIES</span> edge in the cross-layer graph. When two concepts frequently appear in the same episodes, the grounder also strengthens the relationship between them via Jaccard similarity on their shared episode sets, creating or reinforcing a <span class="font-mono text-xs text-indigo-400">RELATED_TO</span> edge with weight proportional to co-occurrence.</p>
 
-    <p class="text-slate-300 leading-relaxed mb-3">Skills can tap into the concept memory pipeline through the <em class="text-indigo-400 not-italic font-medium">BioContext</em> facade &mdash; a lightweight wrapper over MemoryHub that provides skill-friendly methods for concept resolution, episodic recall, numerical grounding, and pattern completion.</p>
+    <h3 id="concept-context" class="text-lg font-semibold text-white mt-6 mb-3 scroll-mt-32">Concept-Aware Recall</h3>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-green-400 mb-1">Skill-Concept Association</h4>
-        <p class="text-xs text-slate-400">When a skill is active during memory formation, ConceptExtractor auto-creates a <span class="font-mono text-green-400">skill:&lt;name&gt;</span> concept with <span class="font-mono text-green-400">EXECUTES_WITH</span> edges to co-occurring concepts. Over time, the system learns which concepts are relevant to which skills.</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-green-400 mb-1">Concept-Driven Skill Discovery</h4>
-        <p class="text-xs text-slate-400">ConceptContextBuilder can <span class="font-mono text-green-400">rank_available_skills()</span> by counting EXECUTES_WITH edges between matched concepts and registered skills. No hardcoded triggers &mdash; the ATL graph IS the trigger system.</p>
-      </div>
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">ConceptContextBuilder</span> provides real-time concept context during the agent's perception-decision loop. When the agent sees objects, people, or pursues a goal, the builder finds matching ATL concepts and enriches them with relationship data and AG statistics &mdash; all within a configurable time budget. AG grounding can be expensive for concepts with many episodes, so the builder degrades gracefully: full context while budget allows, relationships plus cached AG records when it runs low, and name, category, and episode count when it's exhausted &mdash; still useful for basic context.</p>
+
+    <h3 id="pattern-completion" class="text-lg font-semibold text-white mt-6 mb-3 scroll-mt-32">Pattern Completion</h3>
+
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-2">🧬 Biological Inspiration</h3>
+      <p class="text-slate-300">When you see a friend reach for their coffee mug, your brain automatically predicts they're about to drink &mdash; before they do it. This is <em class="text-indigo-400 not-italic font-medium">pattern completion</em>: partial cues activate stored patterns, filling in the expected outcome. The hippocampus and neocortex collaborate: concepts activate associated episodes, which activate predicted actions and outcomes. Maxim's PatternCompleter implements exactly this chain.</p>
     </div>
 
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Provenance Tracing</h3>
+    <p class="text-slate-300 leading-relaxed">The <span class="font-mono text-xs text-indigo-400">PatternCompleter</span> predicts likely outcomes for a partially-formed episode by traversing the concept graph. When a new episode is forming (has perception + context, but no decision/action/outcome yet), the completer chains: <em class="text-indigo-400 not-italic font-medium">matching concepts &rarr; linked episodes &rarr; past outcomes</em>. A forming episode that sees a mug under the goal "grasp_mug" matches the concepts <em>mug</em> and <em>grasp</em>, collects the past episodes they reference, and reads off what happened. Each prediction is traceable back to its source episode and, where the AG has grounded the concept, enriched with the relevant statistics.</p>
 
-    <p class="text-slate-300 leading-relaxed mb-3">Every to_context_dict() output now includes the record's own <span class="font-mono text-indigo-400">id</span> field &mdash; enabling provenance tracing from concept resolution through to user-facing output. The provenance system collects decision traces across the agent pipeline and persists them per-session for cross-run concept lineage queries.</p>
-
-    <div class="bg-slate-800 border border-slate-700 rounded-lg p-4">
-      <h4 class="text-sm font-semibold text-indigo-400 mb-1">ID-Text Linking</h4>
-      <p class="text-xs text-slate-400">The same ID flows from ConceptContextBuilder &rarr; BioContext &rarr; ProvenanceRef &rarr; ExplainTool output. A user reading a trace can follow any <span class="font-mono text-indigo-400">`layer:id`</span> reference back to the source record. Example: <span class="font-mono text-indigo-400">`atl:f47ac10b` kitchen (location, confidence: 0.82)</span></p>
-    </div>
-
-    <p class="text-sm text-slate-400 mt-3">See <a href="/maxim/semantic-memory#concept-memory" class="text-indigo-400 hover:text-indigo-300">Semantic Memory &mdash; Concept Memory</a> for full details on each component.</p>
-  </section>
-
-  <!-- Typed Relationships -->
-  <section class="space-y-4">
-    <h2 id="relationships" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Typed Relationships</h2>
-
-    <p class="text-slate-300 leading-relaxed">Concepts in isolation aren't knowledge &mdash; knowledge is the <em class="text-indigo-400 not-italic font-medium">relationships</em> between concepts. The ATL uses a <em class="text-indigo-400 not-italic font-medium">Semantics</em> manager that wraps the DependencyGraph with typed, directional edges.</p>
-
-    <h3 class="text-lg font-semibold text-white mt-5 mb-3">Pre-Registered Relationship Types</h3>
-
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="border-b border-slate-700">
-            <th class="text-left py-2 px-3 text-slate-400 font-medium">Type</th>
-            <th class="text-left py-2 px-3 text-slate-400 font-medium">Symmetric?</th>
-            <th class="text-left py-2 px-3 text-slate-400 font-medium">Example</th>
-          </tr>
-        </thead>
-        <tbody class="text-slate-300">
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3 font-mono text-xs text-indigo-400">IS_A</td>
-            <td class="py-2 px-3">No</td>
-            <td class="py-2 px-3 text-xs text-slate-400">"coffee_mug" IS_A "container"</td>
-          </tr>
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3 font-mono text-xs text-indigo-400">HAS_PART</td>
-            <td class="py-2 px-3">No</td>
-            <td class="py-2 px-3 text-xs text-slate-400">"robot_arm" HAS_PART "gripper"</td>
-          </tr>
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3 font-mono text-xs text-indigo-400">CAUSES</td>
-            <td class="py-2 px-3">No</td>
-            <td class="py-2 px-3 text-xs text-slate-400">"grasp_action" CAUSES "object_held"</td>
-          </tr>
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3 font-mono text-xs text-amber-400">TRENDS_WITH</td>
-            <td class="py-2 px-3">Yes</td>
-            <td class="py-2 px-3 text-xs text-slate-400">"navigate_failures" TRENDS_WITH "goal_latency"</td>
-          </tr>
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3 font-mono text-xs text-amber-400">CORRELATES_WITH</td>
-            <td class="py-2 px-3">Yes</td>
-            <td class="py-2 px-3 text-xs text-slate-400">Confirmed by AG cross-metric correlation</td>
-          </tr>
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3 font-mono text-xs text-amber-400">PHASE_LOCKED_TO</td>
-            <td class="py-2 px-3">No</td>
-            <td class="py-2 px-3 text-xs text-slate-400">"success_rate" PHASE_LOCKED_TO "circadian" (metadata: phase, coupling)</td>
-          </tr>
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3 font-mono text-xs text-amber-400">PREDICTS</td>
-            <td class="py-2 px-3">No</td>
-            <td class="py-2 px-3 text-xs text-slate-400">"morning_activity" PREDICTS "high_success"</td>
-          </tr>
-          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
-            <td class="py-2 px-3 font-mono text-xs text-green-400">EXECUTES_WITH</td>
-            <td class="py-2 px-3">No</td>
-            <td class="py-2 px-3 text-xs text-slate-400">"skill:patrol_monitor" EXECUTES_WITH "person" &mdash; learned from co-occurrence during skill execution</td>
-          </tr>
-          <tr class="hover:bg-slate-800/50">
-            <td class="py-2 px-3 font-mono text-xs text-green-400">ALIAS_OF</td>
-            <td class="py-2 px-3">No</td>
-            <td class="py-2 px-3 text-xs text-slate-400">"navigate kitchen" ALIAS_OF "navigate", "kitchen" &mdash; phrase-level compound alias</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p class="text-sm text-slate-400 mt-3">The RelationshipRegistry also supports <strong class="text-slate-300">runtime extension</strong> &mdash; agents can propose new relationship types during operation. The registry tracks whether each type is built-in or agent-proposed, and persists across sessions.</p>
+    <p class="text-slate-300 leading-relaxed">The MemoryAgent calls the completer during the forming stage of memory formation, so the agent has predictions before it commits to a decision &mdash; the "last time I saw this, X happened" injection described under <a href="#staged-formation" class="text-indigo-400 hover:text-indigo-300">staged formation</a>.</p>
   </section>
 
   <!-- ============================================================ -->
   <!--  PART 5 — CONNECTIONS & INTEGRATION                          -->
   <!-- ============================================================ -->
 
-  <!-- Cross-Layer Graph -->
+  <!-- Typed Relationships + Cross-Layer Graph -->
   <section class="space-y-4">
-    <h2 id="cross-layer" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Cross-Layer Graph</h2>
+    <h2 id="cross-layer" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Relationships Within and Across Layers</h2>
 
-    <p class="text-slate-300 leading-relaxed">Each memory layer has its own internal associative graph. The <em class="text-indigo-400 not-italic font-medium">CrossLayerGraph</em> connects records <em>across</em> layers, enabling queries like "starting from this episode, what concepts and math patterns are related?"</p>
+    <p id="relationships" class="text-slate-300 leading-relaxed scroll-mt-32">Concepts in isolation aren't knowledge &mdash; knowledge is the <em class="text-indigo-400 not-italic font-medium">relationships</em> between concepts. The ATL wraps its graph with typed, directional edges: structural ones like <span class="font-mono text-xs text-indigo-400">IS_A</span> ("coffee_mug" IS_A "container") and <span class="font-mono text-xs text-indigo-400">CAUSES</span>; statistical ones like <span class="font-mono text-xs text-amber-400">TRENDS_WITH</span>, <span class="font-mono text-xs text-amber-400">PHASE_LOCKED_TO</span>, and <span class="font-mono text-xs text-amber-400">PREDICTS</span> ("morning_activity" PREDICTS "high_success"); and the learned <span class="font-mono text-xs text-green-400">EXECUTES_WITH</span> edges from skill co-occurrence. Agents can propose new relationship types during operation, and the registry persists them across sessions.</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Cross-Layer Architecture</span>
+    <p class="text-slate-300 leading-relaxed">Each memory layer has its own internal associative graph. The <em class="text-indigo-400 not-italic font-medium">CrossLayerGraph</em> connects records <em>across</em> layers &mdash; a concept is <span class="font-mono text-xs text-indigo-400">DERIVED_FROM</span> the episodes that produced it, an Angular Gyrus pattern <span class="font-mono text-xs text-indigo-400">STATISTICALLY_CONFIRMS</span> a concept &mdash; enabling queries like "starting from this episode, what concepts and math patterns are related?" The most powerful feature is <em class="text-indigo-400 not-italic font-medium">cross-layer spreading activation</em>: from any record in any layer, activation follows intra-layer edges, then cross-layer edges, recursing with exponential decay. From a Hippocampus episode where the navigate tool failed, activation finds similar failures, crosses to the ATL concept "navigate_tool_reliability", crosses again to the AG pattern showing the declining success rate, and finally reaches the record linking that decline to evening circadian phase.</p>
 
-   Hippocampus                    ATL                    Angular Gyrus
-   (episodes)                  (concepts)               (math/patterns)
-  ┌───────────┐              ┌───────────┐              ┌───────────┐
-  │ episode_1 ├─ASSOCIATES──┤           │              │ pattern_1 │
-  │ episode_2 ├─ASSOCIATES──┤ concept_A ├──IS_A───────┤           │
-  │ episode_3 │              │ concept_B ├──CAUSES─────┤ pattern_2 │
-  └─────┬─────┘              └─────┬─────┘              └─────┬─────┘
-        │                          │                          │
-        │    ╔══════════════════════╧══════════════════════╗   │
-        ├────║         CrossLayerGraph                     ║───┤
-        │    ║                                             ║   │
-        │    ║  DERIVED_FROM: ATL concept &larr; episodes      ║   │
-        │    ║  INSTANCE_OF: episode &rarr; ATL concept         ║   │
-        │    ║  STATISTICALLY_CONFIRMS: AG pattern &rarr; ATL   ║   │
-        │    ║  QUANTIFIES: AG record &rarr; ATL concept        ║   │
-        │    ║  TEMPORALLY_CORRELATES: any &harr; any           ║   │
-        │    ║  COMPUTED_FROM: AG &larr; source data            ║   │
-        │    ║  INFORMS: any &rarr; any                         ║   │
-        │    ╚═════════════════════════════════════════════╝   │
-        │                                                      │
-        └──────────────────────────────────────────────────────┘</div>
-
-    <h3 class="text-lg font-semibold text-indigo-400 mb-2 mt-6">Causal Memory: Tool Reliability Learning</h3>
-    <p class="text-slate-300 leading-relaxed mb-4">
-      When a tool produces a surprising outcome (high Reward Prediction Error), the system creates
-      <code class="font-mono text-xs text-indigo-400">CAUSES</code> edges in the hippocampal graph
-      connecting event episodes to outcome episodes. These causal chains enable spreading activation
-      to traverse cause-effect relationships &mdash; recalling a past action activates its consequences.
-    </p>
-    <ul class="list-disc pl-5 space-y-2 text-slate-300 mb-4">
-      <li><strong>ToolPainBridge</strong> routes tool errors through PainDetector &rarr; NAc, creating negative causal links</li>
-      <li><strong>RPE-driven salience</strong> &mdash; surprising outcomes (RPE &gt; 0.3) boost hippocampus capture salience, forming stronger memories</li>
-      <li><strong>EC indexing</strong> &mdash; established causal patterns (3+ observations) are registered in the Entorhinal Cortex for similarity-based retrieval</li>
-      <li><strong>SCN temporal context</strong> &mdash; tool events are temporally indexed, enabling discovery of time-based patterns (API rate limits, resource exhaustion)</li>
-    </ul>
-
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Cross-Layer Spreading Activation</h3>
-
-    <p class="text-slate-300 leading-relaxed mb-3">The most powerful feature is cross-layer spreading activation. Starting from any record in any layer, activation spreads:</p>
-
-    <ol class="space-y-2 text-slate-300 list-decimal pl-5">
-      <li>Follow <strong class="text-white">intra-layer</strong> edges via the layer's internal associative graph</li>
-      <li>Follow <strong class="text-white">cross-layer</strong> edges to records in other layers</li>
-      <li>Recurse with exponential <strong class="text-white">decay</strong> (default 0.5 per hop) until threshold or max depth</li>
-      <li>Return activations <strong class="text-white">grouped by layer</strong> &mdash; { "hippocampus": [(id, score)], "atl": [...], "angular_gyrus": [...] }</li>
-    </ol>
-
-    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 mt-4">
-      <h4 class="text-sm font-semibold text-white mb-2">Example Traversal</h4>
-      <p class="text-sm text-slate-300">Starting from a Hippocampus episode where <span class="font-mono text-xs">tool_navigate</span> failed:</p>
-      <ol class="text-sm text-slate-300 list-decimal pl-5 space-y-1 mt-2">
-        <li><strong class="text-blue-400">Intra-layer:</strong> Find similar failure episodes (Hippocampus associative graph)</li>
-        <li><strong class="text-indigo-400">Cross-layer INSTANCE_OF</strong> &rarr; ATL concept "navigate_tool_reliability" (confidence=0.73)</li>
-        <li><strong class="text-indigo-400">ATL IS_A</strong> &rarr; ATL concept "tool_capabilities"</li>
-        <li><strong class="text-purple-400">Cross-layer STATISTICALLY_CONFIRMS</strong> &rarr; AG PATTERN record (R&sup2;=0.73, slope=-0.02/day)</li>
-        <li><strong class="text-amber-400">Cross-layer TEMPORALLY_CORRELATES</strong> &rarr; AG record linking decline to circadian phase 0.8 (evening)</li>
-      </ol>
-    </div>
+    <p class="text-slate-300 leading-relaxed">Causal structure enters the hippocampal graph the same way. When a tool produces a surprising outcome (high reward prediction error), the system creates <code class="font-mono text-xs text-indigo-400">CAUSES</code> edges connecting event episodes to outcome episodes, so recalling a past action activates its consequences. Tool errors route through the pain detector to the NAc as negative causal links, and tool events are temporally indexed by the SCN so time-based patterns (API rate limits, resource exhaustion) can be discovered.</p>
   </section>
 
   <!-- Promotion Pipeline -->
@@ -766,108 +322,35 @@ SemanticMemory(MemoryRecord):
       <p class="text-slate-300">Memory consolidation during sleep transforms labile hippocampal traces into stable neocortical representations. The NAc (reward system) plays a gating role &mdash; rewarding experiences are preferentially consolidated. This is why emotionally significant events become lasting knowledge while mundane details fade.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">SemanticPromoter</em> orchestrates the progression from episodic observations to stable semantic knowledge. It scans multiple <em class="text-indigo-400 not-italic font-medium">PromotionSources</em> for qualifying patterns, filters noise, and creates ATL concepts with full cross-layer traceability.</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Promotion Pipeline</span>
-
-  PromotionSources                  IPS Gate               SemanticPromoter
-  ────────────────                  ────────               ────────────────
-
-  NAc (reward patterns)    ─┐
-                            ├──&rarr;  IPS randomness  ──&rarr;  Deduplicate (ATL recall_similar)
-  StatisticianAgent        ─┤      quality gate           Extract recurring elements
-    (confirmed patterns)    │      (reject noise)         Create/reinforce concept
-                            │                             Form relationships
-  ConceptExtractor         ─┘                             Create cross-layer edges
-                                                          │
-                                                          &darr;
-                                                     ATL SemanticMemory
-                                                     + CrossLayer edges
-                                                     + Relationship types</div>
-
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">PromotionSource Protocol</h3>
-
-    <p class="text-slate-300 leading-relaxed mb-3">Any system that detects patterns can be a promotion source. It just needs one method:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">get_promotion_candidates(min_confidence=0.6, min_observations=3) &rarr; list[PromotionCandidate]
-
-<span class="text-slate-500"># Each candidate provides:</span>
-PromotionCandidate:
-  pattern_name: str            <span class="text-slate-500"># "grasp &rarr; success", "stat:tool:navigate:success"</span>
-  category: str                <span class="text-slate-500"># "causal_pattern", "operational_pattern"</span>
-  confidence: float            <span class="text-slate-500"># Source system's confidence</span>
-  source_memory_ids: list[str] <span class="text-slate-500"># Episodic IDs that contributed</span>
-  metadata: dict               <span class="text-slate-500"># Source-specific extras</span></div>
+    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic font-medium">SemanticPromoter</em> orchestrates the progression from episodic observations to stable semantic knowledge. It scans multiple <em class="text-indigo-400 not-italic font-medium">promotion sources</em> for qualifying patterns, filters noise, and creates ATL concepts with full cross-layer traceability. Any system that detects patterns can be a promotion source. The promoter deduplicates candidates against what the ATL already knows, extracts the recurring elements, creates or reinforces the concept, forms relationships, and creates the cross-layer edges.</p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h4 class="text-sm font-semibold text-blue-400 mb-2">NAc Path (Causal Patterns)</h4>
         <p class="text-sm text-slate-300 mb-2">NAc tracks event&rarr;outcome links via Rescorla-Wagner learning. When a causal link reaches sufficient confidence and observation count, it becomes a promotion candidate.</p>
-        <p class="text-xs text-slate-400"><strong>Example:</strong> "grasp + coffee_mug &rarr; success" observed 5 times with confidence 0.8 &rarr; promote to ATL concept "grasping coffee mugs is reliable" with DERIVED_FROM edges to source episodes.</p>
+        <p class="text-xs text-slate-400"><strong>Example:</strong> "grasp + coffee_mug &rarr; success" observed repeatedly &rarr; ATL concept "grasping coffee mugs is reliable" with DERIVED_FROM edges to source episodes.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h4 class="text-sm font-semibold text-purple-400 mb-2">StatisticianAgent Path (Operational Patterns)</h4>
-        <p class="text-sm text-slate-300 mb-2">Confirmed patterns from the <a href="/maxim/math-cognition#statistician" class="text-indigo-400 hover:text-indigo-300">IPS&rarr;AG escalation pipeline</a> become candidates. No episodic IDs needed &mdash; the AG MathRecord provides the evidence.</p>
-        <p class="text-xs text-slate-400"><strong>Example:</strong> "tool_navigate declining (R&sup2;=0.73)" &rarr; promote to ATL concept with provenance=AGENT_INFERENCE and STATISTICALLY_CONFIRMS cross-layer edge to the AG PATTERN record.</p>
+        <p class="text-sm text-slate-300 mb-2">Confirmed patterns from the <a href="/maxim/math-cognition#statistician" class="text-indigo-400 hover:text-indigo-300">IPS&rarr;AG escalation pipeline</a> become candidates. No episodic IDs needed &mdash; the AG record provides the evidence.</p>
+        <p class="text-xs text-slate-400"><strong>Example:</strong> "tool_navigate declining" &rarr; ATL concept with agent-inference provenance and a STATISTICALLY_CONFIRMS edge to the AG pattern record.</p>
       </div>
     </div>
 
     <h3 class="text-lg font-semibold text-white mt-6 mb-3">IPS Randomness Quality Gate</h3>
 
-    <p class="text-slate-300 leading-relaxed mb-3">Not every NAc pattern deserves permanent semantic status. The <a href="/maxim/math-cognition#ips" class="text-indigo-400 hover:text-indigo-300">IPS</a> provides a lightweight noise filter before the heavyweight promotion machinery runs:</p>
-
-    <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">NAc candidates:</strong> IPS assesses the randomness of observation <em>timing</em>. If events occurred at random intervals (no temporal structure), they're likely coincidental &mdash; rejected.</li>
-      <li><strong class="text-white">StatisticianAgent candidates:</strong> Already passed IPS/AG assessment during the pattern detection FSM &mdash; just checks confidence &ge; 0.4 (no re-assessment needed).</li>
-      <li><strong class="text-white">Small samples (&lt; 8 observations):</strong> Gate allows through conservatively &mdash; too few data points to assess randomness.</li>
-    </ul>
+    <p class="text-slate-300 leading-relaxed">Not every NAc pattern deserves permanent semantic status. The <a href="/maxim/math-cognition#ips" class="text-indigo-400 hover:text-indigo-300">IPS</a> provides a lightweight noise filter before the heavyweight promotion machinery runs. For NAc candidates it assesses the randomness of observation <em>timing</em>: if events occurred at random intervals (no temporal structure), they're likely coincidental &mdash; rejected. StatisticianAgent candidates have already passed IPS/AG assessment, so only a confidence check applies. Small samples are allowed through conservatively &mdash; too few data points to assess randomness.</p>
 
     <h3 class="text-lg font-semibold text-white mt-6 mb-3">When Promotion Runs</h3>
 
-    <p class="text-slate-300 leading-relaxed">Promotion is part of the mandatory consolidation cycle during <span class="font-mono text-xs text-indigo-400">MemoryHub.on_session_end()</span>:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Consolidation Ordering</span>
-
-1. Hippocampus sleep <span class="text-slate-500">(SCN-aware temporal consolidation + auto-save)</span>
-2. Promote           <span class="text-slate-500">(NAc + StatAgent patterns &rarr; ATL concepts, IPS filters noise)</span>
-3. Consolidate       <span class="text-slate-500">(ATL + Angular Gyrus consolidation &mdash; compress, decay, prune)</span>
-4. Persist           <span class="text-slate-500">(save ATL + Angular Gyrus + cross-layer graph)</span>
-
-<span class="text-slate-500">Ordering is critical: promotion runs BEFORE consolidation</span>
-<span class="text-slate-500">so source episodes still exist when cross-layer edges form.</span></div>
+    <p class="text-slate-300 leading-relaxed">Promotion is part of the mandatory consolidation cycle at session end: the Hippocampus sleeps, the promoter runs, the ATL and Angular Gyrus consolidate (compress, decay, prune), and everything is persisted. The ordering is critical: promotion runs <em class="text-indigo-400 not-italic font-medium">before</em> consolidation so source episodes still exist when cross-layer edges form.</p>
   </section>
 
   <!-- Knowledge in the Agent Loop -->
   <section class="space-y-4">
     <h2 id="knowledge-context" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Knowledge in the Agent Loop</h2>
 
-    <p class="text-slate-300 leading-relaxed">The point of all this is to make the agent <em>smarter</em>. Knowledge from ATL and Angular Gyrus flows into the LLM's reasoning context via two channels in <span class="font-mono text-xs text-indigo-400">StructuredContext</span>:</p>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h4 class="text-sm font-semibold text-indigo-400 mb-2">knowledge_context</h4>
-        <p class="text-xs text-slate-300">Merged ATL concepts + AG patterns via cross-layer spreading activation. Broad, session-level knowledge ranked by relevance (capped at 8 entries).</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h4 class="text-sm font-semibold text-indigo-400 mb-2">concept_context</h4>
-        <p class="text-xs text-slate-300">Live concept context from <span class="font-mono text-indigo-400">ConceptContextBuilder</span>. Percept-specific: only concepts matching current objects/people/goal, enriched with relationships and AG stats.</p>
-      </div>
-    </div>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">What the LLM Sees</span>
-
-<span class="text-slate-500"># knowledge_context (broad semantic + statistical knowledge)</span>
-- "coffee_mug" (object, confidence=0.87): A ceramic container typically found in kitchens.
-  Relationships: IS_A container, PROPERTY_OF kitchen_area
-- "stat:tool:navigate:success" (math:PATTERN, confidence=0.73): Navigate tool
-  showing declining success rate (R&sup2;=0.73, slope=-0.02/day).
-
-<span class="text-slate-500"># concept_context (percept-specific, with AG enrichment)</span>
-- "mug" (object, confidence=0.87, 12 episodes):
-  Relationships: IS_A container, RELATED_TO kitchen
-  Stats: salience mean=0.78, success_rate=0.92</div>
-
-    <p class="text-slate-300 leading-relaxed mt-3">Together, these channels give the LLM both broad knowledge ("the navigate tool is declining") and percept-specific concept context ("the mug I'm seeing has high success rate for grasping"), plus <a href="/maxim/semantic-memory#pattern-completion" class="text-indigo-400 hover:text-indigo-300">pattern completion predictions</a> for what's likely to happen next.</p>
+    <p class="text-slate-300 leading-relaxed">The point of all this is to make the agent <em>smarter</em>. Knowledge from the ATL and Angular Gyrus flows into the LLM's reasoning context via two channels in <span class="font-mono text-xs text-indigo-400">StructuredContext</span>. The <em class="text-indigo-400 not-italic font-medium">knowledge context</em> merges ATL concepts and AG patterns via cross-layer spreading activation &mdash; broad, session-level knowledge ranked by relevance. The <em class="text-indigo-400 not-italic font-medium">concept context</em> is live output from the ConceptContextBuilder &mdash; percept-specific, only the concepts matching current objects, people, and goal, enriched with relationships and AG stats. Together, these give the LLM both broad knowledge ("the navigate tool is declining") and percept-specific concept context ("the mug I'm seeing has high success rate for grasping"), plus <a href="#pattern-completion" class="text-indigo-400 hover:text-indigo-300">pattern completion predictions</a> for what's likely to happen next.</p>
   </section>
 
   <!-- Episode Valence & Affective Memory -->
@@ -879,67 +362,22 @@ PromotionCandidate:
       <p class="text-slate-300">Memories are not emotionally neutral. The amygdala tags hippocampal traces with affective valence during encoding, and this coloring persists through consolidation. When you recall a memory, you don't just remember <em>what</em> happened &mdash; you re-experience <em>how it felt</em>. This affective signal modulates future decisions: contexts associated with negative valence trigger avoidance, while positively valenced contexts attract approach behavior.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Maxim now annotates episodes, edges, and retrieval results with <em class="text-indigo-400 not-italic font-medium">valence</em> &mdash; a scalar measure of positive or negative affect derived from reactions that occurred during the episode.</p>
+    <p class="text-slate-300 leading-relaxed">Maxim annotates episodes, edges, and retrieval results with <em class="text-indigo-400 not-italic font-medium">valence</em> &mdash; a scalar measure of positive or negative affect derived from reactions that occurred during the episode. Each episode's valence is computed at finalization as the mean of all reaction valences received during its lifetime: pain reactions contribute negative values, success reactions positive values, and an episode with no reactions is neutral. An episode in which a sword shattered closes negatively valenced &mdash; future recall will carry the "this went badly" signal.</p>
 
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Episode.valence</h3>
-    <p class="text-slate-300 leading-relaxed">Each <code class="bg-slate-950 px-1 rounded text-xs">Episode</code> carries a <code class="bg-slate-950 px-1 rounded text-xs">valence</code> field, computed at finalization as the mean of all reaction valences received during that episode's lifetime. Pain reactions contribute negative values; success reactions contribute positive values. An episode with no reactions has neutral valence (0.0).</p>
+    <p class="text-slate-300 leading-relaxed">When episodes are linked by Hebbian edges in the associative graph, the edge inherits that valence, so the associative connections between memories carry emotional coloring &mdash; not just structural similarity. Spreading activation can propagate edge valence alongside activation strength during multi-hop recall, distinguishing positively and negatively valenced paths through the graph, and retrieval results come back annotated with their accumulated valence. The agent's prompt context includes this affective coloring &mdash; enabling reasoning like "I've done something similar before and it went badly" without requiring explicit causal chain reconstruction.</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Valence Computation at Episode Close</span>
-
-Episode receives reactions during its lifetime:
-  reaction_1: valence = -0.7  (pain: sword shattered)
-  reaction_2: valence = -0.3  (pain: minor strain)
-
-At finalize():
-  Episode.valence = mean(-0.7, -0.3) = -0.5
-
-This episode is negatively valenced &mdash; future recall
-will carry the "this went badly" signal.</div>
-
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Valence on Hebbian Edges</h3>
-    <p class="text-slate-300 leading-relaxed">When episodes are linked by Hebbian edges in the associative graph, the edge inherits valence metadata via <code class="bg-slate-950 px-1 rounded text-xs">Edge.metadata["valence"]</code>. This means the associative connections between memories carry emotional coloring &mdash; not just structural similarity.</p>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h4 class="text-sm font-semibold text-blue-400 mb-2">Positive-Valence Edge</h4>
-        <p class="text-xs text-slate-300">"made coffee successfully" &larr;&rarr; "found mug in kitchen"</p>
-        <p class="text-xs text-slate-400 mt-1">Edge.metadata["valence"] = +0.6. The association carries a "good outcome" signal.</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h4 class="text-sm font-semibold text-red-400 mb-2">Negative-Valence Edge</h4>
-        <p class="text-xs text-slate-300">"slashed with rusty sword" &larr;&rarr; "sword shattered"</p>
-        <p class="text-xs text-slate-400 mt-1">Edge.metadata["valence"] = -0.7. The association carries an aversive signal.</p>
-      </div>
-    </div>
-
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Spreading Activation with Valence Propagation</h3>
-    <p class="text-slate-300 leading-relaxed">The <code class="bg-slate-950 px-1 rounded text-xs">spreading_activation(propagate_valence=True)</code> option propagates edge valence alongside activation strength during multi-hop recall. This means that when retrieving memories by association, the system can distinguish between positively and negatively valenced paths through the graph.</p>
-
-    <p class="text-slate-300 leading-relaxed">At retrieval time, <code class="bg-slate-950 px-1 rounded text-xs">retrieve_on_cue(include_valence=True)</code> returns results annotated with their accumulated valence. The agent's prompt context includes this affective coloring, enabling reasoning like "I've done something similar before and it went badly" without requiring explicit causal chain reconstruction.</p>
-
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">distribute_reward: Reactions to NAc Learning</h3>
-    <p class="text-slate-300 leading-relaxed">Reactions dispatched through the <code class="bg-slate-950 px-1 rounded text-xs">ReactionBus</code> reach the NAc via the <code class="bg-slate-950 px-1 rounded text-xs">distribute_reward</code> subscriber. This adjusts per-node <code class="bg-slate-950 px-1 rounded text-xs">reward_bias</code> values in the Hebbian graph and modulates EC similarity thresholds: positive rewards raise the bias, which <em>lowers</em> the EC recognition threshold for rewarded nodes (the system becomes more permissive toward patterns it has been rewarded for). The bias clamps to [0, max_reward_bias] — negative or pain signals reduce bias toward zero but cannot invert it, so recognition returns toward the baseline threshold rather than narrowing below it.</p>
+    <p class="text-slate-300 leading-relaxed">Reactions also reach the NAc, where they adjust per-node <em class="text-indigo-400 not-italic font-medium">reward bias</em> values in the Hebbian graph and modulate EC similarity thresholds: positive rewards raise the bias, which <em>lowers</em> the EC recognition threshold for rewarded nodes (the system becomes more permissive toward patterns it has been rewarded for). Negative or pain signals reduce bias toward zero but cannot invert it, so recognition returns toward the baseline threshold rather than narrowing below it.</p>
   </section>
 
   <!-- Episode Boundaries -->
   <section class="space-y-4">
     <h2 id="episode-boundaries" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Episode Boundaries</h2>
 
-    <p class="text-slate-300 leading-relaxed">The Hippocampus must decide where one episode ends and the next begins. Rather than using a fixed timer, Maxim uses a set of <em class="text-indigo-400 not-italic font-medium">boundary rules</em> that trigger episode finalization based on contextual signals:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Episode Boundary Rules</span>
-
-CaptureEvent fields checked at each tick:
-  .tick_gap          &rarr; tick_gap rule: too much time between events
-  .channel_change    &rarr; channel_change rule: new input channel
-  .scn_tag_change    &rarr; scn_tag_change rule: SCN temporal phase shift
-  .salience_spike    &rarr; salience_spike rule: pain spike forces boundary</div>
-
-    <p class="text-slate-300 leading-relaxed">The existing rules (<code class="bg-slate-950 px-1 rounded text-xs">tick_gap</code>, <code class="bg-slate-950 px-1 rounded text-xs">channel_change</code>, <code class="bg-slate-950 px-1 rounded text-xs">scn_tag_change</code>) handle temporal and contextual discontinuities. The new <code class="bg-slate-950 px-1 rounded text-xs">salience_spike</code> rule adds <em class="text-indigo-400 not-italic font-medium">pain-driven episode boundaries</em>:</p>
+    <p class="text-slate-300 leading-relaxed">The Hippocampus must decide where one episode ends and the next begins. Rather than using a fixed timer, Maxim uses a set of <em class="text-indigo-400 not-italic font-medium">boundary rules</em> that trigger episode finalization based on contextual signals checked at each tick: too much time between events, a new input channel, an SCN temporal phase shift, and a pain spike. The first three handle temporal and contextual discontinuities. The last adds <em class="text-indigo-400 not-italic font-medium">pain-driven episode boundaries</em>:</p>
 
     <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
       <h4 class="text-red-400 font-semibold mb-2">salience_spike_rule</h4>
-      <p class="text-slate-300 text-sm">When a pain signal with intensity &ge; 0.5 fires, the current episode is immediately finalized (with its accumulated negative valence) and a new episode begins. This mirrors how biological trauma creates sharp memory boundaries &mdash; you remember the moment before and after a painful event as distinct episodes, not a continuous stream. The <code class="bg-slate-950 px-1 rounded text-xs">CaptureEvent.salience_spike</code> field carries this signal from the PainBus into the episode capture pipeline.</p>
+      <p class="text-slate-300 text-sm">When a sufficiently intense pain signal fires, the current episode is immediately finalized (with its accumulated negative valence) and a new episode begins. This mirrors how biological trauma creates sharp memory boundaries &mdash; you remember the moment before and after a painful event as distinct episodes, not a continuous stream.</p>
     </div>
   </section>
 
@@ -952,104 +390,35 @@ CaptureEvent fields checked at each tick:
       <p class="text-slate-300">Memory consolidation during sleep transforms labile hippocampal traces into stable neocortical representations. The nucleus accumbens (reward system) plays a gating role&mdash;rewarding experiences are preferentially consolidated. Similarly, repeated experiences (temporal recurrence) strengthen synaptic traces even without explicit reward.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Maxim implements a <em class="text-indigo-400 not-italic font-medium">wave-based consolidation pipeline</em> that separates staging from promotion, with path-dependent thresholds for one-shot learning (acute) and evidence-based learning (chronic).</p>
+    <p class="text-slate-300 leading-relaxed">Maxim implements a <em class="text-indigo-400 not-italic font-medium">wave-based consolidation pipeline</em> that separates staging from promotion, with path-dependent thresholds for one-shot learning (acute) and evidence-based learning (chronic). When an agent cycle completes, a significance score is computed from weighted heuristics&mdash;reward prediction error, user interaction, novelty, plan boundaries, extreme valence, energy change&mdash;and moments that score high enough are staged. During sleep, each staged moment is re-scored by a consolidation wave and either promoted into the Hippocampus, kept for another wave, or expired.</p>
 
-    <!-- Consolidation Pipeline Diagram -->
-    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 text-center">
-      <h3 class="text-lg font-semibold text-indigo-400 mb-4">Consolidation Pipeline</h3>
-      <pre class="font-mono text-sm text-slate-300 inline-block text-left">
-Agent Cycle Complete
-        │
-        ▼
-┌──────────────────────────────┐
-│ SignificanceWeightLearner    │
-│  RPE magnitude    (0.35)     │
-│  User interaction (0.20)     │
-│  Novelty          (0.15)     │
-│  Plan boundary    (0.10)     │
-│  Valence extreme  (0.10)     │
-│  Energy change    (0.05)     │
-└────────────┬─────────────────┘
-             │ score &gt; 0.5?
-             ▼
-  ┌─────────────────────┐
-  │ Acute Sidecar (JSON)│ &rarr; ~/.maxim/short_term_memory/
-  └─────────┬───────────┘
-            │
-     ┌──────┴──────────────────┐
-     ▼ Sleep Mode              ▼ Sleep Mode
-┌───────────────┐    ┌───────────────────┐
-│  Wave Score   │    │ Chronic Staging   │
-│  Evaluation   │    │ (recurrence LSH)  │
-└───────┬───────┘    └────────┬──────────┘
-        │                     │
-        ▼                     ▼
-  ┌───────────────────────────────┐
-  │  ConsolidationOrchestrator    │
-  │  Promote / Survive / Expire   │
-  └───────────┬───────────────────┘
-              ▼
-       ┌─────────────┐
-       │ Hippocampus │ long-term memory
-       │ + SCN + LSH │ registered
-       └─────────────┘</pre>
-    </div>
-
-    <!-- Staging Paths -->
     <h3 class="text-lg font-semibold text-white mt-6 mb-3">Staging Paths</h3>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h4 class="text-sm font-semibold text-blue-400 mb-1">ACUTE</h4>
-        <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Threshold: 0.45</p>
         <p class="text-sm text-slate-300">One-shot learning. Triggered by RPE spikes, user input, or highly novel percepts. Lower consolidation bar&mdash;a single significant experience can become a lasting memory.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h4 class="text-sm font-semibold text-purple-400 mb-1">CHRONIC</h4>
-        <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Threshold: 0.60</p>
         <p class="text-sm text-slate-300">Evidence-based learning. Detected by LSH percept recurrence&mdash;the same pattern appearing at similar times. Higher bar requires accumulated evidence before promotion.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h4 class="text-sm font-semibold text-emerald-400 mb-1">IMMEDIATE</h4>
-        <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Threshold: 0.85</p>
         <p class="text-sm text-slate-300">Skip-the-queue learning. Extremely significant moments (high RPE + user input + novel) bypass wave processing entirely and promote on first sleep cycle.</p>
       </div>
     </div>
 
-    <!-- Wave Score Formula -->
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Wave Score Formula</h3>
-    <p class="text-slate-300 leading-relaxed">Each consolidation wave re-evaluates staged moments against accumulated system evidence:</p>
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Wave Score Computation</span>
+    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Wave Scoring and Learnable Weights</h3>
+    <p class="text-slate-300 leading-relaxed">Each consolidation wave re-evaluates staged moments against accumulated system evidence: the original significance score, whether the NAc has since corroborated the event&rarr;outcome pattern, whether the SCN has seen similar activity at similar times, whether similar percepts and contexts have recurred since staging, and whether something novel has become routine&mdash;which is exactly what's worth encoding.</p>
 
-wave_score = 0.30 &times; significance          <span class="text-slate-500"># Original heuristic score</span>
-           + 0.20 &times; nac_corroboration      <span class="text-slate-500"># Has the event&rarr;outcome pattern strengthened?</span>
-           + 0.20 &times; temporal_recurrence    <span class="text-slate-500"># Similar activity at similar times? (SCN)</span>
-           + 0.12 &times; percept_recurrence     <span class="text-slate-500"># Similar percepts since staging? (LSH)</span>
-           + 0.10 &times; context_recurrence     <span class="text-slate-500"># Similar language contexts? (LSH)</span>
-           + 0.08 &times; novelty_decay          <span class="text-slate-500"># Novel &rarr; routine = worth encoding</span></div>
+    <p class="text-slate-300 leading-relaxed">The significance heuristic weights themselves learn from long-term utility. After a memory is promoted, the <em class="text-indigo-400 not-italic font-medium">SignificanceWeightLearner</em> tracks whether it becomes well-connected in the associative graph (indicating usefulness). Pearson correlation between heuristic scores and graph edge growth adjusts weights over time&mdash;heuristics that predict useful memories gain weight, others lose it. Thresholds, weights, and index capacities are documented under <a href="https://pymaxim.bio/memory/overview/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">Memory &amp; consolidation</a> on pymaxim.bio.</p>
 
-    <!-- Learnable Weights -->
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">Learnable Significance Weights</h3>
-    <p class="text-slate-300 leading-relaxed">Significance heuristic weights learn from long-term utility. After a memory is promoted, the <em class="text-indigo-400 not-italic font-medium">SignificanceWeightLearner</em> tracks whether it becomes well-connected in the associative graph (indicating usefulness). Pearson correlation between heuristic scores and graph edge growth adjusts weights over time&mdash;heuristics that predict useful memories gain weight, others lose it.</p>
-
-    <!-- Bounded Bins -->
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">SCN Bounded Bins</h3>
-    <p class="text-slate-300 leading-relaxed">SCN time bins use <em class="text-indigo-400 not-italic font-medium">BoundedBin</em> with a max capacity of 200 entries per bin. When full, the least significant entry from the older half is evicted. This prevents unbounded memory growth while preserving the most important temporal associations. The v3.0 persistence format stores significance scores alongside memory IDs for accurate restoration.</p>
-
-    <!-- LSH Similarity -->
-    <h3 class="text-lg font-semibold text-white mt-6 mb-3">LSH Similarity Indices</h3>
-    <p class="text-slate-300 leading-relaxed">Two <em class="text-indigo-400 not-italic font-medium">SimilarityIndex</em> instances use MinHash + Locality-Sensitive Hashing for O(1) approximate similarity lookup, replacing the old O(n) linear scans:</p>
-    <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">context_index:</strong> Language/context similarity. Slots into <span class="font-mono text-xs text-blue-400">AssociationIndex.find_similar()</span> as the preferred path with automatic keyword Jaccard fallback.</li>
-      <li><strong class="text-white">percept_index:</strong> Percept similarity. Used by <span class="font-mono text-xs text-blue-400">recall_deep</span> and chronic recurrence detection to find similar visual/auditory patterns.</li>
-    </ul>
-
-    <!-- Retention principles (preserved from original) -->
     <h3 class="text-lg font-semibold text-white mt-6 mb-3">Retention Principles</h3>
     <ul class="space-y-2 text-slate-300 list-disc pl-5">
       <li><strong class="text-white">Access-based retention:</strong> Frequently accessed memories are preserved</li>
-      <li><strong class="text-white">Graph-aware retention:</strong> Well-connected memories in the associative graph score higher for retention&mdash;mirroring how strongly linked engrams resist synaptic homeostasis during biological sleep</li>
-      <li><strong class="text-white">Compression:</strong> Old memories shrink from ~2.5KB to ~200 bytes, with their live edge count snapshotted for future retention scoring</li>
-      <li><strong class="text-white">Pruning:</strong> Memories not accessed in one week are removed, and their associative graph edges are cleaned up automatically</li>
+      <li><strong class="text-white">Graph-aware retention:</strong> Well-connected memories score higher&mdash;mirroring how strongly linked engrams resist synaptic homeostasis during sleep</li>
+      <li><strong class="text-white">Compression:</strong> Old memories shrink to a fraction of their size, with their edge count snapshotted for future retention scoring</li>
+      <li><strong class="text-white">Pruning:</strong> Unaccessed memories are removed and their graph edges cleaned up</li>
       <li><strong class="text-white">Protection:</strong> High-value memories (user interactions, successes) are never pruned</li>
       <li><strong class="text-white">Temporal coverage:</strong> SCN-aware consolidation maintains representation across time periods</li>
     </ul>
@@ -1094,35 +463,6 @@ wave_score = 0.30 &times; significance          <span class="text-slate-500"># O
     </div>
   </section>
 
-  <div class="pt-6 border-t border-slate-700 space-y-5">
-    <div class="flex justify-between items-stretch gap-4">
-      <a href="/maxim/agent-architecture" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
-        <span class="block text-white font-medium mt-1">The Agent Brain</span>
-      </a>
-      <a href="/maxim/math-cognition" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
-        <span class="block text-white font-medium mt-1">Math &amp; Statistics</span>
-      </a>
-    </div>
-    <div class="text-center space-y-2">
-      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
-      <div class="flex flex-wrap justify-center gap-2">
-        <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
-        <a href="/maxim/agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
-        <a href="/maxim/memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
-        <a href="/maxim/math-cognition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Math &amp; Statistics</a>
-        <a href="/maxim/attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
-        <a href="/maxim/proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
-        <a href="/maxim/communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
-        <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
-        <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
-        <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
-        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking &amp; Mesh</a>
-        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
-      </div>
-    </div>
-  </div>
-  {% include "_maxim_footer.html" %}
+  {% include "_maxim_related.html" %}
 </div>
 {% endblock %}

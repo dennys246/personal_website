@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Maxim — A Brain for Robots | Agentic Robotics Framework{% endblock %}
+{% block title %}Maxim — A Brain for Robots: The Design Essays | Denny Schaedig{% endblock %}
 
-{% block meta_description %}Maxim is an agentic robotics harness that gives robots a brain — a biologically-inspired cognitive architecture for embodied AI agents.{% endblock %}
+{% block meta_description %}The design story behind Maxim, a biologically-inspired cognitive architecture for embodied AI agents — why it's built from brain structures, what the experiments showed, and what a robot learned on real hardware. Docs and evidence live at pymaxim.bio.{% endblock %}
 
-{% block meta_keywords %}Maxim, Maxim AI, Maxim agent, Maxim harness, Maxim brain, Maxim robot, agentic robotics, cognitive architecture, robot brain, embodied AI, biologically-inspired AI, artificial mind, Reachy Mini, memory systems, attention networks, proprioception{% endblock %}
+{% block meta_keywords %}Maxim, Maxim AI, Maxim agent, Maxim harness, Maxim brain, Maxim robot, pymaxim, agentic robotics, cognitive architecture, robot brain, embodied AI, biologically-inspired AI, artificial mind, Reachy Mini, memory systems, attention networks, proprioception, design essays{% endblock %}
 
-{% block meta_author %}Maxim Project{% endblock %}
-{% block og_site_name %}Maxim{% endblock %}
 {% block og_type %}website{% endblock %}
 
 {% block structured_data %}
@@ -24,7 +22,8 @@
     "name": "Denny Schaedig",
     "url": "https://www.dennyschaedig.com"
   },
-  "url": "https://www.dennyschaedig.com/maxim",
+  "url": "https://pymaxim.bio",
+  "installUrl": "https://pymaxim.bio/installation/",
   "codeRepository": "https://github.com/dennys246/Maxim",
   "keywords": ["agentic robotics", "cognitive architecture", "robot brain", "embodied AI", "biologically-inspired AI", "memory systems", "attention networks", "proprioception"]
 }
@@ -32,10 +31,12 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Maxim",
-  "alternateName": "Maxim Agentic Robotics Framework",
-  "url": "https://www.dennyschaedig.com/maxim"
+  "@type": "CollectionPage",
+  "name": "Maxim — the design essays",
+  "description": "Long-form design write-ups on how Maxim works and why it is built from biological blueprints.",
+  "url": "https://www.dennyschaedig.com/maxim",
+  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
+  "about": { "@type": "SoftwareApplication", "name": "Maxim", "url": "https://pymaxim.bio" }
 }
 </script>
 <script type="application/ld+json">
@@ -120,53 +121,56 @@
     />
   </header>
 
-  <!-- Navigation Menu -->
-  <nav class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 space-y-3">
-    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-1 text-center">Explore Maxim</h3>
+  <div class="rounded-xl bg-gradient-to-br from-indigo-700 via-purple-700 to-indigo-800 p-6 text-white shadow-lg space-y-3">
+    <h3 class="text-lg font-semibold">What is Maxim?</h3>
+    <p class="leading-relaxed">Maxim is an agentic robotics framework that gives robots something resembling a mind. Not just reflexes. Not just if-then rules. An actual cognitive architecture inspired by how mammalian brains work, adapted for embodied AI agents that can perceive, remember, decide, and learn.</p>
+    <p class="leading-relaxed text-indigo-100">These pages are the design story &mdash; why each piece is built the way it is, what the experiments showed, and what a real robot learned. The software itself is documented at <a href="https://pymaxim.bio" rel="noopener" class="text-white underline decoration-indigo-300 hover:decoration-white">pymaxim.bio</a>: install, CLI, configuration, and the experiment ledger that decides what Maxim is allowed to claim.</p>
+  </div>
+
+  <!-- Essay index -->
+  <nav class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 space-y-3" aria-label="Maxim essays">
+    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-1 text-center">The Essays</h3>
     <div class="flex flex-wrap justify-center gap-2">
-      <a href="/maxim/release-1-0" class="btn-link">1.0 Release</a>
-      <a href="/maxim/agent-architecture" class="btn-link">The Agent Brain</a>
-      <a href="/maxim/deliberation" class="btn-link">Deliberation</a>
-      <a href="/maxim/memory-systems" class="btn-link">Memory Systems</a>
-      <a href="/maxim/semantic-memory" class="btn-link">Semantic Memory</a>
+      <span class="text-xs uppercase tracking-wider text-slate-500 self-center mr-2">The story</span>
+      <a href="/maxim/sound-orientation" class="btn-link">Sound Orienting</a>
+      <a href="/maxim/release-1-0" class="btn-link">The Honest Benchmark</a>
       <a href="/maxim/substrate-primary" class="btn-link">Substrate-Primary</a>
       <a href="/maxim/hivemind" class="btn-link">Hivemind + Oasis</a>
+      <a href="/maxim/agent-architecture" class="btn-link">The Agent Brain</a>
       <a href="/maxim/math-cognition" class="btn-link">Math &amp; Statistics</a>
-      <a href="/maxim/attention-salience" class="btn-link">Attention &amp; Salience</a>
-      <a href="/maxim/proprioception" class="btn-link">Body Awareness</a>
+    </div>
+    <div class="flex flex-wrap justify-center gap-2 pt-2 border-t border-slate-700/60">
+      <span class="text-xs uppercase tracking-wider text-slate-500 self-center mr-2">How the pieces work</span>
+      <a href="/maxim/memory-systems" class="btn-link">Memory Systems</a>
       <a href="/maxim/embodiment" class="btn-link">Embodiment</a>
-      <a href="/maxim/sound-orientation" class="btn-link">Sound Orienting</a>
-      <a href="/maxim/component-library" class="btn-link">Component Library</a>
       <a href="/maxim/imagination" class="btn-link">Imagination</a>
-      <a href="/maxim/concept-decomposition" class="btn-link">Concept Decomposition</a>
-      <a href="/maxim/communication" class="btn-link">Communication</a>
-      <a href="/maxim/operating-modes" class="btn-link">Operating Modes</a>
-    </div>
-    <div class="flex flex-wrap justify-center gap-2 pt-2 border-t border-slate-700/60">
-      <span class="text-xs uppercase tracking-wider text-slate-500 self-center mr-2">Developer / Research</span>
-      <a href="/maxim/tools" class="btn-link">Tools</a>
-      <a href="/maxim/prompt-system" class="btn-link">Prompt System</a>
-      <a href="/maxim/networking" class="btn-link">Networking</a>
-      <a href="/maxim/agent-mesh" class="btn-link">Agent Mesh</a>
-      <a href="/maxim/simulation" class="btn-link">Simulation</a>
-      <a href="/maxim/dm-campaigns" class="btn-link">DM Campaigns</a>
-      <a href="/maxim/experiments" class="btn-link">Experiments</a>
-      <a href="/maxim/benchmarks" class="btn-link">Benchmarks</a>
-      <a href="/maxim/usage-guide" class="btn-link">Usage Guide</a>
-      <a href="/maxim/technical-deepdive" class="btn-link">Technical Deep Dive</a>
-      <a href="/maxim/roadmap" class="btn-link">Roadmap</a>
-    </div>
-    <div class="flex flex-wrap justify-center gap-2 pt-2 border-t border-slate-700/60">
-      <a href="/maxim/privacy-policy" class="btn-link">Privacy Policy</a>
-      <a href="/maxim/terms-and-conditions" class="btn-link">Terms &amp; Conditions</a>
-      <a href="https://github.com/dennys246/Maxim" class="btn-link">GitHub</a>
+      <a href="/maxim/proprioception" class="btn-link">Body Awareness</a>
+      <a href="/maxim/attention-salience" class="btn-link">Attention &amp; Salience</a>
+      <a href="/maxim/deliberation" class="btn-link">Deliberation</a>
     </div>
   </nav>
 
-  <div class="rounded-xl bg-gradient-to-br from-indigo-700 via-purple-700 to-indigo-800 p-6 text-white shadow-lg">
-    <h3 class="text-lg font-semibold mb-3">What is Maxim?</h3>
-    <p class="leading-relaxed">Maxim is an agentic robotics framework that gives robots something resembling a mind. Not just reflexes. Not just if-then rules. An actual cognitive architecture inspired by how mammalian brains work, adapted for embodied AI agents that can perceive, remember, decide, and learn.</p>
-  </div>
+  <!-- Docs index -->
+  <nav class="bg-slate-900/60 border border-slate-700 rounded-xl p-4 space-y-3" aria-label="Maxim documentation on pymaxim.bio">
+    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-1 text-center">Docs, install &amp; evidence &mdash; pymaxim.bio</h3>
+    <div class="flex flex-wrap justify-center gap-2">
+      <a href="https://pymaxim.bio/getting-started/" rel="noopener" class="btn-link">Getting Started</a>
+      <a href="https://pymaxim.bio/installation/" rel="noopener" class="btn-link">Installation</a>
+      <a href="https://pymaxim.bio/concepts/architecture/" rel="noopener" class="btn-link">Architecture</a>
+      <a href="https://pymaxim.bio/systems/overview/" rel="noopener" class="btn-link">The Systems</a>
+      <a href="https://pymaxim.bio/guides/simulation/" rel="noopener" class="btn-link">Simulation</a>
+      <a href="https://pymaxim.bio/guides/reachy-mini/" rel="noopener" class="btn-link">Reachy Mini</a>
+      <a href="https://pymaxim.bio/research/evidence/" rel="noopener" class="btn-link">Evidence</a>
+      <a href="https://pymaxim.bio/research/experiments/" rel="noopener" class="btn-link">All Experiments</a>
+      <a href="https://pymaxim.bio/reference/cli/" rel="noopener" class="btn-link">CLI Reference</a>
+    </div>
+    <div class="flex flex-wrap justify-center gap-2 pt-2 border-t border-slate-700/60">
+      <a href="https://github.com/dennys246/Maxim" rel="noopener" class="btn-link">GitHub</a>
+      <a href="https://pypi.org/project/pymaxim/" rel="noopener" class="btn-link">PyPI</a>
+      <a href="/maxim/privacy-policy" class="btn-link">Privacy Policy</a>
+      <a href="/maxim/terms-and-conditions" class="btn-link">Terms &amp; Conditions</a>
+    </div>
+  </nav>
 
   <div class="pt-4"></div>
 
@@ -221,7 +225,7 @@
         <h4 class="text-indigo-400 font-semibold mb-1">Anterior Temporal Lobe</h4>
         <p class="text-sm text-slate-400">Semantic memory. Lasting knowledge distilled from experience.</p>
       </a>
-      <a href="/maxim/communication#gateway" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
+      <a href="https://pymaxim.bio/concepts/communication/" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
         <div class="text-3xl mb-2">&#x1F4E1;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Communication Gateway</h4>
         <p class="text-sm text-slate-400">External messaging. Reaching users via SMS, voice, and more.</p>
@@ -241,9 +245,9 @@
 
   <section class="space-y-4">
     <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Operating Modes</h2>
-    <p class="text-slate-300 leading-relaxed">Maxim's behavior is controlled by three independent dimensions: <em class="text-indigo-400 not-italic font-medium">processing states</em> (awake vs sleep), <em class="text-indigo-400 not-italic font-medium">operational modes</em> (passive, active, singularity), and <em class="text-indigo-400 not-italic font-medium">strategies</em> (observe, explore, research, assist, reflect, learn). These combine freely to produce configurations like "active exploration" or "passive reflection."</p>
-    <p class="text-slate-300 leading-relaxed"><a href="/maxim/operating-modes#live-mode" class="text-indigo-400 hover:text-indigo-300">Live mode</a> is the full embodied runtime with a self-evolving intent system&mdash;the agent shapes its own personality through experience. <a href="/maxim/operating-modes#exploration" class="text-indigo-400 hover:text-indigo-300">Exploration mode</a> adds curiosity modeling and budget tracking. <a href="/maxim/operating-modes#sleep" class="text-indigo-400 hover:text-indigo-300">Sleep</a> isn't a mode but a processing state that enables memory consolidation while monitoring for wake keywords.</p>
-    <p class="text-slate-300 leading-relaxed"><a href="/maxim/operating-modes" class="text-indigo-400 hover:text-indigo-300 font-medium">Read the full Operating Modes guide &rarr;</a></p>
+    <p class="text-slate-300 leading-relaxed">Maxim's behavior is controlled by two independent dimensions: a <em class="text-indigo-400 not-italic font-medium">processing state</em> (awake or asleep) and an <em class="text-indigo-400 not-italic font-medium">autonomy level</em> (planning, supervised, or autonomous), each level capping how much initiative the agent may take without a human in the loop. An earlier layer of named strategies (observe, explore, research, assist&hellip;) was removed in the 1.0 mode refactor&mdash;it was policy written by hand, and the point of the substrate is to learn that.</p>
+    <p class="text-slate-300 leading-relaxed">Sleep isn't a mode. The agent enters it by calling the sleep tool, keeps its autonomy level, and wakes when input arrives. Like biological sleep it's active maintenance: memory consolidation and pattern extraction run while the lights are off.</p>
+    <p class="text-slate-300 leading-relaxed"><a href="https://pymaxim.bio/concepts/operating-modes/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 font-medium">Operating modes reference on pymaxim.bio &rarr;</a></p>
   </section>
 
   <section class="space-y-4">

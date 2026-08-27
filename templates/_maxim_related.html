@@ -1,0 +1,55 @@
+{#
+  Shared "where next" block for Maxim essays.
+
+  Each page sets, before including this file:
+    maxim_related  — list of page slugs (3–5 topical neighbours), keys of `maxim_pages` below
+    maxim_docs     — list of (label, url) pairs pointing at the reference page(s) on pymaxim.bio
+
+  `maxim_pages` is the single source of truth for essay titles/blurbs. Add a page here
+  when you add a template; a slug that isn't listed is skipped silently, so check the
+  rendered page.
+#}
+{% set maxim_pages = {
+  "release-1-0":          ("The Honest Benchmark",        "What 1.0 shipped, and the pre-registered experiments that mapped where the biology matters and where the LLM prior wins."),
+  "sound-orientation":    ("Sound Orienting",             "The substrate's first real-hardware policy, learned in about ten trials — and the actuation bug that almost hid it."),
+  "substrate-primary":    ("Substrate-Primary Mode",      "Letting the bio-substrate, not the LLM, pick the action — and the kill criteria that decide if it earned the right."),
+  "hivemind":             ("Hivemind + Oasis",            "Federated substrate sharing between Maxims, and what got dropped from the old Mother Maxim plan."),
+  "agent-architecture":   ("The Agent Brain",             "Where biology meets AI: the design principles behind the agent loop, the fear circuit, and the root goal."),
+  "math-cognition":       ("Math & Statistical Cognition", "The dual number system — fast approximate and slow precise — and why an agent needs a statistician."),
+  "memory-systems":       ("Memory Systems",              "Hippocampus, nucleus accumbens, SCN: how a single experience becomes durable, transferable knowledge."),
+  "embodiment":           ("Embodiment",                  "The Sensor–Entity–Modulator protocol, homeostatic drives, and the pain cascade."),
+  "imagination":          ("Imagination",                 "Designing entities in real time from percepts the agent has never seen before."),
+  "proprioception":       ("Body Awareness",              "Interoception, pain, and why the agent has to feel its own state before it can act on the world."),
+  "attention-salience":   ("Attention & Salience",        "Habituation, sensitization, and deciding what deserves the agent's focus."),
+  "deliberation":         ("Deliberation",                "System-2 inner monologue, working memory, and the gate that decides which thoughts get out.")
+} %}
+
+<div class="pt-8 border-t border-slate-700 space-y-6">
+  {% if maxim_docs %}
+  <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-5 space-y-2">
+    <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Reference on pymaxim.bio</h3>
+    <p class="text-sm text-slate-400">This page is the design story. Install steps, CLI flags, configuration, and the current evidence live in the docs:</p>
+    <div class="flex flex-wrap gap-2 pt-1">
+      {% for label, url in maxim_docs %}
+      <a href="{{ url }}" rel="noopener" class="inline-flex items-center gap-1 text-sm text-indigo-300 hover:text-white bg-slate-900/70 border border-slate-700 hover:border-indigo-500/60 rounded-lg px-3 py-1.5 transition no-underline">{{ label }} <span aria-hidden="true">&rarr;</span></a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if maxim_related %}
+  <div class="space-y-3">
+    <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Related essays</h3>
+    <div class="grid sm:grid-cols-2 gap-4">
+      {% for slug in maxim_related if slug in maxim_pages %}
+      {% set title, blurb = maxim_pages[slug] %}
+      <a href="/maxim/{{ slug }}" class="bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline">
+        <span class="block text-indigo-400 font-semibold">{{ title }}</span>
+        <span class="block text-sm text-slate-400 mt-1">{{ blurb }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% include "_maxim_footer.html" %}
