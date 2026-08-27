@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Embodiment — Maxim Docs | Sensor-Entity-Modulator Protocol{% endblock %}
+{% block title %}Embodiment — Maxim Design Essays | Sensor-Entity-Modulator Protocol{% endblock %}
 
 {% block meta_description %}The SEM (Sensor-Entity-Modulator) protocol — Maxim's composable abstraction for robot joints, cameras, NPCs, and any interactive entity.{% endblock %}
 
@@ -29,8 +29,10 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
-    { "@type": "ListItem", "position": 2, "name": "Embodiment", "item": "https://www.dennyschaedig.com/maxim/embodiment" }
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Ramblings", "item": "https://www.dennyschaedig.com/ramblings" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "Embodiment", "item": "https://www.dennyschaedig.com/maxim/embodiment" }
   ]
 }
 </script>
@@ -45,6 +47,13 @@
     <h1 class="text-3xl md:text-4xl font-bold text-white">Embodiment</h1>
     <p class="text-slate-400 text-lg">Composable hardware &amp; world abstraction through Sensor-Entity-Modulator triples</p>
   </header>
+
+  {% set maxim_written = "April 2026" %}
+  {% set maxim_updated = "August 2026" %}
+  {% set maxim_docs = [("Embodiment overview", "https://pymaxim.bio/embodiment/overview/"), ("The SEM protocol", "https://pymaxim.bio/embodiment/sem-protocol/"), ("Embodiment quickstart", "https://pymaxim.bio/embodiment/quickstart/")] %}
+  {% set maxim_related = ["proprioception", "sound-orientation", "imagination"] %}
+  {% include "_maxim_status.html" %}
+
 
   <!-- Core Concept -->
   <section class="space-y-4">
@@ -63,7 +72,7 @@
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h3 class="text-white font-semibold mb-2">Sensor</h3>
-        <p class="text-slate-300 text-sm">Reads state from an entity. One sensor = one readable quantity. Returns structured <code class="bg-slate-950 px-1 rounded text-xs">SensorReading</code> with value, unit, and timestamp.</p>
+        <p class="text-slate-300 text-sm">Reads state from an entity. One sensor = one readable quantity, returned with a value, unit, and timestamp.</p>
         <p class="text-slate-500 text-xs mt-2">Examples: angle, temperature, durability, trust, frame</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
@@ -72,30 +81,8 @@
         <p class="text-slate-500 text-xs mt-2">Examples: rotate_angle, slash, speak, restart, sharpen</p>
       </div>
     </div>
-  </section>
 
-  <!-- Auto-Tool Generation -->
-  <section class="space-y-4">
-    <h2 id="auto-tools" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Auto-Generated Tools</h2>
-
-    <p class="text-slate-300 leading-relaxed">When an entity tree loads from YAML, tools are automatically created and registered. No hand-written tool classes per hardware component.</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto">
-      <table class="w-full text-left">
-        <thead><tr class="text-indigo-400 border-b border-slate-700">
-          <th class="pb-2">Tool Name</th><th class="pb-2">Type</th><th class="pb-2">Description</th>
-        </tr></thead>
-        <tbody class="text-slate-300">
-          <tr><td class="py-1">sense_shoulder</td><td class="text-slate-500">EntitySense</td><td>Read all sensors on shoulder</td></tr>
-          <tr><td class="py-1">read_shoulder_angle</td><td class="text-slate-500">SensorRead</td><td>Read angle sensor</td></tr>
-          <tr><td class="py-1">shoulder_rotate_angle</td><td class="text-slate-500">Affordance</td><td>Rotate shoulder joint</td></tr>
-          <tr><td class="py-1">rusty_sword_slash</td><td class="text-slate-500">Affordance</td><td>Slash at a target</td></tr>
-          <tr><td class="py-1">grim_ferryman_speak</td><td class="text-slate-500">Affordance</td><td>Say something to the ferryman</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p class="text-slate-300 leading-relaxed">Name collisions are handled by progressive prefixing: <code class="bg-slate-950 px-1 rounded text-xs">shoulder_rotate_angle</code> &rarr; <code class="bg-slate-950 px-1 rounded text-xs">robot2_shoulder_rotate_angle</code> if two robots share the same entity name.</p>
+    <p class="text-slate-300 leading-relaxed">When an entity tree loads, every sensor and affordance becomes a registered tool automatically &mdash; <code class="bg-slate-950 px-1 rounded text-xs">shoulder_rotate_angle</code>, <code class="bg-slate-950 px-1 rounded text-xs">rusty_sword_slash</code> &mdash; with no hand-written tool classes per hardware component; name collisions are handled by progressive prefixing. The protocol contract and module map live in the <a href="https://pymaxim.bio/embodiment/sem-protocol/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">SEM protocol reference</a> and the <a href="https://pymaxim.bio/embodiment/overview/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">embodiment overview</a>.</p>
   </section>
 
   <!-- Cerebellum -->
@@ -119,7 +106,7 @@
       <li><strong class="text-white">High variance</strong> &rarr; LLM fallback (uncertain predictions need grounding)</li>
     </ul>
 
-    <p class="text-slate-300 leading-relaxed">The LLM is a <strong class="text-white">teacher</strong>, not a per-tick oracle. After enough observations, the Cerebellum handles predictions deterministically. In testing, LLM calls drop from 100 to &le;40 over 100 actions.</p>
+    <p class="text-slate-300 leading-relaxed">The LLM is a <strong class="text-white">teacher</strong>, not a per-tick oracle. After enough observations, the Cerebellum handles predictions deterministically. In testing, LLM calls drop from 100 to &le;40 over 100 actions. The current parameters and API are on the <a href="https://pymaxim.bio/systems/cerebellum/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">Cerebellum reference page</a>.</p>
   </section>
 
   <!-- SEM Learning Loop -->
@@ -131,66 +118,29 @@
       <p class="text-slate-300">In the brain, the cerebellum doesn't just predict &mdash; it emits signals when predictions fail <em>or</em> succeed. These signals propagate to the hippocampus (contextual memory) and nucleus accumbens (reward learning) simultaneously, closing the loop between motor execution and long-term behavioral adaptation. Success and failure are not symmetric: negative outcomes carry disproportionate weight, a phenomenon known as <em>negativity bias</em>.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">When the Cerebellum evaluates an affordance, the outcome flows through the bio-pipeline as a <em class="text-indigo-400 not-italic font-medium">reaction</em> &mdash; a typed evaluative signal that drives learning across multiple systems simultaneously. This is the SEM Learning Loop.</p>
-
-    <h3 class="text-white font-semibold mt-4">CerebellumModulator Outcomes</h3>
-    <p class="text-slate-300 leading-relaxed">The <code class="bg-slate-950 px-1 rounded text-xs">CerebellumModulator</code> classifies each affordance execution into one of three outcome paths:</p>
+    <p class="text-slate-300 leading-relaxed">When the Cerebellum evaluates an affordance, the outcome flows through the bio-pipeline as a <em class="text-indigo-400 not-italic font-medium">reaction</em> &mdash; a typed evaluative signal that drives learning across multiple systems simultaneously. Each affordance execution lands on one of three paths:</p>
 
     <div class="grid md:grid-cols-3 gap-4">
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h4 class="text-emerald-400 font-semibold mb-2">Confident Prediction</h4>
-        <p class="text-slate-300 text-sm">Confidence &ge; 0.3 and low variance. The Cerebellum handles the prediction without LLM fallback. Emits a <strong class="text-white">success reaction</strong> with positive valence.</p>
+        <p class="text-slate-300 text-sm">Confidence &ge; 0.3, low variance. No LLM fallback; emits a <strong class="text-white">success reaction</strong> with positive valence.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h4 class="text-amber-400 font-semibold mb-2">LLM Fallback</h4>
-        <p class="text-slate-300 text-sm">Confidence &lt; 0.3 or high variance. The LLM acts as teacher. The Cerebellum trains on the LLM's response via Rescorla-Wagner update. No reaction emitted &mdash; the system is still learning.</p>
+        <p class="text-slate-300 text-sm">Confidence &lt; 0.3 or high variance. The LLM teaches; the Cerebellum trains on its response. No reaction &mdash; still learning.</p>
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h4 class="text-red-400 font-semibold mb-2">Failure</h4>
-        <p class="text-slate-300 text-sm">Affordance execution triggers a failure mode (e.g., shatter, overheat). Emits a <strong class="text-white">pain reaction</strong> with negative valence via the PainBus.</p>
+        <p class="text-slate-300 text-sm">A failure mode fires (shatter, overheat). Emits a <strong class="text-white">pain reaction</strong> with negative valence via the PainBus.</p>
       </div>
     </div>
 
-    <h3 class="text-white font-semibold mt-6">Signal Flow</h3>
-    <p class="text-slate-300 leading-relaxed">Both success and pain reactions flow through the <code class="bg-slate-950 px-1 rounded text-xs">ReactionBus</code>, which dispatches to two subscribers in parallel:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">SEM Learning Loop Signal Flow</span>
-
-CerebellumModulator
-  |
-  |-- confident prediction --&rarr; _emit_success_reaction(valence=+0.3..+1.0)
-  |-- failure mode fired   --&rarr; PainBus.publish(PainSignal) --&rarr; pain_signal_to_reaction
-  |
-  &darr;
-ReactionBus.dispatch(reaction)
-  |
-  |-- Subscriber 1: Hippocampus
-  |     Episode captures the reaction context
-  |     Episode.valence set at finalize (mean of all reactions)
-  |     Hebbian edges annotated with Edge.metadata["valence"]
-  |
-  |-- Subscriber 2: NAc (via distribute_reward)
-  |     Adjusts per-node reward_bias in the Hebbian graph
-  |     EC similarity thresholds shift: positive &rarr; tighter, negative &rarr; looser
-  |
-  &darr;
-Episode boundary: salience_spike_rule
-  Pain spike (intensity &ge; 0.7) forces episode close
-  New episode starts with clean slate
-  |
-  &darr;
-Future retrieval: retrieve_on_cue(include_valence=True)
-  Spreading activation propagates edge valence
-  Recalled memories carry affective coloring</div>
+    <p class="text-slate-300 leading-relaxed">Both reactions dispatch to two subscribers in parallel. The <strong class="text-white">Hippocampus</strong> captures the reaction in the current episode, sets the episode's valence at close, and annotates its Hebbian edges &mdash; so later recall carries affective coloring. The <strong class="text-white">NAc</strong> adjusts per-node reward bias in the same graph and shifts its similarity thresholds: positive tightens, negative loosens. A sharp pain spike forces the episode to close so the next starts clean.</p>
 
     <h3 class="text-white font-semibold mt-6">Negativity Bias</h3>
     <p class="text-slate-300 leading-relaxed">Success reactions carry positive valence but at lower intensity than pain reactions &mdash; mirroring biological negativity bias. A single painful failure creates a stronger learning signal than several routine successes. This asymmetry means the agent develops caution around dangerous affordances faster than it develops confidence around safe ones, which is the correct survival trade-off for an embodied system.</p>
 
-    <h3 class="text-white font-semibold mt-6">Cerebellum Activation via BioStack</h3>
-    <p class="text-slate-300 leading-relaxed">In production, the Cerebellum is wired through <code class="bg-slate-950 px-1 rounded text-xs">BioStack.cerebellum</code> and activated by <code class="bg-slate-950 px-1 rounded text-xs">build_executor</code>. This means every agent entry point that constructs a bio-stack gets Cerebellum forward models and the full SEM Learning Loop automatically &mdash; no per-caller wiring required.</p>
-
-    <h3 class="text-white font-semibold mt-6">Behavioral Convergence Wiring</h3>
-    <p class="text-slate-300 leading-relaxed">The SEM Learning Loop produces valence and reward bias in the substrate, but the LLM also needs to see this information. Behavioral convergence wiring (shipped 2026-04-17) closes four gaps: valence annotations in PromptBuilder so the LLM sees &ldquo;this entity is associated with negative experiences,&rdquo; <code class="bg-slate-950 px-1 rounded text-xs">observe_episode</code> in the agent loop for real-time episode capture, drive-pain evaluation in <code class="bg-slate-950 px-1 rounded text-xs">body.py</code> that fires hunger/fatigue/deprivation pain from <code class="bg-slate-950 px-1 rounded text-xs">HomeostaticDriveSpec</code> and <code class="bg-slate-950 px-1 rounded text-xs">EntropicDriveSpec</code>, and bundled food/water/poison SEM specs. Validated by two experiments: cross-session affective memory (11/11 PASS) and energy-driven consumable learning (13/13 PASS). See <a href="/maxim/experiments" class="text-indigo-400 hover:text-indigo-300 no-underline">Experiments &amp; Results</a> for details.</p>
+    <p class="text-slate-300 leading-relaxed">The loop produces valence and reward bias in the substrate, but the LLM also needs to see it &mdash; so the prompt builder surfaces valence annotations (&ldquo;this entity is associated with negative experiences&rdquo;) and homeostatic drives fire hunger, fatigue, and deprivation pain through the same body. Both were validated by the cross-session affective memory and consumable-learning experiments in <a href="https://pymaxim.bio/research/experiments/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">Experiments &amp; Results</a>.</p>
   </section>
 
   <!-- Motor Programs -->
@@ -206,17 +156,9 @@ Step 2: elbow.motor.rotate_angle(degrees=30, speed=1.0)
 Crystallized after 3 repetitions. Confidence: 0.82
 Known risks: overextension if shoulder.angle > 160 at start</div>
 
-    <h3 class="text-white font-semibold mt-4">Triple-Indexed Registry</h3>
-    <p class="text-slate-300 leading-relaxed">The <em class="text-indigo-400 not-italic">ProgramRegistry</em> indexes programs in three directions:</p>
+    <p class="text-slate-300 leading-relaxed">The program registry is indexed in three directions, because the agent asks three different questions: <strong class="text-white">by goal</strong> (&ldquo;I want to reach forward&rdquo; &rarr; matching programs), <strong class="text-white">by entity</strong> (&ldquo;I'm holding a sword&rdquo; &rarr; all programs involving swords), and <strong class="text-white">by affordance</strong> (&ldquo;I want to slash&rdquo; &rarr; programs for sword, axe, arm, claws).</p>
 
-    <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">By goal</strong> &mdash; "I want to reach forward" &rarr; matching programs</li>
-      <li><strong class="text-white">By entity</strong> &mdash; "I'm holding a sword" &rarr; all programs involving swords</li>
-      <li><strong class="text-white">By affordance</strong> &mdash; "I want to slash" &rarr; programs for sword, axe, arm, claws</li>
-    </ul>
-
-    <h3 class="text-white font-semibold mt-4">Pain-Gated Execution</h3>
-    <p class="text-slate-300 leading-relaxed">Each step has an optional <em class="text-indigo-400 not-italic">pain gate</em> &mdash; a sensor threshold that aborts the program before damage occurs. Gates tighten by 10% after each painful execution. The PainBus is subscribed for real-time mid-sequence interrupts.</p>
+    <p class="text-slate-300 leading-relaxed">Each step has an optional <em class="text-indigo-400 not-italic">pain gate</em> &mdash; a sensor threshold that aborts the program before damage occurs. Gates tighten by 10% after each painful execution, and the PainBus is subscribed for real-time mid-sequence interrupts.</p>
   </section>
 
   <!-- Motor Engrams -->
@@ -228,31 +170,18 @@ Known risks: overextension if shoulder.angle > 160 at start</div>
       <p class="text-slate-300">Hippocampal-cerebellar interactions are well-documented: the hippocampus provides contextual scaffolding for motor learning ("where and when did I learn this movement?"), while the cerebellum stores the procedural knowledge itself.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Motor engrams are <strong class="text-white">ephemeral cross-system traces</strong> linking motor programs to situational context:</p>
-
-    <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">Cerebellum</strong> stores the <em class="text-indigo-400 not-italic">how</em> (motor program steps)</li>
-      <li><strong class="text-white">Hippocampus</strong> stores the <em class="text-indigo-400 not-italic">when/where/what</em> (contextual episode)</li>
-      <li><strong class="text-white">The engram</strong> links them via the associative graph</li>
-    </ul>
+    <p class="text-slate-300 leading-relaxed">Motor engrams are <strong class="text-white">ephemeral cross-system traces</strong> linking motor programs to situational context. The Cerebellum stores the <em class="text-indigo-400 not-italic">how</em> (the program steps), the Hippocampus stores the <em class="text-indigo-400 not-italic">when/where/what</em> (the contextual episode), and the engram links them through the associative graph.</p>
 
     <p class="text-slate-300 leading-relaxed">Engrams form only on <strong class="text-white">significant outcomes</strong> &mdash; pain &gt; 0.3, surprising results (RPE &gt; 0.3), or novel programs. Routine successes don't need episodic context. Engrams decay after ~2 days unless reinforced, using the standard hippocampal consolidation cycle.</p>
 
-    <h3 class="text-white font-semibold mt-4">The Cyclical Feedback Loop</h3>
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Cross-System Loop</span>
-Cerebellum &rarr; Hippocampus:  Motor program outcome &rarr; engram captured
-Hippocampus &rarr; Cerebellum:  Engram recall &rarr; context-dependent gating
-Hippocampus &rarr; NAc:         Engram triggers causal observation
-NAc &rarr; Cerebellum:          Prediction vetoes/greenlights program
-Hippocampus &rarr; SCN:         Temporal index &rarr; rhythmic patterns
-SCN &rarr; Cerebellum:          Time-of-day threshold adjustment</div>
+    <p class="text-slate-300 leading-relaxed">The result is a loop, not a pipeline: a program outcome becomes an engram, recalling the engram gates the program by context, the NAc's prediction vetoes or greenlights it, and the SCN's temporal index lets thresholds shift with time of day.</p>
   </section>
 
   <!-- Virtual Entities -->
   <section class="space-y-4">
     <h2 id="virtual-entities" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Virtual Entities: Beyond Robotics</h2>
 
-    <p class="text-slate-300 leading-relaxed">The SEM protocol is hardware-agnostic. A sword is just an Entity with sensors (durability, sharpness) and modulators (slash, parry) backed by <code class="bg-slate-950 px-1 rounded text-xs">NarrativeModulator</code> instead of hardware. The same cognitive stack that learns about robot joints also learns about swords, NPCs, and doors.</p>
+    <p class="text-slate-300 leading-relaxed">The SEM protocol is hardware-agnostic. A sword is just an Entity with sensors (durability, sharpness) and modulators (slash, parry) backed by a narrative modulator instead of hardware. The same cognitive stack that learns about robot joints also learns about swords, NPCs, and doors.</p>
 
     <div class="grid md:grid-cols-2 gap-4">
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
@@ -276,300 +205,63 @@ SCN &rarr; Cerebellum:          Time-of-day threshold adjustment</div>
   <section class="space-y-4">
     <h2 id="failure-modes" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Composable Failure Modes</h2>
 
-    <p class="text-slate-300 leading-relaxed">Six base failure modes: <code class="bg-slate-950 px-1 rounded text-xs">overextension</code>, <code class="bg-slate-950 px-1 rounded text-xs">overheating</code>, <code class="bg-slate-950 px-1 rounded text-xs">strain</code>, <code class="bg-slate-950 px-1 rounded text-xs">fatigue</code>, <code class="bg-slate-950 px-1 rounded text-xs">impact</code>, <code class="bg-slate-950 px-1 rounded text-xs">exhaustion</code>. Custom failures compose from these without taxonomy explosion:</p>
+    <p class="text-slate-300 leading-relaxed">Six base failure modes: <code class="bg-slate-950 px-1 rounded text-xs">overextension</code>, <code class="bg-slate-950 px-1 rounded text-xs">overheating</code>, <code class="bg-slate-950 px-1 rounded text-xs">strain</code>, <code class="bg-slate-950 px-1 rounded text-xs">fatigue</code>, <code class="bg-slate-950 px-1 rounded text-xs">impact</code>, <code class="bg-slate-950 px-1 rounded text-xs">exhaustion</code>. Custom failures compose from these without taxonomy explosion. Tennis elbow, for instance, composes <em class="text-indigo-400 not-italic">strain</em> and <em class="text-indigo-400 not-italic">fatigue</em>: it triggers only when both cross their thresholds, it is persistent, and it recovers only once fatigue drops back down.</p>
 
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Composed Failure: Tennis Elbow</span>
-composes: [strain, fatigue]
-trigger:
-  all:
-    - {field: strain, op: ">", value: 0.6}
-    - {field: fatigue, op: ">", value: 0.5}
-pain_intensity: 0.5
-persistent: true
-recovery_condition: {field: fatigue, op: "<", value: 0.2}</div>
-
-    <p class="text-slate-300 leading-relaxed">Failures route through the existing <em class="text-indigo-400 not-italic">PainBus</em> and <em class="text-indigo-400 not-italic">ToolPainBridge</em>. NAc learns <code class="bg-slate-950 px-1 rounded text-xs">(affordance, entity_state) &rarr; failure</code> causal links. Persistent failures stay active until recovery conditions are met. All failure state persists across sessions.</p>
+    <p class="text-slate-300 leading-relaxed">Failures route through the existing <em class="text-indigo-400 not-italic">PainBus</em> and <em class="text-indigo-400 not-italic">ToolPainBridge</em>. NAc learns <code class="bg-slate-950 px-1 rounded text-xs">(affordance, entity_state) &rarr; failure</code> causal links. Persistent failures stay active until recovery conditions are met, and all failure state persists across sessions.</p>
   </section>
 
   <!-- Default Embodiment -->
   <section class="space-y-4">
-    <h2 id="default-body" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Default Embodiment <span class="text-xs font-mono text-indigo-400 ml-2">0.7</span></h2>
+    <h2 id="default-body" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Default Embodiment</h2>
 
-    <div class="bg-indigo-900/30 border border-indigo-500/50 rounded-xl p-5">
-      <h4 class="text-indigo-400 font-semibold mb-1">New in 0.7</h4>
-      <p class="text-slate-300 text-sm">Simulations now load <code class="bg-slate-950 px-1 rounded text-xs">bodies/base_humanoid</code> by default when no <code class="bg-slate-950 px-1 rounded text-xs">--embodiment</code> flag is provided. The agent always has a body in sim mode &mdash; 4 entity sensors, 8 affordances, and 5 failure modes. Pass <code class="bg-slate-950 px-1 rounded text-xs">--no-embodiment</code> to explicitly opt out.</p>
-    </div>
+    <p class="text-slate-300 leading-relaxed">Simulations load <code class="bg-slate-950 px-1 rounded text-xs">bodies/base_humanoid</code> when no other embodiment is given. It is a genre-neutral humanoid that works in any campaign setting, so the agent always has a body in sim mode &mdash; 4 entity sensors, 8 affordances, and 5 failure modes &mdash; unless you explicitly opt out.</p>
 
-    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 mt-4">
-      <h3 class="text-white font-semibold mb-2">base_humanoid</h3>
-      <p class="text-slate-300 text-sm">Genre-neutral humanoid body. Works in any campaign setting.</p>
-      <div class="flex flex-wrap gap-1 mt-2"><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">Sensors:</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">stamina</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">hunger</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">visibility</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">carrying_weight</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">health (derived)</span></div>
-      <div class="flex flex-wrap gap-1 mt-2"><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-300">Affordances:</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">look</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">listen</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">rest</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">pick_up</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">drop</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">use</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">move</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-slate-400">speak</span></div>
-      <div class="flex flex-wrap gap-1 mt-2"><span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-red-400">Failures:</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-red-400">concussion</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-red-400">exhaustion</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-red-400">crippled</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-red-400">injury</span><span class="text-xs px-2 py-0.5 rounded bg-slate-900 text-red-400">overburdened</span></div>
-      <code class="text-xs text-slate-500 block mt-2">ref: bodies/base_humanoid</code>
-    </div>
-  </section>
 
-  <!-- Running an agent with a SEM body -->
-  <section class="space-y-4">
-    <h2 id="running-with-body" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Running an Agent with a SEM Body</h2>
-
-    <p class="text-slate-300 leading-relaxed">A live agent can take a SEM body in one CLI flag. <code class="bg-slate-950 px-1 rounded text-xs">--embodiment &lt;ref&gt;</code> loads a bundled component, wraps it in <code class="bg-slate-950 px-1 rounded text-xs">Embodiment(pain_bus=...)</code>, and registers all of its affordance tools into the agent's tool registry &mdash; the agent can then invoke them on its own timeline through normal tool dispatch with the full pain cascade running end-to-end.</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Validate the ref, then run</span>
-$ maxim doctor --embodiment weapons/rusty_sword
-... [ doctor checks ]
-━━━ Embodiment ━━━
-  ✓ Embodiment ref: 'weapons/rusty_sword' resolves &rarr; entity='rusty_sword'
-
-$ maxim --llm mistral-7b --embodiment weapons/rusty_sword
-... [ agent runs with rusty_sword_slash, rusty_sword_parry,
-      rusty_sword_throw, rusty_sword_sharpen, rusty_sword_repair
-      registered as tools ]</div>
-
-    <p class="text-slate-300 leading-relaxed mt-3">If the ref is wrong, doctor groups same-category alternatives first so a typo in <code class="bg-slate-950 px-1 rounded text-xs">weapons/X</code> shows you the other weapons before unrelated categories:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Typo &rarr; actionable hint</span>
-$ maxim doctor --embodiment weapons/nonexistent_sword
-━━━ Embodiment ━━━
-  ✗ Embodiment ref: Component ref 'weapons/nonexistent_sword' not found
-    &rarr; Components in 'weapons':
-    &rarr;   weapons/combat_knife
-    &rarr;   weapons/enchanted_bow
-    &rarr;   weapons/longbow
-    &rarr;   weapons/magic_staff
-    &rarr;   weapons/neural_disruptor
-    &rarr;   weapons/plasma_rifle
-    &rarr;   weapons/poison_dagger
-    &rarr;   weapons/rusty_sword
-    &rarr;   weapons/shock_baton
-    &rarr;
-    &rarr; Other available components:
-    &rarr;   bodies/cybernetic_arm
-    &rarr;   ...and N more</div>
-
-    <h3 class="text-white font-semibold mt-4">Behind the Scenes</h3>
-    <ol class="space-y-2 text-slate-300 list-decimal pl-5">
-      <li><code class="bg-slate-950 px-1 rounded text-xs">cli.py</code> reads <code class="bg-slate-950 px-1 rounded text-xs">--embodiment weapons/rusty_sword</code>.</li>
-      <li><code class="bg-slate-950 px-1 rounded text-xs">runtime/bootstrap.py::build_executor</code> &mdash; the canonical agent-construction site since the executor bootstrap unification &mdash; instantiates the entity via <code class="bg-slate-950 px-1 rounded text-xs">ComponentRegistry</code>, wraps it in <code class="bg-slate-950 px-1 rounded text-xs">Embodiment(pain_bus=...)</code>, and calls <code class="bg-slate-950 px-1 rounded text-xs">generate_tools_for_entity</code>.</li>
-      <li>The agent's LLM sees the affordance tools alongside the standard tools and can invoke them via normal tool dispatch.</li>
-      <li>When the agent invokes <code class="bg-slate-950 px-1 rounded text-xs">rusty_sword_slash</code> on a low-durability sword, <code class="bg-slate-950 px-1 rounded text-xs">embodiment.evaluate_failures()</code> fires the <code class="bg-slate-950 px-1 rounded text-xs">shatter</code> failure mode &rarr; <code class="bg-slate-950 px-1 rounded text-xs">PainBus.publish(PainSignal)</code> &rarr; the executor's <code class="bg-slate-950 px-1 rounded text-xs">ToolPainBridge</code> calls <code class="bg-slate-950 px-1 rounded text-xs">record_tool_embodiment_failure</code> &rarr; NAc forms a NEGATIVE causal link.</li>
-      <li>On the next turn, <code class="bg-slate-950 px-1 rounded text-xs">nac.predict()</code> returns NEGATIVE for that tool, informing the agent's policy.</li>
-    </ol>
-
-    <p class="text-slate-300 leading-relaxed mt-3 text-sm"><strong class="text-white">Structural enforcement:</strong> the <code class="bg-slate-950 px-1 rounded text-xs">build_executor</code> constructor requires an explicit <code class="bg-slate-950 px-1 rounded text-xs">pain_bus=</code> decision (no default), so forgetting to wire the bridge is a <code class="bg-slate-950 px-1 rounded text-xs">TypeError</code> instead of a silent no-op. Every agent entry point in the codebase makes an explicit pain_bus decision; the prior helper-discipline approach was deprecated after three identical "forgot to wire ToolPainBridge" bugs in three weeks &mdash; three-times-is-structural.</p>
-
-    <p class="text-slate-300 leading-relaxed mt-3 text-sm"><strong class="text-white">Verified end-to-end</strong> by <code class="bg-slate-950 px-1 rounded text-xs">tests/substrate/test_sem_execution_production.py</code> against the real bundled <code class="bg-slate-950 px-1 rounded text-xs">weapons/rusty_sword.yaml</code> &mdash; no mocks in the cascade chain. <strong class="text-white">Note</strong>: <code class="bg-slate-950 px-1 rounded text-xs">--embodiment</code> works with <code class="bg-slate-950 px-1 rounded text-xs">--sim</code> (E0, 0.6+); sim mode auto-loads <code class="bg-slate-950 px-1 rounded text-xs">bodies/base_humanoid</code> by default. Only one entity can be loaded via the flag (multi-entity bodies are still loaded the old way via <code class="bg-slate-950 px-1 rounded text-xs">Embodiment(spec.root_entity)</code> in code).</p>
+    <p class="text-slate-300 leading-relaxed">Giving a live agent a different body is a single flag that loads a bundled component, attaches the pain bus, and registers its affordances as tools &mdash; the <a href="https://pymaxim.bio/embodiment/quickstart/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">embodiment quickstart</a> walks through it. One design rule from that wiring is worth keeping here: the executor requires an explicit <code class="bg-slate-950 px-1 rounded text-xs">pain_bus=</code> decision with no default, so a forgotten pain bridge is a <code class="bg-slate-950 px-1 rounded text-xs">TypeError</code> instead of a silent no-op &mdash; adopted after three identical bugs in three weeks, because three-times-is-structural.</p>
   </section>
 
   <!-- Component Library + Genre Gating -->
   <section class="space-y-4">
     <h2 id="component-library" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Component Library &amp; Genre Gating</h2>
 
-    <p class="text-slate-300 leading-relaxed">SEM components are reusable YAML templates stored in <code class="bg-slate-950 px-1 rounded text-xs">src/maxim/_data/components/</code> across 7 categories: <em class="text-indigo-400 not-italic">bodies</em>, <em class="text-indigo-400 not-italic">creatures</em>, <em class="text-indigo-400 not-italic">environments</em>, <em class="text-indigo-400 not-italic">items</em>, <em class="text-indigo-400 not-italic">npcs</em>, <em class="text-indigo-400 not-italic">vehicles</em>, and <em class="text-indigo-400 not-italic">weapons</em>. The <code class="bg-slate-950 px-1 rounded text-xs">ComponentRegistry</code> discovers them automatically from three search paths: campaign-local, user (<code class="bg-slate-950 px-1 rounded text-xs">~/.maxim/components/</code>), and bundled.</p>
-
-    <div class="grid md:grid-cols-2 gap-4">
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">Fantasy (20 components)</h3>
-        <p class="text-slate-300 text-sm">wolf, guard, merchant, ferryman, rusty_sword, longbow, tavern_interior, forest_clearing</p>
-        <p class="text-indigo-400 text-xs mt-2">Genre-neutral: base_humanoid (usable in any campaign)</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h3 class="text-white font-semibold mb-2">Cyberpunk (13 components)</h3>
-        <p class="text-slate-300 text-sm">patrol_drone, cyberdog, netrunner, corpo_guard, street_fixer, shock_baton, neural_disruptor, cybernetic_arm, megarm_v3, neon_alley, server_room, megacorp_lobby, ripperdoc_clinic</p>
-      </div>
-    </div>
-
-    <p class="text-slate-300 leading-relaxed mt-4"><strong class="text-white">Genre gating</strong> prevents cross-genre contamination. When a campaign declares <code class="bg-slate-950 px-1 rounded text-xs">genre: fantasy</code>, the <code class="bg-slate-950 px-1 rounded text-xs">ComponentRegistry</code> and <code class="bg-slate-950 px-1 rounded text-xs">EntityDesigner</code> only suggest genre-matching or genre-neutral components. A fantasy campaign won't accidentally spawn a cyberpunk patrol drone.</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Creating a genre-tagged component</span>
-component:
-  name: laser_rifle
-  tags: [weapon, ranged, <span class="text-indigo-400">scifi</span>]     <span class="text-slate-500"># Genre tag</span>
-  category: weapons
-
-entity:
-  name: laser_rifle
-  entity_type: weapon
-  sensors:
-    charge: {unit: ratio, range: [0, 1], initial: 0.8}</div>
-
-    <p class="text-slate-300 leading-relaxed mt-2">Recognized genre tags: <code class="bg-slate-950 px-1 rounded text-xs">fantasy</code>, <code class="bg-slate-950 px-1 rounded text-xs">cyberpunk</code>, <code class="bg-slate-950 px-1 rounded text-xs">scifi</code>, <code class="bg-slate-950 px-1 rounded text-xs">modern</code>, <code class="bg-slate-950 px-1 rounded text-xs">devops</code>, <code class="bg-slate-950 px-1 rounded text-xs">horror</code>, <code class="bg-slate-950 px-1 rounded text-xs">historical</code>. Explicit registry refs bypass the genre gate &mdash; you can intentionally cross genres when needed.</p>
+    <p class="text-slate-300 leading-relaxed">SEM components are reusable templates across seven categories &mdash; <em class="text-indigo-400 not-italic">bodies</em>, <em class="text-indigo-400 not-italic">creatures</em>, <em class="text-indigo-400 not-italic">environments</em>, <em class="text-indigo-400 not-italic">items</em>, <em class="text-indigo-400 not-italic">npcs</em>, <em class="text-indigo-400 not-italic">vehicles</em>, and <em class="text-indigo-400 not-italic">weapons</em> &mdash; discovered from campaign-local, user, and bundled search paths. <strong class="text-white">Genre gating</strong> prevents cross-genre contamination: when a campaign declares a genre, the registry only suggests genre-matching or genre-neutral components, so a fantasy campaign won't accidentally spawn a cyberpunk patrol drone. Explicit refs bypass the gate when you mean to cross genres. The <a href="https://pymaxim.bio/reference/components/" class="text-indigo-400 hover:text-indigo-300 no-underline">Component Library essay</a> covers the catalog design; the <a href="https://pymaxim.bio/embodiment/component-library/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">component library reference</a> lists what ships.</p>
   </section>
 
   <!-- Asset Foundry -->
   <section class="space-y-4">
-    <h2 id="asset-foundry" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Asset Foundry <span class="text-xs font-mono text-indigo-400 ml-2">E1+E2 &mdash; 0.6+</span></h2>
+    <h2 id="asset-foundry" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Asset Foundry</h2>
 
-    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
-      <h3 class="text-lg font-semibold text-emerald-400 mb-2">LLM-Driven Entity Generation</h3>
-      <p class="text-slate-300">The Asset Foundry generates new SEM components via LLM, validates them against the protocol, runs them through a 3-encounter gauntlet, and scores them on 4 bio-system engagement dimensions. Pass or fail, the pipeline produces actionable feedback.</p>
-    </div>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Foundry Pipeline</span>
-
-Generate (LLM) &rarr; Validate (schema + SEM protocol) &rarr; Gauntlet (3 encounters)
-                                                              &darr;
-                                                    Score (4 dimensions)
-                                                              &darr;
-                                                    Curate (promote to user dir)</div>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">CLI Usage</span>
-$ maxim --foundry "cyberpunk weapons" --foundry-genre cyberpunk
-$ maxim --foundry "fantasy creatures" --foundry-count 20
-$ maxim --foundry "test" --foundry-dry-run       <span class="text-slate-500"># validate only</span>
-$ maxim --foundry "horror NPCs" --llm claude-sonnet  <span class="text-slate-500"># specific LLM</span></div>
-
-    <h3 class="text-white font-semibold mt-4">Scoring Dimensions</h3>
-    <div class="grid md:grid-cols-2 gap-4">
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4">
-        <h4 class="text-indigo-400 font-semibold text-sm">Sensor Engagement</h4>
-        <p class="text-slate-400 text-xs">Do sensors change meaningfully during the gauntlet?</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4">
-        <h4 class="text-indigo-400 font-semibold text-sm">Failure Diversity</h4>
-        <p class="text-slate-400 text-xs">Do failure modes trigger under different conditions?</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4">
-        <h4 class="text-indigo-400 font-semibold text-sm">Affordance Coverage</h4>
-        <p class="text-slate-400 text-xs">Are all affordances exercised during the encounters?</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4">
-        <h4 class="text-indigo-400 font-semibold text-sm">NAc Learning Signal</h4>
-        <p class="text-slate-400 text-xs">Does the entity produce causal links the agent can learn from?</p>
-      </div>
-    </div>
+    <p class="text-slate-300 leading-relaxed">The Asset Foundry generates new SEM components via LLM, validates them against the protocol, runs them through a 3-encounter gauntlet, and scores them on four bio-system engagement dimensions: do sensors change meaningfully, do failure modes trigger under different conditions, are all affordances exercised, and does the entity produce causal links the agent can learn from? Pass or fail, the pipeline produces actionable feedback; passing components are promoted into the user's library. Usage and options are in the <a href="https://pymaxim.bio/embodiment/asset-foundry/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">Asset Foundry reference</a>.</p>
   </section>
 
   <!-- Auto-Curation -->
   <section class="space-y-4">
-    <h2 id="auto-curation" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Auto-Curation <span class="text-xs font-mono text-indigo-400 ml-2">E3 &mdash; 0.7</span></h2>
+    <h2 id="auto-curation" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Auto-Curation</h2>
 
-    <p class="text-slate-300 leading-relaxed">Before a simulation starts, <code class="bg-slate-950 px-1 rounded text-xs">--auto-curate</code> scans the campaign for entity references that have no matching component in the registry. Missing entities are generated via the Asset Foundry, validated, and promoted to the user directory &mdash; filling coverage gaps before the first percept fires.</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">CLI Usage</span>
-$ maxim --sim "test combat" --embodiment weapons/rusty_sword --auto-curate
-$ maxim --sim "explore" --embodiment X --auto-curate --curate-threshold 8
-$ maxim --sim "test" --embodiment X --no-curate  <span class="text-slate-500"># explicit opt-out</span></div>
-
-    <p class="text-slate-300 leading-relaxed mt-3">Deduplication uses the <code class="bg-slate-950 px-1 rounded text-xs">ComponentIndex</code> two-layer lookup (alias + embedding) to avoid generating components that already exist under a different name. Components that pass validation are saved to <code class="bg-slate-950 px-1 rounded text-xs">~/.maxim/components/</code>.</p>
+    <p class="text-slate-300 leading-relaxed">Before a simulation starts, auto-curation scans the campaign for entity references that have no matching component in the registry. Missing entities are generated via the Asset Foundry, validated, and promoted to the user directory &mdash; filling coverage gaps before the first percept fires. A two-layer lookup (alias table, then embedding similarity) avoids regenerating components that already exist under a different name.</p>
   </section>
 
-  <!-- Architecture Diagram -->
+  <!-- Imagination -->
   <section class="space-y-4">
-    <h2 id="architecture" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Architecture</h2>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">
-YAML Spec ──&rarr; Entity Tree ──&rarr; Auto-Generated Tools ──&rarr; Agent
-                  │                                       │
-                  ├──&rarr; Failure Triggers ──&rarr; PainBus ──&rarr; NAc (causal learning)
-                  │                                       │
-                  ├──&rarr; ATL Body Concepts ──&rarr; Grounded LLM predictions
-                  │                                       │
-                  ├──&rarr; Cerebellum ──&rarr; Forward models + Motor programs
-                  │                                       │
-                  └──&rarr; Hippocampus ──&rarr; Motor engrams (context-dependent gating)</div>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-xs text-slate-400 overflow-x-auto">
-      <table class="w-full text-left">
-        <thead><tr class="text-indigo-400 border-b border-slate-700">
-          <th class="pb-2 pr-4">Module</th><th class="pb-2">Purpose</th>
-        </tr></thead>
-        <tbody>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/sem.py</td><td>Core protocols: Sensor, Modulator, Entity, FailureMode</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/spec.py</td><td>YAML loader, SpecSensor/SpecModulator stubs</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/tool_bridge.py</td><td>Auto-tool generation with collision detection</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/body.py</td><td>Embodiment runtime, failure eval, vital drift, prompt state</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/cerebellum.py</td><td>Forward models, motor program registry, engram formation/recall</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/motor.py</td><td>MotorProgram, MotorStep, ProgramRegistry (triple-indexed)</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/engrams.py</td><td>MotorEngram, salience computation, formation logic</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/backends/cerebellum_modulator.py</td><td>CerebellumModulator: wraps Cerebellum prediction with LLM fallback</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/percepts.py</td><td>EmbodimentPerceptSource (tick cycle: eval failures → drift → format)</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/component_registry.py</td><td>Component discovery, genre filtering, instantiation, inheritance, ephemeral overlay (thread-safe)</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">embodiment/component_index.py</td><td>Semantic discovery: alias hash table (O(1)) + embedding index (cosine similarity)</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">imagination/trigger.py</td><td>Entity noun-phrase extraction, ComponentIndex lookup, design dispatch</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">imagination/designer.py</td><td>ImaginationDesigner: wraps EntityDesigner for real-time entity generation</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">imagination/cache.py</td><td>Session-scoped ImaginationCache, thread-safe, shared AUT + orchestrator</td></tr>
-          <tr><td class="py-1 pr-4 text-slate-300">prompts/acting_coach.py</td><td>B3 Acting Coach: bio-modulated exploration meta-prompt (NAc valence, pain anticipation, cerebellum predictions)</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Imagination (I1 + I2) -->
-  <section class="space-y-4">
-    <h2 id="imagination" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Imagination <span class="text-xs font-mono text-indigo-400 ml-2">I1+I2 &mdash; 0.7</span></h2>
+    <h2 id="imagination" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Imagination</h2>
 
     <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
       <h3 class="text-lg font-semibold text-emerald-400 mb-2">Biological Inspiration</h3>
       <p class="text-slate-300">Imagination fires during low-arousal idle states &mdash; the same way you don't daydream while fighting. When the brain encounters something unfamiliar, it constructs a mental model from prior experience to reason about the novel entity before physically interacting with it. The Default Network, which activates during rest and mind-wandering, gates this process.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">When the agent encounters a <strong class="text-white">novel entity</strong> mentioned in percept text that has no existing SEM component, the imagination system designs one in real-time:</p>
-
-    <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre"><span class="text-indigo-400 text-xs uppercase tracking-wider">Imagination Pipeline</span>
-
-Percept Text ──&rarr; Entity Extraction ──&rarr; ComponentIndex Lookup
-                                              │
-                                    ┌─── Match found ───&rarr; Skip (already known)
-                                    │
-                                    └─── No match ──&rarr; DN Arousal Gate
-                                                          │
-                                                    Energy Budget ──&rarr; EntityDesigner (LLM)
-                                                                          │
-                                                                    Quick Validation
-                                                                          │
-                                                              register_ephemeral + Index.add
-                                                                          │
-                                                              Scene-scoped Tool Registration</div>
-
-    <h3 class="text-white font-semibold mt-4">Entity Extraction</h3>
-    <p class="text-slate-300 leading-relaxed">Lightweight NLP heuristics extract entity-like noun phrases from narration text &mdash; physical objects, creatures, weapons, environmental features, items, vehicles, and NPCs. Abstract concepts, body parts, and clothing are filtered out. Two strategies: sentence-level intro patterns (<code class="bg-slate-950 px-1 rounded text-xs">"You see a rusty gate"</code>) and head-noun scanning against a curated indicator vocabulary.</p>
-
-    <h3 class="text-white font-semibold mt-4">ComponentIndex: Two-Layer Lookup</h3>
-    <p class="text-slate-300 leading-relaxed">Before imagining, each candidate phrase is checked against the <code class="bg-slate-950 px-1 rounded text-xs">ComponentIndex</code>:</p>
-    <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">Layer 1: Alias table (O(1))</strong> &mdash; exact match against component names and synonyms</li>
-      <li><strong class="text-white">Layer 2: Embedding similarity</strong> &mdash; cosine similarity against all component signatures (threshold 0.65)</li>
-    </ul>
-    <p class="text-slate-300 leading-relaxed">This means <code class="bg-slate-950 px-1 rounded text-xs">"old iron door"</code> finds <code class="bg-slate-950 px-1 rounded text-xs">environments/rusty_gate</code> and skips imagination.</p>
-
-    <h3 class="text-white font-semibold mt-4">Ephemeral Registration</h3>
-    <p class="text-slate-300 leading-relaxed">Imagined entities are registered in a <strong class="text-white">separate overlay</strong> (<code class="bg-slate-950 px-1 rounded text-xs">_ephemeral_index</code>) from the persistent component index. They're visible to <code class="bg-slate-950 px-1 rounded text-xs">get()</code>, <code class="bg-slate-950 px-1 rounded text-xs">has()</code>, and <code class="bg-slate-950 px-1 rounded text-xs">query()</code> during the session, but cleared at session end via <code class="bg-slate-950 px-1 rounded text-xs">clear_ephemeral()</code>.</p>
-
-    <h3 class="text-white font-semibold mt-4">Provenance Tagging</h3>
-    <p class="text-slate-300 leading-relaxed">Episodes and CausalLinks from imagined entity interactions carry <code class="bg-slate-950 px-1 rounded text-xs">imagined=True</code>. On entity discard (session end), imagined causal links get 50% confidence decay &mdash; partial learning is useful, but reduced confidence reflects simulated origin.</p>
-
-    <h3 class="text-white font-semibold mt-4">Gates</h3>
-    <div class="grid md:grid-cols-3 gap-4">
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h4 class="text-indigo-400 font-semibold mb-2">Mention Threshold</h4>
-        <p class="text-slate-300 text-sm">Default 2 mentions before triggering. Prevents one-off noise from spawning entities.</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h4 class="text-indigo-400 font-semibold mb-2">DN Arousal</h4>
-        <p class="text-slate-300 text-sm">Only fires during low-arousal idle states. Blocked when DN is inhibited or recent interesting events occurred.</p>
-      </div>
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
-        <h4 class="text-indigo-400 font-semibold mb-2">Energy Budget</h4>
-        <p class="text-slate-300 text-sm">Skipped when LLM energy is critical (&lt;10%). Falls back gracefully to verbal-only interaction.</p>
-      </div>
-    </div>
+    <p class="text-slate-300 leading-relaxed">When the agent meets a <strong class="text-white">novel entity</strong> in percept text with no existing SEM component, the imagination system designs one in real time &mdash; only after the two-layer index lookup comes up empty, only during low-arousal idle states, and only when the energy budget allows. Imagined entities live in a session-scoped overlay, and the episodes and causal links they generate are tagged as imagined so their confidence decays when the entity is discarded: partial learning is useful, but reduced confidence reflects simulated origin. Full design in the <a href="/maxim/imagination" class="text-indigo-400 hover:text-indigo-300 no-underline">Imagination essay</a>; reference on <a href="https://pymaxim.bio/embodiment/imagination/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">pymaxim.bio</a>.</p>
   </section>
 
-  <!-- Acting Coach (B3) -->
+  <!-- Acting Coach -->
   <section class="space-y-4">
-    <h2 class="text-xl font-semibold text-white">Acting Coach <span class="text-xs font-mono text-indigo-400 ml-2">B3 &mdash; 0.7</span></h2>
-    <p class="text-slate-300 leading-relaxed">The <strong class="text-white">Acting Coach</strong> is a meta-prompt system that prevents the agent from entering respond loops when embodied. Instead of asking "what should I do?", the agent explores its physical affordances proactively.</p>
+    <h2 id="acting-coach" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Acting Coach</h2>
+
+    <p class="text-slate-300 leading-relaxed">The <strong class="text-white">Acting Coach</strong> is a meta-prompt that prevents the agent from entering respond loops when embodied. Instead of asking "what should I do?", the agent explores its physical affordances proactively.</p>
 
     <div class="bg-slate-900/50 border border-slate-700 rounded-xl p-5 space-y-3">
       <h3 class="text-white font-medium text-sm">Bio-System Modulation (not suppression)</h3>
-      <p class="text-slate-300 text-sm leading-relaxed">The coach is a <em class="text-indigo-400 not-italic">default policy</em> that three bio-systems continuously modulate:</p>
-      <ol class="list-decimal list-inside text-slate-300 text-sm space-y-1.5">
-        <li><strong class="text-white">NAc valence</strong> &mdash; learned caution or preference annotations on specific affordances ("sword_slash has caused damage before")</li>
-        <li><strong class="text-white">Pain anticipation</strong> &mdash; anticipatory anxiety from hippocampal pattern-matching against past pain episodes</li>
-        <li><strong class="text-white">Cerebellum predictions</strong> &mdash; forward model outcome forecasts ("predicted low success, risks: jammed")</li>
-      </ol>
+      <p class="text-slate-300 text-sm leading-relaxed">The coach is a <em class="text-indigo-400 not-italic">default policy</em> that three bio-systems continuously modulate: <strong class="text-white">NAc valence</strong> adds learned caution on specific affordances ("sword_slash has caused damage before"), <strong class="text-white">pain anticipation</strong> adds anxiety from hippocampal pattern-matching against past pain episodes, and <strong class="text-white">Cerebellum predictions</strong> add forward-model forecasts ("predicted low success, risks: jammed").</p>
       <p class="text-slate-400 text-xs">Composition order: base directive &rarr; NAc caution &rarr; pain anticipation &rarr; cerebellum predictions. Each layer <em>adds</em> information; none removes the base exploration directive.</p>
     </div>
   </section>
@@ -578,44 +270,10 @@ Percept Text ──&rarr; Entity Extraction ──&rarr; ComponentIndex Lookup
   <section class="space-y-4">
     <h2 id="sound-orienting" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Case Study: Learned Sound Orienting</h2>
     <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
-      <p class="text-slate-300">The SEM pattern's first real-hardware learned policy: a Reachy Mini body declares an azimuth sensor, a centeredness drive, and two orient affordances &mdash; and the reward substrate learns <em>which turn, in which state, reduces the error</em>, from scratch, in ~10 hardware trials, with no LLM in the action path. Cross-session correct at trial&nbsp;0; independently trained substrates merge into one gauntlet-validated policy (cross-robot transfer is the designed follow-on). <a href="/maxim/sound-orientation" class="text-indigo-400 hover:text-indigo-300 no-underline font-medium">Read the full guide &rarr;</a></p>
+      <p class="text-slate-300">The SEM pattern's first real-hardware learned policy: a <a href="https://pymaxim.bio/guides/reachy-mini/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">Reachy Mini</a> body declares an azimuth sensor, a centeredness drive, and two orient affordances &mdash; and the reward substrate learns <em>which turn, in which state, reduces the error</em>, from scratch, in ~10 hardware trials, with no LLM in the action path. Cross-session correct at trial&nbsp;0; independently trained substrates merge into one gauntlet-validated policy. <a href="/maxim/sound-orientation" class="text-indigo-400 hover:text-indigo-300 no-underline font-medium">Read the full essay &rarr;</a></p>
     </div>
   </section>
 
-  <!-- Navigation -->
-  <div class="pt-6 border-t border-slate-700 space-y-5">
-    <div class="flex justify-between items-stretch gap-4">
-      <a href="/maxim/proprioception" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
-        <span class="block text-white font-medium mt-1">Body Awareness</span>
-      </a>
-      <a href="/maxim/communication" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
-        <span class="block text-white font-medium mt-1">Communication</span>
-      </a>
-    </div>
-    <div class="text-center space-y-2">
-      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
-      <div class="flex flex-wrap justify-center gap-2">
-        <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
-        <a href="/maxim/agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
-        <a href="/maxim/memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
-        <a href="/maxim/math-cognition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Math Cognition</a>
-        <a href="/maxim/attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
-        <a href="/maxim/proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
-        <a href="/maxim/embodiment" class="text-xs text-indigo-400 font-medium transition px-2 py-1 rounded bg-slate-800 no-underline">Embodiment</a>
-        <a href="/maxim/sound-orientation" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Sound Orienting</a>
-        <a href="/maxim/communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
-        <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
-        <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
-        <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
-        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking</a>
-        <a href="/maxim/simulation" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Simulation</a>
-        <a href="/maxim/benchmarks" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Benchmarks</a>
-        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
-      </div>
-    </div>
-  </div>
-  {% include "_maxim_footer.html" %}
+  {% include "_maxim_related.html" %}
 </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}The Agent Brain — Maxim Docs | Agentic Robotics Framework{% endblock %}
+{% block title %}The Agent Brain — Maxim Design Essays | Agentic Robotics Framework{% endblock %}
 
 {% block meta_description %}Explore Maxim's layered agent architecture — how perception, cognition, and action layers combine to give robots a biologically-inspired brain.{% endblock %}
 
@@ -29,8 +29,10 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
-    { "@type": "ListItem", "position": 2, "name": "The Agent Brain", "item": "https://www.dennyschaedig.com/maxim/agent-architecture" }
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Ramblings", "item": "https://www.dennyschaedig.com/ramblings" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "The Agent Brain", "item": "https://www.dennyschaedig.com/maxim/agent-architecture" }
   ]
 }
 </script>
@@ -86,6 +88,13 @@
     <h1 class="text-3xl md:text-4xl font-bold text-white">The Agent Brain</h1>
     <p class="text-indigo-400 font-medium">How Biological Systems Meet Agentic AI</p>
   </header>
+
+  {% set maxim_written = "February 2026" %}
+  {% set maxim_updated = "June 2026" %}
+  {% set maxim_docs = [("Architecture", "https://pymaxim.bio/concepts/architecture/"), ("How the systems connect", "https://pymaxim.bio/systems/overview/"), ("Fear circuit — safety", "https://pymaxim.bio/systems/fear-circuit/")] %}
+  {% set maxim_related = ["memory-systems", "deliberation", "attention-salience", "release-1-0"] %}
+  {% include "_maxim_status.html" %}
+
 
   <p class="text-slate-300 leading-relaxed">Maxim's cognitive components don't exist in isolation. They're woven into an agentic architecture where LLM-powered agents make decisions informed by biological memory, attention, and learning systems. This page explains how the pieces fit together.</p>
 
@@ -610,36 +619,7 @@ Energy Types:
     <p class="text-slate-300 leading-relaxed">Every decision in Maxim traces back to this root goal. The biological systems provide the machinery for understanding (memory, attention, learning). The agent architecture provides the machinery for helping (goal decomposition, planning, execution). The integration of both creates something that might, in small ways, begin to resemble a mind.</p>
   </section>
 
-  <div class="pt-6 border-t border-slate-700 space-y-5">
-    <div class="flex justify-between items-stretch gap-4">
-      <a href="/maxim" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
-        <span class="block text-white font-medium mt-1">Overview</span>
-      </a>
-      <a href="/maxim/memory-systems" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
-        <span class="block text-white font-medium mt-1">Memory Systems</span>
-      </a>
-    </div>
-    <div class="text-center space-y-2">
-      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
-      <div class="flex flex-wrap justify-center gap-2">
-        <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
-        <a href="/maxim/agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
-        <a href="/maxim/memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
-        <a href="/maxim/math-cognition" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Math &amp; Statistics</a>
-        <a href="/maxim/attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
-        <a href="/maxim/proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
-        <a href="/maxim/communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
-        <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
-        <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
-        <a href="/maxim/operating-modes" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Operating Modes</a>
-        <a href="/maxim/networking" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Networking &amp; Mesh</a>
-        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
-      </div>
-    </div>
-  </div>
-  {% include "_maxim_footer.html" %}
+  {% include "_maxim_related.html" %}
 </div>
 {% endblock %}
 

@@ -109,12 +109,22 @@
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Tips & Tricks for Fine-Tuning GANs</span>
   </a>
 
-  <div class="relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
-    <span class="absolute inset-0 bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-700 opacity-90"></span>
-  </div>
+  <a href="{{ url_for('maxim_sound_orientation') }}" aria-label="Read Sound Orienting" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <span class="absolute inset-0 bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-700 opacity-90 transition duration-500 group-hover:scale-105"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-rose-200">A robot learned to turn toward sound</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-rose-200">in ten trials, with no LLM in the loop</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Sound Orienting</span>
+  </a>
 
-  <div class="relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
-    <span class="absolute inset-0 bg-gradient-to-tr from-cyan-500 via-teal-600 to-emerald-700 opacity-90"></span>
-  </div>
+  <a href="{{ url_for('maxim_release_1_0') }}" aria-label="Read The Honest Benchmark" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <span class="absolute inset-0 bg-gradient-to-tr from-cyan-500 via-teal-600 to-emerald-700 opacity-90 transition duration-500 group-hover:scale-105"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-teal-200">Pre-registering Maxim 1.0 and reporting</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-teal-200">where the biology lost to the LLM prior</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">The Honest Benchmark</span>
+  </a>
 
 {% endblock %}

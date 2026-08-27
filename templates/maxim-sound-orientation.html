@@ -29,8 +29,10 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
-    { "@type": "ListItem", "position": 2, "name": "Sound Orienting", "item": "https://www.dennyschaedig.com/maxim/sound-orientation" }
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Ramblings", "item": "https://www.dennyschaedig.com/ramblings" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "Sound Orienting", "item": "https://www.dennyschaedig.com/maxim/sound-orientation" }
   ]
 }
 </script>
@@ -45,6 +47,12 @@
     <h1 class="text-3xl md:text-4xl font-bold text-white">Sound Orienting</h1>
     <p class="text-slate-400 text-lg">The substrate's first real-hardware sensorimotor policy &mdash; learned, not programmed</p>
   </header>
+
+  {% set maxim_written = "July 2026" %}
+  {% set maxim_docs = [("Reachy Mini guide", "https://pymaxim.bio/guides/reachy-mini/"), ("Cerebellum — motor learning", "https://pymaxim.bio/systems/cerebellum/"), ("The Cradle", "https://pymaxim.bio/research/cradle/")] %}
+  {% set maxim_related = ["substrate-primary", "embodiment", "proprioception", "release-1-0"] %}
+  {% include "_maxim_status.html" %}
+
 
   <!-- Core Concept -->
   <section class="space-y-4">
@@ -181,38 +189,6 @@ NAc.update_cluster_reward(state, action, relief)
     <p class="text-slate-300 leading-relaxed">Orienting is Layer 1 of a deliberate ladder, and it is now complete &mdash; direction and magnitude, on real hardware, learned from relief alone. Next rungs: <strong class="text-white">ears</strong> (pinna-like shell structures + a raw two-mic binaural front-end to break the linear array's front/back ambiguity &mdash; turning a hardware blind spot into a learnable state, and now with a genuinely clean sensor baseline to measure against); <strong class="text-white">vision on the same backbone</strong> (a camera bearing feeds the same centeredness drive; category recognition decides what's worth orienting to); and the north star &mdash; <strong class="text-white">spatial co-location as a grounding substrate</strong>: when the head centers on something seen, heard, and named at the same pose and moment, that shared location becomes the index that binds sound, sight, and words.</p>
   </section>
 
-  <!-- Navigation -->
-  <div class="pt-6 border-t border-slate-700 space-y-5">
-    <div class="flex justify-between items-stretch gap-4">
-      <a href="/maxim/embodiment" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">&larr; Previous</span>
-        <span class="block text-white font-medium mt-1">Embodiment</span>
-      </a>
-      <a href="/maxim/hivemind" class="flex-1 bg-slate-800 border border-slate-700 rounded-xl p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition no-underline group text-right">
-        <span class="text-xs text-slate-500 group-hover:text-indigo-400 transition">Next &rarr;</span>
-        <span class="block text-white font-medium mt-1">Hivemind + Oasis</span>
-      </a>
-    </div>
-    <div class="text-center space-y-2">
-      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">All Chapters</h3>
-      <div class="flex flex-wrap justify-center gap-2">
-        <a href="/maxim" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Overview</a>
-        <a href="/maxim/agent-architecture" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">The Agent Brain</a>
-        <a href="/maxim/memory-systems" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Memory Systems</a>
-        <a href="/maxim/attention-salience" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Attention &amp; Salience</a>
-        <a href="/maxim/proprioception" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Body Awareness</a>
-        <a href="/maxim/embodiment" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Embodiment</a>
-        <a href="/maxim/sound-orientation" class="text-xs text-indigo-400 font-medium transition px-2 py-1 rounded bg-slate-800 no-underline">Sound Orienting</a>
-        <a href="/maxim/substrate-primary" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Substrate-Primary</a>
-        <a href="/maxim/hivemind" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Hivemind + Oasis</a>
-        <a href="/maxim/experiments" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Experiments</a>
-        <a href="/maxim/communication" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Communication</a>
-        <a href="/maxim/usage-guide" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Usage Guide</a>
-        <a href="/maxim/technical-deepdive" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Technical Deep Dive</a>
-        <a href="/maxim/roadmap" class="text-xs text-slate-400 hover:text-indigo-400 transition px-2 py-1 rounded hover:bg-slate-800 no-underline">Roadmap</a>
-      </div>
-    </div>
-  </div>
-  {% include "_maxim_footer.html" %}
+  {% include "_maxim_related.html" %}
 </div>
 {% endblock %}

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, Response, url_for, redirect, abort
 import os
-from datetime import datetime
 
 app = Flask(__name__)
 
@@ -40,6 +39,14 @@ def contact():
 def perceptrons():
     return render_template("perceptrons.html")
 
+# --- Maxim ---------------------------------------------------------------------
+# /maxim is the design-essay side of Maxim (the "why"). Reference docs, install,
+# CLI, and the evidence ledger are canonical on https://pymaxim.bio; reference
+# pages that used to live here 301 there (see RETIRED_MAXIM_PAGES below).
+#
+# Wiring a new essay: route here, an entry in `pages` in sitemap_xml, a card on
+# the /maxim hub, and a row in `maxim_pages` in templates/_maxim_related.html.
+
 @app.route("/maxim")
 def maxim():
     return render_template("maxim-overview.html")
@@ -64,85 +71,21 @@ def maxim_attention_salience():
 def maxim_agent_architecture():
     return render_template("maxim-agent-architecture.html")
 
-@app.route("/maxim/technical-deepdive")
-def maxim_technical_deepdive():
-    return render_template("maxim-technical-deepdive.html")
-
-@app.route("/maxim/operating-modes")
-def maxim_operating_modes():
-    return render_template("maxim-operating-modes.html")
-
-@app.route("/maxim/usage-guide")
-def maxim_usage_guide():
-    return render_template("maxim-usage-guide.html")
-
-@app.route("/maxim/communication")
-def maxim_communication():
-    return render_template("maxim-communication.html")
-
 @app.route("/maxim/math-cognition")
 def maxim_math_cognition():
     return render_template("maxim-math-cognition.html")
-
-@app.route("/maxim/semantic-memory")
-def maxim_semantic_memory():
-    return render_template("maxim-semantic-memory.html")
-
-@app.route("/maxim/tools")
-def maxim_tools():
-    return render_template("maxim-tools.html")
-
-@app.route("/maxim/simulation")
-def maxim_simulation():
-    return render_template("maxim-simulation.html")
-
-@app.route("/maxim/benchmarks")
-def maxim_benchmarks():
-    return render_template("maxim-benchmarks.html")
 
 @app.route("/maxim/embodiment")
 def maxim_embodiment():
     return render_template("maxim-embodiment.html")
 
-@app.route("/maxim/networking")
-def maxim_networking():
-    return render_template("maxim-networking.html")
-
 @app.route("/maxim/sound-orientation")
 def maxim_sound_orientation():
     return render_template("maxim-sound-orientation.html")
 
-@app.route("/maxim/roadmap")
-def maxim_roadmap():
-    return render_template("maxim-roadmap.html")
-
-@app.route("/maxim/agent-mesh")
-def maxim_agent_mesh():
-    return render_template("maxim-agent-mesh.html")
-
-@app.route("/maxim/dm-campaigns")
-def maxim_dm_campaigns():
-    return render_template("maxim-dm-campaigns.html")
-
-@app.route("/maxim/component-library")
-def maxim_component_library():
-    return render_template("maxim-component-library.html")
-
-@app.route("/maxim/concept-decomposition")
-def maxim_concept_decomposition():
-    return render_template("maxim-concept-decomposition.html")
-
-@app.route("/maxim/experiments")
-def maxim_experiments():
-    return render_template("maxim-experiments.html")
-
 @app.route("/maxim/imagination")
 def maxim_imagination():
     return render_template("maxim-imagination.html")
-
-@app.route("/maxim/prompt-system")
-def maxim_prompt_system():
-    return render_template("maxim-prompt-system.html")
 
 @app.route("/maxim/hivemind")
 def maxim_hivemind():
@@ -160,35 +103,6 @@ def maxim_deliberation():
 def maxim_release_1_0():
     return render_template("maxim-1-0-release.html")
 
-# --- Legacy PyPI README links -------------------------------------------------
-# The pymaxim 1.0.9 README (immutable on PyPI) links to /maxim/maxim-<slug> URLs
-# that never existed on this site. Permanently redirect them to the docs site.
-# This is a lookup table, not a wildcard: unknown slugs still 404.
-PYMAXIM_DOCS = "https://pymaxim.bio"
-LEGACY_MAXIM_REDIRECTS = {
-    "maxim-1-0-release": "/research/evidence/",
-    "maxim-experiments": "/research/experiments/",
-    "maxim-substrate-primary": "/research/experiments/substrate-primary-evidence/",
-}
-for _slug in (
-    "maxim-overview", "maxim-agent-architecture", "maxim-memory-systems",
-    "maxim-semantic-memory", "maxim-embodiment", "maxim-proprioception",
-    "maxim-prompt-system", "maxim-deliberation", "maxim-imagination",
-    "maxim-simulation", "maxim-dm-campaigns", "maxim-benchmarks",
-    "maxim-component-library", "maxim-concept-decomposition",
-    "maxim-attention-salience", "maxim-operating-modes", "maxim-networking",
-    "maxim-agent-mesh", "maxim-hivemind", "maxim-tools", "maxim-math-cognition",
-    "maxim-technical-deepdive", "maxim-usage-guide", "maxim-roadmap",
-):
-    LEGACY_MAXIM_REDIRECTS[_slug] = "/getting-started/"
-
-@app.route("/maxim/<slug>")
-def maxim_legacy_redirect(slug):
-    target = LEGACY_MAXIM_REDIRECTS.get(slug)
-    if target is None:
-        abort(404)
-    return redirect(PYMAXIM_DOCS + target, code=301)
-
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
     return render_template("maxim-privacy-policy.html")
@@ -196,6 +110,82 @@ def maxim_privacy_policy():
 @app.route("/maxim/terms-and-conditions")
 def maxim_terms_and_conditions():
     return render_template("maxim-terms-and-conditions.html")
+
+# --- Maxim redirects -------------------------------------------------------------
+PYMAXIM_DOCS = "https://pymaxim.bio"
+MAXIM_GITHUB = "https://github.com/dennys246/Maxim"
+
+# Reference pages retired from this site on 2026-08-26 in favour of their
+# pymaxim.bio counterpart. Keep these forever: the old URLs are in search
+# results, the pymaxim README, and pymaxim.bio's own markdown.
+RETIRED_MAXIM_PAGES = {
+    "usage-guide": PYMAXIM_DOCS + "/installation/",
+    "tools": PYMAXIM_DOCS + "/reference/tools/",
+    "simulation": PYMAXIM_DOCS + "/guides/simulation/",
+    "networking": PYMAXIM_DOCS + "/guides/networking/",
+    "agent-mesh": PYMAXIM_DOCS + "/guides/networking/",
+    "operating-modes": PYMAXIM_DOCS + "/concepts/operating-modes/",
+    "communication": PYMAXIM_DOCS + "/concepts/communication/",
+    "technical-deepdive": PYMAXIM_DOCS + "/concepts/architecture/",
+    "experiments": PYMAXIM_DOCS + "/research/experiments/",
+    "roadmap": MAXIM_GITHUB + "/tree/main/docs/plans",
+    # Retired once pymaxim.bio gained pages for them (maxim-web #10).
+    "dm-campaigns": PYMAXIM_DOCS + "/guides/dm-campaigns/",
+    "benchmarks": PYMAXIM_DOCS + "/guides/benchmarks/",
+    "prompt-system": PYMAXIM_DOCS + "/concepts/prompt-system/",
+    "concept-decomposition": PYMAXIM_DOCS + "/systems/concept-decomposition/",
+    "component-library": PYMAXIM_DOCS + "/reference/components/",
+}
+
+# Essays folded into another essay (2026-08-26). Fragment survives the 301.
+MOVED_MAXIM_PAGES = {
+    "semantic-memory": "/maxim/memory-systems#semantic",
+}
+
+# Essays still served here. Used to normalise `/maxim/<slug>.html` and
+# `/maxim/<slug>/` variants back onto the canonical URL.
+MAXIM_ESSAY_SLUGS = (
+    "release-1-0", "sound-orientation", "substrate-primary", "hivemind",
+    "agent-architecture", "math-cognition", "memory-systems", "embodiment",
+    "imagination", "proprioception", "attention-salience", "deliberation",
+    "privacy-policy", "terms-and-conditions",
+)
+
+# The pymaxim 1.0.9 README (immutable on PyPI) and the repo's docs/index.md link
+# to /maxim/maxim-<slug> URLs that never existed here. Each one lands on the best
+# current home: the essay if it's still served, the pymaxim.bio page if it isn't.
+LEGACY_MAXIM_REDIRECTS = {
+    "maxim-overview": "/maxim",
+    "maxim-1-0-release": "/maxim/release-1-0",
+}
+for _slug in MAXIM_ESSAY_SLUGS:
+    LEGACY_MAXIM_REDIRECTS.setdefault("maxim-" + _slug, "/maxim/" + _slug)
+for _slug, _target in {**RETIRED_MAXIM_PAGES, **MOVED_MAXIM_PAGES}.items():
+    LEGACY_MAXIM_REDIRECTS["maxim-" + _slug] = _target
+
+
+def _maxim_redirect_target(slug):
+    """Resolve any non-canonical /maxim/<slug> variant, or None to 404."""
+    key = slug.strip("/")
+    if key.endswith(".html"):
+        key = key[:-5]
+    if key in RETIRED_MAXIM_PAGES:
+        return RETIRED_MAXIM_PAGES[key]
+    if key in MOVED_MAXIM_PAGES:
+        return MOVED_MAXIM_PAGES[key]
+    if key in MAXIM_ESSAY_SLUGS:
+        return "/maxim/" + key
+    return LEGACY_MAXIM_REDIRECTS.get(key)
+
+
+@app.route("/maxim/<path:slug>", strict_slashes=False)
+def maxim_legacy_redirect(slug):
+    # Exact essay routes above win over this rule, so only variants land here:
+    # retired slugs, legacy maxim-* slugs, and .html / trailing-slash forms.
+    target = _maxim_redirect_target(slug)
+    if target is None:
+        abort(404)
+    return redirect(target, code=301)
 
 @app.route("/gan-training-tips")
 def gan_training_tips():
@@ -221,54 +211,40 @@ def robots_txt():
 
 @app.route("/sitemap.xml")
 def sitemap_xml():
+    # (endpoint, changefreq, priority, lastmod). Bump lastmod when you edit a page;
+    # it used to be stamped "today" on every crawl, which told crawlers nothing.
     pages = [
-        ("main", "weekly", "1.0"),
-        ("story", "monthly", "0.8"),
-        ("experiences", "monthly", "0.8"),
-        ("achievements", "monthly", "0.8"),
-        ("papers", "monthly", "0.8"),
-        ("projects", "monthly", "0.8"),
-        ("ramblings", "monthly", "0.6"),
-        ("contact", "monthly", "0.6"),
-        ("perceptrons", "monthly", "0.6"),
-        ("maxim", "weekly", "1.0"),
-        ("maxim_agent_architecture", "weekly", "0.9"),
-        ("maxim_memory_systems", "weekly", "0.9"),
-        ("maxim_attention_salience", "weekly", "0.9"),
-        ("maxim_proprioception", "weekly", "0.9"),
-        ("maxim_usage_guide", "weekly", "0.9"),
-        ("maxim_technical_deepdive", "weekly", "0.9"),
-        ("maxim_operating_modes", "weekly", "0.9"),
-        ("maxim_communication", "weekly", "0.9"),
-        ("maxim_math_cognition", "weekly", "0.9"),
-        ("maxim_semantic_memory", "weekly", "0.9"),
-        ("maxim_tools", "weekly", "0.9"),
-        ("maxim_simulation", "weekly", "0.9"),
-        ("maxim_benchmarks", "weekly", "0.9"),
-        ("maxim_embodiment", "weekly", "0.9"),
-        ("maxim_sound_orientation", "weekly", "0.9"),
-        ("maxim_networking", "weekly", "0.9"),
-        ("maxim_agent_mesh", "weekly", "0.9"),
-        ("maxim_dm_campaigns", "weekly", "0.9"),
-        ("maxim_component_library", "weekly", "0.9"),
-        ("maxim_concept_decomposition", "weekly", "0.9"),
-        ("maxim_experiments", "weekly", "0.9"),
-        ("maxim_imagination", "weekly", "0.9"),
-        ("maxim_prompt_system", "weekly", "0.9"),
-        ("maxim_hivemind", "weekly", "0.9"),
-        ("maxim_substrate_primary", "weekly", "0.9"),
-        ("maxim_deliberation", "weekly", "0.9"),
-        ("maxim_release_1_0", "weekly", "0.9"),
-        ("maxim_roadmap", "monthly", "0.7"),
-        ("maxim_privacy_policy", "monthly", "0.5"),
-        ("maxim_terms_and_conditions", "monthly", "0.5"),
-        ("gan_training_tips", "monthly", "0.6"),
-        ("progressive_growing", "monthly", "0.6"),
+        ("main", "weekly", "1.0", "2026-07-16"),
+        ("story", "monthly", "0.8", "2026-02-16"),
+        ("experiences", "monthly", "0.8", "2026-01-06"),
+        ("achievements", "monthly", "0.8", "2026-01-06"),
+        ("papers", "monthly", "0.8", "2025-12-01"),
+        ("projects", "monthly", "0.8", "2026-07-16"),
+        ("ramblings", "monthly", "0.7", "2026-08-26"),
+        ("contact", "monthly", "0.6", "2025-11-29"),
+        ("perceptrons", "monthly", "0.6", "2025-11-22"),
+        # Maxim — design essays (docs and evidence are on pymaxim.bio)
+        ("maxim", "monthly", "0.9", "2026-08-26"),
+        ("maxim_release_1_0", "monthly", "0.8", "2026-08-26"),
+        ("maxim_sound_orientation", "monthly", "0.8", "2026-08-26"),
+        ("maxim_substrate_primary", "monthly", "0.8", "2026-08-26"),
+        ("maxim_hivemind", "monthly", "0.8", "2026-08-26"),
+        ("maxim_agent_architecture", "monthly", "0.8", "2026-08-26"),
+        ("maxim_math_cognition", "monthly", "0.8", "2026-08-26"),
+        ("maxim_memory_systems", "monthly", "0.8", "2026-08-26"),
+        ("maxim_embodiment", "monthly", "0.8", "2026-08-26"),
+        ("maxim_imagination", "monthly", "0.7", "2026-08-26"),
+        ("maxim_proprioception", "monthly", "0.7", "2026-08-26"),
+        ("maxim_attention_salience", "monthly", "0.7", "2026-08-26"),
+        ("maxim_deliberation", "monthly", "0.7", "2026-08-26"),
+        ("maxim_privacy_policy", "yearly", "0.3", "2026-06-03"),
+        ("maxim_terms_and_conditions", "yearly", "0.3", "2026-06-03"),
+        ("gan_training_tips", "monthly", "0.6", "2026-02-08"),
+        ("progressive_growing", "monthly", "0.6", "2026-02-08"),
     ]
 
-    lastmod = datetime.utcnow().date().isoformat()
     url_entries = []
-    for endpoint, changefreq, priority in pages:
+    for endpoint, changefreq, priority, lastmod in pages:
         loc = url_for(endpoint, _external=True)
         url_entries.append(
             f"""  <url>
