@@ -218,7 +218,7 @@ def sitemap_xml():
         ("story", "monthly", "0.8", "2026-02-16"),
         ("experiences", "monthly", "0.8", "2026-01-06"),
         ("achievements", "monthly", "0.8", "2026-01-06"),
-        ("papers", "monthly", "0.8", "2025-12-01"),
+        ("papers", "monthly", "0.8", "2026-09-02"),
         ("projects", "monthly", "0.8", "2026-07-16"),
         ("ramblings", "monthly", "0.7", "2026-08-26"),
         ("contact", "monthly", "0.6", "2025-11-29"),
