@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Reachability — Maxim 1.1.3 and the Defects That Never Looked Broken | Maxim{% endblock %}
+
+{% block meta_description %}Every headline defect in pymaxim 1.1.3 was a mechanism that existed and could not be reached: a fix with no callers, a guard that passed against a stub, a stamp nothing read, a test that could not run. None looked broken. The practice that makes absence visible.{% endblock %}
+
+{% block meta_keywords %}Maxim 1.1.3, reachability, vacuous test, xfail strict, regression guard, dead code, test discipline, software verification, falsifiability, pymaxim, honest engineering{% endblock %}
+
+{% block meta_author %}Maxim Project{% endblock %}
+{% block og_site_name %}Maxim{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Reachability — Maxim 1.1.3 and the Defects That Never Looked Broken",
+  "description": "A mechanism that does not run looks exactly like one that ran and found nothing. Five defects from pymaxim 1.1.3 that existed and could not be reached, and the practice that makes absence visible: strict red gates, fixes that ship with callers, guards that can fail, and counting the checks that should have run.",
+  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
+  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/reachability",
+  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "datePublished": "2026-09-03",
+  "keywords": ["reachability", "vacuous guard", "xfail strict", "regression guard", "test discipline", "falsifiability", "pymaxim 1.1.3"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Ramblings", "item": "https://www.dennyschaedig.com/ramblings" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "Reachability", "item": "https://www.dennyschaedig.com/maxim/reachability" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
+
+  <header class="text-center space-y-2">
+    <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM 1.1.3</p>
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Reachability</h1>
+    <p class="text-indigo-400 font-medium">A mechanism that does not run looks exactly like one that ran and found nothing</p>
+  </header>
+
+  {% set maxim_written = "September 2026" %}
+  {% set maxim_note = "The five defects here are told as they were understood at the 1.1.3 cut; the defect ledger carries their current status and wins wherever the two disagree." %}
+  {% set maxim_docs = [("Evidence & ledgers", "https://pymaxim.bio/research/evidence/"), ("Defect ledger", "https://github.com/dennys246/Maxim/blob/main/docs/bugs/README.md"), ("Lessons", "https://github.com/dennys246/Maxim/tree/main/docs/lessons"), ("Release notes", "https://github.com/dennys246/Maxim/tree/main/docs/announcements")] %}
+  {% set maxim_related = ["release-1-0", "sound-orientation", "hivemind", "substrate-primary"] %}
+  {% include "_maxim_status.html" %}
+
+  <!-- Lede -->
+  <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+    <p class="text-slate-200 text-lg leading-relaxed">pymaxim 1.1.3 fixed five things that were already there. A merge that computed the right answer and threw it away. A success number that went up when the merge failed. A regression guard that could not fail. A provenance stamp with no reader. A test that could not run, sitting beside two that could not lose. None of them crashed, none of them warned, and every dashboard in front of them was green. They share one shape, and the shape is the whole essay: <strong class="text-white">a mechanism that does not run looks exactly like one that ran and found nothing.</strong></p>
+  </div>
+
+  <!-- Contents -->
+  <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2">Contents</h3>
+    <ol class="space-y-1 text-slate-300 list-decimal pl-5">
+      <li><a href="#the-shape" class="text-indigo-400 hover:text-indigo-300 no-underline">The Shape</a></li>
+      <li><a href="#no-callers" class="text-indigo-400 hover:text-indigo-300 no-underline">A Fix That Merged and Changed Nothing</a></li>
+      <li><a href="#wrong-way" class="text-indigo-400 hover:text-indigo-300 no-underline">A Success Number That Moved the Wrong Way</a></li>
+      <li><a href="#return-left" class="text-indigo-400 hover:text-indigo-300 no-underline">A Guard That Passed Against <code class="bg-slate-950 px-1 rounded text-xs">return left</code></a></li>
+      <li><a href="#no-reader" class="text-indigo-400 hover:text-indigo-300 no-underline">A Stamp Nobody Read</a></li>
+      <li><a href="#impossible-test" class="text-indigo-400 hover:text-indigo-300 no-underline">A Test That Could Not Run, Beside Two That Could Not Fail</a></li>
+      <li><a href="#the-practice" class="text-indigo-400 hover:text-indigo-300 no-underline">The Practice</a></li>
+      <li><a href="#still-owed" class="text-indigo-400 hover:text-indigo-300 no-underline">Still Owed</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. The shape -->
+  <section class="space-y-4">
+    <h2 id="the-shape" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Shape</h2>
+
+    <p class="text-slate-300 leading-relaxed">Every signal a project watches is a signal from something that ran. A test that ran and passed. A linter that ran and found nothing. A merge that ran and reported success. The signals from things that <em>did not</em> run are not red. They are absent, and absence renders as the background colour of the dashboard &mdash; which, on a healthy project, is green.</p>
+
+    <p class="text-slate-300 leading-relaxed">So a fix with no callers, a guard that cannot fail and a stamp nobody reads are not three bugs. They are one bug seen from three angles: the mechanism exists, the code that would exercise it does not, and nothing in the system can tell the difference between <em>checked and fine</em> and <em>never checked</em>. You cannot grep for a missing call. You cannot see a test that was never collected. The only thing that can report on an absence is a check that was designed, in advance, to be present.</p>
+
+    <p class="text-slate-300 leading-relaxed">1.1.2 had already closed four gates that could not fail. 1.1.3 is what happened when we kept pulling that thread, and its name is literal. What follows is the five defects in the order the stories are worth telling, and then the four habits they left behind &mdash; which are the part I actually want you to take.</p>
+  </section>
+
+  <!-- 2. No callers -->
+  <section class="space-y-4">
+    <h2 id="no-callers" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">A Fix That Merged and Changed Nothing</h2>
+
+    <p class="text-slate-300 leading-relaxed">The defect underneath is simple to state. When two Maxims share what they have learned, the <a href="/maxim/hivemind" class="text-indigo-400 hover:text-indigo-300 no-underline">Hivemind</a> merge aligns the donor's memory clusters onto the receiver's, then folds the donor's reward biases in. The alignment step computed the right map and <strong class="text-white">discarded it</strong>. The fold step matched on exact string keys. So every want the donor had learned landed under a cluster id the receiver could never look up. No crash. No warning. A merged foreign want read out as exactly <code class="bg-slate-950 px-1 rounded text-xs">0.0</code>, and the merge reported success.</p>
+
+    <p class="text-slate-300 leading-relaxed">The fix shipped three functions: align and return the map, re-key the donor through it, fold N substrates in one pass. Each was correct. Each was unit-tested. And the pull request left their <em>composition</em> to call sites &mdash; of which there were <strong class="text-white">zero</strong>. Every shipped consumer still called the old fold. Through every real path, the want still read out as <code class="bg-slate-950 px-1 rounded text-xs">0.0</code>.</p>
+
+    <div class="bg-slate-800 border-l-4 border-rose-500 rounded-xl p-6 space-y-3">
+      <h3 class="text-lg font-semibold text-rose-400">What the battery saw</h3>
+      <p class="text-slate-300 text-sm">9,820 tests green. Every lint clean. A clean architecture audit. The new unit tests passed because they called the new functions directly &mdash; which is exactly what a unit test does, and exactly why it could not notice that nothing else did. The PR body quoted a real measurement: a receiver that had never seen the contingency went from 0.0 to 1.0, with four of four merged keys naming a reachable cluster. The number was true. It was taken on a sequence composed <em>by hand in the verification script</em>, which no shipped code performed. It proved the pieces <em>could</em> be composed and was read as proof that they <em>were</em>.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">What caught it was a ship gate that had been written red before the fix existed: three behavioural arms marked <code class="bg-slate-950 px-1 rounded text-xs">xfail(strict=True)</code>, expected to flip to an unexpected pass once the fix merged and force the marker's removal. <strong class="text-white">They kept failing.</strong> That is the entire finding. A non-strict marker would have stayed quietly yellow through both merges, and the fix would have shipped as a green fix nobody called.</p>
+
+    <p class="text-slate-300 leading-relaxed">The reflex at that moment is to delete the markers and get green &mdash; the fix <em>is</em> merged, after all. The second reflex, barely better, is to re-point the arms at the hand-composed sequence, which turns a ship gate into a test of a recipe. Both produce a green suite over a system where the defect is live. The actual remedy was to make the composition one callable thing, in the seam where the bug lived, and to discover in doing so that the receiver had no way to <em>load</em> merged clusters at all &mdash; the registration path hard-coded every node's evidence count to one, which would have erased the merge's weighting on every federation round. An ingestion has two halves, and the second is easy to forget because the first returns a value that looks like the answer.</p>
+  </section>
+
+  <!-- 3. Wrong way -->
+  <section class="space-y-4">
+    <h2 id="wrong-way" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">A Success Number That Moved the Wrong Way</h2>
+
+    <p class="text-slate-300 leading-relaxed">The merge did report something. It reported the size of the combined bias table, and the table grew every time, so the command printed success. But the size of a union of two keyed tables is <strong class="text-white">maximal exactly when nothing aligned</strong>: if every donor key had matched a receiver key, the table would not have grown at all. The number people read as health was inversely correlated with it.</p>
+
+    <div class="bg-slate-950 border border-slate-700 rounded-xl p-5 overflow-x-auto">
+      <pre class="text-sm text-slate-300 leading-relaxed"><code>len(left &cup; right)  =  len(left) + len(right)      <span class="text-slate-500"># nothing aligned: "maximal success"</span>
+len(left &cup; right)  =  len(left)                    <span class="text-slate-500"># everything aligned: "no change"</span></code></pre>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">A metric that cannot go down when the thing it measures fails is not a metric. The merge now reports how many biases were re-keyed and how many were dropped, which are numbers that can embarrass it.</p>
+
+    <p class="text-slate-300 leading-relaxed">There was a second half to this one that appeared in no plan document. The alignment threshold was tuned for paraphrase text embeddings; the interoception clusters that actually carry reward biases form at a much stricter similarity. Returning the map without retuning would have collapsed every donor cluster onto whichever receiver node happened to score highest &mdash; a <em>confidently wrong</em> alignment replacing an <em>honestly missing</em> one, which is strictly worse. Reachable is not sufficient. Reachable and comparable is the bar, and the second word is the one the plan forgot.</p>
+  </section>
+
+  <!-- 4. return left -->
+  <section class="space-y-4">
+    <h2 id="return-left" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">A Guard That Passed Against <code class="bg-slate-950 px-2 rounded text-lg">return left</code></h2>
+
+    <p class="text-slate-300 leading-relaxed">The <a href="/maxim/sound-orientation" class="text-indigo-400 hover:text-indigo-300 no-underline">sound-orienting</a> result has three arms, and the third &mdash; two independently trained substrates merge into a policy at least as good as either &mdash; sits in the graduation ledger as an <em>earned</em> row. Earned rows carry a contract: a <strong class="text-white">Re-run on:</strong> trigger naming what would invalidate them, and a regression guard that re-validates on demand. This row's trigger was &ldquo;merge semantics change,&rdquo; and its guard was the merge gauntlet script.</p>
+
+    <p class="text-slate-300 leading-relaxed">Replace the merge with <code class="bg-slate-950 px-1 rounded text-xs">return left</code> and the gauntlet passes. Replace it with <code class="bg-slate-950 px-1 rounded text-xs">return right</code> and it passes. Only <code class="bg-slate-950 px-1 rounded text-xs">return {}</code> fails. You could have gutted the function the guard existed to protect and the trigger would have fired, the guard would have run, and the ledger would have recorded <em>Maintained</em>.</p>
+
+    <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-6 space-y-3">
+      <h3 class="text-lg font-semibold text-amber-400">Three vacuities, and only one was a threshold</h3>
+      <p class="text-slate-300 text-sm"><strong class="text-white">The gate read one axis.</strong> It checked direction-correctness and never consulted the step-magnitude score it computed and printed on every single run. That is why a stub that turns the right way but the wrong distance passed.</p>
+      <p class="text-slate-300 text-sm"><strong class="text-white">The inputs were at ceiling.</strong> Both recorded parent policies were already perfect, so &ldquo;merged is at least as good as the best parent&rdquo; was evaluated at 1.00 versus 1.00 and carried no information. No threshold fixes this; a parent that is already correct is by itself a passing policy. The guard now derives two deliberately half-blind parents from one policy, so only a real fold can reach a perfect score.</p>
+      <p class="text-slate-300 text-sm"><strong class="text-white">The key space was shared by construction.</strong> Both parents used one agent id and one hard-coded set of bins, so the alignment defect above could not even fire here. That one is out of scope by design &mdash; this arm tests the fold, and the alignment has its own gate now &mdash; but &ldquo;independently trained&rdquo; and &ldquo;independent agents&rdquo; had been read as the same claim.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The row's sentence was true as written. Its <em>evidential status</em> was not. The guard now has a guard: a flag that re-runs the gauntlet with the merge replaced by each stub in turn and exits non-zero if any of them still passes. On the original recorded parents it correctly reports the gate as vacuous. That distinction &mdash; a claim being true versus a claim being <em>defended</em> &mdash; is what the ledger is for, and the ledger is only as falsifiable as its guards.</p>
+  </section>
+
+  <!-- 5. No reader -->
+  <section class="space-y-4">
+    <h2 id="no-reader" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">A Stamp Nobody Read</h2>
+
+    <p class="text-slate-300 leading-relaxed">Every memory cluster the substrate stores is a centroid in an embedding space, and the space depends on the encoder that produced it. Swap the encoder, and old centroids are not slightly wrong &mdash; they are vectors in a different coordinate system that happen to have the same length. The project knew this. It recorded an <em>encoder provenance</em> stamp on the store, persisted it, and reloaded it on every start.</p>
+
+    <p class="text-slate-300 leading-relaxed">Nothing compared it to anything. Its only readers were the bundle export. The recorder itself treated divergence as a finding to merge rather than an error to raise. So a geometry change loaded old-geometry centroids and cosine-scanned them against new embeddings, and the one check that did exist &mdash; refuse a <em>dimension</em> mismatch &mdash; could not see a same-dimension change: a place code that adds sensor names changes the basis set and not the length. Because audio clusters are frozen-centroid by design, the centroid never even drifted. The only symptom was inflated counts.</p>
+
+    <p class="text-slate-300 leading-relaxed">Clusters now carry a <em>geometry</em> tag derived from what actually makes two vectors comparable, and two clusters declaring different geometries never fold &mdash; <strong class="text-white">at cosine 1.0 included</strong>, because similarity across spaces is not a small number, it is undefined. That cannot be a threshold.</p>
+
+    <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6 space-y-3">
+      <h3 class="text-lg font-semibold text-indigo-400">The same shape, three more times before merge</h3>
+      <p class="text-slate-300 text-sm">A pre-merge review found the new guard was itself unreachable in three ways. <strong class="text-white">It was inert for every existing installation</strong> &mdash; no stored cluster had a tag yet, and untagged clusters matched everything forever, so the operator believed a guard was running that was not. <strong class="text-white">The tag named the reading, not the space</strong> &mdash; it hashed the sensor keys present on a given tick, and a corrective &ldquo;cold&rdquo; drive only appears when the body is cold, so a warm infant and a cold one hashed to different geometries and the guard fired in both directions during routine thermoregulation. And <strong class="text-white">the geometry argument was optional</strong>, so omitting it silently disabled the guard &mdash; and a live caller had already omitted it, on a path that mutates centroids. It is now required, and forgetting it is a <code class="bg-slate-950 px-1 rounded text-xs">TypeError</code>. A guard you can forget to arm is a guard that reads as armed.</p>
+    </div>
+  </section>
+
+  <!-- 6. Impossible test -->
+  <section class="space-y-4">
+    <h2 id="impossible-test" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">A Test That Could Not Run, Beside Two That Could Not Fail</h2>
+
+    <p class="text-slate-300 leading-relaxed">1.1.2 added a nightly lane for slow-marked tests because forty-one of them had been running nowhere. The lane's first real catch was a failing integration test: two fire-related concepts should share a memory cluster, and they did not. It failed identically with and without the fix that was suspected, so it was pre-existing, so it went on the ledger.</p>
+
+    <p class="text-slate-300 leading-relaxed">The investigation found no code failure. The test harness deliberately forces the model hub offline and points the model cache at an isolated directory. That is correct &mdash; no network in tests, no polluting the developer's cache. But it means the linguistic encoder can <em>never</em> load its sentence model under the test runner. It always falls back to a bag-of-words encoder whose own docstring says paraphrase collapse will not work with it. <strong class="text-white">The test was structurally impossible, not broken.</strong> It had been asserting a capability that the environment it ran in had removed before the first line executed.</p>
+
+    <p class="text-slate-300 leading-relaxed">Its siblings were the mirror image. Two negative controls asserted that <em>water</em> does <em>not</em> share a cluster with <em>fire</em>. A hash encoder satisfies that trivially &mdash; a degraded encoder is <em>very</em> good at telling things apart &mdash; so they were passing for the wrong reason. And both wrapped their assertion in an <code class="bg-slate-950 px-1 rounded text-xs">if</code> on the concept existing, so the likeliest outcome under a degraded encoder, a missing concept, meant passing having checked nothing at all.</p>
+
+    <p class="text-slate-300 leading-relaxed">The four semantic-dependent tests now skip with a reason that names the cause, and the two guards became assertions. That is the honest state, not the fixed one: <strong class="text-white">a skipped test is not a passing test.</strong> The real remedy is pre-seeding the model into the isolated cache so the nightly lane can run what it was built to run, and that is still owed.</p>
+  </section>
+
+  <!-- 7. The practice -->
+  <section class="space-y-4">
+    <h2 id="the-practice" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Practice</h2>
+
+    <p class="text-slate-300 leading-relaxed">The war stories are the evidence. These are the rules, and they are what the release actually shipped.</p>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">1. Write red gates strict.</h3>
+        <p class="text-slate-300 text-sm">A test written before its fix goes in as <code class="bg-slate-950 px-1 rounded text-xs">xfail(strict=True)</code>. The strictness is the entire mechanism: a non-strict expected failure that silently keeps failing is indistinguishable from one that silently starts passing. And when a strict gate does <em>not</em> flip after the fix merges, that is data. Do not remove the marker. The gate is reporting on the merge, and it is the only thing that can.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">2. A fix ships with a caller, or it has not shipped.</h3>
+        <p class="text-slate-300 text-sm">Before declaring a defect fixed, grep the new symbols across the source and scripts trees, <em>excluding tests</em>. Zero non-test callers means you shipped a capability, not a fix. And when the defect lives in a composition &mdash; an ordering fact about how two functions are called &mdash; better pieces cannot fix it. The fix belongs in the seam, as one callable thing.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">3. Say where a number was measured.</h3>
+        <p class="text-slate-300 text-sm">&ldquo;Measured end to end&rdquo; must name the entry point. If the sequence was composed in the verification script, it is a measurement of a possibility, and it should be written as one. The 0.0 to 1.0 figure was true both times; only the second time was it a property of the shipped path, and only that version is worth quoting.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">4. Confirm expected checks are present, not merely that visible ones are green.</h3>
+        <p class="text-slate-300 text-sm">Count what should have run. One release earlier, a pull request with a merge conflict suppressed the entire test workflow and the checks page rendered three green rows &mdash; every present signal genuinely passing, the important one absent. The same question applies to a guard: ask what would make it fail, then run the stubs and make sure something does.</p>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">One corollary earned its own line. <strong class="text-white">Every mechanism you add to a gate's path needs its own null arm.</strong> Wiring the merge composition made cluster ingestion part of the behavioural gate, which introduced a fresh way to pass hollowly: ingesting the donor's clusters relocates which cluster the receiver lands on, so &ldquo;the score went up&rdquo; could be relocation rather than transfer. The gate now also asserts that ingesting the donor's clusters <em>without</em> its rewards changes nothing. Anti-vacuity guards must cover the fix's own new degrees of freedom, not just the old ones.</p>
+
+    <p class="text-slate-300 leading-relaxed">This is the same project as <a href="/maxim/release-1-0" class="text-indigo-400 hover:text-indigo-300 no-underline">the honest benchmark</a>, one layer down. The ledgers &mdash; defects, measurement limits, and the behavioural claims with their re-run triggers &mdash; are a working system for not fooling yourself, and they are only as falsifiable as the guards they cite. A vacuous guard on an earned row under a live trigger is the exact failure the ledger exists to prevent: the trigger fires, the guard runs, the row reads Maintained, and the claim has not been tested since the day it was earned. Making the guard able to fail is what makes the trigger mean anything.</p>
+  </section>
+
+  <!-- 8. Still owed -->
+  <section class="space-y-4">
+    <h2 id="still-owed" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Still Owed</h2>
+    <p class="text-slate-300 leading-relaxed">The geometry guard's specification says <em>reject or migrate</em> incompatible state. Only <em>reject</em> shipped; the re-encode path does not exist yet, and the warning text currently promises a remedy it cannot deliver. The impossible test is skipped, not running. Both are on the ledger with their triggers, which is where a reader should check rather than here &mdash; the defect ledger wins over this essay wherever they disagree, and it is supposed to.</p>
+  </section>
+
+  {% include "_maxim_related.html" %}
+</div>
+{% endblock %}

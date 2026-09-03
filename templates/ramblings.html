@@ -109,13 +109,13 @@
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Tips & Tricks for Fine-Tuning GANs</span>
   </a>
 
-  <a href="{{ url_for('maxim_sound_orientation') }}" aria-label="Read Sound Orienting" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+  <a href="{{ url_for('maxim_sound_orientation') }}#hardware-lessons" aria-label="Read What the Robot Taught Us — the sound-orienting retraction" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
     <span class="absolute inset-0 bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-700 opacity-90 transition duration-500 group-hover:scale-105"></span>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
-      <p class="text-xs uppercase tracking-[0.3em] text-rose-200">A robot learned to turn toward sound</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-rose-200">in ten trials, with no LLM in the loop</h2>
+      <p class="text-xs uppercase tracking-[0.3em] text-rose-200">A robot learned to turn toward sound.</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-rose-200">The retraction taught us more than the result</h2>
     </div>
-    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Sound Orienting</span>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">What the Robot Taught Us</span>
   </a>
 
   <a href="{{ url_for('maxim_release_1_0') }}" aria-label="Read The Honest Benchmark" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
@@ -125,6 +125,33 @@
       <h2 class="text-xs uppercase tracking-[0.3em] text-teal-200">where the biology lost to the LLM prior</h2>
     </div>
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">The Honest Benchmark</span>
+  </a>
+
+  <a href="{{ url_for('maxim_reachability') }}" aria-label="Read Reachability — the vacuous-guard pattern" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <span class="absolute inset-0 bg-gradient-to-br from-red-600 via-rose-800 to-slate-950 opacity-90 transition duration-500 group-hover:scale-105"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-rose-200">A mechanism that does not run looks</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-rose-200">exactly like one that ran and found nothing</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Reachability</span>
+  </a>
+
+  <a href="https://pymaxim.bio/research/evidence/" rel="noopener" aria-label="Browse the Maxim evidence ledgers on pymaxim.bio" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <span class="absolute inset-0 bg-gradient-to-br from-amber-400 via-orange-600 to-red-800 opacity-90 transition duration-500 group-hover:scale-105"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-amber-200">Bugs, limits and earned claims, each row</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-amber-200">naming the trigger that would re-test it</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">A System for Not Fooling Yourself</span>
+  </a>
+
+  <a href="https://github.com/dennys246/Maxim/blob/main/docs/limits/README.md" rel="noopener" aria-label="Read the Maxim measurement-limits ledger, including L11" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <span class="absolute inset-0 bg-gradient-to-br from-slate-500 via-slate-700 to-slate-950 opacity-90 transition duration-500 group-hover:scale-105"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-200">Past about a dozen sensors per channel</p>
+      <h2 class="text-xs uppercase tracking-[0.3em] text-slate-200">the substrate stops seeing which one moved</h2>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Where Maxim Hits Its Ceiling</span>
   </a>
 
 {% endblock %}
