@@ -53,6 +53,8 @@ REDIRECTS = {
     "/maxim/memory-systems/": "/maxim/memory-systems",
     "/maxim/semantic-memory": "/maxim/memory-systems#semantic",
     "/maxim/usage-guide": "https://pymaxim.bio/installation/",
+    "/maxim/reachability/": "/maxim/reachability",
+    "/maxim/maxim-reachability": "/maxim/reachability",
 }
 for src, dst in REDIRECTS.items():
     r = c.get(src)
