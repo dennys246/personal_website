@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Reachability — Maxim 1.1.3 and the Defects That Never Looked Broken | Maxim{% endblock %}
+{% block title %}Reachability in 1.1.3 — Maxim | Denny Schaedig{% endblock %}
 
 {% block meta_description %}Every headline defect in pymaxim 1.1.3 was a mechanism that existed and could not be reached: a fix with no callers, a guard that passed against a stub, a stamp nothing read, a test that could not run. None looked broken. The practice that makes absence visible.{% endblock %}
 
 {% block meta_keywords %}Maxim 1.1.3, reachability, vacuous test, xfail strict, regression guard, dead code, test discipline, software verification, falsifiability, pymaxim, honest engineering{% endblock %}
 
-{% block meta_author %}Maxim Project{% endblock %}
+{% block meta_author %}Denny Schaedig{% endblock %}
 {% block og_site_name %}Maxim{% endblock %}
 {% block og_type %}article{% endblock %}
 
@@ -31,7 +31,7 @@
   "@type": "BreadcrumbList",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
-    { "@type": "ListItem", "position": 2, "name": "Ramblings", "item": "https://www.dennyschaedig.com/ramblings" },
+    { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://www.dennyschaedig.com/projects" },
     { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
     { "@type": "ListItem", "position": 4, "name": "Reachability", "item": "https://www.dennyschaedig.com/maxim/reachability" }
   ]
@@ -79,11 +79,11 @@
   <section class="space-y-4">
     <h2 id="the-shape" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Shape</h2>
 
-    <p class="text-slate-300 leading-relaxed">Every signal a project watches is a signal from something that ran. A test that ran and passed. A linter that ran and found nothing. A merge that ran and reported success. The signals from things that <em>did not</em> run are not red. They are absent, and absence renders as the background colour of the dashboard &mdash; which, on a healthy project, is green.</p>
+    <p class="text-slate-300 leading-relaxed">Every signal a project watches is a signal from something that ran. A test that ran and passed. A linter that ran and found nothing. A merge that ran and reported success. The signals from things that <em>did not</em> run are not red. They are absent, and absence renders as the background color of the dashboard &mdash; which, on a healthy project, is green.</p>
 
     <p class="text-slate-300 leading-relaxed">So a fix with no callers, a guard that cannot fail and a stamp nobody reads are not three bugs. They are one bug seen from three angles: the mechanism exists, the code that would exercise it does not, and nothing in the system can tell the difference between <em>checked and fine</em> and <em>never checked</em>. You cannot grep for a missing call. You cannot see a test that was never collected. The only thing that can report on an absence is a check that was designed, in advance, to be present.</p>
 
-    <p class="text-slate-300 leading-relaxed">1.1.2 had already closed four gates that could not fail. 1.1.3 is what happened when we kept pulling that thread, and its name is literal. What follows is the five defects in the order the stories are worth telling, and then the four habits they left behind &mdash; which are the part I actually want you to take.</p>
+    <p class="text-slate-300 leading-relaxed">1.1.2 had already closed four gates that could not fail. 1.1.3 is what happened when we kept pulling that thread, and its name is literal. What follows is the five defects in the order the stories are worth telling, and then the four habits they left behind &mdash; which are the part most worth taking away.</p>
   </section>
 
   <!-- 2. No callers -->
@@ -99,7 +99,7 @@
       <p class="text-slate-300 text-sm">9,820 tests green. Every lint clean. A clean architecture audit. The new unit tests passed because they called the new functions directly &mdash; which is exactly what a unit test does, and exactly why it could not notice that nothing else did. The PR body quoted a real measurement: a receiver that had never seen the contingency went from 0.0 to 1.0, with four of four merged keys naming a reachable cluster. The number was true. It was taken on a sequence composed <em>by hand in the verification script</em>, which no shipped code performed. It proved the pieces <em>could</em> be composed and was read as proof that they <em>were</em>.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">What caught it was a ship gate that had been written red before the fix existed: three behavioural arms marked <code class="bg-slate-950 px-1 rounded text-xs">xfail(strict=True)</code>, expected to flip to an unexpected pass once the fix merged and force the marker's removal. <strong class="text-white">They kept failing.</strong> That is the entire finding. A non-strict marker would have stayed quietly yellow through both merges, and the fix would have shipped as a green fix nobody called.</p>
+    <p class="text-slate-300 leading-relaxed">What caught it was a ship gate that had been written red before the fix existed: three behavioral arms marked <code class="bg-slate-950 px-1 rounded text-xs">xfail(strict=True)</code>, expected to flip to an unexpected pass once the fix merged and force the marker's removal. <strong class="text-white">They kept failing.</strong> That is the entire finding. A non-strict marker would have stayed quietly yellow through both merges, and the fix would have shipped as a green fix nobody called.</p>
 
     <p class="text-slate-300 leading-relaxed">The reflex at that moment is to delete the markers and get green &mdash; the fix <em>is</em> merged, after all. The second reflex, barely better, is to re-point the arms at the hand-composed sequence, which turns a ship gate into a test of a recipe. Both produce a green suite over a system where the defect is live. The actual remedy was to make the composition one callable thing, in the seam where the bug lived, and to discover in doing so that the receiver had no way to <em>load</em> merged clusters at all &mdash; the registration path hard-coded every node's evidence count to one, which would have erased the merge's weighting on every federation round. An ingestion has two halves, and the second is easy to forget because the first returns a value that looks like the answer.</p>
   </section>
@@ -192,9 +192,9 @@ len(left &cup; right)  =  len(left)                    <span class="text-slate-5
       </div>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">One corollary earned its own line. <strong class="text-white">Every mechanism you add to a gate's path needs its own null arm.</strong> Wiring the merge composition made cluster ingestion part of the behavioural gate, which introduced a fresh way to pass hollowly: ingesting the donor's clusters relocates which cluster the receiver lands on, so &ldquo;the score went up&rdquo; could be relocation rather than transfer. The gate now also asserts that ingesting the donor's clusters <em>without</em> its rewards changes nothing. Anti-vacuity guards must cover the fix's own new degrees of freedom, not just the old ones.</p>
+    <p class="text-slate-300 leading-relaxed">One corollary earned its own line. <strong class="text-white">Every mechanism you add to a gate's path needs its own null arm.</strong> Wiring the merge composition made cluster ingestion part of the behavioral gate, which introduced a fresh way to pass hollowly: ingesting the donor's clusters relocates which cluster the receiver lands on, so &ldquo;the score went up&rdquo; could be relocation rather than transfer. The gate now also asserts that ingesting the donor's clusters <em>without</em> its rewards changes nothing. Anti-vacuity guards must cover the fix's own new degrees of freedom, not just the old ones.</p>
 
-    <p class="text-slate-300 leading-relaxed">This is the same project as <a href="/maxim/release-1-0" class="text-indigo-400 hover:text-indigo-300 no-underline">the honest benchmark</a>, one layer down. The ledgers &mdash; defects, measurement limits, and the behavioural claims with their re-run triggers &mdash; are a working system for not fooling yourself, and they are only as falsifiable as the guards they cite. A vacuous guard on an earned row under a live trigger is the exact failure the ledger exists to prevent: the trigger fires, the guard runs, the row reads Maintained, and the claim has not been tested since the day it was earned. Making the guard able to fail is what makes the trigger mean anything.</p>
+    <p class="text-slate-300 leading-relaxed">This is the same project as <a href="/maxim/release-1-0" class="text-indigo-400 hover:text-indigo-300 no-underline">the honest benchmark</a>, one layer down. The ledgers &mdash; defects, measurement limits, and the behavioral claims with their re-run triggers &mdash; are a working system for not fooling yourself, and they are only as falsifiable as the guards they cite. A vacuous guard on an earned row under a live trigger is the exact failure the ledger exists to prevent: the trigger fires, the guard runs, the row reads Maintained, and the claim has not been tested since the day it was earned. Making the guard able to fail is what makes the trigger mean anything.</p>
   </section>
 
   <!-- 8. Still owed -->

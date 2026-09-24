@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Maxim — A Brain for Robots: The Design Essays | Denny Schaedig{% endblock %}
+{% block title %}Maxim — Bio-Inspired Cognitive Architecture | Denny Schaedig{% endblock %}
 
 {% block meta_description %}The design story behind Maxim, a biologically-inspired cognitive architecture for embodied AI agents — why it's built from brain structures, what the experiments showed, and what a robot learned on real hardware. Docs and evidence live at pymaxim.bio.{% endblock %}
 
-{% block meta_keywords %}Maxim, Maxim AI, Maxim agent, Maxim harness, Maxim brain, Maxim robot, pymaxim, agentic robotics, cognitive architecture, robot brain, embodied AI, biologically-inspired AI, artificial mind, Reachy Mini, memory systems, attention networks, proprioception, design essays{% endblock %}
+{% block meta_keywords %}Maxim, Maxim AI, Maxim agent, Maxim harness, Maxim brain, Maxim robot, pymaxim, agentic robotics, cognitive architecture, robot brain, embodied AI, biologically-inspired AI, Reachy Mini, memory systems, attention networks, proprioception, design essays{% endblock %}
 
 {% block og_type %}website{% endblock %}
 
@@ -14,9 +14,11 @@
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "Maxim",
-  "description": "Maxim is an agentic robotics framework that gives robots a brain. A biologically-inspired cognitive architecture for embodied AI agents with memory, attention, proprioception, and learning.",
+  "description": "Maxim is an open-source, bio-inspired cognitive architecture for LLM agents and robots, with memory, attention, proprioception, and reward-learning systems modeled on brain structures.",
   "applicationCategory": "Artificial Intelligence",
   "operatingSystem": "Linux, macOS",
+  "softwareVersion": "1.1.3",
+  "license": "https://www.apache.org/licenses/LICENSE-2.0",
   "author": {
     "@type": "Person",
     "name": "Denny Schaedig",
@@ -45,7 +47,7 @@
   "@type": "BreadcrumbList",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
-    { "@type": "ListItem", "position": 2, "name": "Ramblings", "item": "https://www.dennyschaedig.com/ramblings" },
+    { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://www.dennyschaedig.com/projects" },
     { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" }
   ]
 }
@@ -60,7 +62,7 @@
       "name": "What is Maxim?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Maxim is an agentic robotics framework — a biologically-inspired cognitive architecture that gives robots something resembling a mind. It implements computational models of brain structures (hippocampus, entorhinal cortex, nucleus accumbens, attention networks, proprioception, and more) so embodied AI agents can perceive, remember, decide, and learn."
+        "text": "Maxim is an open-source, bio-inspired cognitive architecture for LLM agents and robots, designed and built by Denny Schaedig and published on PyPI as pymaxim. It implements computational models of brain structures (hippocampus, entorhinal cortex, nucleus accumbens, attention networks, proprioception, and more) as a persistent substrate that embodied agents use to perceive, remember, and decide."
       }
     },
     {
@@ -76,7 +78,7 @@
       "name": "Is Maxim open source?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes — Maxim is open source on GitHub at https://github.com/dennys246/Maxim. The repository contains the full cognitive architecture, agent harness, simulation environment, and integration code for the Reachy Mini humanoid robot."
+        "text": "Yes — Maxim is open source on GitHub at https://github.com/dennys246/Maxim. The repository contains the full cognitive architecture, agent harness, simulation environment, and integration code for the Reachy Mini robot."
       }
     },
     {
@@ -84,7 +86,7 @@
       "name": "What hardware does Maxim run on?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Maxim currently runs on the Reachy Mini humanoid robot, processing real visual input, motor commands, and human interactions. The architecture is hardware-agnostic and can be adapted to other embodied platforms via the embodiment layer."
+        "text": "Maxim runs on the Reachy Mini robot, processing real sensor input, motor commands, and human interactions. The architecture is designed to be hardware-agnostic via its embodiment layer, where a new platform declares its sensors and affordances; so far it has been validated on Reachy Mini."
       }
     },
     {
@@ -92,7 +94,7 @@
       "name": "How is Maxim different from other AI agents?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Most AI agents are pure LLM wrappers with stateless tool calls. Maxim adds a persistent bio-substrate — episodic memory (hippocampus), semantic memory (ATL), reward prediction (nucleus accumbens), circadian rhythms (SCN), and proprioception — so the agent learns from every interaction rather than starting fresh each turn."
+        "text": "Most LLM agents keep no learned state between sessions. Maxim adds a persistent bio-substrate — episodic memory (hippocampus), semantic memory (ATL), reward prediction (nucleus accumbens), circadian rhythms (SCN), and proprioception — whose learned state, such as memories and reward associations, carries across sessions. Whether that state changes behavior is tested rather than assumed: the pre-registered 1.0 benchmark found that a strong LLM's prior usually dominates carried experience, while on a Reachy Mini robot a reward substrate with no LLM in the action path learned to turn toward speech in about ten trials and was correct at the start of the next session."
       }
     }
   ]
@@ -108,14 +110,14 @@
 
 {% block content %}
 <div class="space-y-8">
-  <a href="/ramblings" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Ramblings</a>
+  <a href="/projects" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Projects</a>
 
   <header class="text-center space-y-4">
     <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight" style="font-family: 'Space Grotesk', sans-serif;">MAXIM</h1>
-    <p class="text-indigo-400 font-medium">An Artificial Brain from Biological Blueprints</p>
+    <p class="text-indigo-400 font-medium">A Bio-Inspired Cognitive Architecture for LLM Agents and Robots</p>
     <img
-      src="{{ url_for('static', filename='img/reachy_mini_hidding.jpg') }}"
-      alt="Maxim cognitive architecture running on a Reachy Mini humanoid robot — biologically-inspired brain for embodied AI agents"
+      src="{{ url_for('static', filename='img/reachy_mini_hidding.webp') }}"
+      alt="Reachy Mini robot running Maxim, a bio-inspired cognitive architecture for LLM agents and robots"
       class="mx-auto rounded-xl max-h-80 w-auto object-contain shadow-lg shadow-indigo-500/10"
       loading="eager"
     />
@@ -123,7 +125,14 @@
 
   <div class="rounded-xl bg-gradient-to-br from-indigo-700 via-purple-700 to-indigo-800 p-6 text-white shadow-lg space-y-3">
     <h3 class="text-lg font-semibold">What is Maxim?</h3>
-    <p class="leading-relaxed">Maxim is an agentic robotics framework that gives robots something resembling a mind. Not just reflexes. Not just if-then rules. An actual cognitive architecture inspired by how mammalian brains work, adapted for embodied AI agents that can perceive, remember, decide, and learn.</p>
+    <p class="leading-relaxed">Maxim is an open-source, bio-inspired cognitive architecture for LLM agents and robots, designed and built by Denny Schaedig and published on PyPI as <code class="bg-indigo-950/60 px-1 rounded text-sm">pymaxim</code> (Apache-2.0; current release 1.1.3, September 2026). It models brain systems &mdash; episodic and semantic memory, reward learning, attention, proprioception &mdash; as a persistent substrate around the LLM, and validates it on a Reachy Mini robot.</p>
+    <p class="leading-relaxed">Its claims are tested rather than asserted: the 1.0 release shipped with a pre-registered, ablation-controlled benchmark, and results are tracked in a public evidence ledger with the conditions that would require re-running them.</p>
+    <div class="flex flex-wrap gap-2 pt-1">
+      <a href="https://pymaxim.bio" rel="noopener" class="inline-flex items-center gap-1 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg px-3 py-1.5 transition no-underline">Docs &mdash; pymaxim.bio <span aria-hidden="true">&rarr;</span></a>
+      <a href="https://github.com/dennys246/Maxim" rel="noopener" class="inline-flex items-center gap-1 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg px-3 py-1.5 transition no-underline">Source on GitHub <span aria-hidden="true">&rarr;</span></a>
+      <a href="https://pypi.org/project/pymaxim/" rel="noopener" class="inline-flex items-center gap-1 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg px-3 py-1.5 transition no-underline">pymaxim on PyPI <span aria-hidden="true">&rarr;</span></a>
+      <a href="https://pymaxim.bio/research/evidence/" rel="noopener" class="inline-flex items-center gap-1 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg px-3 py-1.5 transition no-underline">Evidence ledger <span aria-hidden="true">&rarr;</span></a>
+    </div>
     <p class="leading-relaxed text-indigo-100">These pages are the design story &mdash; why each piece is built the way it is, what the experiments showed, and what a real robot learned. The software itself is documented at <a href="https://pymaxim.bio" rel="noopener" class="text-white underline decoration-indigo-300 hover:decoration-white">pymaxim.bio</a>: install, CLI, configuration, and the experiment ledger that decides what Maxim is allowed to claim.</p>
   </div>
 
@@ -168,8 +177,6 @@
     <div class="flex flex-wrap justify-center gap-2 pt-2 border-t border-slate-700/60">
       <a href="https://github.com/dennys246/Maxim" rel="noopener" class="btn-link">GitHub</a>
       <a href="https://pypi.org/project/pymaxim/" rel="noopener" class="btn-link">PyPI</a>
-      <a href="/maxim/privacy-policy" class="btn-link">Privacy Policy</a>
-      <a href="/maxim/terms-and-conditions" class="btn-link">Terms &amp; Conditions</a>
     </div>
   </nav>
 
@@ -177,8 +184,8 @@
 
   <section class="space-y-4">
     <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">The Problem with Robot Brains</h2>
-    <p class="text-slate-300 leading-relaxed">Most robots today are either brilliant or stupid, rarely anything in between. Industrial robots execute perfect movements but can't adapt. LLM-powered robots can reason but lack genuine understanding of their bodies. They don't <em class="text-indigo-400 not-italic font-medium">feel</em> where they are in space. They don't <em class="text-indigo-400 not-italic font-medium">remember</em> what worked before.</p>
-    <p class="text-slate-300 leading-relaxed">Maxim bridges this gap by stealing shamelessly from neuroscience. If evolution spent hundreds of millions of years perfecting certain cognitive architectures, why reinvent them?</p>
+    <p class="text-slate-300 leading-relaxed">Industrial robots execute precise, pre-programmed movements but adapt poorly when conditions change. LLM-driven agents can reason in language, but they typically carry no persistent model of their own body state (<em class="text-indigo-400 not-italic font-medium">proprioception</em>) and no learned <em class="text-indigo-400 not-italic font-medium">memory</em> of what worked in earlier sessions.</p>
+    <p class="text-slate-300 leading-relaxed">Maxim's approach is to borrow from neuroscience: rather than invent new mechanisms for memory, reward learning, and attention, it adapts computational models of the brain systems that handle those problems in animals &mdash; and then tests whether each one earns its place.</p>
   </section>
 
   <section class="space-y-4">
@@ -187,57 +194,46 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <a href="/maxim/memory-systems#hippocampus" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">🧠</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Hippocampus</h4>
         <p class="text-sm text-slate-400">Episodic memory. What happened, when, and what came of it.</p>
       </a>
       <a href="/maxim/memory-systems#scn" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">⏰</div>
         <h4 class="text-indigo-400 font-semibold mb-1">SCN</h4>
         <p class="text-sm text-slate-400">Circadian rhythms. Temporal patterns across hours, days, weeks.</p>
       </a>
       <a href="/maxim/memory-systems#nucleus-accumbens" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">🎯</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Nucleus Accumbens</h4>
         <p class="text-sm text-slate-400">Reward prediction. Learning what leads to good (or bad) outcomes.</p>
       </a>
       <a href="/maxim/memory-systems#entorhinal-cortex" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">🔍</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Entorhinal Cortex</h4>
         <p class="text-sm text-slate-400">Similarity matching. Finding relevant memories for new situations.</p>
       </a>
       <a href="/maxim/proprioception#pain" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">⚡</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Pain Circuits</h4>
         <p class="text-sm text-slate-400">Nociception. Detecting and learning from aversive experiences.</p>
       </a>
       <a href="/maxim/attention-salience#attention" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">👁️</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Attention Networks</h4>
         <p class="text-sm text-slate-400">Focus. Deciding where to look and what matters.</p>
       </a>
       <a href="/maxim/math-cognition#dual-number" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">&#x1F9EE;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">IPS &amp; Angular Gyrus</h4>
         <p class="text-sm text-slate-400">Dual number system. Fast approximate and slow precise math cognition.</p>
       </a>
       <a href="/maxim/memory-systems#atl" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">&#x1F4DA;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Anterior Temporal Lobe</h4>
         <p class="text-sm text-slate-400">Semantic memory. Lasting knowledge distilled from experience.</p>
       </a>
       <a href="https://pymaxim.bio/concepts/communication/" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">&#x1F4E1;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Communication Gateway</h4>
         <p class="text-sm text-slate-400">External messaging. Reaching users via SMS, voice, and more.</p>
       </a>
       <a href="/maxim/imagination" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">&#x1F4AD;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Imagination</h4>
         <p class="text-sm text-slate-400">Real-time entity design from novel percepts during low-arousal states.</p>
       </a>
       <a href="/maxim/embodiment#default-body" class="bg-slate-800 border border-slate-700 rounded-xl p-5 text-center hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition no-underline">
-        <div class="text-3xl mb-2">&#x1F9CD;</div>
         <h4 class="text-indigo-400 font-semibold mb-1">Default Embodiment</h4>
         <p class="text-sm text-slate-400">Base humanoid body with 5 sensors, 8 affordances, and 3 failure modes.</p>
       </a>
@@ -253,22 +249,22 @@
 
   <section class="space-y-4">
     <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">How It All Connects</h2>
-    <p class="text-slate-300 leading-relaxed">The magic isn't in any single component. It's in how they integrate. Perception flows into memory. Memory informs attention. Attention shapes what gets remembered. Reward signals update causal models. Pain teaches avoidance.</p>
+    <p class="text-slate-300 leading-relaxed">No single component carries the design; the point is how they integrate. Perception flows into memory. Memory informs attention. Attention shapes what gets remembered. Reward signals update causal models. Pain teaches avoidance.</p>
 
     <div class="bg-slate-950 rounded-lg p-5 font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre">Perception → Memory → Attention → Decision → Action → Outcome
      ↑                                              ↓
      └──────────────── Learning ←───────────────────┘</div>
 
     <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
-      <h3 class="text-lg font-semibold text-indigo-400 mb-3">A Concrete Example</h3>
-      <p class="text-slate-300 mb-3">A robot is asked to "find the coffee mug." Here's what happens:</p>
+      <h3 class="text-lg font-semibold text-indigo-400 mb-3">An Illustrative Example</h3>
+      <p class="text-slate-300 mb-3">A robot is asked to "find the coffee mug." In the design, the systems are meant to cooperate like this:</p>
       <ul class="space-y-2 text-slate-300 list-disc pl-5">
         <li>The <em class="text-indigo-400 not-italic font-medium">Entorhinal Cortex</em> retrieves similar past experiences (maybe "finding cups" or "kitchen tasks")</li>
         <li>The <em class="text-indigo-400 not-italic font-medium">Hippocampus</em> provides context: "Last time, the mug was on the counter"</li>
         <li>The <em class="text-indigo-400 not-italic font-medium">SCN</em> notes it's morning, when mugs are often near the coffee maker</li>
         <li>The <em class="text-indigo-400 not-italic font-medium">Attention Network</em> prioritizes scanning kitchen areas</li>
         <li>The <em class="text-indigo-400 not-italic font-medium">Nucleus Accumbens</em> predicts: "Counter search usually succeeds"</li>
-        <li>If the robot moves too fast and jerks, <em class="text-indigo-400 not-italic font-medium">Pain Detection</em> signals discomfort</li>
+        <li>If the robot moves too fast and jerks, the proprioceptive <em class="text-indigo-400 not-italic font-medium">nociception signal</em> registers an aversive event that the reward system learns to avoid</li>
         <li>Success or failure updates all relevant memories and predictions</li>
       </ul>
     </div>
@@ -279,7 +275,7 @@
     <div class="space-y-4">
       <details class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <summary class="text-indigo-400 font-semibold cursor-pointer">What is Maxim?</summary>
-        <p class="text-slate-300 mt-3 leading-relaxed">Maxim is an agentic robotics framework — a biologically-inspired cognitive architecture that gives robots something resembling a mind. It implements computational models of brain structures (hippocampus, entorhinal cortex, nucleus accumbens, attention networks, proprioception, and more) so embodied AI agents can perceive, remember, decide, and learn.</p>
+        <p class="text-slate-300 mt-3 leading-relaxed">Maxim is an open-source, bio-inspired cognitive architecture for LLM agents and robots, designed and built by Denny Schaedig and published on PyPI as <a href="https://pypi.org/project/pymaxim/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">pymaxim</a>. It implements computational models of brain structures (hippocampus, entorhinal cortex, nucleus accumbens, attention networks, proprioception, and more) as a persistent substrate that embodied agents use to perceive, remember, and decide.</p>
       </details>
       <details class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <summary class="text-indigo-400 font-semibold cursor-pointer">What is the Maxim harness?</summary>
@@ -287,31 +283,37 @@
       </details>
       <details class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <summary class="text-indigo-400 font-semibold cursor-pointer">Is Maxim open source?</summary>
-        <p class="text-slate-300 mt-3 leading-relaxed">Yes — Maxim is open source on GitHub at <a href="https://github.com/dennys246/Maxim" class="text-indigo-400 hover:text-indigo-300">github.com/dennys246/Maxim</a>. The repository contains the full cognitive architecture, agent harness, simulation environment, and integration code for the Reachy Mini humanoid robot.</p>
+        <p class="text-slate-300 mt-3 leading-relaxed">Yes — Maxim is open source on GitHub at <a href="https://github.com/dennys246/Maxim" class="text-indigo-400 hover:text-indigo-300">github.com/dennys246/Maxim</a>. The repository contains the full cognitive architecture, agent harness, simulation environment, and integration code for the Reachy Mini robot.</p>
       </details>
       <details class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <summary class="text-indigo-400 font-semibold cursor-pointer">What hardware does Maxim run on?</summary>
-        <p class="text-slate-300 mt-3 leading-relaxed">Maxim currently runs on the Reachy Mini humanoid robot, processing real visual input, motor commands, and human interactions. The architecture is hardware-agnostic and can be adapted to other embodied platforms via the <a href="/maxim/embodiment" class="text-indigo-400 hover:text-indigo-300">embodiment layer</a>.</p>
+        <p class="text-slate-300 mt-3 leading-relaxed">Maxim runs on the Reachy Mini robot, processing real sensor input, motor commands, and human interactions. The architecture is designed to be hardware-agnostic via its <a href="/maxim/embodiment" class="text-indigo-400 hover:text-indigo-300">embodiment layer</a>, where a new platform declares its sensors and affordances; so far it has been validated on Reachy Mini.</p>
       </details>
       <details class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <summary class="text-indigo-400 font-semibold cursor-pointer">How is Maxim different from other AI agents?</summary>
-        <p class="text-slate-300 mt-3 leading-relaxed">Most AI agents are pure LLM wrappers with stateless tool calls. Maxim adds a persistent bio-substrate — episodic memory (hippocampus), semantic memory (ATL), reward prediction (nucleus accumbens), circadian rhythms (SCN), and proprioception — so the agent learns from every interaction rather than starting fresh each turn.</p>
+        <p class="text-slate-300 mt-3 leading-relaxed">Most LLM agents keep no learned state between sessions. Maxim adds a persistent bio-substrate — episodic memory (hippocampus), semantic memory (ATL), reward prediction (nucleus accumbens), circadian rhythms (SCN), and proprioception — whose learned state, such as memories and reward associations, carries across sessions. Whether that state changes behavior is tested rather than assumed: the <a href="/maxim/release-1-0" class="text-indigo-400 hover:text-indigo-300">pre-registered 1.0 benchmark</a> found that a strong LLM's prior usually dominates carried experience, while on a Reachy Mini robot a reward substrate with no LLM in the action path <a href="/maxim/sound-orientation" class="text-indigo-400 hover:text-indigo-300">learned to turn toward speech</a> in about ten trials and was correct at the start of the next session.</p>
       </details>
     </div>
   </section>
 
   <section class="space-y-4">
-    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Why This Matters</h2>
-    <p class="text-slate-300 leading-relaxed">This isn't just academic curiosity. Biological inspiration provides:</p>
+    <h2 class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Design Goals &mdash; and What Has Been Tested</h2>
+    <p class="text-slate-300 leading-relaxed">Biology is the design reference because it points at properties worth aiming for. These are design goals and working hypotheses, not demonstrated results; the <a href="https://pymaxim.bio/research/evidence/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">evidence ledger</a> tracks which have been tested and how:</p>
     <ul class="space-y-2 text-slate-300 list-disc pl-5">
-      <li><strong class="text-white">Robustness:</strong> Brains evolved to handle noisy, unpredictable environments</li>
-      <li><strong class="text-white">Efficiency:</strong> Evolution optimized for energy constraints</li>
-      <li><strong class="text-white">Continuous Learning:</strong> Real memory systems adapt without catastrophic forgetting</li>
-      <li><strong class="text-white">Embodied Grounding:</strong> Cognition tied to sensorimotor experience</li>
-      <li><strong class="text-white">Safety:</strong> Pain and fear are ancient, battle-tested harm avoidance systems</li>
+      <li><strong class="text-white">Robustness:</strong> brains operate in noisy, unpredictable environments</li>
+      <li><strong class="text-white">Efficiency:</strong> biological systems work under tight energy budgets</li>
+      <li><strong class="text-white">Continual learning:</strong> biological memory integrates new experience without wholesale overwriting of the old</li>
+      <li><strong class="text-white">Embodied grounding:</strong> cognition tied to sensorimotor experience</li>
+      <li><strong class="text-white">Safety:</strong> pain and fear are long-conserved harm-avoidance signals</li>
     </ul>
-    <p class="text-slate-300 leading-relaxed">Maxim runs on the Reachy Mini humanoid robot, processing real visual input, real motor commands, real interactions with humans. It's not a simulation. It's not a thought experiment. It's a working system that learns from every interaction.</p>
+    <p class="text-slate-300 leading-relaxed">The results so far are mixed, and the essays report both halves. On a Reachy Mini robot, a reward substrate with no LLM in the action path learned to turn toward speech &mdash; direction and step size &mdash; in about ten trials, and was correct at trial&nbsp;0 of the next session from its persisted state (<a href="/maxim/sound-orientation" class="text-indigo-400 hover:text-indigo-300">Sound Orienting</a>). In simulation, the pre-registered 1.0 benchmark found that carried cross-session experience did not override a strong LLM's prior, so Maxim does not claim its LLM agents &ldquo;learn and get better&rdquo; (<a href="/maxim/release-1-0" class="text-indigo-400 hover:text-indigo-300">The Honest Benchmark</a>).</p>
   </section>
+
+  <p class="text-xs text-slate-500 text-center pt-4 border-t border-slate-700/60">
+    <a href="/maxim/privacy-policy" class="hover:text-slate-300">Privacy Policy</a>
+    <span aria-hidden="true" class="mx-2">&middot;</span>
+    <a href="/maxim/terms-and-conditions" class="hover:text-slate-300">Terms &amp; Conditions</a>
+  </p>
 
 </div>
 {% endblock %}

@@ -1,29 +1,48 @@
 {% extends "base.html" %}
 
-{% block title %}Denny Schaedig | Ramblings{% endblock %}
+{% block title %}Writing &amp; Talks | Denny Schaedig{% endblock %}
+
+{% block meta_description %}Technical writing, talks, and media by Denny Schaedig on machine learning, GAN training, the Maxim cognitive architecture, and snow science.{% endblock %}
 
 {% block main_class %}w-full p-0 mt-0 bg-transparent border-0 space-y-0{% endblock %}
 
 {% block content %}
+<header class="bg-slate-950 px-6 py-12 text-center">
+  <h1 class="text-3xl md:text-4xl font-semibold text-white">Writing &amp; Talks</h1>
+  <p class="mt-3 text-base text-slate-200/80">Technical writing, talks, and media on machine learning, robotics, and snow science.</p>
+</header>
 <section class="grid gap-px sm:grid-cols-2 lg:grid-cols-3 bg-slate-900">
-  <a href="https://www.denver7.com/news/local-news/colorado-backcountry-skier-using-ai-to-predict-avalanches" aria-label="Read Aurora Sprints" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+  <a href="{{ url_for('gan_training_tips') }}" aria-label="Read Practical Lessons for Training GANs" class="group relative block aspect-square overflow-hidden rounded-none bg-gradient-to-br from-sky-200 via-sky-300 to-blue-400">
     <img
-      src="{{ url_for('static', filename='img/ABC_Denver7_Ryan_Fish_Denny_Schaedig_Interview.png') }}"
-      alt="Denver7 interview with Ryan Fish and Denny Schaedig"
-      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      src="{{ url_for('static', filename='img/gan_symbolic_pic.webp') }}"
+      alt="Generative adversarial network symbolic illustration"
+      class="absolute inset-0 h-full w-full object-contain transition duration-500 group-hover:scale-105"
       loading="lazy"
     >
-    <span class="absolute inset-0 bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 opacity-50 mix-blend-multiply transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
-      <p class="text-xs uppercase tracking-[0.3em] text-indigo-200">ABC Denver7 Ryan Fish join's Denny</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-indigo-200"> for first snowpack sampling of 2025-2026</h2>
+      <p class="text-xs uppercase tracking-[0.3em] text-sky-200">Practical lessons from training</p>
+      <p class="text-xs uppercase tracking-[0.3em] text-sky-200">generative adversarial networks</p>
     </div>
-    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Sampling with Denver7's Ryan Fish</span>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Practical Lessons for Training GANs</span>
+  </a>
+
+  <a href="{{ url_for('progressive_growing') }}" aria-label="Read Progressive Growing of GANs: a curriculum approach to high-resolution training" class="group relative block aspect-square overflow-hidden rounded-none bg-gradient-to-br from-green-700 via-green-800 to-emerald-900">
+    <img
+      src="{{ url_for('static', filename='img/progressive_growing.webp') }}"
+      alt="Progressive growing of GANs"
+      class="absolute inset-0 h-full w-full object-contain transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-lime-200">Progressive growing of GANs and</p>
+      <p class="text-xs uppercase tracking-[0.3em] text-lime-200">building the Abominable SnowGAN</p>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Progressively Growing Models</span>
   </a>
 
   <a href="{{ url_for('maxim') }}" aria-label="Read Maxim Overview" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
     <img
-      src="{{ url_for('static', filename='img/reachy_mini_hidding.jpg') }}"
+      src="{{ url_for('static', filename='img/reachy_mini_hidding.webp') }}"
       alt="Maxim — a brain for robots. Reachy Mini running the Maxim agentic robotics cognitive architecture"
       class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
       loading="lazy"
@@ -31,98 +50,25 @@
     <span class="absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700 opacity-0 mix-blend-multiply transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
       <p class="text-xs uppercase tracking-[0.3em] text-violet-200">Building artificial minds from</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-violet-200">biological blueprints for robots</h2>
+      <p class="text-xs uppercase tracking-[0.3em] text-violet-200">biological blueprints for robots</p>
     </div>
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Maxim: A Brain for Robots</span>
   </a>
 
-  <a href="https://youtu.be/nFu4g8I2m0A" aria-label="Read Signal Drift" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
-    <img
-      src="{{ url_for('static', filename='img/perceptron-neuron_connection_denny_schaedig_thumbnail.png') }}"
-      alt="Denny Schaedig discusses how perceptrons are similar to neurons"
-      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
-      loading="lazy"
-    >
-    <span class="absolute inset-0 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 opacity-0 transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
-    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
-      <p class="text-xs uppercase tracking-[0.3em] text-emerald-200">Denny rambles about perceptron being</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-emerald-200">inspired by the brain and neurons</h2>
-    </div>
-    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">How AI Got Started</span>
-  </a>
-
-  <a href="https://youtu.be/QJqz6qSf2E8" aria-label="Read Chalkboard Protocol" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
-    <img
-      src="{{ url_for('static', filename='img/snowpack_sampling.png') }}"
-      alt="Snowpack sampling with avalanche gear"
-      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
-      loading="lazy"
-    >
-    <span class="absolute inset-0 bg-gradient-to-br from-fuchsia-500 via-purple-500 to-indigo-500 opacity-0 mix-blend-multiply transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
-    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
-      <p class="text-xs uppercase tracking-[0.3em] text-fuchsia-200">Learn about how Denny applying</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-fuchsia-200">AI avalanche risk prediction</h2>
-    </div>
-    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">How to teach an AI about Avalanches</span>
-  </a>
-
-  <a href="https://www.rmdig.ai/collection_signup" aria-label="Read Lantern Hours" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
-    <img
-      src="{{ url_for('static', filename='img/data_collection_loveland_pass.png') }}"
-      alt="Data Collection on Loveland Pass"
-      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
-      loading="lazy"
-    >
-    <span class="absolute inset-0 bg-gradient-to-tr from-amber-400 via-orange-500 to-rose-500 opacity-0 transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
-    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
-      <p class="text-xs uppercase tracking-[0.3em] text-amber-200">Learn about how you can help your </p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-amber-200">community by collecting snowpack</h2>
-    </div>
-    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Dig Snowpits with Me!</span>
-  </a>
-
-  <a href="{{ url_for('progressive_growing') }}" aria-label="Read Progressive Growing" class="group relative block aspect-square overflow-hidden rounded-none bg-gradient-to-br from-green-700 via-green-800 to-emerald-900">
-    <img
-      src="{{ url_for('static', filename='img/progressive_growing.png') }}"
-      alt="Progressive growing of GANs"
-      class="absolute inset-0 h-full w-full object-contain transition duration-500 group-hover:scale-105"
-      loading="lazy"
-    >
-    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
-      <p class="text-xs uppercase tracking-[0.3em] text-lime-200">Progressive growing of GANs and</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-lime-200">building the Abominable SnowGAN</h2>
-    </div>
-    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Progressively Growing Models</span>
-  </a>
-
-  <a href="{{ url_for('gan_training_tips') }}" aria-label="Read GAN Training Tips" class="group relative block aspect-square overflow-hidden rounded-none bg-gradient-to-br from-sky-200 via-sky-300 to-blue-400">
-    <img
-      src="{{ url_for('static', filename='img/gan_symbolic_pic.png') }}"
-      alt="Generative adversarial network symbolic illustration"
-      class="absolute inset-0 h-full w-full object-contain transition duration-500 group-hover:scale-105"
-      loading="lazy"
-    >
-    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
-      <p class="text-xs uppercase tracking-[0.3em] text-sky-200">Read and apply what Denny learned about</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-sky-200">generative adversarial networks</h2>
-    </div>
-    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Tips & Tricks for Fine-Tuning GANs</span>
-  </a>
-
-  <a href="{{ url_for('maxim_sound_orientation') }}#hardware-lessons" aria-label="Read What the Robot Taught Us — the sound-orienting retraction" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+  <a href="{{ url_for('maxim_sound_orientation') }}#hardware-lessons" aria-label="Read What the Robot Taught Us, the hardware debugging lessons from Maxim sound orientation" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
     <span class="absolute inset-0 bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-700 opacity-90 transition duration-500 group-hover:scale-105"></span>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
       <p class="text-xs uppercase tracking-[0.3em] text-rose-200">A robot learned to turn toward sound.</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-rose-200">The retraction taught us more than the result</h2>
+      <p class="text-xs uppercase tracking-[0.3em] text-rose-200">The debugging lesson was worth more than the result</p>
     </div>
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">What the Robot Taught Us</span>
   </a>
 
-  <a href="{{ url_for('maxim_release_1_0') }}" aria-label="Read The Honest Benchmark" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+  <a href="{{ url_for('maxim_release_1_0') }}" aria-label="Read the Maxim 1.0 release and pre-registered benchmark" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
     <span class="absolute inset-0 bg-gradient-to-tr from-cyan-500 via-teal-600 to-emerald-700 opacity-90 transition duration-500 group-hover:scale-105"></span>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
       <p class="text-xs uppercase tracking-[0.3em] text-teal-200">Pre-registering Maxim 1.0 and reporting</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-teal-200">where the biology lost to the LLM prior</h2>
+      <p class="text-xs uppercase tracking-[0.3em] text-teal-200">where the biology lost to the LLM prior</p>
     </div>
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">The Honest Benchmark</span>
   </a>
@@ -131,7 +77,7 @@
     <span class="absolute inset-0 bg-gradient-to-br from-red-600 via-rose-800 to-slate-950 opacity-90 transition duration-500 group-hover:scale-105"></span>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
       <p class="text-xs uppercase tracking-[0.3em] text-rose-200">A mechanism that does not run looks</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-rose-200">exactly like one that ran and found nothing</h2>
+      <p class="text-xs uppercase tracking-[0.3em] text-rose-200">exactly like one that ran and found nothing</p>
     </div>
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Reachability</span>
   </a>
@@ -140,7 +86,7 @@
     <span class="absolute inset-0 bg-gradient-to-br from-amber-400 via-orange-600 to-red-800 opacity-90 transition duration-500 group-hover:scale-105"></span>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
       <p class="text-xs uppercase tracking-[0.3em] text-amber-200">Bugs, limits and earned claims, each row</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-amber-200">naming the trigger that would re-test it</h2>
+      <p class="text-xs uppercase tracking-[0.3em] text-amber-200">naming the trigger that would re-test it</p>
     </div>
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">A System for Not Fooling Yourself</span>
   </a>
@@ -149,9 +95,69 @@
     <span class="absolute inset-0 bg-gradient-to-br from-slate-500 via-slate-700 to-slate-950 opacity-90 transition duration-500 group-hover:scale-105"></span>
     <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
       <p class="text-xs uppercase tracking-[0.3em] text-slate-200">Past about a dozen sensors per channel</p>
-      <h2 class="text-xs uppercase tracking-[0.3em] text-slate-200">the substrate stops seeing which one moved</h2>
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-200">the substrate stops seeing which one moved</p>
     </div>
     <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Where Maxim Hits Its Ceiling</span>
   </a>
 
+  <a href="https://youtu.be/nFu4g8I2m0A" aria-label="Watch the video on how perceptrons were inspired by neurons (YouTube)" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <img
+      src="{{ url_for('static', filename='img/perceptron-neuron_connection_denny_schaedig_thumbnail.webp') }}"
+      alt="Denny Schaedig discusses how perceptrons are similar to neurons"
+      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <span class="absolute inset-0 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 opacity-0 transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-emerald-200">How the perceptron was</p>
+      <p class="text-xs uppercase tracking-[0.3em] text-emerald-200">inspired by biological neurons</p>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">How AI Got Started</span>
+  </a>
+
+  <a href="https://youtu.be/QJqz6qSf2E8" aria-label="Watch the video on teaching an AI about avalanches (YouTube)" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <img
+      src="{{ url_for('static', filename='img/snowpack_sampling.webp') }}"
+      alt="Snowpack sampling with avalanche gear"
+      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <span class="absolute inset-0 bg-gradient-to-br from-fuchsia-500 via-purple-500 to-indigo-500 opacity-0 mix-blend-multiply transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-fuchsia-200">How Denny is applying AI</p>
+      <p class="text-xs uppercase tracking-[0.3em] text-fuchsia-200">to avalanche risk prediction</p>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">How to Teach an AI About Avalanches</span>
+  </a>
+
+  <a href="https://www.denver7.com/news/local-news/colorado-backcountry-skier-using-ai-to-predict-avalanches" aria-label="Read the ABC Denver7 story on using AI to predict avalanches" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <img
+      src="{{ url_for('static', filename='img/ABC_Denver7_Ryan_Fish_Denny_Schaedig_Interview.webp') }}"
+      alt="Denver7 interview with Ryan Fish and Denny Schaedig"
+      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <span class="absolute inset-0 bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 opacity-50 mix-blend-multiply transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-indigo-200">ABC Denver7&rsquo;s Ryan Fish joins Denny</p>
+      <p class="text-xs uppercase tracking-[0.3em] text-indigo-200">for the first snowpack sampling of 2025&ndash;2026</p>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Sampling with Denver7&rsquo;s Ryan Fish</span>
+  </a>
+
+  <a href="https://www.rmdig.ai/collection_signup" aria-label="Volunteer for snowpack data collection with Rocky Mountain Digerati" class="group relative block aspect-square overflow-hidden rounded-none bg-slate-950/70">
+    <img
+      src="{{ url_for('static', filename='img/data_collection_loveland_pass.webp') }}"
+      alt="Data Collection on Loveland Pass"
+      class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
+      loading="lazy"
+    >
+    <span class="absolute inset-0 bg-gradient-to-tr from-amber-400 via-orange-500 to-rose-500 opacity-0 transition duration-500 group-hover:scale-105 group-hover:opacity-100"></span>
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 px-6 text-center opacity-0 transition duration-300 group-hover:opacity-100">
+      <p class="text-xs uppercase tracking-[0.3em] text-amber-200">Learn how you can help your</p>
+      <p class="text-xs uppercase tracking-[0.3em] text-amber-200">community by collecting snowpack data</p>
+    </div>
+    <span class="absolute bottom-6 left-6 text-sm font-medium uppercase tracking-[0.35em] text-white/80 transition duration-300 group-hover:opacity-0">Volunteer: Snowpack Data Collection</span>
+  </a>
+</section>
 {% endblock %}

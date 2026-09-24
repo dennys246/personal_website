@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Robot Learns to Turn Toward Sound — Substrate-Learned Sensorimotor Policy on Real Hardware | Maxim{% endblock %}
+{% block title %}Sound Orienting on Real Hardware — Maxim | Denny Schaedig{% endblock %}
 
-{% block meta_description %}How Maxim's bio-substrate learned to turn a real robot toward sound — no LLM in the action path, learned in 10 trials, transferred across sessions, and mergeable across independently trained learners.{% endblock %}
+{% block meta_description %}How Maxim's bio-substrate learned to turn a real robot toward sound — no LLM in the action path, learned in 10 trials, and transferred across sessions.{% endblock %}
 
 {% block meta_keywords %}Maxim sound orienting, sound localization robot, DoA orienting, substrate learning, nucleus accumbens robot, Reachy Mini sound, sensorimotor learning, robot learns to orient, fleet learning, hivemind substrate{% endblock %}
 
-{% block meta_author %}Maxim Project{% endblock %}
+{% block meta_author %}Denny Schaedig{% endblock %}
 {% block og_site_name %}Maxim{% endblock %}
 {% block og_type %}article{% endblock %}
 
@@ -16,7 +16,8 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "A Robot That Learned to Turn Toward Sound — a Substrate-Learned Sensorimotor Policy on Real Hardware",
-  "description": "Maxim's nucleus-accumbens substrate learns to turn a Reachy Mini toward speech, credited only by relief (azimuth-error reduction). Learned from scratch in ~10 hardware trials, correct at trial 0 of the next session, and mergeable across independently trained learning sessions — the designed path to cross-robot fleet learning.",
+  "description": "Maxim's nucleus-accumbens substrate learns to turn a Reachy Mini toward speech, credited only by relief (azimuth-error reduction). Learned from scratch in ~10 hardware trials, and correct at trial 0 of the next session. A merge of two separately trained substrates was later found under-tested (see the Reachability essay).",
+  "datePublished": "2026-07-01",
   "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
   "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/sound-orientation",
@@ -30,7 +31,7 @@
   "@type": "BreadcrumbList",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
-    { "@type": "ListItem", "position": 2, "name": "Ramblings", "item": "https://www.dennyschaedig.com/ramblings" },
+    { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://www.dennyschaedig.com/projects" },
     { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
     { "@type": "ListItem", "position": 4, "name": "Sound Orienting", "item": "https://www.dennyschaedig.com/maxim/sound-orientation" }
   ]
@@ -49,6 +50,7 @@
   </header>
 
   {% set maxim_written = "July 2026" %}
+  {% set maxim_updated = "September 2026" %}
   {% set maxim_docs = [("Reachy Mini guide", "https://pymaxim.bio/guides/reachy-mini/"), ("Cerebellum — motor learning", "https://pymaxim.bio/systems/cerebellum/"), ("The Cradle", "https://pymaxim.bio/research/cradle/")] %}
   {% set maxim_related = ["reachability", "substrate-primary", "embodiment", "release-1-0"] %}
   {% include "_maxim_status.html" %}
@@ -60,7 +62,7 @@
 
     <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
       <h3 class="text-lg font-semibold text-emerald-400 mb-2">Core Result</h3>
-      <p class="text-slate-300">A Reachy Mini <strong class="text-white">learned to turn toward speech &mdash; which way <em>and how far</em></strong> &mdash; starting from a completely empty reward substrate, with <strong class="text-white">no LLM anywhere in the action path</strong>. Direction went from chance to 100% correct within ~10 hardware trials. It was already correct at trial&nbsp;0 of the next session (loaded from the persisted substrate). Two independently trained substrates merged into a policy at least as good as either &mdash; the seed of fleet learning. And with the state representation fixed, it reached <strong class="text-white">100% on step size too</strong>: near the centre it learned that a big turn is actively <em>harmful</em> &mdash; from a single punished attempt it never repeated.</p>
+      <p class="text-slate-300">A Reachy Mini <strong class="text-white">learned to turn toward speech &mdash; which way <em>and how far</em></strong> &mdash; starting from a completely empty reward substrate, with <strong class="text-white">no LLM anywhere in the action path</strong>. Direction went from chance to 100% correct within ~10 hardware trials. It was already correct at trial&nbsp;0 of the next session (loaded from the persisted substrate). Two separately trained substrates also merged into a policy that scored at least as well as either, though that test later proved weaker than it looked (see the note below). And with the state representation fixed, it reached <strong class="text-white">100% on step size too</strong>: near the center it learned that a big turn is actively <em>harmful</em> &mdash; from a single punished attempt it never repeated.</p>
     </div>
 
     <p class="text-slate-300 leading-relaxed">Nobody wrote a &ldquo;turn toward the sound&rdquo; rule. The robot's reward substrate (the <a href="/maxim/agent-architecture" class="text-indigo-400 hover:text-indigo-300 no-underline">nucleus accumbens model</a>) discovered which turn direction reduces its bearing error in each situation, purely from experiencing relief when the error shrank &mdash; the same drive-pain-reduction credit that powers Maxim's <a href="/maxim/proprioception" class="text-indigo-400 hover:text-indigo-300 no-underline">interoceptive drives</a>.</p>
@@ -102,8 +104,12 @@ NAc.update_cluster_reward(state, action, relief)
       </div>
       <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h3 class="text-white font-semibold mb-2">3. Merge across learners</h3>
-        <p class="text-slate-300 text-sm">Two independently trained substrates merged (<code class="bg-slate-950 px-1 rounded text-xs">nac_merge</code>) into a policy <strong class="text-emerald-400">at least as correct as either input</strong> &mdash; in rehearsal the merge even repaired one input's weak state. Fleet learning in miniature.</p>
+        <p class="text-slate-300 text-sm">Two separately trained substrates merged (<code class="bg-slate-950 px-1 rounded text-xs">nac_merge</code>) into a policy <strong class="text-emerald-400">at least as correct as either input</strong> &mdash; in rehearsal the merge even repaired one input's weak state. A first step toward sharing learned policies across robots, but see the note below: this arm was under-tested.</p>
       </div>
+    </div>
+
+    <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-5">
+      <p class="text-slate-300 text-sm"><strong class="text-amber-400">Note (September 2026).</strong> The merge result above is weaker evidence than it first appeared. Both parent policies were already at ceiling, so &ldquo;merged is at least as good as the best parent&rdquo; compared 1.00 with 1.00 and carried no information, and both parents shared one agent id and one set of bins, so they were not independent agents. The regression guard for this claim also passed when the merge was replaced with a stub. Maxim 1.1.3 rebuilt that guard; the full account is in <a href="/maxim/reachability#return-left" class="text-indigo-400 hover:text-indigo-300 no-underline">Reachability</a>. The note concerns only this third arm.</p>
     </div>
 
     <p class="text-slate-300 leading-relaxed">One moment from the live run says it all: on trial 2 an exploratory wrong turn made the error worse (negative relief); on trial 3, the very next visit to that state, the greedy choice had already flipped to the correct turn. <strong class="text-white">One-trial operant learning, on hardware.</strong></p>
@@ -133,7 +139,7 @@ NAc.update_cluster_reward(state, action, relief)
 
     <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6 space-y-3">
       <h3 class="text-lg font-semibold text-emerald-400">The state bins and the action set are duals</h3>
-      <p class="text-slate-300 text-sm">A turn of size <em>d</em> moves the error by <em>S = d &times; gain</em>. So a step takes error <em>e</em> to <em>|e &minus; S|</em>, which means <strong class="text-white">one action beats another exactly when the current error is nearer to its shift</strong>. The optimal policy is just <strong class="text-white">nearest-neighbour quantization of the error onto your available step sizes</strong> &mdash; and the boundaries fall at the midpoints:</p>
+      <p class="text-slate-300 text-sm">A turn of size <em>d</em> moves the error by <em>S = d &times; gain</em>. So a step takes error <em>e</em> to <em>|e &minus; S|</em>, which means <strong class="text-white">one action beats another exactly when the current error is nearer to its shift</strong>. The optimal policy is just <strong class="text-white">nearest-neighbor quantization of the error onto your available step sizes</strong> &mdash; and the boundaries fall at the midpoints:</p>
       <div class="bg-slate-950 border border-slate-700 rounded-lg p-3 overflow-x-auto"><code class="text-sm text-slate-300">boundary = gain &times; (d_small + d_big) / 2&nbsp;&nbsp;&nbsp;&nbsp;# Reachy: 0.546 &times; 1.2/2 = 0.33</code></div>
       <p class="text-slate-300 text-sm">Our bins split at 0.5 &mdash; an arbitrary number that <strong class="text-white">straddled 0.33</strong>. A bin spanning the boundary contains <em>two opposite correct answers</em>: it hands the learner consistently contradictory evidence and caps it, no matter how much exploration or reward shaping you add. Moving the boundary to the derived value took magnitude from <strong class="text-emerald-400">0.75 to 1.00</strong>.</p>
       <p class="text-slate-300 text-sm">So it was never about <em>resolution</em> &mdash; it was about <strong class="text-white">alignment</strong>. And because the boundary depends on the robot's own measured gain, <strong class="text-white">every robot derives its own</strong>. You cannot copy ours.</p>
@@ -176,9 +182,9 @@ NAc.update_cluster_reward(state, action, relief)
 
     <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 space-y-3">
       <ol class="list-decimal list-inside text-slate-300 text-sm space-y-2">
-        <li><strong class="text-white">Gauntlet</strong> &mdash; the frozen-policy probe validates any contribution in milliseconds, no hardware: a flipped-calibration or poisoned policy simply fails. This is promotion gate #1 of the planned Queen-tier trust topology (curated substrate flows out freely as signed releases; contributions earn their way in through validation).</li>
+        <li><strong class="text-white">Gauntlet</strong> &mdash; the frozen-policy probe validates any contribution in milliseconds, no hardware: a flipped-calibration or poisoned policy simply fails. This is the first validation gate in the planned trust model for shared substrate: curated substrate is published as signed releases, and outside contributions are accepted only after passing validation.</li>
         <li><strong class="text-white">Merge</strong> &mdash; <code class="bg-slate-950 px-1 rounded text-xs">nac_merge</code> combines contributors' reward biases (provenance-tagged, clamped), and the tool refuses to bundle any merge that isn't at least as correct as its inputs.</li>
-        <li><strong class="text-white">Bundle</strong> &mdash; the gauntlet-passed result exports as a domain-tagged substrate zip (&ldquo;queen-mind&rdquo; release). Another robot imports, merges, and starts its first session already knowing how to orient &mdash; identical hardware means the policy transfers by construction.</li>
+        <li><strong class="text-white">Bundle</strong> &mdash; the gauntlet-passed result exports as a domain-tagged substrate zip (a curated, signed release). Another robot imports, merges, and starts its first session already knowing how to orient &mdash; on identical hardware the policy is designed to transfer directly. (Merge quality is the part the <a href="/maxim/reachability#return-left" class="text-indigo-400 hover:text-indigo-300 no-underline">Reachability</a> essay found under-tested.)</li>
       </ol>
     </div>
   </section>
