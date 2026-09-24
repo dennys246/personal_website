@@ -4,16 +4,21 @@ import os
 
 app = Flask(__name__)
 
-RESUME_FILENAME = "Denny_Schaedig_Resume.pdf"
+CV_FILENAME = "Denny_Schaedig_CV.pdf"
 
 @app.context_processor
 def inject_site_globals():
-    # The Résumé links only render once the PDF is actually in static/.
-    has_resume = os.path.exists(os.path.join(app.static_folder, RESUME_FILENAME))
+    # The CV links only render once the PDF is actually in static/.
+    has_cv = os.path.exists(os.path.join(app.static_folder, CV_FILENAME))
     return {
         "current_year": date.today().year,
-        "resume_url": url_for("static", filename=RESUME_FILENAME) if has_resume else None,
+        "cv_url": url_for("static", filename=CV_FILENAME) if has_cv else None,
     }
+
+# The CV was first published as a résumé; keep that URL working.
+@app.route("/static/Denny_Schaedig_Resume.pdf")
+def legacy_resume_pdf():
+    return redirect(url_for("static", filename=CV_FILENAME), code=301)
 
 @app.route("/")
 def main():
