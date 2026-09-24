@@ -51,15 +51,16 @@
 
   {% set maxim_written = "May 2026" %}
   {% set maxim_updated = "September 2026" %}
-  {% set maxim_note = "Oasis and the Hivemind protocol are design, not shipped software." %}
-  {% set maxim_docs = [("Networking & mesh", "https://pymaxim.bio/guides/networking/"), ("hivemind.md in the repo", "https://github.com/dennys246/Maxim/blob/main/docs/hivemind.md")] %}
+  {% set maxim_note = "The design shipped as 1.2.0 “Oasis”; the status box below says what shipped and what did not." %}
+  {% set maxim_docs = [("Oasis guide", "https://pymaxim.bio/guides/oasis/"), ("Networking & mesh", "https://pymaxim.bio/guides/networking/"), ("hivemind.md in the repo", "https://github.com/dennys246/Maxim/blob/main/docs/hivemind.md")] %}
   {% set maxim_related = ["reachability", "substrate-primary", "memory-systems", "agent-architecture"] %}
   {% include "_maxim_status.html" %}
 
 
   <div class="rounded-xl bg-gradient-to-br from-purple-700 via-indigo-700 to-purple-800 p-6 text-white shadow-lg">
     <h3 class="text-lg font-semibold mb-2">Status</h3>
-    <p class="leading-relaxed"><strong>As of 1.1.3 (September 2026):</strong> the design was completed in May 2026, and the sharing groundwork has shipped &mdash; portable substrate bundles and the merge path that aligns a donor's memory clusters onto the receiver's and re-keys its reward biases, which 1.1.3 wired end to end after finding it unreachable (see <a href="/maxim/reachability#no-callers" class="underline decoration-indigo-300 hover:decoration-white">Reachability</a>). <strong>Oasis software and the peer-to-peer Hivemind protocol are design stage; not yet shipped.</strong> The design supersedes the older Mother Maxim plan (2,224 LOC) with a federated rather than hierarchical architecture, estimated at ~2,100 LOC.</p>
+    <p class="leading-relaxed"><strong>As of 1.3.0 (September 2026):</strong> the core of this design has shipped. <strong>1.2.0 &ldquo;Oasis&rdquo;</strong> delivered the peer-to-peer substrate exchange end to end: ed25519-signed substrate bundles, authenticated exchange endpoints, the <code class="bg-slate-950 px-1 rounded text-xs">maxim oasis serve/publish/status</code> and <code class="bg-slate-950 px-1 rounded text-xs">maxim hive add/list/pull/contribute/trust</code> commands, and Queen-only default trust, where a pull refuses any release not signed by a key the operator has registered as a trusted publisher (a &ldquo;Queen&rdquo;). It builds on the merge path that 1.1.3 wired end to end after finding it unreachable (see <a href="/maxim/reachability#no-callers" class="underline decoration-indigo-300 hover:decoration-white">Reachability</a>).</p>
+    <p class="leading-relaxed mt-3"><strong>What it has shown:</strong> in a live Minecraft world with no LLM in the action path, a want taught to one agent transferred to an independent agent and changed what it did at first contact (1.2, earned); pooling partial learners let each agent reach criterion in fewer of its own trials but cost more total experience (1.2, partial); and a survival fear learned from drowning pain transferred to an agent that never felt it (1.3, earned). <strong>Not yet shipped:</strong> Queen-tier promotion (the gauntlet that would score a bundle does not exist yet, so contributions stay in the experimental tier) and Oasis discovery (the registry is static and operator-maintained). Shared wants are still keyed to the exact situation they were learned in. Details: <a href="https://pymaxim.bio/guides/oasis/" rel="noopener" class="underline decoration-indigo-300 hover:decoration-white">the Oasis guide</a> and the <a href="https://github.com/dennys246/Maxim/releases" rel="noopener" class="underline decoration-indigo-300 hover:decoration-white">1.2 and 1.3 release notes</a>.</p>
   </div>
 
   <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
@@ -218,7 +219,7 @@
 
   <section class="space-y-4">
     <h2 id="phasing" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Phasing</h2>
-    <p class="text-slate-300 leading-relaxed">This is the phasing as planned in May 2026. The version targets were a plan, not a record of what shipped; the status box at the top of this page is current as of 1.1.3.</p>
+    <p class="text-slate-300 leading-relaxed">This is the phasing as planned in May 2026. The version targets were a plan, not a record of what shipped; the status box at the top of this page is current as of 1.3.0.</p>
     <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 overflow-x-auto">
       <table class="w-full text-sm text-slate-300">
         <thead>
