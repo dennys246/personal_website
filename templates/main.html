@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}Denny Schaedig{% endblock %}
+{% block title %}Denny Schaedig | Machine Learning Engineer{% endblock %}
+{% block meta_description %}Denny Schaedig is a machine learning engineer building production ML systems, generative models, and open-source research software. Based in Colorado.{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -15,98 +16,90 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("/static/img/crested_butte_profile.JPG");
-  background-image: image-set(
-    url("/static/img/crested_butte_profile.JPG") type("image/jpg"),
-    url("/static/img/crested_butte_profile.HEIC") type("image/heic")
-  );
+  background-image: url("/static/img/buffalo_mountain_1.webp");
   background-size: cover;
   background-position: center;
   z-index: -2;
 }
 
-.scroll-cta {
-  position: fixed;
-  top: 33%;
-  left: 50%;
-  transform: translate(-50%, calc(-50% + 40px));
-  display: flex;
-  gap: 1rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s ease, transform 0.35s ease;
-  z-index: 50;
+.home-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(2, 6, 23, 0.85) 0%, rgba(2, 6, 23, 0.55) 55%, rgba(2, 6, 23, 0.2) 100%);
+  z-index: -1;
 }
 
-.scroll-cta.visible {
-  opacity: 1;
-  transform: translate(-50%, -50%);
-  pointer-events: auto;
+.hero-panel {
+  max-width: 40rem;
 }
 
-.scroll-cta__btn {
-  padding: 0.85rem 2rem;
+.hero-photo {
+  width: 16rem;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 1.5rem;
+  border: 3px solid rgba(99, 102, 241, 0.7);
+  box-shadow: 0 25px 45px -20px rgba(2, 6, 23, 0.9);
+}
+
+@media (max-width: 1023px) {
+  .hero-photo {
+    width: 9rem;
+  }
+}
+
+.hero-btn {
+  display: inline-block;
+  padding: 0.7rem 1.5rem;
   border-radius: 9999px;
   border: 1px solid rgba(248, 250, 252, 0.65);
   background: rgba(15, 23, 42, 0.6);
   color: #f8fafc;
   font-weight: 600;
+  font-size: 0.9rem;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
   transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
   backdrop-filter: blur(10px);
 }
 
-.scroll-cta__btn:hover {
+.hero-btn:hover,
+.hero-btn--primary {
   background: rgba(99, 102, 241, 0.9);
   border-color: rgba(248, 250, 252, 0.9);
+}
+
+.hero-btn:hover {
   transform: translateY(-2px);
 }
 
-.scroll-cta__card {
+.highlight-card {
+  display: block;
   background: rgba(15, 23, 42, 0.82);
   border: 1px solid rgba(148, 163, 184, 0.4);
   border-radius: 1.5rem;
-  padding: 1.75rem;
+  padding: 1.5rem;
   backdrop-filter: blur(12px);
   box-shadow: 0 20px 40px -25px rgba(15, 23, 42, 0.9);
-  min-width: 220px;
-  text-decoration: none;
   color: #e2e8f0;
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-.scroll-cta__card:hover {
+.highlight-card:hover {
   transform: translateY(-6px);
   border-color: rgba(99, 102, 241, 0.7);
 }
 
-.scroll-cta__card h3 {
-  font-size: 1.25rem;
+.highlight-card h3 {
+  font-size: 1.15rem;
   font-weight: 600;
   color: #c7d2fe;
   margin-bottom: 0.5rem;
 }
 
-.scroll-cta__card p {
+.highlight-card p {
   color: rgba(226, 232, 240, 0.8);
   font-size: 0.95rem;
-}
-
-.scroll-cta__card span {
-  display: inline-block;
-  margin-top: 0.75rem;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(99, 102, 241, 0.85);
-}
-
-@media (max-width: 768px) {
-  .scroll-cta,
-  .scroll-cta.visible {
-    display: none;
-  }
 }
 </style>
 {% endblock %}
@@ -114,49 +107,49 @@
 {% block main_class %}home-hero relative w-full mt-0 flex-grow p-0 overflow-hidden{% endblock %}
 
 {% block content %}
-<section class="relative w-full min-h-screen">
-  <div class="h-[100vh] w-full"></div>
+<section class="relative w-full min-h-screen flex flex-col justify-center gap-12 px-6 py-16 sm:px-12 lg:px-20">
+  <div class="flex flex-col-reverse gap-8 lg:flex-row lg:items-center lg:gap-16">
+  <div class="hero-panel space-y-5">
+    <h1 class="text-4xl sm:text-5xl font-semibold text-white">Denny Schaedig</h1>
+    <p class="text-xl text-indigo-200 font-medium">Machine Learning Engineer</p>
+    <p class="text-lg leading-relaxed text-slate-200">
+      I design, train, and ship ML systems end to end, from data pipelines and distributed training to
+      model packaging and serving. I'm a Machine Learning / AI Engineer at Washington University in
+      St. Louis, first author of HRfunc (<i>Neurophotonics</i>, 2025), and the creator of Maxim, an
+      open-source cognitive architecture for LLM agents and robots.
+    </p>
+    <p class="text-slate-300">
+      Based in Summit County, Colorado. Open to remote roles or hybrid in the Golden–Boulder area.
+    </p>
+    <div class="flex flex-wrap gap-3 pt-2">
+      <a href="/experiences" class="hero-btn hero-btn--primary">Experience</a>
+      <a href="/projects" class="hero-btn">Projects</a>
+      <a href="/contact" class="hero-btn">Contact</a>
+      <a href="https://github.com/dennys246" class="hero-btn">GitHub</a>
+      <a href="https://www.linkedin.com/in/denny-schaedig/" class="hero-btn">LinkedIn</a>
+      {% if resume_url %}<a href="{{ resume_url }}" class="hero-btn">Résumé (PDF)</a>{% endif %}
+    </div>
+  </div>
+  <img src="{{ url_for('static', filename='img/headshot.webp') }}" alt="Denny Schaedig" class="hero-photo" width="600" height="800">
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 max-w-6xl" aria-label="Highlights">
+    <a href="/maxim" class="highlight-card">
+      <h3>Maxim</h3>
+      <p>Open-source cognitive architecture for LLM agents and robots, with persistent memory, reward learning, and pre-registered benchmarks.</p>
+    </a>
+    <a href="/projects" class="highlight-card">
+      <h3>HRfunc</h3>
+      <p>Open-source Python package for fNIRS signal deconvolution, published in <i>Neurophotonics</i>, with ~14K PyPI downloads.</p>
+    </a>
+    <a href="/projects" class="highlight-card">
+      <h3>snowGAN &amp; Snowpack Dataset</h3>
+      <p>A 2,341-image computer-vision dataset and pretrained GAN on Hugging Face, used as a backbone for avalanche-risk modeling.</p>
+    </a>
+    <a href="/papers" class="highlight-card">
+      <h3>Publications</h3>
+      <p>Peer-reviewed work in <i>NeuroImage</i>, <i>Neurophotonics</i>, <i>Clinical Psychological Science</i>, and <i>JCPP Advances</i>.</p>
+    </a>
+  </div>
 </section>
-
-<div id="scroll-cta" class="scroll-cta" aria-label="Quick navigation">
-  <a href="/maxim" class="scroll-cta__card">
-    <h3>Maxim</h3>
-    <p>An agentic robotics framework giving robots a brain — its reward substrate just taught a real robot to turn toward sound, from scratch, with no LLM in the loop.</p>
-  </a>
-  <a href="/projects" class="scroll-cta__card">
-    <h3>Neurotech</h3>
-    <p>Building tools for Neuroscientist to better understand and leverage fMRI and fNIRS data.</p>
-  </a>
-  <a href="/projects" class="scroll-cta__card">
-    <h3>AI Systems</h3>
-    <p>Designing applied machine learning, from avalanche forecasting to pathology diagnosis.</p>
-  </a>
-  <a href="/projects" class="scroll-cta__card">
-    <h3>Snowpack Dataset</h3>
-    <p>Collecting snowpack samples to apply computer vision to avalanche risk prediction.</p>
-  </a>
-</div>
-{% endblock %}
-
-{% block scripts %}
-{{ super() }}
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const scrollCta = document.getElementById('scroll-cta');
-    if (!scrollCta) return;
-
-    let hasActivated = false;
-    const maybeShowScrollCta = () => {
-      if (hasActivated) return;
-      if (window.scrollY > 140) {
-        scrollCta.classList.add('visible');
-        hasActivated = true;
-        window.removeEventListener('scroll', maybeShowScrollCta);
-      }
-    };
-
-    window.addEventListener('scroll', maybeShowScrollCta, { passive: true });
-    maybeShowScrollCta();
-  });
-</script>
 {% endblock %}

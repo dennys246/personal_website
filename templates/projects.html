@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Denny Schaedig | Projects{% endblock %}
+{% block title %}Projects | Denny Schaedig{% endblock %}
+
+{% block meta_description %}Machine learning projects by Denny Schaedig: Maxim cognitive architecture, synchronAI, HRfunc, snowGAN and the Snowpack dataset, and BOLDnet.{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -15,7 +17,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url("/static/img/dillion_resevoir_1.JPG");
+    background-image: url("/static/img/dillion_resevoir_1.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -72,77 +74,50 @@
 {% block content %}
 <div class="w-full flex justify-center">
   <div class="flex w-full max-w-4xl flex-col items-center gap-16 pt-[18vh] pb-24 px-6 lg:px-0">
-    <a class="reveal project-card project-card-link w-full" href="https://www.hrfunc.org">
-      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i></h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        To improve human representation in science, Denny leverages
-        linear algebra and deconvolution to estimate neural activity and
-        hemodynamic response functions (HRFs) directly in functional near infrared spectroscopy (fNIRS)
-        data. Leveraging a hybrid tree-hash table data structure, the HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i> tool allows Neuroscientists to
-        communicate observed hemodynamics, increase neural activity estimation activation,
-        and improve represationation of people from diverse backgrounds in science.
-        Check out the <span class="text-indigo-200">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i> website</span>
-        for more information!
-      </p>
-    </a>
-    <a class="reveal project-card project-card-link w-full" href="https://www.rmdig.ai/avai">
-      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200">AvAI&trade;</h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        AvAI is a artificial intelligence taught to understand snowpack
-        characteristics and apply features learned to avalanche risk 
-        prediction. The model is undergoing training currently and expected
-        to be released alongside a paper validating it's use in 2026. Check
-        out the <span class="text-indigo-200">Rocky Mountain Digerati website</span>
-        for updates on it's progress!
-      </p>
-    </a>
-    <a class="reveal project-card project-card-link w-full" href="https://www.rmdig.ai/snowpack_dataset">
-      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200">Rocky Mountain Snowpack Dataset</h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        The Rocky Mountain Snowpack dataset is a collection of snowpack images
-        methodically collected to preserve each samples location in time & space.
-        The datasets ultimate goal is to allow the wider articial intelligence 
-        and machine learning community to be apply their skills to snow science.
-        The ultimate goal of this dataset is enable an AI to be trained to predict
-        avalanche risk at higher accuracy than current avalanche risk prediction
-        systems (~86%).
-      </p>
-    </a>
-    <a class="reveal project-card project-card-link w-full" href="/maxim">
-      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200">Maxim</h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        Maxim is an agentic robotics framework that gives robots something resembling a mind.
-        Inspired by mammalian neuroscience, it implements computational models of the hippocampus,
-        entorhinal cortex, nucleus accumbens, and attention networks to create embodied AI agents
-        that can perceive, remember, decide, and learn. Built for the Reachy Mini humanoid robot,
-        Maxim processes real visual input, real motor commands, and real human interactions.
-        Its latest milestone: the reward substrate taught the robot to turn toward sound on
-        real hardware — learned from scratch in ~10 trials, with no LLM in the action path.
-        Read the <span class="text-indigo-200">full overview</span> to learn more.
-      </p>
-    </a>
-    <a class="reveal project-card project-card-link w-full" href="https://github.com/dennys246/synchronAI">
-      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200">synchronAI</h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        synchronAI is a multimodal machine learning system for detecting interpersonal synchrony
-        between two individuals. It fuses video, audio, and fNIRS (functional near-infrared spectroscopy)
-        data to predict when two people's physiological and behavioral patterns align during interaction.
-        By combining visual behavioral cues, vocal characteristics, and real-time brain activity measurements,
-        synchronAI enables researchers in psychology and neuroscience to quantify a phenomenon
-        that has historically been difficult to measure objectively.
-        Check out the <span class="text-indigo-200">synchronAI repository</span> on GitHub.
-      </p>
-    </a>
-    <a class="reveal project-card project-card-link w-full" href="https://github.com/dennys246/BOLDnet">
-      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200">BOLDnet</h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        A fMRI AI training framework for seemlessly feature engineering
-        blood oxygenation level dependent (BOLD) data on either classification
-        or regression problems. A foundational model examining emotional valence
-        is undergoing training and expected to be released in the near future.
-        Check out the <span class="text-indigo-200">BOLDnet repository</span> on GitHub.
-      </p>
-    </a>
+    <header class="project-card w-full text-center">
+      <h1 class="text-3xl md:text-4xl font-semibold text-white">Projects</h1>
+      <p class="mt-3 text-base text-slate-200/80">Selected machine learning systems, open-source tools, and datasets I have designed, trained, and shipped.</p>
+    </header>
+    <article class="reveal project-card project-card-link w-full">
+      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200"><a href="/maxim" class="no-underline">Maxim</a></h2>
+      <p class="mt-3 text-center text-base font-medium text-slate-100">Bio-inspired cognitive architecture for LLM agents and robots.</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80">Maxim provides homeostatic drives, persistent cross-session memory, reward learning, and retrieval-augmented generation (RAG) for LLM agents, with a simulation environment and robotics integration. Its components are computational models inspired by mammalian neuroscience, including the hippocampus, entorhinal cortex, nucleus accumbens, and attention networks. Maxim runs on the Reachy Mini robot with live visual input, motor commands, and human interaction.</p>
+      <p class="mt-4 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Stack:</span> Python (PyPI package <code>pymaxim</code>, Apache-2.0) &middot; LLM agents &middot; RAG &middot; reward learning &middot; Reachy Mini robot</p>
+      <p class="mt-1 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Status/Result:</span> Released on PyPI with documentation at pymaxim.bio. Most recent hardware result: the reward substrate learned to turn the Reachy Mini toward speech from an empty substrate within ~10 trials, with no LLM in the action path (<a href="/maxim/sound-orientation" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline">write-up</a>).</p>
+      <p class="mt-4 text-sm font-medium"><a href="/maxim" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline">Overview</a> &middot; <a href="https://pymaxim.bio" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">Docs</a> &middot; <a href="https://github.com/dennys246/Maxim" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">Code</a> &middot; <a href="https://pypi.org/project/pymaxim/" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">PyPI</a></p>
+    </article>
+    <article class="reveal project-card project-card-link w-full">
+      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200"><a href="https://github.com/dennys246/synchronAI" rel="noopener" class="no-underline">synchronAI</a></h2>
+      <p class="mt-3 text-center text-base font-medium text-slate-100">Multimodal deep learning for measuring interpersonal synchrony.</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80">synchronAI fuses video, audio, and fNIRS (functional near-infrared spectroscopy) time-series to detect when two people&rsquo;s behavioral and physiological signals align during interaction. It gives psychology and neuroscience researchers an automated, quantitative measure of a phenomenon that has historically been difficult to assess objectively.</p>
+      <p class="mt-4 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Stack:</span> Multimodal deep learning over video, audio, and fNIRS time-series</p>
+      <p class="mt-1 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Status/Result:</span> In active development at the Laboratory for Child Brain Development, Washington University in St. Louis; current model reaches 0.72 AUC.</p>
+      <p class="mt-4 text-sm font-medium"><a href="https://github.com/dennys246/synchronAI" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">Code</a></p>
+    </article>
+    <article class="reveal project-card project-card-link w-full">
+      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200"><a href="https://www.hrfunc.org" rel="noopener" class="no-underline">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i></a></h2>
+      <p class="mt-3 text-center text-base font-medium text-slate-100">Open-source Python package for hemodynamic response modeling in fNIRS.</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i> uses linear algebra and deconvolution to estimate neural activity and hemodynamic response functions (HRFs) directly from fNIRS data, rather than assuming a single canonical response. A hybrid tree&ndash;hash-table data structure backs a live peer-to-peer database that lets researchers share and reuse observed HRFs across studies and populations.</p>
+      <p class="mt-4 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Stack:</span> Python &middot; pip-installable package (PyPI) &middot; deconvolution &middot; peer-to-peer HRF-sharing database</p>
+      <p class="mt-1 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Status/Result:</span> Published in <em>Neurophotonics</em> (2025); presented in an invited NIRx vendor webinar; maintained across 22 public releases with ~14K PyPI downloads.</p>
+      <p class="mt-4 text-sm font-medium"><a href="https://www.hrfunc.org" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">Site</a> &middot; <a href="https://github.com/dennys246/HRfunc" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">Code</a> &middot; <a href="https://pypi.org/project/hrfunc/" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">PyPI</a> &middot; <a href="https://doi.org/10.1117/1.NPh.13.S1.S17801" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">Paper</a></p>
+    </article>
+    <article class="reveal project-card project-card-link w-full">
+      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200"><a href="https://www.rmdig.ai/snowpack_dataset" rel="noopener" class="no-underline">snowGAN, Rocky Mountain Snowpack Dataset &amp; AvAI&trade;</a></h2>
+      <p class="mt-3 text-center text-base font-medium text-slate-100">An open snowpack imagery dataset, a pretrained GAN, and a downstream avalanche-risk model.</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80">The Rocky Mountain Snowpack dataset is a curated set of 2,341 snowpack images, each collected to preserve its location in time and space, released so the wider machine learning community can apply its methods to snow science. snowGAN was generatively pre-trained on this high-resolution imagery and serves as a transfer-learning backbone for AvAI, a multimodal avalanche-risk classifier. AvAI is delivered through a cross-platform mobile app for real-time inference and labeled field-data collection, and AvServ, a federated server that runs a check-out safety program connecting app users with search and rescue teams when they do not check in on time.</p>
+      <p class="mt-4 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Stack:</span> PyTorch / TensorFlow &middot; GANs (progressive growing) &middot; transfer learning &middot; Hugging Face &middot; cross-platform mobile app</p>
+      <p class="mt-1 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Status/Result:</span> Dataset published on Hugging Face (DOI 10.57967/hf/6143; peak of ~2,600 monthly downloads). Pretrained snowGAN models released as RMDig/snowGAN-core and RMDig/snowGAN-magnified-profile. AvAI is in development: model training and the mobile app are in progress.</p>
+      <p class="mt-4 text-sm font-medium"><a href="https://github.com/dennys246/snowGAN" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">Code</a> &middot; <a href="https://www.rmdig.ai/snowpack_dataset" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">Dataset</a> &middot; <a href="https://doi.org/10.57967/hf/6143" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">DOI</a> &middot; <a href="https://huggingface.co/RMDig/snowGAN-core" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">snowGAN-core</a> &middot; <a href="https://huggingface.co/RMDig/snowGAN-magnified-profile" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">snowGAN-magnified-profile</a> &middot; <a href="https://www.rmdig.ai/avai" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">AvAI</a></p>
+    </article>
+    <article class="reveal project-card project-card-link w-full">
+      <h2 class="project-title text-2xl font-semibold text-indigo-400 text-center transition-colors duration-200"><a href="https://github.com/dennys246/BOLDnet" rel="noopener" class="no-underline">BOLDnet</a></h2>
+      <p class="mt-3 text-center text-base font-medium text-slate-100">Deep learning framework for fMRI (BOLD) data.</p>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80">BOLDnet is a TensorFlow framework for rapid model prototyping on standardized fMRI datasets, supporting classification and regression on blood-oxygenation-level-dependent (BOLD) data. It includes custom spatial-attention layers and 4D volumetric data loaders.</p>
+      <p class="mt-4 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Stack:</span> TensorFlow &middot; custom spatial-attention layers &middot; 4D volumetric data loaders</p>
+      <p class="mt-1 text-sm leading-relaxed text-slate-200/80"><span class="font-semibold text-slate-100">Status/Result:</span> Research prototype; originally developed as KleinNet in the Banich Lab at the University of Colorado Boulder.</p>
+      <p class="mt-4 text-sm font-medium"><a href="https://github.com/dennys246/BOLDnet" class="text-indigo-300 hover:text-white underline-offset-2 hover:underline" rel="noopener">Code</a></p>
+    </article>
   </div>
 </div>
 {% endblock %}
@@ -168,17 +143,7 @@
       hasStarted = true;
     };
 
-    if (window.scrollY > 10) {
-      startObserving();
-    } else {
-      const onScroll = () => {
-        if (window.scrollY > 10) {
-          startObserving();
-          window.removeEventListener('scroll', onScroll);
-        }
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-    }
+    startObserving();
   });
 </script>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Denny Schaedig | Papers{% endblock %}
+{% block title %}Publications | Denny Schaedig{% endblock %}
 
-{% block meta_description %}Peer-reviewed publications by Denny Schaedig on fNIRS neuroimaging, parent-child neural synchrony, and early childhood anxiety.{% endblock %}
+{% block meta_description %}Publications by Denny Schaedig on functional connectome stability, fNIRS methods, parent–child neural dynamics, and early childhood anxiety.{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -17,7 +17,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url("/static/img/buffalo_mountain_1.JPG");
+    background-image: url("/static/img/buffalo_mountain_1.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -72,39 +72,54 @@
 {% block content %}
 <div class="w-full flex justify-center">
   <div class="flex w-full max-w-4xl flex-col items-center gap-16 pt-[18vh] pb-24 px-6 lg:px-0">
+    <header class="w-full space-y-2">
+      <h1 class="text-4xl font-semibold text-white">Publications</h1>
+      <p class="text-slate-300">Peer-reviewed articles and preprints. Also on <a href="https://orcid.org/0009-0002-1310-6392" class="underline hover:text-indigo-300">ORCID</a>.</p>
+    </header>
+    <a class="reveal project-card w-full" href="https://doi.org/10.1016/j.neuroimage.2026.122246">
+      <h2 class="project-title text-2xl font-semibold text-slate-100 transition-colors duration-200">
+        Stability of the functional connectome across childhood: a five-year dense-sampling case study with multi-subject validation
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate-200/80">
+        Kirk Graff, Yiwen Zhang, <strong class="text-slate-100">Denny Schaedig</strong>, Nadine Melhem, Susan B. Perlman
+      </p>
+      <p class="mt-2 text-sm text-slate-400"><i>NeuroImage</i>, 340, 122246 · 2026</p>
+    </a>
     <a class="reveal project-card w-full" href="https://doi.org/10.1177/21677026251396786">
       <h2 class="project-title text-2xl font-semibold text-slate-100 transition-colors duration-200">
         Parent–Child Neural Dynamics During a Stressful Task: Probing Associations With Temperament and Anxiety
       </h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        Joscelin Rocha-Hidalgo, Harmony Nguyen, Dakota Reis, Denny Schaedig, Khalil I. Thompson, Susan B. Perlman, Koraly E. Pérez-Edgar
+        Joscelin Rocha-Hidalgo, Harmony Nguyen, Dakota Reis, <strong class="text-slate-100">Denny Schaedig</strong>, Khalil I. Thompson, Susan B. Perlman, Koraly E. Pérez-Edgar
       </p>
-      <p class="mt-2 text-sm text-slate-400"><i>Clinical Psychological Science</i>, 2026</p>
+      <p class="mt-2 text-sm text-slate-400"><i>Clinical Psychological Science</i>, 14(5), 658–675 · 2026</p>
     </a>
     <a class="reveal project-card w-full" href="https://doi.org/10.1002/jcv2.70158">
       <h2 class="project-title text-2xl font-semibold text-slate-100 transition-colors duration-200">
         Identifiable regional and neural network abnormalities in early childhood anxiety
       </h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        Khalil I. Thompson, Yiwen Zhang, Denny Schaedig, Anna Bankston, Anoushka Parnerkar, Shrinidhi Jeyaram, Nadine Melhem, Susan B. Perlman
+        Khalil I. Thompson, Yiwen Zhang, <strong class="text-slate-100">Denny Schaedig</strong>, Anna Bankston, Anoushka Parnerkar, Shrinidhi Jeyaram, Nadine Melhem, Susan B. Perlman
       </p>
-      <p class="mt-2 text-sm text-slate-400"><i>JCPP Advances</i>, 2026</p>
+      <p class="mt-2 text-sm text-slate-400"><i>JCPP Advances</i>, e70158 · 2026</p>
     </a>
-    <a class="reveal project-card w-full" href="https://www.spiedigitallibrary.org/journals/neurophotonics/volume-13/issue-S1/S17801/HRfunc--a-tool-for-modeling-hemodynamic-response-variability-in/10.1117/1.NPh.13.S1.S17801.full">
+    <a class="reveal project-card w-full" href="https://doi.org/10.1117/1.NPh.13.S1.S17801">
       <h2 class="project-title text-2xl font-semibold text-slate-100 transition-colors duration-200">
-        <span class = "text-indigo-400">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i></span>: a tool for modeling hemodynamic response variability in fNIRS
+        <span class="text-indigo-400">HR<i><span style="font-family: 'Times New Roman', serif;">func</span></i></span>: a tool for modeling hemodynamic response variability in fNIRS
       </h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        Denny Schaedig, Megan Schumer, Bedilia Mata-Centeno, Luca Pollonini, Koraly Pérez-Edgar, Nadine Melhem, Susan B. Perlman
+        <strong class="text-slate-100">Denny Schaedig</strong>, Megan Schumer, Bedilia Mata-Centeno, Luca Pollonini, Koraly E. Pérez-Edgar, Nadine Melhem, Susan B. Perlman
       </p>
+      <p class="mt-2 text-sm text-slate-400"><i>Neurophotonics</i>, 13(S1), S17801 · 2025 · First author</p>
     </a>
-    <a class="reveal project-card w-full" href="https://www.biorxiv.org/content/10.1101/2025.07.02.662817v1">
+    <a class="reveal project-card w-full" href="https://doi.org/10.1101/2025.07.02.662817">
       <h2 class="project-title text-2xl font-semibold text-slate-100 transition-colors duration-200">
         Neural Synchrony in Parent-Child Dyads: Profiles Associated with Interparental Conflict and Internalizing Symptoms
       </h2>
       <p class="mt-4 text-base leading-relaxed text-slate-200/80">
-        Charles Alvarado, Carlomagno C. Panlilio, Koraly Perez-Edgar, Khalil I. Thompson, Denny Schaedig, Nadine Melhem, Susan B. Perlman
+        Charles Alvarado, Carlomagno C. Panlilio, Koraly E. Pérez-Edgar, Khalil I. Thompson, <strong class="text-slate-100">Denny Schaedig</strong>, Nadine Melhem, Susan B. Perlman
       </p>
+      <p class="mt-2 text-sm text-slate-400"><i>bioRxiv</i> preprint · 2025</p>
     </a>
   </div>
 </div>
@@ -131,17 +146,7 @@
       hasStarted = true;
     };
 
-    if (window.scrollY > 10) {
-      startObserving();
-    } else {
-      const onScroll = () => {
-        if (window.scrollY > 10) {
-          startObserving();
-          window.removeEventListener('scroll', onScroll);
-        }
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-    }
+    startObserving();
   });
 </script>
 {% endblock %}

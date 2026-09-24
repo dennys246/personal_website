@@ -1,7 +1,19 @@
 from flask import Flask, render_template, Response, url_for, redirect, abort
+from datetime import date
 import os
 
 app = Flask(__name__)
+
+RESUME_FILENAME = "Denny_Schaedig_Resume.pdf"
+
+@app.context_processor
+def inject_site_globals():
+    # The Résumé links only render once the PDF is actually in static/.
+    has_resume = os.path.exists(os.path.join(app.static_folder, RESUME_FILENAME))
+    return {
+        "current_year": date.today().year,
+        "resume_url": url_for("static", filename=RESUME_FILENAME) if has_resume else None,
+    }
 
 @app.route("/")
 def main():
@@ -15,9 +27,10 @@ def story():
 def experiences():
     return render_template("experiences.html")
 
+# Achievements and education were folded into /experiences.
 @app.route("/achievements")
 def achievements():
-    return render_template("achievements.html")
+    return redirect(url_for("experiences") + "#awards", code=301)
 
 @app.route("/papers")
 def papers():
@@ -218,34 +231,33 @@ def sitemap_xml():
     # (endpoint, changefreq, priority, lastmod). Bump lastmod when you edit a page;
     # it used to be stamped "today" on every crawl, which told crawlers nothing.
     pages = [
-        ("main", "weekly", "1.0", "2026-07-16"),
-        ("story", "monthly", "0.8", "2026-09-02"),
-        ("experiences", "monthly", "0.8", "2026-09-02"),
-        ("achievements", "monthly", "0.8", "2026-01-06"),
-        ("papers", "monthly", "0.8", "2026-09-02"),
-        ("projects", "monthly", "0.8", "2026-07-16"),
-        ("ramblings", "monthly", "0.7", "2026-09-03"),
-        ("contact", "monthly", "0.6", "2025-11-29"),
-        ("perceptrons", "monthly", "0.6", "2025-11-22"),
+        ("main", "weekly", "1.0", "2026-09-24"),
+        ("story", "monthly", "0.8", "2026-09-24"),
+        ("experiences", "monthly", "0.8", "2026-09-24"),
+        ("papers", "monthly", "0.8", "2026-09-24"),
+        ("projects", "monthly", "0.8", "2026-09-24"),
+        ("ramblings", "monthly", "0.7", "2026-09-24"),
+        ("contact", "monthly", "0.6", "2026-09-24"),
+        ("perceptrons", "monthly", "0.6", "2026-09-24"),
         # Maxim — design essays (docs and evidence are on pymaxim.bio)
-        ("maxim", "monthly", "0.9", "2026-09-03"),
-        ("maxim_release_1_0", "monthly", "0.8", "2026-09-03"),
-        ("maxim_reachability", "monthly", "0.8", "2026-09-03"),
-        ("maxim_sound_orientation", "monthly", "0.8", "2026-09-03"),
-        ("maxim_substrate_primary", "monthly", "0.8", "2026-08-26"),
-        ("maxim_hivemind", "monthly", "0.8", "2026-09-03"),
-        ("maxim_agent_architecture", "monthly", "0.8", "2026-08-26"),
-        ("maxim_math_cognition", "monthly", "0.8", "2026-08-26"),
-        ("maxim_memory_systems", "monthly", "0.8", "2026-08-26"),
-        ("maxim_embodiment", "monthly", "0.8", "2026-08-26"),
-        ("maxim_imagination", "monthly", "0.7", "2026-08-26"),
-        ("maxim_proprioception", "monthly", "0.7", "2026-08-26"),
-        ("maxim_attention_salience", "monthly", "0.7", "2026-08-26"),
-        ("maxim_deliberation", "monthly", "0.7", "2026-08-26"),
+        ("maxim", "monthly", "0.9", "2026-09-24"),
+        ("maxim_release_1_0", "monthly", "0.8", "2026-09-24"),
+        ("maxim_reachability", "monthly", "0.8", "2026-09-24"),
+        ("maxim_sound_orientation", "monthly", "0.8", "2026-09-24"),
+        ("maxim_substrate_primary", "monthly", "0.8", "2026-09-24"),
+        ("maxim_hivemind", "monthly", "0.8", "2026-09-24"),
+        ("maxim_agent_architecture", "monthly", "0.8", "2026-09-24"),
+        ("maxim_math_cognition", "monthly", "0.8", "2026-09-24"),
+        ("maxim_memory_systems", "monthly", "0.8", "2026-09-24"),
+        ("maxim_embodiment", "monthly", "0.8", "2026-09-24"),
+        ("maxim_imagination", "monthly", "0.7", "2026-09-24"),
+        ("maxim_proprioception", "monthly", "0.7", "2026-09-24"),
+        ("maxim_attention_salience", "monthly", "0.7", "2026-09-24"),
+        ("maxim_deliberation", "monthly", "0.7", "2026-09-24"),
         ("maxim_privacy_policy", "yearly", "0.3", "2026-06-03"),
         ("maxim_terms_and_conditions", "yearly", "0.3", "2026-06-03"),
-        ("gan_training_tips", "monthly", "0.6", "2026-02-08"),
-        ("progressive_growing", "monthly", "0.6", "2026-02-08"),
+        ("gan_training_tips", "monthly", "0.6", "2026-09-24"),
+        ("progressive_growing", "monthly", "0.6", "2026-09-24"),
     ]
 
     url_entries = []

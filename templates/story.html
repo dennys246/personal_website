@@ -1,32 +1,30 @@
 {% extends "base.html" %}
 
-{% block title %}Denny Schaedig | Story{% endblock %}
+{% block title %}About | Denny Schaedig{% endblock %}
+{% block meta_description %}About Denny Schaedig: a Colorado-based machine learning engineer with a neuroscience background, building ML systems for research and open source.{% endblock %}
 
 {% block extra_head %}
 <style>
-.story-hero {
+  .story-hero {
     position: relative;
     overflow: hidden;
     background-color: transparent !important;
-    padding: 4rem 1.5rem;
     min-height: 100vh;
   }
   .story-hero::before {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url("/static/img/summer_denny_picture.jpg");
+    background-image: url("/static/img/denny-outdoors.webp");
     background-size: cover;
-    background-position: center;
+    background-position: 20% center;
     z-index: -2;
   }
-  .story-hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
+  .story-copy {
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.78);
   }
-.reveal {
+  .reveal {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.6s ease, transform 0.6s ease;
@@ -35,44 +33,39 @@
     opacity: 1;
     transform: translateY(0);
   }
-  .story-copy {
-    color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.75);
-  }
 </style>
 {% endblock %}
 
-{% block main_class %}story-hero w-full min-h-screen p-0 flex items-start justify-start{% endblock %}
+{% block main_class %}story-hero w-full min-h-screen p-0 flex items-stretch justify-end{% endblock %}
 
 {% block content %}
-<div class="reveal w-full max-w-xl bg-transparent font-bold">
-  <div class="flex min-h-screen flex-col justify-between gap-6 p-8 backdrop-blur-md story-copy">
+<div class="reveal w-full md:w-1/2 lg:max-w-2xl">
+  <div class="flex min-h-screen flex-col gap-5 p-8 sm:p-12 backdrop-blur-md story-copy">
+    <h1 class="text-3xl font-semibold">About</h1>
     <p class="leading-relaxed">
-    Denny Schaedig is a Colorado native passionate about learning in every
-    sense. This passion started as a drive to learn more about the world and in 2015
-    drove Denny to pursue a Bachelor's in Neuroscience at the University
-    of Colorado, Boulder. While honing his understanding of Neuroscience, he focused his studies on how our
-    brains naturally learn, form memories and leverage what was learned. Along the way he 
-    took courses on computer science and mathmatical models of cognition which ignited a 
-    fierce passion and love for computer science, AI, and machine learning.
-    <br><br>
-    This passion ultimately led him to learn more about AI through first-hand experiences.
-    He first started applying computer vision and machine learning to 4D fMRI data in 2018, ultimately
-    training an AI (KleinNet) to understand how the brain functions during a cognitive task. These projects inspired 
-    him to pursue a Master's in AI and machine learning through Colorado State University Global
-    in 2022 to hone his skills. Denny has been leveraging these skills within the Neuroscience 
-    field, building software and training AI to advance scientific research.
-    <br><br>
-    Denny currently works remotely as an AI Engineer for the Laboratory for Child Brain Development 
-    at Washington University in St. Louis preprocessing and analyzing
-    neuroimaging data with traditional and AI approaches. In his free 
-    time, Denny likes to build stuff he believes could help
-    his communities. Currently he is training AvAI&trade; to predict avalanche 
-    risk with real-time data to inform backcountry skiers of potential dangers.
-    <br><br>In his free time, he also loves to learn new things. Currently he is learning the
-    fine details of skiing through teaching and learning from the Professional Ski Instructor
-    of America (PSIA). Alongside this he is learning how to snowboard and
-    is getting ready to shred down his first double black this season! 
+    Denny Schaedig is a machine learning engineer who designs, trains, and ships ML systems end to end,
+    from data pipelines and distributed training to model packaging, serving, and deployment.
+    A Colorado native, he is based in Summit County.
+    </p>
+    <p class="leading-relaxed">
+    He came to machine learning through neuroscience. While earning a B.A. in Neuroscience at the
+    University of Colorado Boulder, he focused on how the brain learns, forms memories, and uses what it
+    has learned, and coursework in computer science and mathematical models of cognition drew him toward AI.
+    In 2018, in the Banich Lab, he began applying computer vision and deep learning to 4D fMRI data, work that
+    became BOLDnet (originally KleinNet). He went on to earn an M.S. in Artificial Intelligence and Machine
+    Learning from Colorado State University Global in 2025.
+    </p>
+    <p class="leading-relaxed">
+    Since December 2022 he has worked remotely as a Machine Learning / AI Engineer at the Laboratory for
+    Child Brain Development at Washington University in St. Louis. There he architected a HIPAA-compliant
+    AWS HPC environment and built HRfunc, an open-source fNIRS analysis package published in
+    <i>Neurophotonics</i>. He also founded Rocky Mountain Digerati, where he builds LLM-agent systems and
+    applied ML for avalanche safety, including snowGAN, a public snowpack imagery dataset, and the AvAI
+    risk model. His open-source cognitive architecture, <a href="/maxim" class="underline hover:text-indigo-300">Maxim</a>,
+    explores persistent memory and reward learning for LLM agents and robots.
+    </p>
+    <p class="leading-relaxed">
+    Outside of work, he teaches skiing as a PSIA-certified instructor and is learning to snowboard.
     </p>
   </div>
 </div>

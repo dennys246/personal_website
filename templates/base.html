@@ -10,11 +10,11 @@
   <meta charset="UTF-8">
   <title>{% block title %}Denny Schaedig{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% set default_description = "Official site for Denny Schaedig, an AI and neuroimaging engineer sharing projects, publications, and experiences across data science, neuroscience, and mountain life." %}
+  {% set default_description = "Denny Schaedig is a machine learning engineer building production ML systems, generative models, and open-source research software." %}
   {% set canonical_url = request.base_url %}
-  {% set preview_image = url_for('static', filename='img/signature.jpg', _external=True) %}
+  {% set preview_image = url_for('static', filename='img/og-card.jpg', _external=True) %}
   <meta name="description" content="{% block meta_description %}{{ default_description }}{% endblock %}">
-  <meta name="keywords" content="{% block meta_keywords %}Denny Schaedig, AI engineer, neuroimaging, data science, Colorado researcher, Rocky Mountain Digerati{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}Denny Schaedig, machine learning engineer, MLOps, generative models, neuroimaging{% endblock %}">
   <meta name="author" content="{% block meta_author %}Denny Schaedig{% endblock %}">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
@@ -24,12 +24,17 @@
   <meta property="og:type" content="{% block og_type %}website{% endblock %}">
   <meta property="og:url" content="{{ canonical_url }}">
   <meta property="og:image" content="{{ preview_image }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Denny Schaedig, Machine Learning Engineer">
   <meta property="og:site_name" content="{% block og_site_name %}Denny Schaedig{% endblock %}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ self.title()|striptags }}">
   <meta name="twitter:description" content="{{ self.meta_description() }}">
   <meta name="twitter:image" content="{{ preview_image }}">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="/static/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/static/favicon-32.png">
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,600,700&display=swap" rel="stylesheet">
   {% block extra_head %}{% endblock %}
   <style>
@@ -76,7 +81,8 @@
     }
 
     .chalk-text {
-      font-family: "Comic Sans MS", "Comic Sans";
+      font-family: 'Satoshi', sans-serif;
+      font-weight: 500;
     }
 
     .btn-link {
@@ -103,10 +109,23 @@
     "@type": "Person",
     "name": "Denny Schaedig",
     "url": "{{ request.url_root }}",
-    "jobTitle": "AI & Neuroimaging Engineer",
-    "description": "Denny Schaedig builds AI, neuroimaging tools, and mountain-focused research projects in Colorado.",
-    "image": "{{ preview_image }}",
-    "knowsAbout": ["Artificial Intelligence", "Neuroimaging", "Data Science", "Backcountry Safety"]
+    "jobTitle": "Machine Learning Engineer",
+    "description": "Machine learning engineer building production ML systems, generative models, and open-source research software.",
+    "image": "{{ url_for('static', filename='img/headshot-square.jpg', _external=True) }}",
+    "email": "mailto:dennys25@pm.me",
+    "address": {"@type": "PostalAddress", "addressRegion": "CO", "addressCountry": "US"},
+    "worksFor": {"@type": "Organization", "name": "Washington University in St. Louis"},
+    "alumniOf": [
+      {"@type": "CollegeOrUniversity", "name": "Colorado State University Global"},
+      {"@type": "CollegeOrUniversity", "name": "University of Colorado Boulder"}
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/in/denny-schaedig/",
+      "https://github.com/dennys246",
+      "https://huggingface.co/dennys246",
+      "https://orcid.org/0009-0002-1310-6392"
+    ],
+    "knowsAbout": ["Machine Learning", "MLOps", "Generative Models", "Deep Learning", "LLM Agents", "Neuroimaging"]
   }
   </script>
   {% endblock %}
@@ -118,18 +137,19 @@
 <header class="p-6 bg-black text-white shadow sticky top-0 z-50">
   <div class="max-w-7xl mx-auto flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-center">
     <nav class="flex flex-wrap items-center justify-center gap-4 text-lg order-2 md:order-1 md:mr-10">
-      <a href="/story" class="chalk-text text-white hover:text-gray-400 transition">My Story</a>
-      <a href="/experiences" class="chalk-text text-white hover:text-gray-400 transition">Experiences</a>
-      <a href="/achievements" class="chalk-text text-white hover:text-gray-400 transition">Achievements</a>
+      <a href="/story" class="chalk-text text-white hover:text-gray-400 transition">About</a>
+      <a href="/experiences" class="chalk-text text-white hover:text-gray-400 transition">Experience</a>
+      <a href="/projects" class="chalk-text text-white hover:text-gray-400 transition">Projects</a>
     </nav>
     <a href="/" class="logo-wrapper order-1 md:order-2">
-      <img src="/static/img/signature.jpg" alt="Signature" class="logo-default" />
+      <img src="/static/img/signature.jpg" alt="Denny Schaedig — home" class="logo-default" />
     </a>
     <nav class="flex flex-wrap items-center justify-center gap-4 text-lg order-3 md:ml-10">
-      <a href="/projects" class="chalk-text text-white hover:text-gray-400 transition">Projects</a>
-      <a href="/papers" class="chalk-text text-white hover:text-gray-400 transition">Papers</a>
-      <a href="/ramblings" class="chalk-text text-white hover:text-gray-400 transition">Ramblings</a>
+      <a href="/papers" class="chalk-text text-white hover:text-gray-400 transition">Publications</a>
+      <a href="/ramblings" class="chalk-text text-white hover:text-gray-400 transition">Writing</a>
       <a href="/maxim" class="chalk-text text-white hover:text-gray-400 transition">Maxim</a>
+      <a href="/contact" class="chalk-text text-white hover:text-gray-400 transition">Contact</a>
+      {% if resume_url %}<a href="{{ resume_url }}" class="chalk-text text-white hover:text-gray-400 transition">Résumé</a>{% endif %}
     </nav>
   </div>
 </header>
@@ -166,11 +186,15 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm text-center md:text-left">
       
       <!-- Left -->
-      <p class="mb-2 md:mb-0">&copy; 2025 Denny Schaedig. All rights reserved.</p>
+      <p class="mb-2 md:mb-0">&copy; {{ current_year }} Denny Schaedig. All rights reserved.</p>
       
       <!-- Right -->
-      <div class="flex flex-col md:flex-row gap-2 md:gap-4">
-        <a href="/contact" class="hover:text-indigo-500">Contact Me</a>
+      <div class="flex flex-wrap justify-center gap-x-4 gap-y-2">
+        <a href="mailto:dennys25@pm.me" class="hover:text-indigo-500">Email</a>
+        <a href="https://www.linkedin.com/in/denny-schaedig/" class="hover:text-indigo-500">LinkedIn</a>
+        <a href="https://github.com/dennys246" class="hover:text-indigo-500">GitHub</a>
+        <a href="https://huggingface.co/dennys246" class="hover:text-indigo-500">Hugging Face</a>
+        <a href="https://orcid.org/0009-0002-1310-6392" class="hover:text-indigo-500">ORCID</a>
       </div>
       
     </div>
