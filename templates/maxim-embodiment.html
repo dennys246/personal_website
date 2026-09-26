@@ -4,7 +4,7 @@
 
 {% block meta_description %}The SEM (Sensor-Entity-Modulator) protocol — Maxim's composable abstraction for robot joints, cameras, NPCs, and any interactive entity.{% endblock %}
 
-{% block meta_keywords %}Maxim embodiment, SEM protocol, sensor entity modulator, robot abstraction, cerebellum forward models, motor programs, hippocampal engrams, virtual entities, composable robotics{% endblock %}
+{% block meta_keywords %}Maxim embodiment, SEM protocol, sensor entity modulator, robot abstraction, cerebellum forward models, motor programs, virtual entities, composable robotics{% endblock %}
 
 {% block meta_author %}Denny Schaedig{% endblock %}
 {% block og_site_name %}Maxim{% endblock %}
@@ -50,9 +50,9 @@
   </header>
 
   {% set maxim_written = "April 2026" %}
-  {% set maxim_updated = "August 2026" %}
+  {% set maxim_updated = "September 2026" %}
   {% set maxim_docs = [("Embodiment overview", "https://pymaxim.bio/embodiment/overview/"), ("The SEM protocol", "https://pymaxim.bio/embodiment/sem-protocol/"), ("Embodiment quickstart", "https://pymaxim.bio/embodiment/quickstart/")] %}
-  {% set maxim_related = ["proprioception", "sound-orientation", "imagination"] %}
+  {% set maxim_related = ["proprioception", "sound-orientation", "imagination", "engrams"] %}
   {% include "_maxim_status.html" %}
 
 
@@ -171,11 +171,16 @@ Known risks: overextension if shoulder.angle > 160 at start</div>
       <p class="text-slate-300">Hippocampal-cerebellar interactions are well-documented: the hippocampus provides contextual scaffolding for motor learning ("where and when did I learn this movement?"), while the cerebellum stores the procedural knowledge itself.</p>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">Motor engrams are <strong class="text-white">ephemeral cross-system traces</strong> linking motor programs to situational context. The Cerebellum stores the <em class="text-indigo-400 not-italic">how</em> (the program steps), the Hippocampus stores the <em class="text-indigo-400 not-italic">when/where/what</em> (the contextual episode), and the engram links them through the associative graph.</p>
+    <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-amber-400 mb-2">Design intent &mdash; not wired yet</h3>
+      <p class="text-slate-300 text-sm">Everything in this section is implemented and unit-tested, and none of it runs in production: nothing outside the tests forms, reads or strengthens a motor engram, and there is no engram decay code. An earlier version of this page said engrams form and decay on their own; that was the design, not the running system. <a href="/maxim/engrams#motor" class="text-indigo-400 hover:text-indigo-300 no-underline">Engrams</a> tells that story and what happens next.</p>
+    </div>
 
-    <p class="text-slate-300 leading-relaxed">Engrams form only on <strong class="text-white">significant outcomes</strong> &mdash; pain &gt; 0.3, surprising results (RPE &gt; 0.3), or novel programs. Routine successes don't need episodic context. Engrams decay after ~2 days unless reinforced, using the standard hippocampal consolidation cycle.</p>
+    <p class="text-slate-300 leading-relaxed">The design: a motor engram is a <strong class="text-white">cross-system trace</strong> linking a motor program to the situation it ran in. The Cerebellum holds the <em class="text-indigo-400 not-italic">how</em> (the program steps), the Hippocampus holds the <em class="text-indigo-400 not-italic">when/where/what</em> (a trace marked as an engram for that program), and a node in the associative graph links the two.</p>
 
-    <p class="text-slate-300 leading-relaxed">The result is a loop, not a pipeline: a program outcome becomes an engram, recalling the engram gates the program by context, the NAc's prediction vetoes or greenlights it, and the SCN's temporal index lets thresholds shift with time of day.</p>
+    <p class="text-slate-300 leading-relaxed">Formation was meant to be selective &mdash; only on <strong class="text-white">significant outcomes</strong>: pain above 0.3, a reward prediction error above 0.3, novelty above 0.7, or a program the Cerebellum is still unsure of (confidence below 0.3). Routine successes would not need episodic context. The intended loop: a program outcome becomes an engram, recalling the engram gates the program by context, and the NAc's prediction vetoes or greenlights it.</p>
+
+    <p class="text-slate-300 leading-relaxed">None of those arrows has a caller today. The Cerebellum's forward model does train on real readings every session, but its predictions have no consumer and its state is not saved between sessions. Wiring the save is scheduled engineering; whether the motor engram gets a real reader or is retired is decided by a later audit of the forward model.</p>
   </section>
 
   <!-- Virtual Entities -->

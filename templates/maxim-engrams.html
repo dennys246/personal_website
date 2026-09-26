@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Engrams — Maxim | Denny Schaedig{% endblock %}
+
+{% block meta_description %}What a memory trace has to do — form from one experience, stay specific, come back from a partial cue, change behaviour — the neuroscience each piece of Maxim borrows, and the one engram that does all four without the LLM.{% endblock %}
+
+{% block meta_keywords %}Maxim engrams, engram cells, memory engram, pattern separation, pattern completion, memory allocation, fear conditioning, synaptic tagging and capture, behavioural tagging, storage strength, retrieval strength, cerebellar forward model, situation engram, embodied AI memory, bio-inspired memory{% endblock %}
+
+{% block meta_author %}Denny Schaedig{% endblock %}
+{% block og_site_name %}Maxim{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Engrams — What a Memory Trace Has to Do, and How Much of That Maxim Does",
+  "description": "An engram has to form from one experience, stay specific, come back from a partial cue, and change behaviour. The neuroscience each piece of Maxim borrows — pattern separation, allocation, fear conditioning, synaptic tagging, storage strength, forward models — scored against the code, the drowning fear that passes all four tests without the LLM, and the 1.4 engram-integrity work on the rest.",
+  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
+  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/engrams",
+  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "datePublished": "2026-09-25",
+  "keywords": ["engram", "engram cells", "pattern separation", "pattern completion", "memory allocation", "fear conditioning", "synaptic tagging", "storage strength", "forward model", "situation engram"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://www.dennyschaedig.com/projects" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "Engrams", "item": "https://www.dennyschaedig.com/maxim/engrams" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
+
+  <header class="text-center space-y-2">
+    <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM</p>
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Engrams</h1>
+    <p class="text-indigo-400 font-medium">What a memory trace has to do, and how much of that Maxim actually does</p>
+  </header>
+
+  {% set maxim_written = "September 2026" %}
+  {% set maxim_note = "The engram scorecard in Maxim's repository is the living version of this page and wins wherever the two disagree." %}
+  {% set maxim_docs = [("Engrams", "https://pymaxim.bio/memory/engrams/")] %}
+  {% set maxim_related = ["memory-systems", "embodiment", "substrate-primary", "hivemind", "sound-orientation"] %}
+  {% include "_maxim_status.html" %}
+
+  <!-- Lede -->
+  <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+    <p class="text-slate-200 text-lg leading-relaxed">Maxim has five kinds of memory trace, and I used to call all of them engrams. Then I wrote down what an engram has to <em>do</em> and scored each against the code instead of its design. One passes on every count without the language model: a fear learned from drowning that gets the agent out of the water before the pain arrives, and transfers to an agent that never felt it. The rest form honestly and stop somewhere short.</p>
+  </div>
+
+  <!-- Contents -->
+  <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2">Contents</h3>
+    <ol class="space-y-1 text-slate-300 list-decimal pl-5">
+      <li><a href="#the-idea" class="text-indigo-400 hover:text-indigo-300 no-underline">The Idea</a></li>
+      <li><a href="#four-tests" class="text-indigo-400 hover:text-indigo-300 no-underline">Four Things an Engram Has to Do</a></li>
+      <li><a href="#borrowed" class="text-indigo-400 hover:text-indigo-300 no-underline">What Each Piece Borrows</a></li>
+      <li><a href="#drowning" class="text-indigo-400 hover:text-indigo-300 no-underline">The One That Works</a></li>
+      <li><a href="#gaps" class="text-indigo-400 hover:text-indigo-300 no-underline">Where the Biology Outruns the Code</a></li>
+      <li><a href="#next" class="text-indigo-400 hover:text-indigo-300 no-underline">What I'm Building Next</a></li>
+      <li><a href="#references" class="text-indigo-400 hover:text-indigo-300 no-underline">References</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. The idea -->
+  <section class="space-y-4">
+    <h2 id="the-idea" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Idea</h2>
+
+    <p class="text-slate-300 leading-relaxed">The word is older than almost everything else in neuroscience. Richard Semon coined <em>engram</em> in 1904 for the lasting change an experience leaves in living tissue &mdash; the physical trace that a later cue can bring back <a href="#ref-semon" class="text-indigo-400 hover:text-indigo-300 no-underline">[1]</a>. For most of a century there was no way to test it. Karl Lashley spent decades cutting lesions into rat cortex looking for where a maze memory lived, and in 1950 summarised the search as &ldquo;In Search of the Engram.&rdquo; No single lesion removed the memory <a href="#ref-lashley" class="text-indigo-400 hover:text-indigo-300 no-underline">[2]</a>.</p>
+
+    <p class="text-slate-300 leading-relaxed">What changed it was a tool. In 2012, Xu Liu, Steve Ramirez and colleagues in Susumu Tonegawa's lab tagged the neurons in the hippocampus's dentate gyrus that were active while a mouse learned to fear a place, and later switched just those cells back on with light. The mouse froze in a different, safe box <a href="#ref-liu" class="text-indigo-400 hover:text-indigo-300 no-underline">[3]</a>. A year later the same group paired reactivation of a tagged ensemble with a shock and produced fear of a place where nothing bad had happened <a href="#ref-ramirez" class="text-indigo-400 hover:text-indigo-300 no-underline">[4]</a>. The trace was real, it was a population of cells, and it could be driven from outside.</p>
+
+    <p class="text-slate-300 leading-relaxed">The modern picture that grew from this work <a href="#ref-josselyn-tonegawa" class="text-indigo-400 hover:text-indigo-300 no-underline">[5]</a> is the one I build against: an engram is a <strong class="text-white">sparse ensemble</strong>, <strong class="text-white">allocated</strong> to a small fraction of the available neurons, that <strong class="text-white">forms from a single experience</strong> and can be <strong class="text-white">reactivated by a partial cue</strong>. Maxim has no neurons. It borrows the shape of the idea and then has to show the borrowed shape does the same job.</p>
+  </section>
+
+  <!-- 2. Four tests -->
+  <section class="space-y-4">
+    <h2 id="four-tests" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Four Things an Engram Has to Do</h2>
+
+    <p class="text-slate-300 leading-relaxed">Stripped of the anatomy, the idea makes four claims about a trace. It <strong class="text-white">forms</strong> from one experience. It stays <strong class="text-white">specific</strong>: a different situation does not land on it. It is <strong class="text-white">recalled</strong> from a partial cue. And recall <strong class="text-white">changes behaviour</strong>. A trace that forms and is never read is a record, not an engram.</p>
+
+    <p class="text-slate-300 leading-relaxed">I score Maxim on those four instead of on its design for the reason in <a href="/maxim/reachability" class="text-indigo-400 hover:text-indigo-300 no-underline">Reachability</a>: a design document describes arrows, and whether each arrow has a caller is a separate fact it cannot tell you. So every cell below was read in the code, and &ldquo;changes behaviour&rdquo; needs an experiment through the real action path with the valence removed as a control.</p>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-3 sm:p-4 overflow-x-auto">
+      <table class="w-full text-xs sm:text-sm text-left text-slate-300">
+        <thead class="text-slate-400 border-b border-slate-700">
+          <tr><th class="py-2 pr-2 sm:pr-3 font-semibold">Trace</th><th class="py-2 pr-2 sm:pr-3 font-semibold">Forms</th><th class="py-2 pr-2 sm:pr-3 font-semibold">Specific</th><th class="py-2 pr-2 sm:pr-3 font-semibold">Recalled</th><th class="py-2 font-semibold">Changes behaviour</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-700/60">
+          <tr><td class="py-2 pr-2 sm:pr-3 text-white font-medium">Situation</td><td class="py-2 pr-2 sm:pr-3 text-emerald-400">yes</td><td class="py-2 pr-2 sm:pr-3 text-amber-400">for big swings only</td><td class="py-2 pr-2 sm:pr-3 text-emerald-400">yes</td><td class="py-2 text-emerald-400">yes, no LLM</td></tr>
+          <tr><td class="py-2 pr-2 sm:pr-3 text-white font-medium">Recognition</td><td class="py-2 pr-2 sm:pr-3 text-emerald-400">yes</td><td class="py-2 pr-2 sm:pr-3 text-amber-400">may drift</td><td class="py-2 pr-2 sm:pr-3 text-amber-400">text only</td><td class="py-2 text-amber-400">text, small nudge</td></tr>
+          <tr><td class="py-2 pr-2 sm:pr-3 text-white font-medium">Episodic</td><td class="py-2 pr-2 sm:pr-3 text-emerald-400">yes</td><td class="py-2 pr-2 sm:pr-3 text-emerald-400">yes</td><td class="py-2 pr-2 sm:pr-3 text-amber-400">built, unused</td><td class="py-2 text-amber-400">prompt text only</td></tr>
+          <tr><td class="py-2 pr-2 sm:pr-3 text-white font-medium">Semantic</td><td class="py-2 pr-2 sm:pr-3 text-emerald-400">by name</td><td class="py-2 pr-2 sm:pr-3 text-slate-500">&mdash;</td><td class="py-2 pr-2 sm:pr-3 text-emerald-400">by name</td><td class="py-2 text-amber-400">prompt text only</td></tr>
+          <tr><td class="py-2 pr-2 sm:pr-3 text-white font-medium">Motor</td><td class="py-2 pr-2 sm:pr-3 text-rose-400">no caller</td><td class="py-2 pr-2 sm:pr-3 text-slate-500">&mdash;</td><td class="py-2 pr-2 sm:pr-3 text-slate-500">&mdash;</td><td class="py-2 text-rose-400">no</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. Borrowed biology -->
+  <section class="space-y-4">
+    <h2 id="borrowed" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">What Each Piece Borrows</h2>
+
+    <p class="text-slate-300 leading-relaxed">Six ideas from the literature do real work in the code. For each: the biology, what I built from it, and where the copy is looser than the original.</p>
+
+    <h3 id="separation" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Separate or complete</h3>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <p class="text-slate-300">Every input forces a choice: is this new and owed its own trace, or a fragment of something stored that the old trace should fill in? David Marr sketched a hippocampus that could do both <a href="#ref-marr" class="text-indigo-400 hover:text-indigo-300 no-underline">[6]</a>. Alessandro Treves and Edmund Rolls later argued that CA3 needs two input systems for the two jobs: strong, sparse inputs from the dentate gyrus to force a new pattern when storing, and a separate cue pathway that lets CA3's recurrent connections complete a stored pattern from a fragment when retrieving <a href="#ref-treves-rolls-1992" class="text-indigo-400 hover:text-indigo-300 no-underline">[7]</a><a href="#ref-treves-rolls-1994" class="text-indigo-400 hover:text-indigo-300 no-underline">[8]</a>.</p>
+    </div>
+    <p class="text-slate-300 leading-relaxed">Maxim's entorhinal cortex makes that decision with one number. A sensor reading is embedded and compared by cosine against the stored nodes for its channel; at 0.85 or above it <em>completes</em> into the best match, otherwise it <em>allocates</em> a new node. Sensor nodes keep their first vector as a frozen prototype, so they cannot drift into their neighbours. There is no sparse code here, just a threshold, and <a href="#direction" class="text-indigo-400 hover:text-indigo-300 no-underline">its geometry</a> turns out to be the main limit on the whole system.</p>
+
+    <h3 id="allocation" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Allocation</h3>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <p class="text-slate-300">Which neurons join an engram is not random. In the amygdala, neurons with more of the transcription factor CREB than their neighbours at the moment of learning win the competition to join the fear memory <a href="#ref-han" class="text-indigo-400 hover:text-indigo-300 no-underline">[9]</a>. The working account: eligible neurons compete, the more excitable win, and because excitability lingers it also decides which memories get linked <a href="#ref-josselyn-frankland" class="text-indigo-400 hover:text-indigo-300 no-underline">[10]</a>. In mice, two places learned five hours apart were encoded by overlapping hippocampal ensembles and became linked, so fear of one spread to the other; two places learned a week apart were not <a href="#ref-cai" class="text-indigo-400 hover:text-indigo-300 no-underline">[11]</a>.</p>
+    </div>
+    <p class="text-slate-300 leading-relaxed">Maxim takes the <em>linking</em> half and keys it on place rather than time. Every episodic trace the survival loop captures records the situation it happened in (the cluster ids above) and is linked to the concepts for those clusters, so memories from the same situation can be cued together. Excitability and the time window are not modelled.</p>
+
+    <h3 id="fear" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Conditioned fear</h3>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <p class="text-slate-300">Fear conditioning is the best-mapped learning circuit in the brain. A neutral cue paired with something painful becomes a trigger for defensive behaviour, and Joseph LeDoux's work placed the learning and storage of that association in the amygdala <a href="#ref-ledoux" class="text-indigo-400 hover:text-indigo-300 no-underline">[12]</a>.</p>
+    </div>
+    <p class="text-slate-300 leading-relaxed">Maxim's cluster fear attaches that idea to a situation node. When the body reports pain from running out of air or losing health, the world-situation node active on that tick takes on fear; the next time a reading completes into that node, the fear raises a threat need the action selector acts on. It lives in the nucleus-accumbens module rather than a separate amygdala, and it does not decay, by design: getting over a fear should be new learning. Nothing writes that new learning yet, so this fear cannot currently be extinguished.</p>
+
+    <h3 id="tagging" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Tagging a moment after the fact</h3>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <p class="text-slate-300">Uwe Frey and Richard Morris showed that a weak stimulus at one synapse leaves a temporary tag, and that a strong stimulus elsewhere on the same neuron within a window can supply what the tag needs to become lasting <a href="#ref-frey-morris" class="text-indigo-400 hover:text-indigo-300 no-underline">[13]</a>. The behavioural version is striking: a weak training session that would normally be forgotten is remembered if the animal explores a novel place close to it in time <a href="#ref-moncada-viola" class="text-indigo-400 hover:text-indigo-300 no-underline">[14]</a>, and the effect holds across several different kinds of learning <a href="#ref-ballarini" class="text-indigo-400 hover:text-indigo-300 no-underline">[15]</a>.</p>
+    </div>
+    <p class="text-slate-300 leading-relaxed">Maxim's retroactive tagging borrows only the shape: when a trace is strong, traces from the same situation in the seconds before it become harder to forget &mdash; the earlier seconds in the water before the drowning bites, not the walk to the shore. It is backward-only, seconds long, gated by nothing like dopamine, and opt-in. Its design document says up front that it is not a faithful model of behavioural tagging.</p>
+
+    <h3 id="strength" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Two kinds of strength</h3>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <p class="text-slate-300">Robert and Elizabeth Bjork's &ldquo;new theory of disuse&rdquo; separates how well something is learned (storage strength) from how easy it is to get at right now (retrieval strength). Retrieval strength can fall away while storage strength stays <a href="#ref-bjork" class="text-indigo-400 hover:text-indigo-300 no-underline">[16]</a>.</p>
+    </div>
+    <p class="text-slate-300 leading-relaxed">Maxim's forgetting model stamps each trace with a storage strength at encoding, larger when the moment was painful, surprising, novel or relieving. It is built and opt-in, and its base constant is a placeholder until an experiment calibrates it. The default path still forgets by recency and access count, which rewards whatever the language model happens to read.</p>
+
+    <h3 id="forward-models" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Forward models</h3>
+    <div class="bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-6">
+      <p class="text-slate-300">To move well you have to predict a movement's result before the senses report it. Daniel Wolpert and colleagues showed people estimate where their hand is as if running an internal model of it <a href="#ref-wolpert-1995" class="text-indigo-400 hover:text-indigo-300 no-underline">[17]</a>, Chris Miall and Wolpert laid out what such forward models are for <a href="#ref-miall-wolpert" class="text-indigo-400 hover:text-indigo-300 no-underline">[18]</a>, and the cerebellum is the leading candidate for where they live <a href="#ref-wolpert-1998" class="text-indigo-400 hover:text-indigo-300 no-underline">[19]</a>.</p>
+    </div>
+    <p class="text-slate-300 leading-relaxed">Maxim's <a href="/maxim/embodiment#cerebellum" class="text-indigo-400 hover:text-indigo-300 no-underline">Cerebellum</a> keeps a small predictor for each combination of entity, action and parameter range, learned from prediction error, and trains it on real readings every session. What happens next is in the <a href="#forward-model-lost" class="text-indigo-400 hover:text-indigo-300 no-underline">gaps</a> below.</p>
+  </section>
+
+  <!-- 4. Drowning -->
+  <section class="space-y-4">
+    <h2 id="drowning" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The One That Works</h2>
+
+    <p class="text-slate-300 leading-relaxed">The situation engram is where those ideas meet, and the one I can defend on all four counts. The test is a pool on a live Minecraft server, and the pain is the game's own: stay under long enough and the air runs out.</p>
+
+    <p class="text-slate-300 leading-relaxed">In training the agent is held underwater until air hunger hurts. Its twin gets the same dives and the same pain, with the wire from pain to fear cut. Then both go back in the water, with each probe capped just short of the measured moment the pain would start, so no probe hurts. The question is whether the agent leaves on its own before then.</p>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">It learns</h3>
+        <p class="text-slate-300 text-sm">Five seeds per arm. After training, the agent with fear surfaced before the pain on every seed (median probability 1.0, from 0.0 before), a median 3.4 seconds early; its twin never tried. Exact permutation p = 1/252 &asymp; 0.004, the floor for five versus five. Fear on shore stayed at zero.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">It transfers</h3>
+        <p class="text-slate-300 text-sm">An independent agent imported the first one's signed export and left the water on its <em>first</em> submersion in 12 of 12 pairs, never having felt the pain; 0 of 24 isolated agents did (Fisher p = 8.0&times;10<sup>&minus;10</sup>). The same donor with fear cut shipped the situation but not the fear, and 0 of 12 receivers moved.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">It follows the water</h3>
+        <p class="text-slate-300 text-sm">Trained in one pool and tested in another at a different height and distance from spawn, the agent left in 12 of 12 trials (95% interval 0.76&ndash;1.00); with the fear zeroed on the same node, 0 of 3 moved. An offline replay predicted the match: cosine 0.9992.</p>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Each result has a scope, and the scope is part of the result. In the first, the clean fear-only reading is the first probe per seed; after one escape, the escape action also carries a learned positive link. The transfer result does not claim the fear can be unlearned, scales, or reaches another pool. And the cross-pool result is narrower than it sounds: the world channel there has exactly one sensor that discriminates anything, a flag for &ldquo;in water,&rdquo; so what transferred is indifference to where the pool is, not recognition of a different situation.</p>
+
+    <p class="text-slate-300 leading-relaxed">Within that scope it passes all four tests. It forms from the game's own pain. It is specific: shore fear stays at zero. It comes back when a new reading completes into the old node. And it changes what the body does, with no language model in the path and a control that keeps the representation and removes only the fear.</p>
+  </section>
+
+  <!-- 5. Gaps -->
+  <section class="space-y-4">
+    <h2 id="gaps" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Where the Biology Outruns the Code</h2>
+
+    <p class="text-slate-300 leading-relaxed">The audit behind the scorecard found five places where the design says engram and the code says something less. Each has an issue, and together they are the &ldquo;engram integrity&rdquo; line of the 1.4 roadmap.</p>
+
+    <h3 id="direction" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Cosine sees direction, not size</h3>
+    <p class="text-slate-300 leading-relaxed">A situation is a sum of per-sensor vectors, compared by cosine, and cosine ignores length. A sensor at its neutral rest contributes nothing; a sensor at an extreme contributes fully, in a new direction. So two situations separate only when some sensor swings from neutral to an extreme, or across neutral. A sensor that moves a lot on one side barely rotates the sum, at any gain. That is why &ldquo;dark means danger&rdquo; failed and drowning worked: distance to the nearest hostile moved substantially and the two situations still sat at cosine 0.99, while &ldquo;in water&rdquo; flips from silent to full weight. For now I work around it by choosing cues that swing, which is design, not learning.</p>
+
+    <h3 id="daily-wrap" class="text-lg font-semibold text-white mt-6 scroll-mt-32">The fear misses before dawn</h3>
+    <p class="text-slate-300 leading-relaxed">One world sensor is time of day, encoded as a straight line from 0 to 1, so the end of the day is as far as possible from its start. Near the wrap the pool stops reading as the pool: 0.847 at 95% of the day and 0.799 at 99%, against the 0.85 threshold. The drowning fear holds through midnight and misses only in the last twentieth of the cycle, just before dawn. Every experiment ran on a frozen day, which is what hid it.</p>
+
+    <h3 id="episodic-text" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Episodes that only reach the model as text</h3>
+    <p class="text-slate-300 leading-relaxed">Episodic traces form honestly: each capture declares what it measured and records the situation it happened in. A new situation cue recalls the episodes from the current situation &mdash; and the agent loop calls it and discards the result, because the consumer that would act on it is not built yet. Today an episode reaches behaviour only as a few lines in the language model's prompt. That is recall, not yet an engram changing behaviour.</p>
+
+    <h3 id="motor" class="text-lg font-semibold text-white mt-6 scroll-mt-32">Motor engrams that are built and never called</h3>
+    <p class="text-slate-300 leading-relaxed">The <a href="/maxim/embodiment#engrams" class="text-indigo-400 hover:text-indigo-300 no-underline">Embodiment</a> essay described motor engrams as if they ran: formed on pain or surprise, decaying after about two days. The formation code exists and is unit-tested; nothing in production calls it, nothing reads it, and no decay code exists. I have corrected that essay. From the outside, a mechanism with no caller and one that ran and found nothing worth remembering look identical.</p>
+
+    <h3 id="forward-model-lost" class="text-lg font-semibold text-white mt-6 scroll-mt-32">A forward model thrown away every session</h3>
+    <p class="text-slate-300 leading-relaxed">The Cerebellum's forward model learns live from real readings, and then the session ends and it is gone. The loader reads one path; the saver reads a setting nothing sets, so the save is a silent no-op at all three places that call it (<a href="https://github.com/dennys246/Maxim/issues/908" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">#908</a>). An internal guideline even cited that save call as the proof the state persisted. Nothing consumes the predictions yet, so no behaviour changes &mdash; but a forward model that starts from zero every morning is not much of a model.</p>
+  </section>
+
+  <!-- 6. Next -->
+  <section class="space-y-4">
+    <h2 id="next" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">What I'm Building Next</h2>
+
+    <p class="text-slate-300 leading-relaxed">The plan adds no new mechanism; each item fixes, documents, measures or routes something that exists. The first four gate the 1.4.0 release; the last three ride on work that already owns them.</p>
+
+    <ol class="space-y-3 text-slate-300 list-decimal pl-5">
+      <li><strong class="text-white">Save the Cerebellum where it loads from,</strong> with a test that reads the saved prediction back after a real session end and turns red if the path is removed.</li>
+      <li><strong class="text-white">Say what runs and mark what doesn't.</strong> Correct the motor-engram docs, mark every unwired function dormant, and add a test that fails when one gains a caller.</li>
+      <li><strong class="text-white">Delete a danger label that can never print.</strong> It fires below a value the code clamps at zero.</li>
+      <li><strong class="text-white">Measure whether reward makes text memories drift,</strong> offline, before deciding whether to fix it.</li>
+      <li><strong class="text-white">Encode the clock as a circle.</strong> This moves the geometry every drowning result stands on, so it fires re-runs of five experiments, after an offline replay and a design review.</li>
+      <li><strong class="text-white">Let an episodic engram act,</strong> measured with recall removed and the situation fear held identical, in a world with more than the pool's two situations.</li>
+      <li><strong class="text-white">Resurrect or retire motor engrams.</strong> If an audit finds the forward model can predict how far away pain is, its predictions get wired into the action path. If not, the docs move to an appendix titled &ldquo;designed, never wired.&rdquo;</li>
+    </ol>
+
+    <p class="text-slate-300 leading-relaxed">The same sentence keeps showing up in this project because it keeps being true: <strong class="text-white">a mechanism that does not run looks exactly like one that ran and found nothing.</strong> An engram is the strictest case, because its job is to be absent most of the time and present on cue. A fear that never fires might be unneeded, or never wired. The only way to tell is to decide in advance what the trace doing its job would look like, then look for it in the code path that actually runs. The drowning fear is where I have done that and it held. The next release is about earning the same for the others, or saying plainly that they haven't.</p>
+  </section>
+
+  <!-- References -->
+  <section class="space-y-4">
+    <h2 id="references" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">References</h2>
+    <ol class="space-y-2 text-sm text-slate-400 list-decimal pl-5">
+      <li id="ref-semon" class="scroll-mt-32">Semon, R. (1904). <em>Die Mneme als erhaltendes Prinzip im Wechsel des organischen Geschehens</em>. Leipzig: Wilhelm Engelmann. English translation: <em>The Mneme</em> (L. Simon, trans., 1921). London: George Allen &amp; Unwin. <a href="https://archive.org/details/cu31924100387210" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">archive.org/details/cu31924100387210</a></li>
+      <li id="ref-lashley" class="scroll-mt-32">Lashley, K. S. (1950). In search of the engram. <em>Symposia of the Society for Experimental Biology</em>, 4, 454&ndash;482.</li>
+      <li id="ref-liu" class="scroll-mt-32">Liu, X., Ramirez, S., Pang, P. T., Puryear, C. B., Govindarajan, A., Deisseroth, K., &amp; Tonegawa, S. (2012). Optogenetic stimulation of a hippocampal engram activates fear memory recall. <em>Nature</em>, 484, 381&ndash;385. <a href="https://doi.org/10.1038/nature11028" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1038/nature11028</a></li>
+      <li id="ref-ramirez" class="scroll-mt-32">Ramirez, S., Liu, X., Lin, P.-A., Suh, J., Pignatelli, M., Redondo, R. L., Ryan, T. J., &amp; Tonegawa, S. (2013). Creating a false memory in the hippocampus. <em>Science</em>, 341, 387&ndash;391. <a href="https://doi.org/10.1126/science.1239073" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1126/science.1239073</a></li>
+      <li id="ref-josselyn-tonegawa" class="scroll-mt-32">Josselyn, S. A., &amp; Tonegawa, S. (2020). Memory engrams: Recalling the past and imagining the future. <em>Science</em>, 367, eaaw4325. <a href="https://doi.org/10.1126/science.aaw4325" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1126/science.aaw4325</a></li>
+      <li id="ref-marr" class="scroll-mt-32">Marr, D. (1971). Simple memory: a theory for archicortex. <em>Philosophical Transactions of the Royal Society B</em>, 262, 23&ndash;81. <a href="https://doi.org/10.1098/rstb.1971.0078" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1098/rstb.1971.0078</a></li>
+      <li id="ref-treves-rolls-1992" class="scroll-mt-32">Treves, A., &amp; Rolls, E. T. (1992). Computational constraints suggest the need for two distinct input systems to the hippocampal CA3 network. <em>Hippocampus</em>, 2, 189&ndash;199. <a href="https://doi.org/10.1002/hipo.450020209" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1002/hipo.450020209</a></li>
+      <li id="ref-treves-rolls-1994" class="scroll-mt-32">Treves, A., &amp; Rolls, E. T. (1994). Computational analysis of the role of the hippocampus in memory. <em>Hippocampus</em>, 4, 374&ndash;391. <a href="https://doi.org/10.1002/hipo.450040319" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1002/hipo.450040319</a></li>
+      <li id="ref-han" class="scroll-mt-32">Han, J.-H., Kushner, S. A., Yiu, A. P., Cole, C. J., Matynia, A., Brown, R. A., Neve, R. L., Guzowski, J. F., Silva, A. J., &amp; Josselyn, S. A. (2007). Neuronal competition and selection during memory formation. <em>Science</em>, 316, 457&ndash;460. <a href="https://doi.org/10.1126/science.1139438" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1126/science.1139438</a></li>
+      <li id="ref-josselyn-frankland" class="scroll-mt-32">Josselyn, S. A., &amp; Frankland, P. W. (2018). Memory allocation: mechanisms and function. <em>Annual Review of Neuroscience</em>, 41, 389&ndash;413. <a href="https://doi.org/10.1146/annurev-neuro-080317-061956" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1146/annurev-neuro-080317-061956</a></li>
+      <li id="ref-cai" class="scroll-mt-32">Cai, D. J., Aharoni, D., Shuman, T., et al. (2016). A shared neural ensemble links distinct contextual memories encoded close in time. <em>Nature</em>, 534, 115&ndash;118. <a href="https://doi.org/10.1038/nature17955" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1038/nature17955</a></li>
+      <li id="ref-ledoux" class="scroll-mt-32">LeDoux, J. E. (2000). Emotion circuits in the brain. <em>Annual Review of Neuroscience</em>, 23, 155&ndash;184. <a href="https://doi.org/10.1146/annurev.neuro.23.1.155" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1146/annurev.neuro.23.1.155</a></li>
+      <li id="ref-frey-morris" class="scroll-mt-32">Frey, U., &amp; Morris, R. G. M. (1997). Synaptic tagging and long-term potentiation. <em>Nature</em>, 385, 533&ndash;536. <a href="https://doi.org/10.1038/385533a0" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1038/385533a0</a></li>
+      <li id="ref-moncada-viola" class="scroll-mt-32">Moncada, D., &amp; Viola, H. (2007). Induction of long-term memory by exposure to novelty requires protein synthesis: evidence for a behavioral tagging. <em>Journal of Neuroscience</em>, 27, 7476&ndash;7481. <a href="https://doi.org/10.1523/JNEUROSCI.1083-07.2007" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1523/JNEUROSCI.1083-07.2007</a></li>
+      <li id="ref-ballarini" class="scroll-mt-32">Ballarini, F., Moncada, D., Martinez, M. C., Alen, N., &amp; Viola, H. (2009). Behavioral tagging is a general mechanism of long-term memory formation. <em>PNAS</em>, 106, 14599&ndash;14604. <a href="https://doi.org/10.1073/pnas.0907078106" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1073/pnas.0907078106</a></li>
+      <li id="ref-bjork" class="scroll-mt-32">Bjork, R. A., &amp; Bjork, E. L. (1992). A new theory of disuse and an old theory of stimulus fluctuation. In A. F. Healy, S. M. Kosslyn &amp; R. M. Shiffrin (Eds.), <em>From Learning Processes to Cognitive Processes: Essays in Honor of William K. Estes</em> (Vol. 2, pp. 35&ndash;67). Hillsdale, NJ: Erlbaum.</li>
+      <li id="ref-wolpert-1995" class="scroll-mt-32">Wolpert, D. M., Ghahramani, Z., &amp; Jordan, M. I. (1995). An internal model for sensorimotor integration. <em>Science</em>, 269, 1880&ndash;1882. <a href="https://doi.org/10.1126/science.7569931" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1126/science.7569931</a></li>
+      <li id="ref-miall-wolpert" class="scroll-mt-32">Miall, R. C., &amp; Wolpert, D. M. (1996). Forward models for physiological motor control. <em>Neural Networks</em>, 9, 1265&ndash;1279. <a href="https://doi.org/10.1016/S0893-6080(96)00035-4" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1016/S0893-6080(96)00035-4</a></li>
+      <li id="ref-wolpert-1998" class="scroll-mt-32">Wolpert, D. M., Miall, R. C., &amp; Kawato, M. (1998). Internal models in the cerebellum. <em>Trends in Cognitive Sciences</em>, 2, 338&ndash;347. <a href="https://doi.org/10.1016/S1364-6613(98)01221-2" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline break-all">doi.org/10.1016/S1364-6613(98)01221-2</a></li>
+    </ol>
+    <p class="text-sm text-slate-400">Maxim claims above come from the project's engram-formation tracker and fix plan, the cosine-separation note, and the Exp 60, 61 and 62 rows of the <a href="https://pymaxim.bio/research/evidence/" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">evidence ledger</a>.</p>
+  </section>
+
+  {% include "_maxim_related.html" %}
+</div>
+{% endblock %}
