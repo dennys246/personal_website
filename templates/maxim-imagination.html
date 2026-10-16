@@ -11,17 +11,18 @@
 {% block og_type %}article{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Imagination — Real-Time Entity Design from Novel Percepts",
   "description": "How Maxim's imagination system designs SEM entities in real-time when the agent encounters novel objects, creatures, or NPCs mentioned in narration.",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/imagination",
   "datePublished": "2026-04-01",
-  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
   "keywords": ["imagination", "entity design", "Default Network", "arousal gating", "SEM components"]
 }
 </script>

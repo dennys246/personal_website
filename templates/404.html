@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found | Denny Schaedig{% endblock %}
+{% block meta_description %}This page doesn't exist. Find Denny Schaedig's experience, projects, publications, and writing from here.{% endblock %}
+{% block robots %}<meta name="robots" content="noindex">{% endblock %}
+{% block page_node %}{% endblock %}
+
+{% block content %}
+<div class="text-center py-10 space-y-5">
+  <h1 class="text-3xl font-semibold text-white">Page not found</h1>
+  <p class="text-slate-300">That page doesn't exist, or it has moved. Try one of these:</p>
+  <p class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-indigo-300">
+    <a href="/" class="hover:text-white underline-offset-2 hover:underline">Home</a>
+    <a href="/experiences" class="hover:text-white underline-offset-2 hover:underline">Experience</a>
+    <a href="/projects" class="hover:text-white underline-offset-2 hover:underline">Projects</a>
+    <a href="/papers" class="hover:text-white underline-offset-2 hover:underline">Publications</a>
+    <a href="/maxim" class="hover:text-white underline-offset-2 hover:underline">Maxim</a>
+    <a href="/contact" class="hover:text-white underline-offset-2 hover:underline">Contact</a>
+  </p>
+</div>
+{% endblock %}

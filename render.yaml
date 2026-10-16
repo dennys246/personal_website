@@ -3,5 +3,5 @@ services:
     name: personal_website
     runtime: python
     plan: free
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && (./build_css.sh || echo "Tailwind build failed; serving the committed static/site.css")
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT

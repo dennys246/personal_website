@@ -11,14 +11,15 @@
 {% block og_type %}article{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
   "name": "Privacy Policy — Maxim",
   "description": "Privacy policy for the Maxim agentic robotics framework.",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/privacy-policy"
 }
 </script>

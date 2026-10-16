@@ -2,7 +2,7 @@
 
 {% block title %}1.0 Release: The Honest Benchmark — Maxim | Denny Schaedig{% endblock %}
 
-{% block meta_description %}Maxim 1.0: a working bio-inspired cognitive architecture for LLM agents, and a pre-registered, cross-model, adversarial benchmark that tests whether the bio-substrate changes agent behavior.{% endblock %}
+{% block meta_description %}Maxim 1.0: a bio-inspired LLM agent architecture and a pre-registered, cross-model benchmark testing whether its substrate changes agent behavior.{% endblock %}
 
 {% block meta_keywords %}Maxim 1.0, bio-inspired cognitive architecture, cross-session learning, LLM agents, pre-registered benchmark, counter-prior, substrate-primary, reasoning models, falsification{% endblock %}
 
@@ -11,17 +11,18 @@
 {% block og_type %}article{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Maxim 1.0 — The Honest Benchmark",
   "description": "A working bio-inspired cognitive architecture for LLM agents, released alongside a pre-registered, cross-model, adversarial benchmark of whether the bio-substrate changes agent behavior.",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/release-1-0",
   "datePublished": "2026-06-01",
-  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
   "keywords": ["Maxim 1.0", "bio-inspired", "cross-session learning", "pre-registered benchmark", "counter-prior", "substrate-primary"]
 }
 </script>

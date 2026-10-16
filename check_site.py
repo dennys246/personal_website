@@ -55,6 +55,9 @@ REDIRECTS = {
     "/maxim/usage-guide": "https://pymaxim.bio/installation/",
     "/maxim/reachability/": "/maxim/reachability",
     "/maxim/maxim-reachability": "/maxim/reachability",
+    "/story": "/about",
+    "/projects/": "/projects",
+    "/maxim/": "/maxim",
 }
 for src, dst in REDIRECTS.items():
     r = c.get(src)
@@ -62,6 +65,11 @@ for src, dst in REDIRECTS.items():
         problems.append((src, "redirect", f"{r.status_code} {r.headers.get('Location')}"))
 if c.get("/maxim/does-not-exist").status_code != 404:
     problems.append(("/maxim/does-not-exist", "redirect", "expected 404"))
+if c.get("/no-such-page").status_code != 404:
+    problems.append(("/no-such-page", "404 page", "expected 404"))
+for icon in ("/favicon.ico", "/apple-touch-icon.png"):
+    if c.get(icon).status_code != 200:
+        problems.append((icon, "root icon", "expected 200"))
 
 print(f"{len(pages)} pages, {len(REDIRECTS)} redirects checked")
 if problems:
