@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Foundations: Maxim 1.3.2 | Denny Schaedig{% endblock %}
+
+{% block meta_description %}pymaxim 1.3.2 makes no new claim about what its agents can do. It fixes the foundations: truthful memory, a loop taken apart safely, stricter practice.{% endblock %}
+
+{% block meta_keywords %}Maxim 1.3.2, pymaxim, software engineering practice, refactoring, characterization tests, regression tests, code review, dormant code, technical debt, research integrity, brain-inspired AI{% endblock %}
+
+{% block meta_author %}Denny Schaedig{% endblock %}
+{% block og_site_name %}Maxim{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block structured_data %}
+{{ super() }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Foundations: Maxim 1.3.2, a Release With No Headline, on Purpose",
+  "description": "pymaxim 1.3.2 makes no new behavioural claim. It fixes places where Maxim's memory systems quietly reported the wrong thing, takes its largest file apart without changing what it does, and changes how the project is engineered: red gates, deletion probes, three different reviewers, and evidence rules that refuse weak data.",
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
+  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/foundations",
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
+  "datePublished": "2026-10-16",
+  "keywords": ["Maxim 1.3.2", "pymaxim", "refactoring", "characterization tests", "code review", "dormant code", "research integrity"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://www.dennyschaedig.com/projects" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "Foundations", "item": "https://www.dennyschaedig.com/maxim/foundations" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
+
+  <header class="text-center space-y-2">
+    <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM 1.3.2</p>
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Foundations</h1>
+    <p class="text-indigo-400 font-medium">A release with no new headline result, on purpose</p>
+  </header>
+
+  {% set maxim_written = "October 2026" %}
+  {% set maxim_note = "The counts here were measured at the v1.3.2 tag; its changelog is the authority wherever the two disagree." %}
+  {% set maxim_docs = [("Evidence & ledgers", "https://pymaxim.bio/research/evidence/"), ("Changelog", "https://github.com/dennys246/Maxim/blob/main/CHANGELOG.md"), ("Roadmap 1.3.x", "https://github.com/dennys246/Maxim/blob/main/docs/plans/roadmap_1_3_x.md")] %}
+  {% set maxim_related = ["floors", "reachability", "engrams", "release-1-0"] %}
+  {% include "_maxim_status.html" %}
+
+  <!-- Lede -->
+  <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+    <p class="text-slate-200 text-lg leading-relaxed">Most software releases lead with a new trick. pymaxim 1.3.2 doesn't have one, and it makes no new claim about what Maxim's agents can do. Instead it spends a whole release on the parts nobody sees: places where Maxim's memory systems quietly reported the wrong thing, the project's biggest and most tangled file, and above all the way I work on it. <strong class="text-white">You can't trust the next headline if you can't trust the foundation it stands on.</strong></p>
+  </div>
+
+  <!-- Contents -->
+  <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2">Contents</h3>
+    <ol class="space-y-1 text-slate-300 list-decimal pl-5">
+      <li><a href="#renovating" class="text-indigo-400 hover:text-indigo-300 no-underline">Renovating Before You Build</a></li>
+      <li><a href="#truthful" class="text-indigo-400 hover:text-indigo-300 no-underline">Memory That Tells the Truth About Itself</a></li>
+      <li><a href="#loop" class="text-indigo-400 hover:text-indigo-300 no-underline">Taking the Loop Apart Without Breaking It</a></li>
+      <li><a href="#practice" class="text-indigo-400 hover:text-indigo-300 no-underline">How I Work Now</a></li>
+      <li><a href="#next" class="text-indigo-400 hover:text-indigo-300 no-underline">What It Doesn't Show, and What's Next</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. Renovating -->
+  <section class="space-y-4">
+    <h2 id="renovating" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Renovating Before You Build</h2>
+
+    <p class="text-slate-300 leading-relaxed">Picture an old house you want to add a second storey to. A sensible builder doesn't start with the new floor. They open the walls first and find the wire that runs nowhere, the pipe that has been dripping into the basement, the circuits nobody labelled. Then they fix what they found, write down what they changed, and only then build up.</p>
+
+    <p class="text-slate-300 leading-relaxed">1.3.2 is that inspection for Maxim, my open-source AI agent with memory systems loosely modelled on parts of the brain. Everything in it is a fix, a guard against a fix coming undone, or a change in how the work is done. It doesn't show that Maxim's agents learn anything new, and I'm not claiming it does. The release notes also carry this month's downgrade of the drowning-fear results, which a plain learner matched; <a href="/maxim/floors" class="text-indigo-400 hover:text-indigo-300 no-underline">Floors</a> tells that story, so I won't repeat it here.</p>
+  </section>
+
+  <!-- 2. Truthful bio-systems -->
+  <section class="space-y-4">
+    <h2 id="truthful" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Memory That Tells the Truth About Itself</h2>
+
+    <p class="text-slate-300 leading-relaxed">Maxim's parts are named after brain regions. That's a way to organise the design, not a simulation of a brain. Several of those parts had been reporting things that weren't true. None of them crashed loudly. Each one quietly bent what the agent learned or what an experiment recorded.</p>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">A failure, booked once</h3>
+        <p class="text-slate-300 text-sm">Maxim keeps score of which actions worked in a part named after the nucleus accumbens. When a tool failed and then succeeded, the score could come out as two successes. Some failures were booked twice. It was a till that rang up a refund as a sale. Now each failure is booked once, against the exact attempt that failed, along with how surprising it was. Robot movements got the same fix (#1200, #1207, #1209, #1221).</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">Learning that went in the bin</h3>
+        <p class="text-slate-300 text-sm">The Cerebellum, Maxim's part for predicting what a movement will do, saved its learning to one place and loaded it from another. Picture a diary written every evening and filed in a drawer nobody opens, while the morning reader checks a different one. Every session started from scratch. Now it saves where it loads (#908). Nothing acts on those predictions yet, so no behaviour changes.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">Two parts that crashed when busy</h3>
+        <p class="text-slate-300 text-sm">The SCN, Maxim's internal clock, could crash when a background job added to it while sleep or a save was reading it, like two people editing the same list at once. The Hippocampus, which stores episodes, had the same weakness and showed it as an intermittent test failure. Both now take turns (#1217, #1135).</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">An engine left running</h3>
+        <p class="text-slate-300 text-sm">The Default Network runs background tasks while the agent is idle. In simulations it was never switched off at the end of a run, so its threads kept ticking on a finished run, like an engine left running after you park. They also drew random numbers that broke an unrelated test. The loop that starts it now stops it (#1263).</p>
+      </div>
+    </div>
+
+    <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-6 space-y-3">
+      <h3 class="text-lg font-semibold text-amber-400">The narrator who couldn't hear</h3>
+      <p class="text-slate-300 text-sm">Some of Maxim's experiments run in a simulated world described by a narrator, a second AI that decides what happens next. The narrator was getting a delivery receipt instead of what the agent actually said, so it chose its next move without hearing the reply (#1261). And the narrator's own tool notes had leaked into the agent's instructions, telling the agent that its reply tool was &ldquo;NOT AVAILABLE&rdquo;, which cost an extra step on every reply (#1260). Picture an interviewer wearing earplugs, handing the candidate a sign that says &ldquo;don't answer.&rdquo; Both are fixed. Runs from before and after aren't comparable wherever the narrator depended on the agent's replies, and re-checking the affected experiments is its own follow-up.</p>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The last fix in this group is just honesty. Some mechanisms never earned a role in behaviour: scaffolding that made it look as if pain could interrupt an action (#1179), a fear bridge whose calls never matched the part it talked to (#840), and a recall function whose &ldquo;story memories&rdquo; have always come back empty (#1138). They are now marked <em>Dormant</em> in the code, with the reason. The project's rule is <strong class="text-white">dormancy over deletion</strong>: in code this tightly wired, ripping out a dead wire can break three live ones. So you label the circuit in the fuse box &ldquo;not connected&rdquo; and build nothing new on it. It only comes back if a new experiment earns it a place.</p>
+  </section>
+
+  <!-- 3. Loop -->
+  <section class="space-y-4">
+    <h2 id="loop" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Taking the Loop Apart Without Breaking It</h2>
+
+    <p class="text-slate-300 leading-relaxed">Every Maxim agent runs one central loop: perceive, think, act, learn, repeat. At 1.3.1 that loop lived in a single file of <strong class="text-white">5,543 lines</strong>. That's hard for anyone to hold in their head, and hard to change safely. In 1.3.2 it is down to <strong class="text-white">3,363</strong>, and the pieces live in nine smaller modules with one job each, six of them new in this release: setup, gates, perception, planning, the bio-system's proposals, and so on.</p>
+
+    <p class="text-slate-300 leading-relaxed">The danger in a move like that is changing what the code does without noticing. So before each piece moved, I wrote a <em>characterization test</em>: a recording of exactly what the old code did, from the outside. The moved code had to pass it unchanged. It's like photographing a room before you move the furniture, so you can check that everything ended up where it was.</p>
+
+    <p class="text-slate-300 leading-relaxed">Then come the <em>ratchets</em>. A ratchet wrench turns one way and won't slip back, and the project now has several checks that work the same way:</p>
+    <ul class="list-disc pl-6 space-y-2 text-slate-300">
+      <li><strong class="text-white">Function length.</strong> The 52 functions still over 200 lines are pinned at their current size. None may grow, and no new one may pass 200.</li>
+      <li><strong class="text-white">Test coverage.</strong> The share of code the tests exercise has a floor, overall, per package and per file, that only rises, and new changes must be at least 80% covered.</li>
+      <li><strong class="text-white">Type checking.</strong> An automated check that each piece is handed the kind of data it expects now covers the layer that wires the parts together, at 0 errors (37 before). Elsewhere, no file's error count may rise.</li>
+      <li><strong class="text-white">Silent errors.</strong> No new code may swallow an error without reporting it.</li>
+    </ul>
+
+    <p class="text-slate-300 leading-relaxed">The decomposition isn't finished, and I've made that binding. An automated check now refuses to let any 1.4.0 release pass until the rest of the job is done: a written list of 32 items, 3 functions that must shrink, and 5 more recordings of the simulation runner. That is a promise about process, not a claim about behaviour. No new storey until the inspection list is closed.</p>
+  </section>
+
+  <!-- 4. Practice -->
+  <section class="space-y-4">
+    <h2 id="practice" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">How I Work Now</h2>
+
+    <p class="text-slate-300 leading-relaxed">The fixes above are the evidence. This is the part I'd most want another engineer to take away: the habits that found those defects and that keep them found.</p>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">1. Show the leak before you fix it.</h3>
+        <p class="text-slate-300 text-sm">Every bug fix starts as a test that fails for the right reason, marked as an expected failure. The fix has to make it pass. If the fix lands and the test still fails, that's not an annoyance to delete. It's the test telling you the fix didn't reach the bug.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">2. Test the smoke alarm with smoke.</h3>
+        <p class="text-slate-300 text-sm">A guard only counts if removing the thing it protects makes it fail. Every new guard is proven by deleting its mechanism and watching it go red. A test that stays green with the mechanism gone is decoration.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">3. Three different inspectors.</h3>
+        <p class="text-slate-300 text-sm">Every code change gets three reviewers before it merges. One asks whether it works, one whether it's the right design, and one traces every place outside the change that feeds it or reads from it, like the inspector who follows the pipes into the next room. Fixes from a review are reviewed again. The point is a <em>different</em> reader, not a more careful one: an audit found that eight of eight sampled breaking changes reviewed by just two readers missed a broken connection.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">4. Weak evidence never counts.</h3>
+        <p class="text-slate-300 text-sm">A run that crashed or stopped early isn't data. It can't change a result's status or a release claim. Each result is stamped with the exact code, model and settings that produced it, and the ledger of results is machine-readable, so an automated gate checks it rather than my memory.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">5. Exceptions are written down.</h3>
+        <p class="text-slate-300 text-sm">When I decide to bend a rule, the decision is committed as a machine-readable record, never a verbal OK. 1.3.2 ships with one result, the cross-session experiment Exp 37, marked out of date under a written exception, and its changelog says so.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">6. Inspect the house as it stands today.</h3>
+        <p class="text-slate-300 text-sm">The slow tests run overnight. A release now refuses to go out unless every overnight run passed within the last 48 hours on the exact code being released. Last week's clean inspection doesn't cover this week's wiring.</p>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">In numbers, since 1.3.1: <strong class="text-white">189</strong> pull requests merged; the Python files in the test suite grew from <strong class="text-white">575 to 697</strong>; and the repository's automated lint checks, each one a rule that a script enforces instead of my attention, went from <strong class="text-white">13 to 24</strong>. That last number matters most to me. A rule followed by attention is where slips land. A rule a script enforces is one I can stop worrying about.</p>
+  </section>
+
+  <!-- 5. Next -->
+  <section class="space-y-4">
+    <h2 id="next" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">What It Doesn't Show, and What's Next</h2>
+
+    <p class="text-slate-300 leading-relaxed">1.3.2 claims no new behaviour. It doesn't show that Maxim learns better, faster or more than it did. Some of its fixes may even make learning look slower, because a failure that used to be counted several times now counts once. What it does show is narrower: the memory systems now report what actually happened, the loop is smaller without doing anything differently, and the rules that keep both true are enforced by scripts.</p>
+
+    <p class="text-slate-300 leading-relaxed">The next survival experiments need a situation that a plain learner could actually lose, as <a href="/maxim/floors" class="text-indigo-400 hover:text-indigo-300 no-underline">Floors</a> explains. And 1.4 builds on the decomposed loop, which it can't ship without finishing. The source is on <a href="https://github.com/dennys246/Maxim" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">GitHub</a>, and the docs and the evidence ledger are at <a href="https://pymaxim.bio" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">pymaxim.bio</a>.</p>
+
+    <p class="text-slate-300 leading-relaxed">A release like this is the house inspection nobody photographs for the listing. It's also the only reason to believe the listing.</p>
+  </section>
+
+  {% include "_maxim_related.html" %}
+</div>
+{% endblock %}
