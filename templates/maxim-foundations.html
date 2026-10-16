@@ -51,7 +51,7 @@
   </header>
 
   {% set maxim_written = "October 2026" %}
-  {% set maxim_note = "The counts here were measured on Maxim's main branch for the 1.3.2 release; the changelog is the authority wherever the two disagree." %}
+  {% set maxim_note = "The counts here were measured at the v1.3.2 tag; its changelog is the authority wherever the two disagree." %}
   {% set maxim_docs = [("Evidence & ledgers", "https://pymaxim.bio/research/evidence/"), ("Changelog", "https://github.com/dennys246/Maxim/blob/main/CHANGELOG.md"), ("Roadmap 1.3.x", "https://github.com/dennys246/Maxim/blob/main/docs/plans/roadmap_1_3_x.md")] %}
   {% set maxim_related = ["floors", "reachability", "engrams", "release-1-0"] %}
   {% include "_maxim_status.html" %}
@@ -119,14 +119,14 @@
   <section class="space-y-4">
     <h2 id="loop" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Taking the Loop Apart Without Breaking It</h2>
 
-    <p class="text-slate-300 leading-relaxed">Every Maxim agent runs one central loop: perceive, think, act, learn, repeat. At 1.3.1 that loop lived in a single file of <strong class="text-white">5,543 lines</strong>. That's hard for anyone to hold in their head, and hard to change safely. On main for 1.3.2 it is down to <strong class="text-white">3,363</strong>, and the pieces live in nine smaller modules with one job each, six of them new in this release: setup, gates, perception, planning, the bio-system's proposals, and so on.</p>
+    <p class="text-slate-300 leading-relaxed">Every Maxim agent runs one central loop: perceive, think, act, learn, repeat. At 1.3.1 that loop lived in a single file of <strong class="text-white">5,543 lines</strong>. That's hard for anyone to hold in their head, and hard to change safely. In 1.3.2 it is down to <strong class="text-white">3,363</strong>, and the pieces live in nine smaller modules with one job each, six of them new in this release: setup, gates, perception, planning, the bio-system's proposals, and so on.</p>
 
     <p class="text-slate-300 leading-relaxed">The danger in a move like that is changing what the code does without noticing. So before each piece moved, I wrote a <em>characterization test</em>: a recording of exactly what the old code did, from the outside. The moved code had to pass it unchanged. It's like photographing a room before you move the furniture, so you can check that everything ended up where it was.</p>
 
     <p class="text-slate-300 leading-relaxed">Then come the <em>ratchets</em>. A ratchet wrench turns one way and won't slip back, and the project now has several checks that work the same way:</p>
     <ul class="list-disc pl-6 space-y-2 text-slate-300">
       <li><strong class="text-white">Function length.</strong> The 52 functions still over 200 lines are pinned at their current size. None may grow, and no new one may pass 200.</li>
-      <li><strong class="text-white">Test coverage.</strong> The share of code the tests exercise has a floor, overall and per package, that only rises, and new changes must be at least 80% covered.</li>
+      <li><strong class="text-white">Test coverage.</strong> The share of code the tests exercise has a floor, overall, per package and per file, that only rises, and new changes must be at least 80% covered.</li>
       <li><strong class="text-white">Type checking.</strong> An automated check that each piece is handed the kind of data it expects now covers the layer that wires the parts together, at 0 errors (37 before). Elsewhere, no file's error count may rise.</li>
       <li><strong class="text-white">Silent errors.</strong> No new code may swallow an error without reporting it.</li>
     </ul>
@@ -167,7 +167,7 @@
       </div>
     </div>
 
-    <p class="text-slate-300 leading-relaxed">In numbers, since 1.3.1: <strong class="text-white">187</strong> pull requests merged; the Python files in the test suite grew from <strong class="text-white">575 to 696</strong>; and the repository's automated lint checks, each one a rule that a script enforces instead of my attention, went from <strong class="text-white">13 to 24</strong>. That last number matters most to me. A rule followed by attention is where slips land. A rule a script enforces is one I can stop worrying about.</p>
+    <p class="text-slate-300 leading-relaxed">In numbers, since 1.3.1: <strong class="text-white">189</strong> pull requests merged; the Python files in the test suite grew from <strong class="text-white">575 to 697</strong>; and the repository's automated lint checks, each one a rule that a script enforces instead of my attention, went from <strong class="text-white">13 to 24</strong>. That last number matters most to me. A rule followed by attention is where slips land. A rule a script enforces is one I can stop worrying about.</p>
   </section>
 
   <!-- 5. Next -->
