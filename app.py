@@ -155,6 +155,10 @@ def maxim_reachability():
 def maxim_engrams():
     return render_template("maxim-engrams.html")
 
+@app.route("/maxim/floors")
+def maxim_floors():
+    return render_template("maxim-floors.html")
+
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
     return render_template("maxim-privacy-policy.html")
@@ -197,7 +201,7 @@ MOVED_MAXIM_PAGES = {
 # Essays still served here. Used to normalise `/maxim/<slug>.html` and
 # `/maxim/<slug>/` variants back onto the canonical URL.
 MAXIM_ESSAY_SLUGS = (
-    "release-1-0", "reachability", "engrams", "sound-orientation", "substrate-primary", "hivemind",
+    "release-1-0", "reachability", "engrams", "floors", "sound-orientation", "substrate-primary", "hivemind",
     "agent-architecture", "math-cognition", "memory-systems", "embodiment",
     "imagination", "proprioception", "attention-salience", "deliberation",
     "privacy-policy", "terms-and-conditions",
@@ -271,14 +275,15 @@ def sitemap_xml():
         ("experiences", "monthly", "0.8", "2026-10-15"),
         ("papers", "monthly", "0.8", "2026-10-15"),
         ("projects", "monthly", "0.8", "2026-10-15"),
-        ("ramblings", "monthly", "0.7", "2026-09-24"),
+        ("ramblings", "monthly", "0.7", "2026-10-15"),
         ("contact", "monthly", "0.6", "2026-09-24"),
         ("perceptrons", "monthly", "0.6", "2026-09-24"),
         # Maxim — design essays (docs and evidence are on pymaxim.bio)
         ("maxim", "monthly", "0.9", "2026-10-15"),
         ("maxim_release_1_0", "monthly", "0.8", "2026-09-24"),
         ("maxim_reachability", "monthly", "0.8", "2026-09-24"),
-        ("maxim_engrams", "monthly", "0.8", "2026-09-28"),
+        ("maxim_engrams", "monthly", "0.8", "2026-10-15"),
+        ("maxim_floors", "monthly", "0.8", "2026-10-15"),
         ("maxim_sound_orientation", "monthly", "0.8", "2026-09-24"),
         ("maxim_substrate_primary", "monthly", "0.8", "2026-09-28"),
         ("maxim_hivemind", "monthly", "0.8", "2026-09-28"),
