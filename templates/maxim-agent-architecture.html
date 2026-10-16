@@ -11,17 +11,18 @@
 {% block og_type %}article{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "The Agent Brain — Maxim's Layered Cognitive Architecture",
   "description": "Explore Maxim's layered agent architecture — how perception, cognition, and action layers combine to give robots a brain inspired by biological neural systems.",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/agent-architecture",
   "datePublished": "2026-02-01",
-  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
   "keywords": ["agent architecture", "cognitive layers", "robot brain", "embodied AI"]
 }
 </script>

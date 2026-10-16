@@ -2,7 +2,7 @@
 
 {% block title %}Reachability in 1.1.3 — Maxim | Denny Schaedig{% endblock %}
 
-{% block meta_description %}Every headline defect in pymaxim 1.1.3 was a mechanism that existed and could not be reached: a fix with no callers, a guard that passed against a stub, a stamp nothing read, a test that could not run. None looked broken. The practice that makes absence visible.{% endblock %}
+{% block meta_description %}Every headline defect in pymaxim 1.1.3 was a mechanism that existed but could not be reached. None looked broken. The practice that makes absence visible.{% endblock %}
 
 {% block meta_keywords %}Maxim 1.1.3, reachability, vacuous test, xfail strict, regression guard, dead code, test discipline, software verification, falsifiability, pymaxim, honest engineering{% endblock %}
 
@@ -11,16 +11,17 @@
 {% block og_type %}article{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Reachability — Maxim 1.1.3 and the Defects That Never Looked Broken",
   "description": "A mechanism that does not run looks exactly like one that ran and found nothing. Five defects from pymaxim 1.1.3 that existed and could not be reached, and the practice that makes absence visible: strict red gates, fixes that ship with callers, guards that can fail, and counting the checks that should have run.",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/reachability",
-  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
   "datePublished": "2026-09-03",
   "keywords": ["reachability", "vacuous guard", "xfail strict", "regression guard", "test discipline", "falsifiability", "pymaxim 1.1.3"]
 }

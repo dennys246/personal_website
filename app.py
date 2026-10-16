@@ -1,32 +1,58 @@
-from flask import Flask, render_template, Response, url_for, redirect, abort
+from flask import Flask, render_template, Response, url_for, redirect, abort, request, send_from_directory
 from datetime import date
 import os
 
 app = Flask(__name__)
 
-CV_FILENAME = "Denny_Schaedig_CV.pdf"
+CV_FILENAME = "Denny_Schaedig_CV.pdf"          # two-page academic-style CV
+RESUME_FILENAME = "Denny_Schaedig_Resume.pdf"  # one-page industry resume
 
 @app.context_processor
 def inject_site_globals():
-    # The CV links only render once the PDF is actually in static/.
-    has_cv = os.path.exists(os.path.join(app.static_folder, CV_FILENAME))
+    # The CV/resume links only render once the PDF is actually in static/.
+    def static_url_if_present(filename):
+        if os.path.exists(os.path.join(app.static_folder, filename)):
+            return url_for("static", filename=filename)
+        return None
     return {
         "current_year": date.today().year,
-        "cv_url": url_for("static", filename=CV_FILENAME) if has_cv else None,
+        "cv_url": static_url_if_present(CV_FILENAME),
+        "resume_url": static_url_if_present(RESUME_FILENAME),
     }
 
-# The CV was first published as a résumé; keep that URL working.
-@app.route("/static/Denny_Schaedig_Resume.pdf")
-def legacy_resume_pdf():
-    return redirect(url_for("static", filename=CV_FILENAME), code=301)
+# One URL per page: /projects/ and /about/ 404'd, so fold trailing slashes
+# onto the canonical path (query string kept).
+@app.before_request
+def strip_trailing_slash():
+    path = request.path
+    if path != "/" and path.endswith("/"):
+        target = path.rstrip("/")
+        if request.query_string:
+            target += "?" + request.query_string.decode()
+        return redirect(target, code=301)
+
+# Browsers and Google's favicon fetcher ask for these at the site root.
+@app.route("/favicon.ico")
+@app.route("/apple-touch-icon.png")
+def root_icons():
+    return send_from_directory(app.static_folder, request.path.lstrip("/"))
+
+@app.errorhandler(404)
+def not_found(_error):
+    return render_template("404.html"), 404
 
 @app.route("/")
 def main():
     return render_template("main.html")
 
+@app.route("/about")
+def about():
+    return render_template("story.html")
+
+# The About page used to live at /story.
 @app.route("/story")
 def story():
-    return render_template("story.html")
+    return redirect(url_for("about"), code=301)
 
 @app.route("/experiences")
 def experiences():
@@ -240,16 +266,16 @@ def sitemap_xml():
     # (endpoint, changefreq, priority, lastmod). Bump lastmod when you edit a page;
     # it used to be stamped "today" on every crawl, which told crawlers nothing.
     pages = [
-        ("main", "weekly", "1.0", "2026-09-24"),
-        ("story", "monthly", "0.8", "2026-09-24"),
-        ("experiences", "monthly", "0.8", "2026-09-24"),
-        ("papers", "monthly", "0.8", "2026-09-24"),
-        ("projects", "monthly", "0.8", "2026-09-28"),
+        ("main", "weekly", "1.0", "2026-10-15"),
+        ("about", "monthly", "0.8", "2026-10-15"),
+        ("experiences", "monthly", "0.8", "2026-10-15"),
+        ("papers", "monthly", "0.8", "2026-10-15"),
+        ("projects", "monthly", "0.8", "2026-10-15"),
         ("ramblings", "monthly", "0.7", "2026-09-24"),
         ("contact", "monthly", "0.6", "2026-09-24"),
         ("perceptrons", "monthly", "0.6", "2026-09-24"),
         # Maxim — design essays (docs and evidence are on pymaxim.bio)
-        ("maxim", "monthly", "0.9", "2026-09-28"),
+        ("maxim", "monthly", "0.9", "2026-10-15"),
         ("maxim_release_1_0", "monthly", "0.8", "2026-09-24"),
         ("maxim_reachability", "monthly", "0.8", "2026-09-24"),
         ("maxim_engrams", "monthly", "0.8", "2026-09-28"),

@@ -11,17 +11,18 @@
 {% block og_type %}article{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Embodiment — The SEM Protocol for Composable Hardware & World Abstraction",
   "description": "How Maxim models interactive entities through the Sensor-Entity-Modulator protocol, with Cerebellum forward models and motor programs.",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/embodiment",
   "datePublished": "2026-04-01",
-  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
   "keywords": ["embodiment", "SEM protocol", "sensor", "entity", "modulator", "cerebellum", "motor programs"]
 }
 </script>

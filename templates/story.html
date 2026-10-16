@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}About | Denny Schaedig{% endblock %}
+{% block title %}About Denny Schaedig | Machine Learning Engineer{% endblock %}
+{% block page_type %}ProfilePage{% endblock %}
 {% block meta_description %}About Denny Schaedig: a Colorado-based machine learning engineer with a neuroscience background, building ML systems for research and open source.{% endblock %}
 
 {% block extra_head %}
@@ -41,7 +42,7 @@
 {% block content %}
 <div class="reveal w-full md:w-1/2 lg:max-w-2xl">
   <div class="flex min-h-screen flex-col gap-5 p-8 sm:p-12 backdrop-blur-md story-copy">
-    <h1 class="text-3xl font-semibold">About</h1>
+    <h1 class="text-3xl font-semibold">About Denny Schaedig</h1>
     <p class="leading-relaxed">
     Denny Schaedig is a machine learning engineer who designs, trains, and ships ML systems end to end,
     from data pipelines and distributed training to model packaging, serving, and deployment.
@@ -56,12 +57,13 @@
     Learning from Colorado State University Global in 2025.
     </p>
     <p class="leading-relaxed">
-    Since December 2022 he has worked remotely as a Machine Learning / AI Engineer at the Laboratory for
-    Child Brain Development at Washington University in St. Louis. There he architected a HIPAA-compliant
-    AWS HPC environment and built HRfunc, an open-source fNIRS analysis package published in
-    <i>Neurophotonics</i>. He also founded Rocky Mountain Digerati, where he builds LLM-agent systems and
-    applied ML for avalanche safety, including snowGAN, a public snowpack imagery dataset, and the AvAI
-    risk model. His open-source cognitive architecture, <a href="/maxim" class="underline hover:text-indigo-300">Maxim</a>,
+    Since December 2022 he has worked remotely as the NeuroImaging Engineer at the Laboratory for
+    Child Brain Development at Washington University in St. Louis, a role focused on machine learning
+    and software engineering. There he architected a HIPAA-compliant AWS HPC environment and built HRfunc,
+    an open-source fNIRS analysis package published in <i>Neurophotonics</i>. He also founded Rocky Mountain
+    Digerati, an independent applied-ML lab where he builds LLM-agent systems and ML for avalanche safety:
+    the open Rocky Mountain Snowpack dataset, the snowGAN generative models, and AvAI, a backcountry
+    check-out safety app. His open-source cognitive architecture, <a href="/maxim" class="underline hover:text-indigo-300">Maxim</a>,
     explores persistent memory and reward learning for LLM agents and robots.
     </p>
     <p class="leading-relaxed">

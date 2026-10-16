@@ -2,7 +2,7 @@
 
 {% block title %}Substrate-Primary Mode — Maxim | Denny Schaedig{% endblock %}
 
-{% block meta_description %}Maxim's substrate-primary mode — a parallel architecture where the bio-substrate, not the LLM, selects the agent's actions — and the kill criteria that decide whether it earns that role.{% endblock %}
+{% block meta_description %}Maxim's substrate-primary mode, where the bio-substrate rather than the LLM selects actions, and the kill criteria that decide whether it earns that role.{% endblock %}
 
 {% block meta_keywords %}substrate-primary, Maxim AUT mode, bio-substrate action selection, NAc recommend_action, parallel mode architecture, grounded language acquisition, cradle prelinguistic, LLM-free agent{% endblock %}
 
@@ -11,6 +11,7 @@
 {% block og_type %}article{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -18,10 +19,10 @@
   "headline": "Substrate-Primary Mode — Bio-Substrate Action Selection Without LLM Mediation",
   "description": "Maxim's parallel architecture where the bio-substrate carries action selection. First prototyped in May 2026 and since run in simulation and on a Reachy Mini robot.",
   "datePublished": "2026-05-01",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/substrate-primary",
-  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
   "keywords": ["substrate-primary", "bio-substrate", "action selection", "grounded language acquisition", "parallel mode"]
 }
 </script>

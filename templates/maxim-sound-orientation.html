@@ -11,6 +11,7 @@
 {% block og_type %}article{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -18,10 +19,10 @@
   "headline": "A Robot That Learned to Turn Toward Sound — a Substrate-Learned Sensorimotor Policy on Real Hardware",
   "description": "Maxim's nucleus-accumbens substrate learns to turn a Reachy Mini toward speech, credited only by relief (azimuth-error reduction). Learned from scratch in ~10 hardware trials, and correct at trial 0 of the next session. A merge of two separately trained substrates was later found under-tested (see the Reachability essay).",
   "datePublished": "2026-07-01",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/sound-orientation",
-  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
   "keywords": ["sound orienting", "sound localization", "substrate learning", "sensorimotor policy", "Reachy Mini", "fleet learning", "hivemind"]
 }
 </script>

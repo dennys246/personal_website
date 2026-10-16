@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Maxim — Bio-Inspired Cognitive Architecture | Denny Schaedig{% endblock %}
+{% block title %}Maxim: Bio-Inspired LLM Agent Harness | Denny Schaedig{% endblock %}
 
-{% block meta_description %}The design story behind Maxim, a biologically-inspired cognitive architecture for embodied AI agents — why it's built from brain structures, what the experiments showed, and what a robot learned on real hardware. Docs and evidence live at pymaxim.bio.{% endblock %}
+{% block meta_description %}Maxim is an open-source LLM agent harness with persistent memory and learned drives, tested with pre-registered, ablation-controlled experiments, nulls included.{% endblock %}
 
 {% block meta_keywords %}Maxim, Maxim AI, Maxim agent, Maxim harness, Maxim brain, Maxim robot, pymaxim, agentic robotics, cognitive architecture, robot brain, embodied AI, biologically-inspired AI, Reachy Mini, memory systems, attention networks, proprioception, design essays{% endblock %}
 
 {% block og_type %}website{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -19,11 +20,7 @@
   "operatingSystem": "Linux, macOS",
   "softwareVersion": "1.3.1",
   "license": "https://www.apache.org/licenses/LICENSE-2.0",
-  "author": {
-    "@type": "Person",
-    "name": "Denny Schaedig",
-    "url": "https://www.dennyschaedig.com"
-  },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
   "url": "https://pymaxim.bio",
   "installUrl": "https://pymaxim.bio/installation/",
   "codeRepository": "https://github.com/dennys246/Maxim",
@@ -37,7 +34,7 @@
   "name": "Maxim — the design essays",
   "description": "Long-form design write-ups on how Maxim works and why it is built from biological blueprints.",
   "url": "https://www.dennyschaedig.com/maxim",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
   "about": { "@type": "SoftwareApplication", "name": "Maxim", "url": "https://pymaxim.bio" }
 }
 </script>
@@ -114,7 +111,7 @@
 
   <header class="text-center space-y-4">
     <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight" style="font-family: 'Space Grotesk', sans-serif;">MAXIM</h1>
-    <p class="text-indigo-400 font-medium">A Bio-Inspired Cognitive Architecture for LLM Agents and Robots</p>
+    <p class="text-indigo-400 font-medium">An open-source LLM agent harness with persistent memory and learned drives, tested with pre-registered experiments</p>
     <img
       src="{{ url_for('static', filename='img/reachy_mini_hidding.webp') }}"
       alt="Reachy Mini robot running Maxim, a bio-inspired cognitive architecture for LLM agents and robots"
@@ -126,7 +123,7 @@
   <div class="rounded-xl bg-gradient-to-br from-indigo-700 via-purple-700 to-indigo-800 p-6 text-white shadow-lg space-y-3">
     <h3 class="text-lg font-semibold">What is Maxim?</h3>
     <p class="leading-relaxed">Maxim is an open-source, bio-inspired cognitive architecture for LLM agents and robots, designed and built by Denny Schaedig and published on PyPI as <code class="bg-indigo-950/60 px-1 rounded text-sm">pymaxim</code> (Apache-2.0; current release 1.3.1, September 2026). It models brain systems &mdash; episodic and semantic memory, reward learning, fear, attention, proprioception &mdash; as a persistent substrate around the LLM, and tests it on a Reachy Mini robot and in a live Minecraft world it does not control.</p>
-    <p class="leading-relaxed">Its claims are tested rather than asserted: every release since 1.0 has shipped with pre-registered, ablation-controlled experiments, and results are tracked in a public evidence ledger with the conditions that would require re-running them. The most recent: in 1.2 &ldquo;Oasis&rdquo; a want taught to one agent transferred to an independent agent over a real network, and in 1.3 a survival fear one agent learned from in-game pain transferred to an agent that never felt it &mdash; both with no LLM in the action path. 1.3.1 &ldquo;Hardening&rdquo; adds no new claim: it fixes what a re-score of 1.3.0 found, each fix shipped with the test or check that holds it.</p>
+    <p class="leading-relaxed">Its claims are tested rather than asserted: every release since 1.0 has shipped with pre-registered, ablation-controlled experiments, and results are tracked in a public evidence ledger with the conditions that would require re-running them. The most recent: in 1.2 &ldquo;Oasis&rdquo; a want taught to one agent transferred to an independent agent over a real network, and in 1.3 a survival fear one agent learned from in-game pain transferred to an agent that never felt it &mdash; both with no LLM in the action path. A later pre-registered baseline found that a plain tabular Q-learner matches the fear learning itself, so the 1.3 fear results are now rated partial. 1.3.1 &ldquo;Hardening&rdquo; adds no new claim: it fixes what a re-score of 1.3.0 found, each fix shipped with the test or check that holds it.</p>
     <div class="flex flex-wrap gap-2 pt-1">
       <a href="https://pymaxim.bio" rel="noopener" class="inline-flex items-center gap-1 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg px-3 py-1.5 transition no-underline">Docs &mdash; pymaxim.bio <span aria-hidden="true">&rarr;</span></a>
       <a href="https://github.com/dennys246/Maxim" rel="noopener" class="inline-flex items-center gap-1 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg px-3 py-1.5 transition no-underline">Source on GitHub <span aria-hidden="true">&rarr;</span></a>
@@ -135,6 +132,29 @@
     </div>
     <p class="leading-relaxed text-indigo-100">These pages are the design story &mdash; why each piece is built the way it is, what the experiments showed, and what a real robot learned. The software itself is documented at <a href="https://pymaxim.bio" rel="noopener" class="text-white underline decoration-indigo-300 hover:decoration-white">pymaxim.bio</a>: install, CLI, configuration, and the experiment ledger that decides what Maxim is allowed to claim.</p>
   </div>
+
+
+  <!-- Evidence first: what a reviewer should see before the biology -->
+  <section class="space-y-4" aria-labelledby="evidence-heading">
+    <h2 id="evidence-heading" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Evidence at a Glance</h2>
+    <p class="text-slate-300 leading-relaxed">Each claim is pre-registered with a frozen pass gate, run against control and ablation arms, and tracked in the <a href="https://pymaxim.bio/research/evidence/" rel="noopener" class="text-indigo-400 hover:text-indigo-300">evidence ledger</a>. Nulls and downgrades stay on the record.</p>
+    <div class="overflow-x-auto rounded-xl border border-slate-700">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-slate-800/80 text-slate-300">
+          <tr><th scope="col" class="px-4 py-3 font-semibold">Claim tested</th><th scope="col" class="px-4 py-3 font-semibold">Controls</th><th scope="col" class="px-4 py-3 font-semibold">Result</th><th scope="col" class="px-4 py-3 font-semibold">Status</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-700/70 text-slate-300 align-top">
+          <tr><td class="px-4 py-3">A want taught to one agent transfers to an independent agent (1.2)</td><td class="px-4 py-3">Isolated agent, satiated donor, falsifier arms</td><td class="px-4 py-3">0.84 [0.71, 0.92] vs. 0.22 isolated; n&nbsp;=&nbsp;50 per arm</td><td class="px-4 py-3 text-emerald-300">Supported</td></tr>
+          <tr><td class="px-4 py-3">Hunger relief teaches an agent to orient toward a caregiver's voice (1.1)</td><td class="px-4 py-3">Satiated, yoked, and no-feed arms</td><td class="px-4 py-3">0.878 vs. 0.441 / 0.413; 12 seeds per arm, arm means reproduce</td><td class="px-4 py-3 text-emerald-300">Supported</td></tr>
+          <tr><td class="px-4 py-3">A reward substrate learns to turn toward speech on Reachy Mini hardware</td><td class="px-4 py-3">No LLM in the action path</td><td class="px-4 py-3">Learned in ~10 trials; correct at trial 0 of the next session</td><td class="px-4 py-3 text-emerald-300">Shown on hardware</td></tr>
+          <tr><td class="px-4 py-3">A fear learned from in-game pain transfers to an agent that never felt it (1.3)</td><td class="px-4 py-3">Isolated receivers plus two falsifiers; random and Q-learning baselines</td><td class="px-4 py-3">12/12 vs. 0/60 controls (Fisher p&nbsp;=&nbsp;8.0&times;10<sup>&minus;10</sup>); a tabular Q-learner matches the fear learning</td><td class="px-4 py-3 text-amber-300">Partial</td></tr>
+          <tr><td class="px-4 py-3">Pooling partial learners speeds learning (1.2)</td><td class="px-4 py-3">Matched single agent</td><td class="px-4 py-3">Trials to criterion 21 &rarr; 10.5 (N&nbsp;=&nbsp;1 &rarr; 8), but more total experience</td><td class="px-4 py-3 text-amber-300">Partial</td></tr>
+          <tr><td class="px-4 py-3">Carried pain overrides an LLM's wrong prior (1.0)</td><td class="px-4 py-3">Fresh, unrelated-resume, and ablation arms across 4 LLMs</td><td class="px-4 py-3">No model reached the &le;&nbsp;&minus;1.0&nbsp;SD gate</td><td class="px-4 py-3 text-rose-300">Null: the prior won</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-sm text-slate-400">Engineering: Python, Apache-2.0, ~700 PyPI downloads a month; 15,000+ unit tests in CI across Python 3.10&ndash;3.14; LLM backends include Anthropic, OpenAI, and llama.cpp; optional PostgreSQL/pgvector memory.</p>
+  </section>
 
   <!-- Essay index -->
   <nav class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 space-y-3" aria-label="Maxim essays">
@@ -307,7 +327,7 @@
       <li><strong class="text-white">Embodied grounding:</strong> cognition tied to sensorimotor experience</li>
       <li><strong class="text-white">Safety:</strong> pain and fear are long-conserved harm-avoidance signals</li>
     </ul>
-    <p class="text-slate-300 leading-relaxed">The results so far are mixed, and the essays report both halves. On a Reachy Mini robot, a reward substrate with no LLM in the action path learned to turn toward speech &mdash; direction and step size &mdash; in about ten trials, and was correct at trial&nbsp;0 of the next session from its persisted state (<a href="/maxim/sound-orientation" class="text-indigo-400 hover:text-indigo-300">Sound Orienting</a>). In simulation, the pre-registered 1.0 benchmark found that carried cross-session experience did not override a strong LLM's prior, so Maxim does not claim its LLM agents &ldquo;learn and get better&rdquo; (<a href="/maxim/release-1-0" class="text-indigo-400 hover:text-indigo-300">The Honest Benchmark</a>). Since then the claims have moved into a world Maxim does not control: on a live Minecraft server, a taught want transferred between independent agents over a real network (1.2, n&nbsp;=&nbsp;50 receivers per arm), and a fear learned from drowning pain transferred to 12 of 12 receivers against 0 of 24 isolated controls (1.3). The same releases publish their limits: the shared want is keyed to one exact situation and does not yet generalize across layouts, pooling learners helps each agent but costs more total experience, and a &ldquo;dark means danger&rdquo; fear was blocked because the sensors could not tell the situations apart (<a href="https://github.com/dennys246/Maxim/releases" rel="noopener" class="text-indigo-400 hover:text-indigo-300">release notes</a>).</p>
+    <p class="text-slate-300 leading-relaxed">The results so far are mixed, and the essays report both halves. On a Reachy Mini robot, a reward substrate with no LLM in the action path learned to turn toward speech &mdash; direction and step size &mdash; in about ten trials, and was correct at trial&nbsp;0 of the next session from its persisted state (<a href="/maxim/sound-orientation" class="text-indigo-400 hover:text-indigo-300">Sound Orienting</a>). In simulation, the pre-registered 1.0 benchmark found that carried cross-session experience did not override a strong LLM's prior, so Maxim does not claim its LLM agents &ldquo;learn and get better&rdquo; (<a href="/maxim/release-1-0" class="text-indigo-400 hover:text-indigo-300">The Honest Benchmark</a>). Since then the claims have moved into a world Maxim does not control: on a live Minecraft server, a taught want transferred between independent agents over a real network (1.2, n&nbsp;=&nbsp;50 receivers per arm), and a fear learned from drowning pain transferred to 12 of 12 receivers against 0 of 24 isolated controls (1.3), though a later pre-registered baseline showed a plain tabular Q-learner matches the fear learning itself, so that result is now rated partial. The same releases publish their limits: the shared want is keyed to one exact situation and does not yet generalize across layouts, pooling learners helps each agent but costs more total experience, and a &ldquo;dark means danger&rdquo; fear was blocked because the sensors could not tell the situations apart (<a href="https://github.com/dennys246/Maxim/releases" rel="noopener" class="text-indigo-400 hover:text-indigo-300">release notes</a>).</p>
   </section>
 
   <p class="text-xs text-slate-500 text-center pt-4 border-t border-slate-700/60">

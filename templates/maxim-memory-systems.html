@@ -2,7 +2,7 @@
 
 {% block title %}Memory Systems — Maxim | Denny Schaedig{% endblock %}
 
-{% block meta_description %}How Maxim remembers, predicts, and learns. Hippocampus, SCN, Nucleus Accumbens, Entorhinal Cortex, and the ATL semantic memory that distills episodes into concepts — biologically-inspired memory for embodied AI.{% endblock %}
+{% block meta_description %}How Maxim remembers, predicts, and learns: hippocampus, SCN, nucleus accumbens, entorhinal cortex, and ATL semantic memory for embodied AI agents.{% endblock %}
 
 {% block meta_keywords %}Maxim memory systems, robot memory, hippocampus AI, episodic memory robot, reward prediction, entorhinal cortex, circadian rhythm AI, agentic memory, embodied AI memory, semantic memory, ATL anterior temporal lobe, concept memory, pattern completion, cross-layer graph, semantic promoter, knowledge graph{% endblock %}
 
@@ -11,17 +11,18 @@
 {% block og_type %}article{% endblock %}
 
 {% block structured_data %}
+{{ super() }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Memory Systems — How Maxim Remembers, Predicts, and Builds Lasting Knowledge",
   "description": "How Maxim remembers, predicts, and learns. The Hippocampus, SCN, Nucleus Accumbens, Entorhinal Cortex, and the ATL semantic memory now covered here — concept memory, pattern completion, cross-layer graphs, and the promotion pipeline that turns episodes into lasting knowledge for embodied AI agents.",
-  "author": { "@type": "Person", "name": "Denny Schaedig", "url": "https://www.dennyschaedig.com" },
-  "publisher": { "@type": "Organization", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
   "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/memory-systems",
   "datePublished": "2026-02-01",
-  "isPartOf": { "@type": "WebSite", "name": "Maxim", "url": "https://www.dennyschaedig.com/maxim" },
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
   "keywords": ["memory systems", "hippocampus", "episodic memory", "reward prediction", "entorhinal cortex", "semantic memory", "ATL", "concept memory", "pattern completion", "cross-layer graph", "knowledge promotion"]
 }
 </script>

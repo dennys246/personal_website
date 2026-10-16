@@ -208,3 +208,6 @@ __marimo__/
 
 .DS_Store
 *.docx
+
+# Tailwind standalone CLI download (build_css.sh)
+.tailwind/

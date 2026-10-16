@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-    }
-  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
   <meta charset="UTF-8">
   <title>{% block title %}Denny Schaedig{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% set default_description = "Denny Schaedig is a machine learning engineer building production ML systems, generative models, and open-source research software." %}
-  {% set canonical_url = request.base_url %}
+  {% set default_description = "Denny Schaedig is a machine learning engineer building generative models, LLM agents, and open-source research software." %}
+  {% set site_url = "https://www.dennyschaedig.com" %}
+  {% set canonical_url = site_url ~ request.path %}
   {% set preview_image = url_for('static', filename='img/og-card.jpg', _external=True) %}
   <meta name="description" content="{% block meta_description %}{{ default_description }}{% endblock %}">
   <meta name="keywords" content="{% block meta_keywords %}Denny Schaedig, machine learning engineer, MLOps, generative models, neuroimaging{% endblock %}">
   <meta name="author" content="{% block meta_author %}Denny Schaedig{% endblock %}">
-  <meta name="robots" content="index, follow">
-  <meta name="googlebot" content="index, follow">
+  {% block robots %}<meta name="robots" content="index, follow">{% endblock %}
   <link rel="canonical" href="{{ canonical_url }}">
   <meta property="og:title" content="{{ self.title()|striptags }}">
   <meta property="og:description" content="{{ self.meta_description() }}">
   <meta property="og:type" content="{% block og_type %}website{% endblock %}">
   <meta property="og:url" content="{{ canonical_url }}">
   <meta property="og:image" content="{{ preview_image }}">
+  <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Denny Schaedig, Machine Learning Engineer">
@@ -35,10 +31,12 @@
   <link rel="icon" href="/static/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="/static/favicon-32.png">
   <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,600,700&display=swap" rel="stylesheet">
   {% block extra_head %}{% endblock %}
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     .center-wrapper {
       text-align: center;
     }
@@ -103,29 +101,58 @@
 
   </style>
   {% block structured_data %}
+  {# One identity graph site-wide: pages reference the Person by @id. Child
+     templates that override this block call super() and add their own nodes. #}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Denny Schaedig",
-    "url": "{{ request.url_root }}",
-    "jobTitle": "Machine Learning Engineer",
-    "description": "Machine learning engineer building production ML systems, generative models, and open-source research software.",
-    "image": "{{ url_for('static', filename='img/headshot-square.jpg', _external=True) }}",
-    "email": "mailto:dennys25@pm.me",
-    "address": {"@type": "PostalAddress", "addressRegion": "CO", "addressCountry": "US"},
-    "worksFor": {"@type": "Organization", "name": "Washington University in St. Louis"},
-    "alumniOf": [
-      {"@type": "CollegeOrUniversity", "name": "Colorado State University Global"},
-      {"@type": "CollegeOrUniversity", "name": "University of Colorado Boulder"}
-    ],
-    "sameAs": [
-      "https://www.linkedin.com/in/denny-schaedig/",
-      "https://github.com/dennys246",
-      "https://huggingface.co/dennys246",
-      "https://orcid.org/0009-0002-1310-6392"
-    ],
-    "knowsAbout": ["Machine Learning", "MLOps", "Generative Models", "Deep Learning", "LLM Agents", "Neuroimaging"]
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "{{ site_url }}/#person",
+        "name": "Denny Schaedig",
+        "givenName": "Denny",
+        "familyName": "Schaedig",
+        "url": "{{ site_url }}/",
+        "image": "{{ site_url }}/static/img/headshot-square.jpg",
+        "jobTitle": "Machine Learning Engineer",
+        "hasOccupation": {"@type": "Occupation", "name": "NeuroImaging Engineer (Machine Learning & Software Engineering)"},
+        "description": "Machine learning engineer building generative models, LLM agents, and open-source research software.",
+        "email": "mailto:dennys25@pm.me",
+        "address": {"@type": "PostalAddress", "addressRegion": "CO", "addressCountry": "US"},
+        "worksFor": {"@type": "CollegeOrUniversity", "name": "Washington University in St. Louis", "sameAs": "https://wustl.edu"},
+        "alumniOf": [
+          {"@type": "CollegeOrUniversity", "name": "Colorado State University Global", "sameAs": "https://csuglobal.edu"},
+          {"@type": "CollegeOrUniversity", "name": "University of Colorado Boulder", "sameAs": "https://www.colorado.edu"}
+        ],
+        "identifier": {"@type": "PropertyValue", "propertyID": "ORCID", "value": "0009-0002-1310-6392"},
+        "sameAs": [
+          "https://www.linkedin.com/in/denny-schaedig/",
+          "https://github.com/dennys246",
+          "https://huggingface.co/dennys246",
+          "https://orcid.org/0009-0002-1310-6392",
+          "https://pypi.org/user/dennys246/",
+          "https://dennyschaedig.substack.com",
+          "https://bsky.app/profile/dennyschaedig.bsky.social"
+        ],
+        "knowsAbout": ["Machine Learning", "Deep Learning", "Generative Models", "LLM Agents", "LLM Evaluation", "MLOps", "Computer Vision", "Neuroimaging", "fNIRS"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "{{ site_url }}/#website",
+        "url": "{{ site_url }}/",
+        "name": "Denny Schaedig",
+        "publisher": {"@id": "{{ site_url }}/#person"}
+      }{% block page_node %},
+      {
+        "@type": "{% block page_type %}WebPage{% endblock %}",
+        "@id": "{{ canonical_url }}#webpage",
+        "url": "{{ canonical_url }}",
+        "name": {{ (self.title()|striptags)|tojson }},
+        "isPartOf": {"@id": "{{ site_url }}/#website"},
+        {% if self.page_type() == "ProfilePage" %}"mainEntity"{% else %}"about"{% endif %}: {"@id": "{{ site_url }}/#person"}
+      }{% endblock %}{% block extra_graph %}{% endblock %}
+    ]
   }
   </script>
   {% endblock %}
@@ -137,19 +164,19 @@
 <header class="p-6 bg-black text-white shadow sticky top-0 z-50">
   <div class="max-w-7xl mx-auto flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-center">
     <nav class="flex flex-wrap items-center justify-center gap-4 text-lg order-2 md:order-1 md:mr-10">
-      <a href="/story" class="chalk-text text-white hover:text-gray-400 transition">About</a>
+      <a href="/about" class="chalk-text text-white hover:text-gray-400 transition">About</a>
       <a href="/experiences" class="chalk-text text-white hover:text-gray-400 transition">Experience</a>
       <a href="/projects" class="chalk-text text-white hover:text-gray-400 transition">Projects</a>
     </nav>
     <a href="/" class="logo-wrapper order-1 md:order-2">
-      <img src="/static/img/signature.jpg" alt="Denny Schaedig — home" class="logo-default" />
+      <img src="/static/img/signature.jpg" alt="Denny Schaedig — home" class="logo-default" width="145" height="64" />
     </a>
     <nav class="flex flex-wrap items-center justify-center gap-4 text-lg order-3 md:ml-10">
       <a href="/papers" class="chalk-text text-white hover:text-gray-400 transition">Publications</a>
       <a href="/ramblings" class="chalk-text text-white hover:text-gray-400 transition">Writing</a>
       <a href="/maxim" class="chalk-text text-white hover:text-gray-400 transition">Maxim</a>
       <a href="/contact" class="chalk-text text-white hover:text-gray-400 transition">Contact</a>
-      {% if cv_url %}<a href="{{ cv_url }}" class="chalk-text text-white hover:text-gray-400 transition">CV</a>{% endif %}
+      {% if resume_url %}<a href="{{ resume_url }}" class="chalk-text text-white hover:text-gray-400 transition">Resume</a>{% endif %}
     </nav>
   </div>
 </header>
@@ -194,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <a href="https://www.linkedin.com/in/denny-schaedig/" class="hover:text-indigo-500">LinkedIn</a>
         <a href="https://github.com/dennys246" class="hover:text-indigo-500">GitHub</a>
         <a href="https://huggingface.co/dennys246" class="hover:text-indigo-500">Hugging Face</a>
+        <a href="https://dennyschaedig.substack.com" class="hover:text-indigo-500">Substack</a>
         <a href="https://orcid.org/0009-0002-1310-6392" class="hover:text-indigo-500">ORCID</a>
       </div>
       

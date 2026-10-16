@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}Denny Schaedig | Machine Learning Engineer{% endblock %}
-{% block meta_description %}Denny Schaedig is a machine learning engineer building production ML systems, generative models, and open-source research software. Based in Colorado.{% endblock %}
+{% block meta_description %}Denny Schaedig is a machine learning engineer in Colorado building generative models, LLM agents, and open-source research software, with a first-author paper in Neurophotonics.{% endblock %}
+{% block page_type %}ProfilePage{% endblock %}
 
 {% block extra_head %}
+<link rel="preload" as="image" href="/static/img/buffalo_mountain_1.webp">
 <style>
 .home-hero {
   position: relative;
@@ -35,7 +37,7 @@
 }
 
 .hero-photo {
-  width: 16rem;
+  width: 13rem;
   aspect-ratio: 3 / 4;
   object-fit: cover;
   border-radius: 1.5rem;
@@ -107,15 +109,15 @@
 {% block main_class %}home-hero relative w-full mt-0 flex-grow p-0 overflow-hidden{% endblock %}
 
 {% block content %}
-<section class="relative w-full min-h-screen flex flex-col justify-center gap-12 px-6 py-16 sm:px-12 lg:px-20">
+<section class="relative w-full flex flex-col gap-8 px-6 py-10 sm:px-12 lg:px-20 lg:py-12">
   <div class="flex flex-col-reverse gap-8 lg:flex-row lg:items-center lg:gap-16">
   <div class="hero-panel space-y-5">
     <h1 class="text-4xl sm:text-5xl font-semibold text-white">Denny Schaedig</h1>
     <p class="text-xl text-indigo-200 font-medium">Machine Learning Engineer</p>
     <p class="text-lg leading-relaxed text-slate-200">
       I design, train, and ship ML systems end to end, from data pipelines and distributed training to
-      model packaging and serving. I'm a Machine Learning / AI Engineer at Washington University in
-      St. Louis, first author of HRfunc (<i>Neurophotonics</i>, 2025), and the creator of Maxim, an
+      model packaging and serving. As NeuroImaging Engineer at Washington University in St. Louis, I
+      do the machine learning and software engineering for a neuroimaging lab. I'm first author of HRfunc (<i>Neurophotonics</i>, 2025), and the creator of Maxim, an
       open-source cognitive architecture for LLM agents and robots.
     </p>
     <p class="text-slate-300">
@@ -127,24 +129,26 @@
       <a href="/contact" class="hero-btn">Contact</a>
       <a href="https://github.com/dennys246" class="hero-btn">GitHub</a>
       <a href="https://www.linkedin.com/in/denny-schaedig/" class="hero-btn">LinkedIn</a>
-      {% if cv_url %}<a href="{{ cv_url }}" class="hero-btn">CV (PDF)</a>{% endif %}
+      <a href="https://huggingface.co/RMDig" class="hero-btn">Hugging Face</a>
+      {% if resume_url %}<a href="{{ resume_url }}" class="hero-btn">Resume (PDF)</a>{% endif %}
+      {% if cv_url %}<a href="{{ cv_url }}" class="hero-btn">Full CV</a>{% endif %}
     </div>
   </div>
-  <img src="{{ url_for('static', filename='img/headshot.webp') }}" alt="Denny Schaedig" class="hero-photo" width="600" height="800">
+  <img src="{{ url_for('static', filename='img/denny-schaedig-headshot.webp') }}" srcset="{{ url_for('static', filename='img/denny-schaedig-headshot.webp') }} 416w, {{ url_for('static', filename='img/headshot.webp') }} 600w" sizes="(min-width: 1024px) 13rem, 9rem" alt="Denny Schaedig, machine learning engineer" class="hero-photo" width="416" height="555" fetchpriority="high">
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 max-w-6xl" aria-label="Highlights">
     <a href="/maxim" class="highlight-card">
       <h3>Maxim</h3>
-      <p>Open-source cognitive architecture for LLM agents and robots (v1.3). Learned wants and fears transfer between agents, backed by pre-registered benchmarks.</p>
+      <p>Open-source LLM agent harness with persistent memory and learned drives (v1.3.1, ~700 PyPI downloads/month). Every claim is pre-registered and ablation-tested, null results included.</p>
     </a>
-    <a href="/projects" class="highlight-card">
+    <a href="/projects#hrfunc" class="highlight-card">
       <h3>HRfunc</h3>
       <p>Open-source Python package for fNIRS signal deconvolution, published in <i>Neurophotonics</i>, with ~14K PyPI downloads.</p>
     </a>
-    <a href="/projects" class="highlight-card">
+    <a href="/projects#snowgan" class="highlight-card">
       <h3>snowGAN &amp; Snowpack Dataset</h3>
-      <p>A 4,040-image computer-vision dataset and pretrained GAN on Hugging Face, used as a backbone for avalanche-risk modeling.</p>
+      <p>A hand-collected 4,040-sample snowpack dataset (40K+ Hugging Face downloads) and pretrained GANs, the backbone for avalanche-risk modeling.</p>
     </a>
     <a href="/papers" class="highlight-card">
       <h3>Publications</h3>
