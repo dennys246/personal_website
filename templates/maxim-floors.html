@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}Floors — Maxim | Denny Schaedig{% endblock %}
+
+{% block meta_description %}Testing an AI only against a weaker copy of itself is like testing a pill only against a sugar pill. What happened when Maxim met a plain competitor.{% endblock %}
+
+{% block meta_keywords %}Maxim floors, baseline comparison, ablation study, placebo vs active comparator, Q-learning baseline, AI evaluation, brain-inspired AI, agent memory, sample efficiency, fair baselines, pymaxim{% endblock %}
+
+{% block meta_author %}Denny Schaedig{% endblock %}
+{% block og_site_name %}Maxim{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block structured_data %}
+{{ super() }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Floors — Sugar Pill or Aspirin: How You Know a Brain-Inspired AI Is Earning Its Keep",
+  "description": "Every Maxim claim had been tested against a weaker copy of Maxim, the equivalent of testing a pill only against a sugar pill. The first test against a plain competitor, a textbook trial-and-error learner, tied with Maxim's drowning fear 8/8. The different ways to compare a system, what each can and can't tell you, and what the next experiment has to show.",
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
+  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/floors",
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
+  "datePublished": "2026-10-15",
+  "keywords": ["baseline floors", "ablation", "placebo", "active comparator", "Q-learning", "sample efficiency", "fair baselines", "brain-inspired AI", "pymaxim"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://www.dennyschaedig.com/projects" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "Floors", "item": "https://www.dennyschaedig.com/maxim/floors" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
+
+  <header class="text-center space-y-2">
+    <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM</p>
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Floors</h1>
+    <p class="text-indigo-400 font-medium">Sugar pill or aspirin: how you know a brain-inspired AI is earning its keep</p>
+  </header>
+
+  {% set maxim_written = "October 2026" %}
+  {% set maxim_note = "The statuses here are as of 15 October 2026. The behavioral ledger (rows T1-13 to T1-15) is the living record and wins wherever the two disagree." %}
+  {% set maxim_docs = [("Evidence & ledgers", "https://pymaxim.bio/research/evidence/"), ("Baseline floors plan", "https://github.com/dennys246/Maxim/blob/main/docs/plans/baseline_floors.md"), ("B1 preregistration", "https://github.com/dennys246/Maxim/blob/main/docs/experiments/b1_exp60_floor_prereg.md")] %}
+  {% set maxim_related = ["engrams", "release-1-0", "reachability", "substrate-primary"] %}
+  {% include "_maxim_status.html" %}
+
+  <!-- Lede -->
+  <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+    <p class="text-slate-200 text-lg leading-relaxed">Until this month, every claim I'd made for Maxim was tested against a weaker copy of Maxim. That's like testing a new pill only against a sugar pill. In October I tested it for the first time against the ordinary stuff on the shelf, and the ordinary stuff did just as well. <strong class="text-white">Beating a sugar pill shows your ingredient does something. Only beating aspirin shows it's worth having.</strong> This essay is about the different ways to compare a system, what each one can and can't tell you, and what happened when mine met its first real competitor.</p>
+  </div>
+
+  <!-- Contents -->
+  <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2">Contents</h3>
+    <ol class="space-y-1 text-slate-300 list-decimal pl-5">
+      <li><a href="#sugar-pill" class="text-indigo-400 hover:text-indigo-300 no-underline">Sugar Pill or Aspirin?</a></li>
+      <li><a href="#the-test" class="text-indigo-400 hover:text-indigo-300 no-underline">The Drowning Test</a></li>
+      <li><a href="#ablations" class="text-indigo-400 hover:text-indigo-300 no-underline">Beating the Sugar Pill</a></li>
+      <li><a href="#floors" class="text-indigo-400 hover:text-indigo-300 no-underline">Beating Aspirin</a></li>
+      <li><a href="#b1" class="text-indigo-400 hover:text-indigo-300 no-underline">The Result</a></li>
+      <li><a href="#when-which" class="text-indigo-400 hover:text-indigo-300 no-underline">Who Decides When to Act?</a></li>
+      <li><a href="#twin" class="text-indigo-400 hover:text-indigo-300 no-underline">Same Drug, Different Bottle</a></li>
+      <li><a href="#efficiency" class="text-indigo-400 hover:text-indigo-300 no-underline">Faster Isn't the Same as Better</a></li>
+      <li><a href="#strawmen" class="text-indigo-400 hover:text-indigo-300 no-underline">Rigging the Trial, Both Ways</a></li>
+      <li><a href="#next" class="text-indigo-400 hover:text-indigo-300 no-underline">What Comes Next</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. Analogy -->
+  <section class="space-y-4">
+    <h2 id="sugar-pill" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Sugar Pill or Aspirin?</h2>
+
+    <p class="text-slate-300 leading-relaxed">Maxim is a software project of mine: an AI agent with memory systems loosely modelled on parts of the brain, named after the hippocampus, the nucleus accumbens and others. The names are a way to organise the design. They are not evidence that it works, and nothing below leans on them.</p>
+
+    <p class="text-slate-300 leading-relaxed">Imagine you've invented a headache pill. There are two very different questions you can ask about it.</p>
+
+    <p class="text-slate-300 leading-relaxed">The first is whether the active ingredient does anything. You find out by giving some people the real pill and others an identical pill with the ingredient taken out. If only the real one helps, the ingredient is doing something. Researchers call this kind of test, where you remove one part and keep everything else, an <em>ablation</em>.</p>
+
+    <p class="text-slate-300 leading-relaxed">The second is whether your pill beats what's already on the shelf. You find out by testing it against plain aspirin. I call that kind of comparison a <em>floor</em>: the most basic, no-frills option that anything fancier has to beat to be worth the trouble.</p>
+
+    <p class="text-slate-300 leading-relaxed">A pill can pass the first test and fail the second. Plenty of ingredients beat a sugar pill and still aren't better than aspirin. Until October, Maxim had only ever taken the first test.</p>
+  </section>
+
+  <!-- 2. The test -->
+  <section class="space-y-4">
+    <h2 id="the-test" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Drowning Test</h2>
+
+    <p class="text-slate-300 leading-relaxed">Maxim's best result comes from Minecraft. An agent is held underwater in a pool until its air runs low, which Maxim registers as pain. During this training it does nothing; it just goes through it. Then it's put back in the water, and each test is cut off just before the pain would start again. The question is whether it gets out on its own before it gets hurt.</p>
+
+    <p class="text-slate-300 leading-relaxed">The part doing the work is a simple piece of wiring. When pain arrives, Maxim attaches fear to whatever situation it's in. The next time it recognises that situation, the fear pushes it to act.</p>
+  </section>
+
+  <!-- 3. Ablations -->
+  <section class="space-y-4">
+    <h2 id="ablations" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Beating the Sugar Pill</h2>
+
+    <p class="text-slate-300 leading-relaxed">The first test was the sugar-pill kind. I ran the agent against an identical copy with the fear wiring disconnected: same dives, same pain. After training, the agent with fear got out before the pain on every run. The copy without it never did.</p>
+
+    <p class="text-slate-300 leading-relaxed">That result still stands, and it says something real: take the fear wiring out and the behaviour disappears. What it can't say is whether the wiring is special. Almost anything plugged into that spot would beat having nothing there.</p>
+  </section>
+
+  <!-- 4. Floors -->
+  <section class="space-y-4">
+    <h2 id="floors" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Beating Aspirin</h2>
+
+    <p class="text-slate-300 leading-relaxed">A floor is a plain agent that sees what Maxim sees, can do what Maxim can do, and gets the same rolls of the dice, but has none of the brain-inspired parts. Each floor answers a different sceptic.</p>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">The coin-flipper</h3>
+        <p class="text-slate-300 text-sm">&ldquo;Is it better than chance?&rdquo; Picks any available action at random.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">The trial-and-error learner</h3>
+        <p class="text-slate-300 text-sm">&ldquo;Couldn't ordinary machine learning do this?&rdquo; The textbook method, called Q-learning: keep a scorecard of how well each action has gone in each situation, and favour the winners.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">The bare chatbot</h3>
+        <p class="text-slate-300 text-sm">&ldquo;Isn't the AI model doing all the work?&rdquo; The same language model, with none of Maxim's memory.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">The chatbot with a notebook</h3>
+        <p class="text-slate-300 text-sm">&ldquo;Isn't this just giving a chatbot notes?&rdquo; The same model, plus ordinary notes it carries from one session to the next.</p>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Since 10 October the project has a strict rule: nothing new gets called <em>earned</em> unless it beats the floors that apply to it. Something that only ties is marked <em>partial</em>. That is still worth publishing. It just isn't a win.</p>
+
+    <div class="bg-slate-800 border-l-4 border-amber-500 rounded-xl p-6 space-y-3">
+      <h3 class="text-lg font-semibold text-amber-400">The two chatbot floors haven't run yet</h3>
+      <p class="text-slate-300 text-sm">They need some rebuilding inside Maxim first. Until they exist, I can't call anything new on Maxim's chatbot side earned, and I'm not claiming that here. They also couldn't be tested fairly in the drowning world. A chatbot told &ldquo;you're underwater and running out of air&rdquo;, next to a button labelled <code class="bg-slate-950 px-1 rounded text-xs">escape_water</code>, would press it on the first try, because it already knows that from its training. A fair test would scramble the labels so the chatbot's general knowledge can't hand it the answer. Everything below is about the coin-flipper and the trial-and-error learner.</p>
+    </div>
+  </section>
+
+  <!-- 5. B1 -->
+  <section class="space-y-4">
+    <h2 id="b1" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Result</h2>
+
+    <p class="text-slate-300 leading-relaxed">I re-ran the fear agent alongside the coin-flipper and the trial-and-error learner, eight runs each, and all forty runs came back clean. The trial-and-error learner got ten practice dives in which it could actually try things. The score is whether each agent got out on its first test after training. Later tests are partly habit, because by then a successful escape has also been rewarded.</p>
+
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-3 sm:p-4 overflow-x-auto">
+      <table class="w-full text-xs sm:text-sm text-left text-slate-300">
+        <thead class="text-slate-400 border-b border-slate-700">
+          <tr><th class="py-2 pr-2 sm:pr-3 font-semibold">Agent</th><th class="py-2 pr-2 sm:pr-3 font-semibold">Chooses from</th><th class="py-2 font-semibold">Got out on the first test</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-700/60">
+          <tr><td class="py-2 pr-2 sm:pr-3 text-white font-medium">Fear agent</td><td class="py-2 pr-2 sm:pr-3">Its learned fear plus a built-in escape reflex</td><td class="py-2 text-emerald-400">8/8</td></tr>
+          <tr><td class="py-2 pr-2 sm:pr-3 text-white font-medium">Trial-and-error learner</td><td class="py-2 pr-2 sm:pr-3">All 26 available actions</td><td class="py-2 text-emerald-400">8/8</td></tr>
+          <tr><td class="py-2 pr-2 sm:pr-3 text-white font-medium">Coin-flipper</td><td class="py-2 pr-2 sm:pr-3">All 26 available actions</td><td class="py-2 text-rose-400">2/8</td></tr>
+          <tr><td class="py-2 pr-2 sm:pr-3 text-white font-medium">Trial-and-error, two choices <span class="text-slate-500 font-normal">(extra)</span></td><td class="py-2 pr-2 sm:pr-3">Only the two escape-type actions</td><td class="py-2 text-emerald-400">8/8</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">The fear agent clearly beat the coin-flipper: a statistical test says a gap that big is very unlikely to be luck (p = 0.0035). Against the trial-and-error learner there was no difference at all (p = 1.0). A tie doesn't prove the two are equally good, since eight runs each is too few for that. It only means I have no evidence the fear agent is better. On 14 October the drowning result went from earned to partial.</p>
+  </section>
+
+  <!-- 6. When / which -->
+  <section class="space-y-4">
+    <h2 id="when-which" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Who Decides When to Act?</h2>
+
+    <p class="text-slate-300 leading-relaxed">The tie makes sense once you split getting out of the water into two questions: <strong class="text-white">when</strong> to act, and <strong class="text-white">what</strong> to do.</p>
+
+    <p class="text-slate-300 leading-relaxed">Back to the pills. Suppose your invention is a smart pill that learns the early warning signs of a headache from past ones and releases its medicine before the pain starts. That's really two things: a sensor that learned <em>when</em>, and a medicine somebody chose for it.</p>
+
+    <p class="text-slate-300 leading-relaxed">Maxim's fear is the sensor. It learned <em>when</em> from pain it went through without doing anything: being underwater picked up fear, and standing on the shore didn't. The <em>what</em> was chosen by me. Maxim has a built-in reflex that links fear to an action called <code class="bg-slate-950 px-1 rounded text-xs">escape_water</code>, which I built for this experiment and named so the reflex would find it. A built-in choice like that is called a <em>prior</em>. One of the design reviewers summed it up: the fear wiring &ldquo;learned <em>when</em>; the prior's name match supplied <em>what</em>.&rdquo;</p>
+
+    <p class="text-slate-300 leading-relaxed">Now look at the comparison. To stop the plain learners acting blindly on dry land, the test only switched them on once they were in the water. In pill terms, a nurse handed over the aspirin the moment the headache began. That gave them the <em>when</em> for free, so the trial only compared the <em>what</em>, which is the half Maxim didn't learn either. The test plan said so in writing before any results came in.</p>
+
+    <p class="text-slate-300 leading-relaxed">The clearest number in the run makes the same point. The trial-and-error learner limited to the two escape-type actions got out on its <strong class="text-white">very first time underwater</strong>, on 8 of 8 runs, with no experience at all. The built-in reflex carries the act.</p>
+  </section>
+
+  <!-- 7. Twin -->
+  <section class="space-y-4">
+    <h2 id="twin" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Same Drug, Different Bottle</h2>
+
+    <p class="text-slate-300 leading-relaxed">There is a third kind of comparison: the simplest textbook method that does the same job as your invention. Drug makers know this one well. If your new molecule turns out to work just like an old generic, your trial will tie with the generic, and that tells you something useful about what you've actually made.</p>
+
+    <p class="text-slate-300 leading-relaxed">For Maxim's fear, the twin is a standard algorithm that learns how good or bad each situation is from what tends to follow it. Given the same reflex, it is Maxim's fear wiring under another name, so the test plan expects a tie. That isn't embarrassing. It means any claim worth making lives somewhere else: in how Maxim recognises situations, in what the fear connects to, in what it does that the textbook version can't.</p>
+
+    <p class="text-slate-300 leading-relaxed">Two later experiments ran into exactly this. One showed the fear passing between separate agents: 12 of 12 agents that received another agent's memory, and had never felt the pain themselves, got out of the water. The other showed the fear carrying over to a second pool. Both rest on the same fear wiring, so on 15 October I marked both partial too, without re-running them, and wrote the decision down. What survives is narrower but real: a learned fear can be packaged up and moved between agents, and Maxim's sense of &ldquo;underwater&rdquo; carries over from one pool to another. Neither shows Maxim doing better than a plain learner would.</p>
+  </section>
+
+  <!-- 8. Efficiency -->
+  <section class="space-y-4">
+    <h2 id="efficiency" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Faster Isn't the Same as Better</h2>
+
+    <p class="text-slate-300 leading-relaxed">The fear agent needed no practice actions at all. The trial-and-error learner needed 31 tries in a typical run (the median of the eight), or 16 with only the two escape-type actions to choose from. That's a real gap, and in a world where every wrong try costs something, it would matter.</p>
+
+    <p class="text-slate-300 leading-relaxed">But the score was whether each one got out on the first test, and they tied. Learning fast and doing well in the end are different things, and winning one doesn't let you claim the other. That's why I fixed which one counted before the run. The fear agent's head start isn't all its own work either: its zero comes from a reflex that already knew the answer.</p>
+  </section>
+
+  <!-- 9. Strawmen -->
+  <section class="space-y-4">
+    <h2 id="strawmen" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Rigging the Trial, Both Ways</h2>
+
+    <p class="text-slate-300 leading-relaxed">The easiest way to beat a floor is to pick one that can't win, and the first draft of this test had one. It trained a trial-and-error learner on the same dives the fear agent got, where nothing the agent chooses actually happens. The pain arrives no matter what it picks, so its scorecard fills up with noise. A reviewer called it out as a floor that &ldquo;can't fail to lose.&rdquo; It was dropped before any data came in, and the real floor became a learner that actually gets to try things.</p>
+
+    <p class="text-slate-300 leading-relaxed">The trap has a quieter version. The learner's first settings made every untried action look better than one it had already tried, so in a practice simulation it kept exploring and got out on the first test only about 10% of the time. That floor was built to lose too. The settings were changed before the real run, and the change is on record. The plan also names the next version of the trap in advance: giving a plain learner such a fine-grained view of the world that it can't tell two nearly identical situations are the same. That would rig the trial in Maxim's favour, and the reviewers are told to refuse it.</p>
+
+    <p class="text-slate-300 leading-relaxed">It cuts the other way as well. A floor that can't lose, because it's handed the answer or the task leaves nothing to learn, turns every result into a tie and tells you nothing. In drug terms, you learn nothing from a trial against expired aspirin, or against a sugar pill that's secretly aspirin. The honest floor is one you think might win.</p>
+  </section>
+
+  <!-- 10. Next -->
+  <section class="space-y-4">
+    <h2 id="next" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">What Comes Next</h2>
+
+    <p class="text-slate-300 leading-relaxed">Here is where Maxim stands. The drowning fear beats chance. It doesn't beat a plain learner that's told when to act. The fear's learned sense of <em>when</em> still beats the copy with the wiring cut. The two follow-up experiments are partial. The chatbot floors haven't run, so nothing new on the chatbot side counts as earned.</p>
+
+    <p class="text-slate-300 leading-relaxed">The next experiments run the textbook twin as a competitor too, so every result says how much it adds over the standard version of itself. And to beat a floor, a test needs a situation where a sensible plain learner could actually lose. The best candidate is recognising something new as similar to something familiar. Maxim files each new situation by how much it resembles ones it has already seen, so a fear learned in one place can fire somewhere it has never been. A plain scorecard treats that new place as brand new and has to learn it from scratch. If Maxim's brain-inspired design is earning its keep, that's where it should show. If the plain learner ties there too, it goes on the record the same way this one did.</p>
+
+    <p class="text-slate-300 leading-relaxed">Beating a sugar pill only tells you the ingredient does something. Whether the pill is worth taking is a question you have to put to something else.</p>
+  </section>
+
+  {% include "_maxim_related.html" %}
+</div>
+{% endblock %}
