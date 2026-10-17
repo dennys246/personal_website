@@ -68,6 +68,7 @@
       <li><a href="#renovating" class="text-indigo-400 hover:text-indigo-300 no-underline">Renovating Before You Build</a></li>
       <li><a href="#truthful" class="text-indigo-400 hover:text-indigo-300 no-underline">Memory That Tells the Truth About Itself</a></li>
       <li><a href="#loop" class="text-indigo-400 hover:text-indigo-300 no-underline">Taking the Loop Apart Without Breaking It</a></li>
+      <li><a href="#front-door" class="text-indigo-400 hover:text-indigo-300 no-underline">The Front Door Was Unlocked</a></li>
       <li><a href="#practice" class="text-indigo-400 hover:text-indigo-300 no-underline">How I Work Now</a></li>
       <li><a href="#next" class="text-indigo-400 hover:text-indigo-300 no-underline">What It Doesn't Show, and What's Next</a></li>
     </ol>
@@ -134,7 +135,21 @@
     <p class="text-slate-300 leading-relaxed">The decomposition isn't finished, and I've made that binding. An automated check now refuses to let any 1.4.0 release pass until the rest of the job is done: a written list of 32 items, 3 functions that must shrink, and 5 more recordings of the simulation runner. That is a promise about process, not a claim about behaviour. No new storey until the inspection list is closed.</p>
   </section>
 
-  <!-- 4. Practice -->
+  <!-- 4. Security -->
+  <section class="space-y-4">
+    <h2 id="front-door" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Front Door Was Unlocked</h2>
+
+    <p class="text-slate-300 leading-relaxed">One fix in 1.3.2 is a security fix, and it's the one to read first if you run Maxim. Several Maxim machines can work together, with one acting as the <em>leader</em> that the others connect to. Before 1.3.2, a machine that hadn't been told its role became a leader by default, and a leader without a password-like key let anyone in. Remote-admin commands were switched on whenever that door was open, and through a Cloudflare tunnel, the leader's debug pages could be read by anyone who knew its web address. It's as if the renovation found that the house had been shipped with the front door unlocked and the spare key taped to it.</p>
+
+    <p class="text-slate-300 leading-relaxed">The fix makes Maxim <em>fail closed</em>: when in doubt, it refuses instead of allowing. A machine now defaults to working alone. A leader without a usable key refuses to start and says how to fix it. A request from the machine itself no longer counts as proof of who sent it, and remote admin stays off until you switch it on. Each of those guards was proven the same way as every other guard in this release, by deleting the thing it protects and watching its test fail. The problem is published as a high-severity <a href="https://github.com/dennys246/Maxim/security/advisories/GHSA-7qh4-mp34-88v9" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">security advisory</a> covering pymaxim 1.3.1 and earlier.</p>
+
+    <div class="bg-slate-800 border-l-4 border-rose-500 rounded-xl p-6 space-y-3">
+      <h3 class="text-lg font-semibold text-rose-400">If you run a Maxim leader</h3>
+      <p class="text-slate-300 text-sm">Upgrade each leader <strong class="text-white">on its own machine</strong> and restart it from cold. Don't upgrade and restart it remotely: a remote restart carries the old settings into the new process, and a leader that now refuses to start can't be reached remotely to fix it. Run <code class="bg-slate-950 px-1 rounded text-xs">maxim doctor</code> there first. The advisory and the <a href="https://github.com/dennys246/Maxim/blob/main/CHANGELOG.md" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">changelog</a> list the steps: setting the role, creating or tightening the key, opting back in to remote admin, and moving peers to the new port.</p>
+    </div>
+  </section>
+
+  <!-- 5. Practice -->
   <section class="space-y-4">
     <h2 id="practice" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">How I Work Now</h2>
 
@@ -170,7 +185,7 @@
     <p class="text-slate-300 leading-relaxed">In numbers, since 1.3.1: <strong class="text-white">189</strong> pull requests merged; the Python files in the test suite grew from <strong class="text-white">575 to 697</strong>; and the repository's automated lint checks, each one a rule that a script enforces instead of my attention, went from <strong class="text-white">13 to 24</strong>. That last number matters most to me. A rule followed by attention is where slips land. A rule a script enforces is one I can stop worrying about.</p>
   </section>
 
-  <!-- 5. Next -->
+  <!-- 6. Next -->
   <section class="space-y-4">
     <h2 id="next" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">What It Doesn't Show, and What's Next</h2>
 
