@@ -290,7 +290,7 @@ def sitemap_xml():
         ("maxim", "monthly", "0.9", "2026-10-24"),
         ("maxim_release_1_0", "monthly", "0.8", "2026-09-24"),
         ("maxim_reachability", "monthly", "0.8", "2026-09-24"),
-        ("maxim_engrams", "monthly", "0.8", "2026-10-15"),
+        ("maxim_engrams", "monthly", "0.8", "2026-10-24"),
         ("maxim_floors", "monthly", "0.8", "2026-10-15"),
         ("maxim_foundations", "monthly", "0.8", "2026-10-24"),
         ("maxim_verified", "monthly", "0.8", "2026-10-24"),
