@@ -123,7 +123,7 @@
   <div class="rounded-xl bg-gradient-to-br from-indigo-700 via-purple-700 to-indigo-800 p-6 text-white shadow-lg space-y-3">
     <h3 class="text-lg font-semibold">What is Maxim?</h3>
     <p class="leading-relaxed">Maxim is an open-source, bio-inspired cognitive architecture for LLM agents and robots, designed and built by Denny Schaedig and published on PyPI as <code class="bg-indigo-950/60 px-1 rounded text-sm">pymaxim</code> (Apache-2.0; current release 1.3.3, October 2026). It models brain systems &mdash; episodic and semantic memory, reward learning, fear, attention, proprioception &mdash; as a persistent substrate around the LLM, and tests it on a Reachy Mini robot and in a live Minecraft world it does not control.</p>
-    <p class="leading-relaxed">Its claims are tested rather than asserted: every release since 1.0 has shipped with pre-registered, ablation-controlled experiments, and results are tracked in a public evidence ledger with the conditions that would require re-running them. The most recent: in 1.2 &ldquo;Oasis&rdquo; a want taught to one agent transferred to an independent agent over a real network, and in 1.3 a survival fear one agent learned from in-game pain transferred to an agent that never felt it &mdash; both with no LLM in the action path. A later pre-registered baseline found that a plain tabular Q-learner matches the fear learning itself, so the 1.3 fear results are now rated partial. 1.3.1 &ldquo;Hardening&rdquo;, 1.3.2 &ldquo;Decomposition&rdquo; and 1.3.3 &ldquo;Release pipeline&rdquo; add no new claim: 1.3.1 fixes what a re-score of 1.3.0 found, and 1.3.2 takes the agent loop apart under characterization tests, adds the checks that hold it, and closes a high-severity <a href="https://github.com/dennys246/Maxim/security/advisories/GHSA-7qh4-mp34-88v9" rel="noopener" class="underline decoration-indigo-300 hover:decoration-white">security advisory</a> (<a href="/maxim/foundations" class="underline decoration-indigo-300 hover:decoration-white">Foundations</a>). 1.3.3 fixes what building the Console on top of Maxim turned up, and is the first release CI publishes: from a signed tag, after a green nightly on that exact commit and a smoke test of the exact wheel, through PyPI trusted publishing.</p>
+    <p class="leading-relaxed">Its claims are tested rather than asserted: every release since 1.0 has shipped with pre-registered, ablation-controlled experiments, and results are tracked in a public evidence ledger with the conditions that would require re-running them. The most recent: in 1.2 &ldquo;Oasis&rdquo; a want taught to one agent transferred to an independent agent over a real network, and in 1.3 a survival fear one agent learned from in-game pain transferred to an agent that never felt it &mdash; both with no LLM in the action path. A later pre-registered baseline found that a plain tabular Q-learner matches the fear learning itself, so the 1.3 fear results are now rated partial. 1.3.1 &ldquo;Hardening&rdquo;, 1.3.2 &ldquo;Decomposition&rdquo; and 1.3.3 &ldquo;Release pipeline&rdquo; add no new claim: 1.3.1 fixes what a re-score of 1.3.0 found, and 1.3.2 takes the agent loop apart under characterization tests, adds the checks that hold it, and closes a high-severity <a href="https://github.com/dennys246/Maxim/security/advisories/GHSA-7qh4-mp34-88v9" rel="noopener" class="underline decoration-indigo-300 hover:decoration-white">security advisory</a> (<a href="/maxim/foundations" class="underline decoration-indigo-300 hover:decoration-white">Foundations</a>). 1.3.3 fixes what building the Console on top of Maxim turned up, and is the first release CI publishes: from a signed tag, after a green nightly on that exact commit and a smoke test of the exact wheel, through PyPI trusted publishing (<a href="/maxim/verified" class="underline decoration-indigo-300 hover:decoration-white">Verified</a>).</p>
     <div class="flex flex-wrap gap-2 pt-1">
       <a href="https://pymaxim.bio" rel="noopener" class="inline-flex items-center gap-1 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg px-3 py-1.5 transition no-underline">Docs &mdash; pymaxim.bio <span aria-hidden="true">&rarr;</span></a>
       <a href="https://github.com/dennys246/Maxim" rel="noopener" class="inline-flex items-center gap-1 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg px-3 py-1.5 transition no-underline">Source on GitHub <span aria-hidden="true">&rarr;</span></a>
@@ -156,6 +156,35 @@
     <p class="text-sm text-slate-400">Engineering: Python, Apache-2.0, ~13.5K PyPI downloads across 26 releases; 16,600+ unit tests in CI across Python 3.10&ndash;3.14; LLM backends include Anthropic, OpenAI, and llama.cpp; optional PostgreSQL/pgvector memory.</p>
   </section>
 
+  <!-- Release history: one row per named release; statuses as they stand today, not as first announced -->
+  {% set releases = [
+    ("1.3.3", "Release pipeline", "Oct 24, 2026", "The first release CI publishes, from a signed tag; three checks that tested a stand-in now test the real thing. No new claim.", "verified"),
+    ("1.3.2", "Decomposition", "Oct 16, 2026", "The agent loop taken apart under characterization tests, with ratchets to hold it, and a high-severity security fix. No new claim.", "foundations"),
+    ("1.3.1", "Hardening", "Sep 27, 2026", "Fixes from a re-score of 1.3.0, each shipped with the check that holds it. No new claim.", None),
+    ("1.3.0", "Oasis-2", "Sep 19, 2026", "A fear learned from in-game pain, and its transfer to an agent that never felt it. Now rated partial: a plain tabular learner matches it.", "floors"),
+    ("1.2.1", "Spoken-code loop", "Sep 10, 2026", "Device-pairing pieces; a correction in 1.3.0 records that the full loop was not yet wired.", None),
+    ("1.2.0", "Oasis", "Sep 9, 2026", "A taught want transfers between independent agents through a shipped peer-to-peer exchange.", "hivemind"),
+    ("1.1.3", "Reachability", "Sep 3, 2026", "Five defects that existed and could not be reached, and the practice that makes absence visible.", "reachability"),
+    ("1.1.1", "Enforcement", "Aug 30, 2026", "Every item a lint, CI step or test that makes a claim mechanically checkable.", None),
+    ("1.1.0", "Sensorimotor", "Aug 26, 2026", "Hunger relief teaches an agent to orient toward a caregiver's voice.", None),
+    ("1.0.0", "The Honest Benchmark", "Jun 17, 2026", "The harness and a pre-registered cross-model benchmark: carried pain did not override a strong LLM's prior.", "release-1-0"),
+  ] %}
+  <section class="space-y-4" aria-labelledby="releases-heading">
+    <h2 id="releases-heading" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2">Release History</h2>
+    <p class="text-slate-300 leading-relaxed">Named releases, newest first, with each result's status as it stands today. Every version and its notes are on <a href="https://github.com/dennys246/Maxim/releases" rel="noopener" class="text-indigo-400 hover:text-indigo-300">GitHub Releases</a>.</p>
+    <ol class="divide-y divide-slate-700/70 rounded-xl border border-slate-700">
+      {% for version, name, date, line, essay in releases %}
+      <li class="px-4 py-3 sm:flex sm:gap-4">
+        <div class="sm:w-44 shrink-0">
+          <a href="https://github.com/dennys246/Maxim/releases/tag/v{{ version }}" rel="noopener" class="font-semibold text-white hover:text-indigo-300">{{ version }} &ldquo;{{ name }}&rdquo;</a>
+          <span class="block text-xs text-slate-500">{{ date }}</span>
+        </div>
+        <p class="text-sm text-slate-300 mt-1 sm:mt-0">{{ line }}{% if essay %} <a href="/maxim/{{ essay }}" class="text-indigo-400 hover:text-indigo-300 whitespace-nowrap">Read the essay &rarr;</a>{% endif %}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+
   <!-- Essay index -->
   <nav class="bg-slate-800/60 border border-slate-700 rounded-xl p-4 space-y-3" aria-label="Maxim essays">
     <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-1 text-center">The Essays</h3>
@@ -167,6 +196,7 @@
       <a href="/maxim/engrams" class="btn-link">Engrams</a>
       <a href="/maxim/floors" class="btn-link">Floors</a>
       <a href="/maxim/foundations" class="btn-link">Foundations</a>
+      <a href="/maxim/verified" class="btn-link">Verified</a>
       <a href="/maxim/substrate-primary" class="btn-link">Substrate-Primary</a>
       <a href="/maxim/hivemind" class="btn-link">Hivemind + Oasis</a>
       <a href="/maxim/agent-architecture" class="btn-link">The Agent Brain</a>

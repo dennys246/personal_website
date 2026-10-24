@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Verified: Maxim 1.3.3 | Denny Schaedig{% endblock %}
+
+{% block meta_description %}pymaxim 1.3.3 makes no new claim. It fixes three checks that tested a stand-in instead of the real thing, and ships the first release CI publishes.{% endblock %}
+
+{% block meta_keywords %}Maxim 1.3.3, pymaxim, release pipeline, trusted publishing, signed release, smoke test, integration testing, verification, research integrity, software engineering practice{% endblock %}
+
+{% block meta_author %}Denny Schaedig{% endblock %}
+{% block og_site_name %}Maxim{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block structured_data %}
+{{ super() }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Verified: Maxim 1.3.3 and Checking the Thing You Ship",
+  "description": "pymaxim 1.3.3 makes no new behavioural claim. Three checks in 1.3.2 tested a stand-in instead of the shipped thing: a voice that loaded but could not speak, a live stream tested without the real web server, and a benchmark graded against an empty record. 1.3.3 fixes them and is the first release CI publishes, from a signed tag, through PyPI trusted publishing.",
+  "author": { "@id": "https://www.dennyschaedig.com/#person" },
+  "publisher": { "@id": "https://www.dennyschaedig.com/#person" },
+  "mainEntityOfPage": "https://www.dennyschaedig.com/maxim/verified",
+  "isPartOf": { "@id": "https://www.dennyschaedig.com/#website" },
+  "datePublished": "2026-10-24",
+  "keywords": ["Maxim 1.3.3", "pymaxim", "release pipeline", "trusted publishing", "smoke test", "verification"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.dennyschaedig.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://www.dennyschaedig.com/projects" },
+    { "@type": "ListItem", "position": 3, "name": "Maxim", "item": "https://www.dennyschaedig.com/maxim" },
+    { "@type": "ListItem", "position": 4, "name": "Verified", "item": "https://www.dennyschaedig.com/maxim/verified" }
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  <a href="/maxim" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium">&larr; Back to Overview</a>
+
+  <header class="text-center space-y-2">
+    <p class="text-xs font-bold text-indigo-500 uppercase tracking-[0.3em]">MAXIM 1.3.3</p>
+    <h1 class="text-3xl md:text-4xl font-bold text-white">Verified</h1>
+    <p class="text-indigo-400 font-medium">Say what you checked, and check the thing you ship</p>
+  </header>
+
+  {% set maxim_written = "October 2026" %}
+  {% set maxim_note = "The details here come from the v1.3.3 changelog and release notes, which win wherever the two disagree." %}
+  {% set maxim_docs = [("Release notes", "https://github.com/dennys246/Maxim/releases/tag/v1.3.3"), ("Changelog", "https://github.com/dennys246/Maxim/blob/v1.3.3/CHANGELOG.md"), ("Evidence & ledgers", "https://pymaxim.bio/research/evidence/")] %}
+  {% set maxim_related = ["foundations", "floors", "reachability", "release-1-0"] %}
+  {% include "_maxim_status.html" %}
+
+  <!-- Lede -->
+  <div class="bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-6">
+    <p class="text-slate-200 text-lg leading-relaxed">The release notes for pymaxim 1.3.2 said its voice was &ldquo;verified&rdquo;. It was checked, and it couldn't speak. 1.3.3 makes no new claim about what Maxim's agents can do. It's about that one word: three checks that tested a stand-in instead of the real thing, and a release process built so the thing that gets checked is the exact thing that ships. <strong class="text-white">&ldquo;Verified&rdquo; is only as good as the answer to one question: verified <em>what</em>?</strong></p>
+  </div>
+
+  <!-- Contents -->
+  <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+    <h3 class="text-lg font-semibold text-indigo-400 mb-2">Contents</h3>
+    <ol class="space-y-1 text-slate-300 list-decimal pl-5">
+      <li><a href="#inspection" class="text-indigo-400 hover:text-indigo-300 no-underline">The Inspection Sticker</a></li>
+      <li><a href="#stand-ins" class="text-indigo-400 hover:text-indigo-300 no-underline">Three Checks of a Stand-In</a></li>
+      <li><a href="#customer" class="text-indigo-400 hover:text-indigo-300 no-underline">The Customer Who Drove It</a></li>
+      <li><a href="#pipeline" class="text-indigo-400 hover:text-indigo-300 no-underline">Only the Car That Passed</a></li>
+      <li><a href="#also" class="text-indigo-400 hover:text-indigo-300 no-underline">Also in 1.3.3</a></li>
+      <li><a href="#next" class="text-indigo-400 hover:text-indigo-300 no-underline">What It Doesn't Show</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <section class="space-y-4">
+    <h2 id="inspection" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Inspection Sticker</h2>
+
+    <p class="text-slate-300 leading-relaxed">Picture buying a used car with a fresh inspection sticker on the windscreen. You'd assume someone drove it. But a sticker can mean very different things. Maybe the mechanic checked that the engine was installed, not that it started. Maybe the brakes were tested on a rig in the shop, never on this car. The sticker looks the same either way.</p>
+
+    <p class="text-slate-300 leading-relaxed">Software is full of stickers like that. A test passes, a check goes green, a release note says &ldquo;verified&rdquo;, and the question that matters is what was actually exercised. In 1.3.2, three of Maxim's checks had quietly tested something other than the thing that ships. None of them was lying. Each one checked exactly what it was built to check. The trouble was the gap between that and what people read it as.</p>
+  </section>
+
+  <!-- 2 -->
+  <section class="space-y-4">
+    <h2 id="stand-ins" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Three Checks of a Stand-In</h2>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">A voice that loaded</h3>
+        <p class="text-slate-300 text-sm">Maxim can speak through Piper, an open-source text-to-speech library, and a robot uses that voice to read out a pairing code. The 1.3.2 notes called the voice setup &ldquo;verified&rdquo;. What was checked was that the voice's files were the right ones and that the voice loaded. Nothing checked that it could speak, and it couldn't: Maxim called an older version of Piper's interface, so every attempt failed and the pairing code played as silence (#1332). The engine was installed; nobody turned the key.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">A stream tested on a rig</h3>
+        <p class="text-slate-300 text-sm">Maxim's Console, its web dashboard, shows the agent's activity live over a streaming connection. On a clean install that connection failed: the web server Maxim installs ships without the piece that handles streaming, so every live panel was blank (#1347). The tests passed anyway, because they used a test client that never goes through the real web server. The brakes worked on the rig.</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <h3 class="text-white font-semibold mb-2">A score sheet that never saw the drive</h3>
+        <p class="text-slate-300 text-sm">Maxim's benchmark graded each run against an empty record of what the agent did, so some of its checks could never pass, for any model. A small model's &ldquo;0 of 3&rdquo; in the 1.3.2 release checklist was that empty record, not the model. Meanwhile a suite with no score threshold at all could pass on nothing (#1310). Picture a driving examiner whose clipboard never receives the drive.</p>
+      </div>
+    </div>
+
+    <p class="text-slate-300 leading-relaxed">Each fix comes with a check of the real thing. A test now drives the real Piper library with the exact voice Maxim ships, and the robot only offers spoken pairing on a voice that really speaks. Another test starts the real web server and opens a real streaming connection. The benchmark now sees the run it's grading. It passes only if at least one threshold was applied and every expectation was met, and the shipped suite that can't pass yet now says so instead of passing on empty inputs. The 1.3.3 notes also correct the 1.3.2 notes in writing: &ldquo;verified Piper voice provisioning&rdquo; overclaimed.</p>
+  </section>
+
+  <!-- 3 -->
+  <section class="space-y-4">
+    <h2 id="customer" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">The Customer Who Drove It</h2>
+
+    <p class="text-slate-300 leading-relaxed">Most of these weren't found by Maxim's own tests. They were found by maxim-pulse, a separate project that builds the Console on top of Maxim. Building a real product on your own library is like handing the car to a customer who actually drives it to work. They find what the inspection didn't.</p>
+
+    <p class="text-slate-300 leading-relaxed">Besides the silent voice and the blank live panels, maxim-pulse found that the Console's chat offered the model tools it wasn't allowed to use, and when the model picked one, the turn sat waiting until it timed out (#1412, #1413). And one message typed into the chat was being saved as a new memory every half second (#1414). Each is fixed, with a test that would have caught it.</p>
+  </section>
+
+  <!-- 4 -->
+  <section class="space-y-4">
+    <h2 id="pipeline" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Only the Car That Passed</h2>
+
+    <p class="text-slate-300 leading-relaxed">The other half of 1.3.3 makes sure the checked thing and the shipped thing are the same. It's the first Maxim release published by an automated pipeline instead of by hand, and the pipeline works like a dealer who may only hand over the exact car that passed today's inspection:</p>
+    <ul class="list-disc pl-6 space-y-2 text-slate-300">
+      <li><strong class="text-white">It starts from a signed tag:</strong> a release marker on the code that can be traced to me.</li>
+      <li><strong class="text-white">It requires the overnight tests to have passed on that exact code</strong>, not on a version from earlier in the week.</li>
+      <li><strong class="text-white">It installs the exact package</strong> it's about to publish into a fresh, empty environment and runs a quick check there, so it tests the car on the lot, not one like it.</li>
+      <li><strong class="text-white">It waits for my approval</strong>, then uploads through PyPI's trusted publishing, so no password sits anywhere waiting to be stolen.</li>
+    </ul>
+
+    <p class="text-slate-300 leading-relaxed">Two checks guard the parts that come from elsewhere. The Console bundled inside Maxim must be the newest release of maxim-pulse for its interface version, and the build refuses anything else; 1.3.2 had shipped an older Console two days after a newer one was tagged. And the optional voice and Console add-ons are now installed on their own every night, at the oldest and newest versions Maxim says it supports, so a mismatch like the Piper one shows up before a release instead of after.</p>
+  </section>
+
+  <!-- 5 -->
+  <section class="space-y-4">
+    <h2 id="also" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">Also in 1.3.3</h2>
+
+    <ul class="list-disc pl-6 space-y-2 text-slate-300">
+      <li><strong class="text-white">Security.</strong> Every local language-model server Maxim starts now requires a key, even on a machine working alone, because before this any other program or user on a shared computer could use it. Every Maxim on a machine should be upgraded together. The agent also can no longer switch its own internet access back on, and its file tools refuse to write git settings. The changelog says plainly that the last one narrows a risk rather than closing it.</li>
+      <li><strong class="text-white">A saved agent no longer forgets while it's switched off.</strong> Before, a saved agent's learning faded with the time it spent off, a learned fear halving every week. Now it resumes exactly as it was saved. The changelog records the trade-off: a learned fear now never fades, because Maxim has no way to unlearn one yet (see <a href="/maxim/engrams" class="text-indigo-400 hover:text-indigo-300 no-underline">Engrams</a>).</li>
+      <li><strong class="text-white">Nothing downloads without asking.</strong> A missing model is now downloaded only with your consent, on every path.</li>
+    </ul>
+  </section>
+
+  <!-- 6 -->
+  <section class="space-y-4">
+    <h2 id="next" class="text-2xl font-semibold text-white border-b border-indigo-500/50 pb-2 scroll-mt-32">What It Doesn't Show</h2>
+
+    <p class="text-slate-300 leading-relaxed">1.3.3 claims no new behaviour, and no experiment result changed status. The one result with out-of-date evidence, the cross-session experiment Exp 37, stays marked stale under a written exception, as it did in 1.3.2. Some changes break on purpose, and the release notes list what to do for each.</p>
+
+    <p class="text-slate-300 leading-relaxed">This is the third release in a row without a headline, after <a href="/maxim/foundations" class="text-indigo-400 hover:text-indigo-300 no-underline">Foundations</a>. That's deliberate. The next real result has to beat a plain learner (<a href="/maxim/floors" class="text-indigo-400 hover:text-indigo-300 no-underline">Floors</a>), and when it arrives I want every sticker it carries to mean what it says. The source is on <a href="https://github.com/dennys246/Maxim" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">GitHub</a>, and the docs and evidence ledger are at <a href="https://pymaxim.bio" rel="noopener" class="text-indigo-400 hover:text-indigo-300 no-underline">pymaxim.bio</a>.</p>
+
+    <p class="text-slate-300 leading-relaxed">A check is a promise about one specific thing. The work is in saying which thing, and making sure it's the one you hand over.</p>
+  </section>
+
+  {% include "_maxim_related.html" %}
+</div>
+{% endblock %}
