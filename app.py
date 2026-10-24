@@ -163,6 +163,10 @@ def maxim_floors():
 def maxim_foundations():
     return render_template("maxim-foundations.html")
 
+@app.route("/maxim/verified")
+def maxim_verified():
+    return render_template("maxim-verified.html")
+
 @app.route("/maxim/privacy-policy")
 def maxim_privacy_policy():
     return render_template("maxim-privacy-policy.html")
@@ -205,7 +209,7 @@ MOVED_MAXIM_PAGES = {
 # Essays still served here. Used to normalise `/maxim/<slug>.html` and
 # `/maxim/<slug>/` variants back onto the canonical URL.
 MAXIM_ESSAY_SLUGS = (
-    "release-1-0", "reachability", "engrams", "floors", "foundations", "sound-orientation", "substrate-primary", "hivemind",
+    "release-1-0", "reachability", "engrams", "floors", "foundations", "verified", "sound-orientation", "substrate-primary", "hivemind",
     "agent-architecture", "math-cognition", "memory-systems", "embodiment",
     "imagination", "proprioception", "attention-salience", "deliberation",
     "privacy-policy", "terms-and-conditions",
@@ -279,7 +283,7 @@ def sitemap_xml():
         ("experiences", "monthly", "0.8", "2026-10-15"),
         ("papers", "monthly", "0.8", "2026-10-15"),
         ("projects", "monthly", "0.8", "2026-10-24"),
-        ("ramblings", "monthly", "0.7", "2026-10-16"),
+        ("ramblings", "monthly", "0.7", "2026-10-24"),
         ("contact", "monthly", "0.6", "2026-09-24"),
         ("perceptrons", "monthly", "0.6", "2026-09-24"),
         # Maxim — design essays (docs and evidence are on pymaxim.bio)
@@ -288,7 +292,8 @@ def sitemap_xml():
         ("maxim_reachability", "monthly", "0.8", "2026-09-24"),
         ("maxim_engrams", "monthly", "0.8", "2026-10-15"),
         ("maxim_floors", "monthly", "0.8", "2026-10-15"),
-        ("maxim_foundations", "monthly", "0.8", "2026-10-16"),
+        ("maxim_foundations", "monthly", "0.8", "2026-10-24"),
+        ("maxim_verified", "monthly", "0.8", "2026-10-24"),
         ("maxim_sound_orientation", "monthly", "0.8", "2026-09-24"),
         ("maxim_substrate_primary", "monthly", "0.8", "2026-10-24"),
         ("maxim_hivemind", "monthly", "0.8", "2026-10-24"),
